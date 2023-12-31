@@ -29,7 +29,7 @@ def get_user_name(source_str: str) -> str:
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=4000)
+    uvicorn.run(app, host="0.0.0.0", port=400)
 
 
 # 登录：curl http://localhost:3001/login\?token\=1213abac
