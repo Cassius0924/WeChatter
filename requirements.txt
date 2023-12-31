@@ -1,0 +1,4 @@
+g4f==0.1.9.7
+requests==2.31.0
+fastapi==0.108.0
+uvicorn==0.25.0
