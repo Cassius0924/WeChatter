@@ -1,5 +1,3 @@
-import uvicorn
-
 from fastapi import FastAPI, Form
 from message_parser import MessageParser
 import json
@@ -17,19 +15,43 @@ async def recv_msg(
     isMentioned: str = Form(),
     isSystemEvent: str = Form(),
 ):
-    to_user_name = get_user_name(source)
-    print(to_user_name + ": " + content)
-    message_parser.parse_message(content, to_user_name)
+    print("==" * 20)
+    print(content)
+    '''
+    {
+      "event": "login", // login | logout | error
+      "user": { // 当前的用户信息，没有则为null
+        "_events": {},
+        "_eventsCount": 0,
+        "id": "@xxxasdfsf",
+        "payload": {
+          "alias": "",
+          "avatar": "",
+          "friend": false,
+          "gender": 1,
+          "id": "@xxx",
+          "name": "somebody",
+          "phone": [],
+          "star": false,
+          "type": 1
+        }
+        "error": ''// js 报错的错误栈信息
+      }
+    }
+    '''
+    print(source)
+    print(isMentioned)
+    print(isSystemEvent)
+    print("==" * 20)
+    to_user_name = get_user_name(source)    # 获取发送者的名字
+    print(to_user_name + ": " + content)    
+    message_parser.parse_message(content, to_user_name) # 解析消息
     return content, source
 
 
 def get_user_name(source_str: str) -> str:
     source_dict = json.loads(source_str)
     return source_dict["from"]["payload"]["name"]
-
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=4000)
 
 
 # 登录：curl http://localhost:3001/login\?token\=1213abac
