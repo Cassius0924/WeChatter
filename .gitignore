@@ -4,4 +4,4 @@ __pycache__/
 .idea/
 
 # 忽略开发测试文件
-test*.py
+test*

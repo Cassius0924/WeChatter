@@ -37,8 +37,6 @@ class MessageParser:
         elif cmd == self.__get_cmd_value("bili-hot"):
             CommandInvoker.cmd_bili_hot(to_user_name)
 
-        return 
-
 
     # 解析消息，判断是否为命令消息
     def __parse_command(self, message: str) -> Tuple[str, dict]:
