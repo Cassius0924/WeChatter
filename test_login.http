@@ -1,0 +1,27 @@
+POST http://localhost:4000/receive_msg
+Content-Type: multipart/form-data; boundary=---------------------------974767299852498929531610575
+
+-----------------------------974767299852498929531610575
+Content-Disposition: form-data; name="type"
+
+text
+-----------------------------974767299852498929531610575
+Content-Disposition: form-data; name="content"
+
+hello
+-----------------------------974767299852498929531610575
+Content-Disposition: form-data; name="source"
+
+{"type":"text","content":"hello"}
+-----------------------------974767299852498929531610575
+Content-Disposition: form-data; name="isMentioned"
+
+0
+-----------------------------974767299852498929531610575
+Content-Disposition: form-data; name="isSystemEvent"
+
+0
+-----------------------------974767299852498929531610575
+Content-Disposition: form-data; name="isGroup"
+
+0

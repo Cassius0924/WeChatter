@@ -1,10 +1,12 @@
 from typing import Tuple
+from admin import send_msg_to_all_admin
 from command_invoker import CommandInvoker
-from send_msg import acknowledge
+from notifier import Notifier
 from command.command_set import cmd_dict
 from event_parser import EventParser
 
 
+# 消息解析器，用于解析用户发来的消息
 class MessageParser:
     def __init__(self) -> None:
         pass
@@ -13,19 +15,16 @@ class MessageParser:
         message, desc_and_cmd = self.__parse_command(message)
         desc, cmd = desc_and_cmd["desc"], desc_and_cmd["value"]
         print(desc)
-        # 非命令消息
+
+        # 非命令消息（消息不是以/开头）
         if cmd == 0:
             print("该消息不是命令类型")
             return
-
-        # 判断是否为登录消息
-        if (EventParser.parse_login(message)):
-            print("机器人登录成功")
-            return
-
+    
         # 是命令消息
-        acknowledge(to_user_name)  # 回复消息已收到
-
+        # 回复消息已收到
+        Notifier.notify_received(to_user_name)
+        # 开始处理命令
         if cmd == self.__get_cmd_value("help"):
             CommandInvoker.cmd_help(to_user_name)
 
@@ -38,6 +37,10 @@ class MessageParser:
         elif cmd == self.__get_cmd_value("bili-hot"):
             CommandInvoker.cmd_bili_hot(to_user_name)
 
+        return 
+
+
+    # 解析消息，判断是否为命令消息
     def __parse_command(self, message: str) -> Tuple[str, dict]:
         for value in cmd_dict.values():
             for key in value["keys"]:
@@ -49,6 +52,13 @@ class MessageParser:
             "value": cmd_dict["None"]["value"],
         }
 
+
+    # 获取命令值
     def __get_cmd_value(self, cmd: str) -> int:
         return cmd_dict[cmd]["value"]
+
+
+
+
+
 

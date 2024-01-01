@@ -1,7 +1,7 @@
 from command.gpt_reply import reply_by_gpt35, reply_by_gpt4
 from command.help import get_help_msg
 from command.bili_hot import get_bili_hot_str
-from send_msg import send_text_msg, acknowledge, send_file_msg, send_image_msg
+from send_msg import send_text_msg, send_file_msg, send_image_msg
 
 
 class CommandInvoker:
@@ -41,7 +41,7 @@ class CommandInvoker:
         pass
 
     # 命令：/
-
+        
         
 
 
