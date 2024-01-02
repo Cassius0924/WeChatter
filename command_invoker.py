@@ -24,7 +24,7 @@ class CommandInvoker:
     @staticmethod
     def cmd_gpt4(message: str, to_user_name: str) -> None:
         send_text_msg(reply_by_gpt4(message), to_user_name)
-    
+
     # 命令：/bili-hot
     @staticmethod
     def cmd_bili_hot(to_user_name: str) -> None:
@@ -33,7 +33,7 @@ class CommandInvoker:
     # 命令：/zhihu-hot
     @staticmethod
     def cmd_zhihu_hot(to_user_name: str) -> None:
-        pass
+        send_text_msg("get_zhihu_hot_str()", to_user_name)
 
     # 命令：/weibo-hot
     @staticmethod
@@ -41,8 +41,8 @@ class CommandInvoker:
         pass
 
     # 命令：/
-        
-        
+
+
 
 
 

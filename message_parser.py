@@ -20,7 +20,7 @@ class MessageParser:
         if cmd == 0:
             print("该消息不是命令类型")
             return
-    
+
         # 是命令消息
         # 回复消息已收到
         Notifier.notify_received(to_user_name)
@@ -36,6 +36,9 @@ class MessageParser:
 
         elif cmd == self.__get_cmd_value("bili-hot"):
             CommandInvoker.cmd_bili_hot(to_user_name)
+
+        elif cmd == self.__get_cmd_value("zhihu-hot"):
+            CommandInvoker.cmd_zhihu_hot(to_user_name)
 
 
     # 解析消息，判断是否为命令消息
