@@ -1,3 +1,5 @@
+# 命令集
+# TODO: 添加参数功能，例如天气查询，可以添加城市参数（/天气 北京）
 cmd_dict = {
     "None": {
         "keys": ["None"],
@@ -13,19 +15,19 @@ cmd_dict = {
 
     "gpt4": {
         "keys": ["gpt4"],
-        "desc": "调用gpt4完成对话。",
+        "desc": "调用GPT4进行回答。",
         "value": 2,
     },
     
     "gpt": {
         "keys": ["gpt"],
-        "desc": "调用gpt3。5完成对话。",
+        "desc": "调用GPT3.5进行回答。",
         "value": 3,
     },
     
     "image-stitch": {
         "keys": ["图片拼接", "image-stitch"],
-        "desc": "调用图像拼接算法。",
+        "desc": "调用图像拼接。",
         "value": 4,
     },
     
@@ -59,15 +61,28 @@ cmd_dict = {
         "value": 9,
     },
     
-    "eng": {
-        "keys": ["eng", "单词"],
-        "desc": "解释英语单词。",
+    "word": {
+        "keys": ["word", "单词"],
+        "desc": "解释单词(词、成语)。",
         "value": 10,
     },
     
     "tran": {
         "keys": ["tran", "翻译"],
-        "desc": "翻译。",
+        "desc": "翻译英文句子。",
         "value": 11,
-    }
+    },
+    
+    "people": {
+        "keys": ["people", "人民日报"],
+        "desc": "发送今天人民日报的PDF。",
+        "value": 12,
+    },
+
+    "today": {
+        "keys": ["today-in-history", "历史上的今天"],
+        "desc": "历史上的今天。",
+        "value": 13,
+    },
+
 }
