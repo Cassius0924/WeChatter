@@ -40,6 +40,9 @@ class MessageParser:
         elif cmd == self.__get_cmd_value("zhihu-hot"):
             CommandInvoker.cmd_zhihu_hot(to_user_name)
 
+        elif cmd == self.__get_cmd_value("weibo-hot"):
+            CommandInvoker.cmd_weibo_hot(to_user_name)
+
 
     # 解析消息，判断是否为命令消息
     def __parse_command(self, message: str) -> Tuple[str, dict]:
