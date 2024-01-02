@@ -30,6 +30,8 @@ async def recv_msg(
         handle_system_event(content)
         return
     # 不是系统消息，则是用户发来的消息
+
+    # TODO: 判断是否是群消息，群消息需要@机器人，此限制可以在config里修改
     
     # 获取发送者的名字
     to_user_name = get_user_name(source)

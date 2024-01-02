@@ -3,6 +3,7 @@ from command.help import get_help_msg
 from command.bili_hot import get_bili_hot_str
 from command.zhihu_hot import get_zhihu_hot_str
 from command.weibo_hot import get_weibo_hot_str
+from command.transalte import get_reverso_context_tran_str, detect_lang, check_lang_support
 from send_msg import send_text_msg, send_file_msg, send_image_msg
 
 
@@ -14,7 +15,6 @@ class CommandInvoker:
     @staticmethod
     def cmd_help(to_user_name: str) -> None:
         send_text_msg(get_help_msg(), to_user_name)
-        pass
 
     # 命令：/gpt
     @staticmethod
@@ -42,8 +42,45 @@ class CommandInvoker:
     def cmd_weibo_hot(to_user_name: str) -> None:
         send_text_msg(get_weibo_hot_str(), to_user_name)
 
-    # 命令：/
+    # 命令：/word
+    # TODO: 改成解释单词，不翻译
+    @staticmethod
+    def cmd_word(message: str, to_user_name: str) -> None:
+        # 检测文本语言
+        from_lang = detect_lang(message)
+        to_lang = "chinese"
+        # en -> zh
+        # zh -> en
+        # other -> zh -> en
+        if from_lang == "":
+            send_text_msg("无法检测文本语言", to_user_name)
+            return
+        if from_lang == "chinese":
+            to_lang = "english"
+        elif from_lang != "english" and not check_lang_support(from_lang, "chinese"):
+            to_lang = "english"
+        # 获取翻译
+        result = get_reverso_context_tran_str(message, from_lang, to_lang)
+        send_text_msg(result, to_user_name)
 
+    # 命令：/tran
+    @staticmethod
+    def cmd_tran(message: str, to_user_name: str) -> None:
+        # 获取翻译
+        send_text_msg("翻译功能暂未开放", to_user_name)
+
+    # 命令：/people-daily
+    @staticmethod
+    def cmd_people_daily(to_user_name: str) -> None:
+        # 获取人民日报
+        send_text_msg("人民日报功能暂未开放", to_user_name)
+
+    
+    # 命令：/today-in-history
+    @staticmethod
+    def cmd_today_in_history(to_user_name: str) -> None:
+        # 获取历史上的今天
+        send_text_msg("历史上的今天功能暂未开放", to_user_name)
 
 
 
