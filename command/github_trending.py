@@ -16,15 +16,17 @@ def get_github_trending() -> list:
 
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
-        trending_repos = soup.find_all('h1', class_='h3 lh-condensed')
 
         trending_list = []
-        for repo in trending_repos:
-            repo_info = repo.find('a')
-            repo_name = repo_info.get('href').strip('/')
-            trending_list.append(repo_name)
+        articles = soup.select('article')
+        for article in articles:
+            title = article.select_one('h2 a')
+            if title:
+                trending_list.append(title.text.strip())# 去除首尾空格
 
-        return trending_list
+        return trending_list[:20]
 
     print("获取GitHub趋势失败")
     return []
+
+print(get_github_trending_str())
