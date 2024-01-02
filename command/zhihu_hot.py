@@ -5,7 +5,7 @@ def get_zhihu_hot_str() -> str:
     if len(hot_search_list) == 0:
         return "获取知乎热搜失败"
     hot_search_str = "✨=====知乎热搜=====✨\n"
-    for i, hot_search in enumerate(hot_search_list["data"]):
+    for i, hot_search in enumerate(hot_search_list["data"][:20]):
         hot_search_str += f"{i + 1}. {hot_search['target']['title']}\n"
     return hot_search_str
 
