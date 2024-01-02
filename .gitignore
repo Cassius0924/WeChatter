@@ -5,3 +5,6 @@ __pycache__/
 
 # 忽略开发测试文件
 test*
+
+main.py
+config.py
