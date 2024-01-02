@@ -4,6 +4,12 @@
 
 基于[wechatbot-webhook](https://github.com/danni-cool/wechatbot-webhook)
 
+## 设置管理员
+
+在`config.py`中填写管理员名称。
+
+管理员接收机器人状态变化通知。
+
 ## 功能
 
 - [x] GPT问答，基于[gpt4free](https://github.com/xtekky/gpt4free)

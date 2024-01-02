@@ -1,3 +1,7 @@
-__pycache__
+__pycache__/
 
-.idea
+.vscode/
+.idea/
+
+# 忽略开发测试文件
+test*
