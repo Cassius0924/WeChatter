@@ -36,11 +36,12 @@ def get_github_trending_list() -> list:
             # if comment:
             #     trending_item["comment"] = comment
 
-            comment = ''
-            for element in article.find('p').contents:
-                if element.name =='a':
-                    comment
-                comment += str(element)
+            paragraph = soup.find("p")
+            for a_tag in paragraph.find_all("a"):
+                a_tag.extract()
+            comment = paragraph.get_text(strip=True)
+            if comment:
+                trending_item["comment"] = comment
 
             programming_language = article.select_one(
                 "span[itemprop='programmingLanguage']"
