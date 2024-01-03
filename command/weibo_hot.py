@@ -1,3 +1,4 @@
+# 获取微博热搜命令
 import requests
 
 def get_weibo_hot_str() -> str:

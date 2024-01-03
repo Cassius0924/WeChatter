@@ -42,6 +42,9 @@ class MessageParser:
 
         elif cmd == self.__get_cmd_value("weibo-hot"):
             CommandInvoker.cmd_weibo_hot(to_user_name)
+            
+        elif cmd == self.__get_cmd_value("word"):
+            CommandInvoker.cmd_word(message, to_user_name)
 
         elif cmd == self.__get_cmd_value("github-trending"):
             CommandInvoker.cmd_github_trending(to_user_name)
@@ -51,8 +54,9 @@ class MessageParser:
     def __parse_command(self, message: str) -> Tuple[str, dict]:
         for value in cmd_dict.values():
             for key in value["keys"]:
-                if message.startswith("/" + key):
-                    message = message[len(key) + 1 :]
+                # 命令以/开头，和消息之间用空格隔开
+                if message.startswith("/" + key + " "):
+                    message = message[len(key) + 2:]
                     return message, {"desc": value["desc"], "value": value["value"]}
         return message, {
             "desc": cmd_dict["None"]["desc"],
