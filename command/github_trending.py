@@ -47,7 +47,7 @@ def get_github_trending_list() -> list:
 
             star_today = article.select_one("div:nth-of-type(1) span:nth-of-type(2)")
             if star_today:
-                trending_item["star_today"] = star_today.text.strip()
+                trending_item["star_today"] = star_today.text
 
             if trending_item:  # Check if the dictionary is not empty before appending
                 trending_list.append(trending_item)
