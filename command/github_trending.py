@@ -36,8 +36,8 @@ def get_github_trending_list() -> list:
             # if comment:
             #     trending_item["comment"] = comment
 
-            paragraph = article.find("p")
-            for a_tag in paragraph.find_all("a"):
+            paragraph = article.select_one("p")
+            for a_tag in paragraph.select("a"):
                 a_tag.extract()
             comment = paragraph.get_text(strip=True)
             if comment:
