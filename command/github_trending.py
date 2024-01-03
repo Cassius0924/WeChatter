@@ -45,11 +45,11 @@ def get_github_trending_list() -> list:
             if programming_language:
                 trending_item["programmingLanguage"] = programming_language.text.strip()
 
-            star_total = article.select_one("div:nth-of-type(1) a:nth-of-type(1)")
+            star_total = article.select_one("div:nth-of-type(2) a:nth-of-type(1)")
             if star_total:
                 trending_item["star_total"] = star_total.text.strip()
 
-            star_today = article.select_one("div:nth-of-type(1) span:nth-of-type(2)")
+            star_today = article.select_one("div:nth-of-type(2) span:nth-of-type(3)")
             if star_today:
                 trending_item["star_today"] = star_today.text.strip()
 
