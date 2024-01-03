@@ -124,7 +124,6 @@ def get_reverso_context_tran_str(content: str, from_lang: str, to_lang: str) -> 
         if i >= 10:
             break
         msg += res + "\n"
-
     return msg
 
 

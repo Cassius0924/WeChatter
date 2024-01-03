@@ -1,3 +1,4 @@
+# 事件解析器类
 from typing import Union
 
 

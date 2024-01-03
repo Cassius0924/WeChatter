@@ -1,12 +1,10 @@
-import json
-
+# 接收Docker转发过来的消息的接口
 from fastapi import FastAPI, Form
-
 from message_parser import MessageParser
+import json
 from notifier import Notifier
 
 app = FastAPI()
-
 message_parser = MessageParser()
 
 
@@ -39,7 +37,7 @@ async def recv_msg(
     to_user_name = get_user_name(source)
     if isSystemEvent == "0":
         print(to_user_name + ": " + content)
-        # 解析消息
+    # 解析消息
     message_parser.parse_message(content, to_user_name)
 
 

@@ -1,8 +1,10 @@
+# 消息解析器
 from typing import Tuple
-
-from command.command_set import cmd_dict
+from admin import send_msg_to_all_admin
 from command_invoker import CommandInvoker
 from notifier import Notifier
+from command.command_set import cmd_dict
+from event_parser import EventParser
 
 
 # 消息解析器，用于解析用户发来的消息
@@ -44,9 +46,6 @@ class MessageParser:
 
         elif cmd == self.__get_cmd_value("word"):
             CommandInvoker.cmd_word(message, to_user_name)
-
-        elif cmd == self.__get_cmd_value("github-trending"):
-            CommandInvoker.cmd_github_trending(to_user_name)
 
     # 解析消息，判断是否为命令消息
     def __parse_command(self, message: str) -> Tuple[str, dict]:

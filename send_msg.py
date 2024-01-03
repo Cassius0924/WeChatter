@@ -1,6 +1,8 @@
+# 消息发送类
 import requests
 
 
+# TODO: 封装成类
 # 发送消息：curl -X POST http://localhost:3001/webhook/msg
 def send_text_msg(message: str, to_user_name: str):
     url = "http://localhost:3001/webhook/msg"

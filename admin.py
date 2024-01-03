@@ -1,5 +1,6 @@
-from config import admin_list
+# 管理员管理
 from send_msg import send_text_msg
+from config import admin_list
 
 
 # 给所有管理发消息
