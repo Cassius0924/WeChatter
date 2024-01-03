@@ -4,6 +4,7 @@ from command.bili_hot import get_bili_hot_str
 from command.zhihu_hot import get_zhihu_hot_str
 from command.weibo_hot import get_weibo_hot_str
 from command.transalte import get_reverso_context_tran_str, detect_lang, check_lang_support
+from command.github_trending import get_github_trending_str as get_github_trending_str
 from send_msg import send_text_msg, send_file_msg, send_image_msg
 
 
@@ -75,13 +76,18 @@ class CommandInvoker:
         # 获取人民日报
         send_text_msg("人民日报功能暂未开放", to_user_name)
 
-    
+
     # 命令：/today-in-history
     @staticmethod
     def cmd_today_in_history(to_user_name: str) -> None:
         # 获取历史上的今天
         send_text_msg("历史上的今天功能暂未开放", to_user_name)
 
+
+    # 命令：/github-trending
+    @staticmethod
+    def cmd_github_trending(to_user_name: str) -> None:
+        send_text_msg(get_github_trending_str(), to_user_name)
 
 
 
