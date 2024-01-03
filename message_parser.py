@@ -54,20 +54,20 @@ class MessageParser:
     def __parse_command(self, message: str) -> Tuple[str, dict]:
         for value in cmd_dict.values():
             for key in value["keys"]:
+                # 无参数指令：
+                if message == "/" + key:
+                    return message, {"desc": value["desc"], "value": value["value"]}
+                # 带参数指令：
                 # 命令以/开头，和消息之间用空格隔开
                 if message.startswith("/" + key + " "):
                     message = message[len(key) + 2:]
                     return message, {"desc": value["desc"], "value": value["value"]}
-        return message, {
-            "desc": cmd_dict["None"]["desc"],
-            "value": cmd_dict["None"]["value"],
-        }
+        return message, {"desc": cmd_dict["None"]["desc"], "value": cmd_dict["None"]["value"]}
 
 
     # 获取命令值
     def __get_cmd_value(self, cmd: str) -> int:
         return cmd_dict[cmd]["value"]
-
 
 
 
