@@ -35,17 +35,11 @@ def get_github_trending_list() -> list:
             # comment = article.select_one("p").get_text(strip=True)
             # if comment:
             #     trending_item["comment"] = comment
-
-            paragraphs = article.find_all("p")
-            for paragraph in paragraphs:
-                # Check if the <p> contains any <a> tags
-                if paragraph.find("a"):
-                    # If <a> tags are found, extract text without them
-                    text_without_a = ''.join([text for text in paragraph.find_all(text=True, recursive=False) if text.parent.name != 'a'])
-                    trending_item["comment"] = text_without_a
-                else:
-                    # If no <a> tags found, extract text normally
-                    trending_item["comment"] = paragraph.get_text()
+            try:
+                specific_text = article.find_all("p")[0].get_text(strip=True)  # 假设目标文本位于第二个<p>标签内
+                trending_item['specific_text'] = specific_text
+            except IndexError:
+                trending_item['specific_text'] = "找不到特定文本"
 
             programming_language = article.select_one(
                 "span[itemprop='programmingLanguage']"
