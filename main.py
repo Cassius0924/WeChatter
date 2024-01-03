@@ -1,7 +1,7 @@
+# 项目启动文件
 import uvicorn
 from recv_msg import app
 
-# 项目启动文件
 # 启动命令：python main.py
 
 

@@ -1,12 +1,12 @@
+# 接收Docker转发过来的消息的接口
 from fastapi import FastAPI, Form
 from message_parser import MessageParser
 import json
-
 from notifier import Notifier
 
 app = FastAPI()
-
 message_parser = MessageParser()
+
 
 @app.post("/receive_msg")
 async def recv_msg(
@@ -32,11 +32,11 @@ async def recv_msg(
     # 不是系统消息，则是用户发来的消息
 
     # TODO: 判断是否是群消息，群消息需要@机器人，此限制可以在config里修改
-    
+
     # 获取发送者的名字
     to_user_name = get_user_name(source)
     if isSystemEvent == "0":
-        print(to_user_name + ": " + content)    
+        print(to_user_name + ": " + content)
     # 解析消息
     message_parser.parse_message(content, to_user_name)
 
@@ -48,6 +48,7 @@ def get_user_name(source_str: str) -> str:
         return ""
     return source_dict["from"]["payload"]["name"]
     # return source_dict.get("from", {}).get("payload", {}).get("name", "")
+
 
 # 判断系统事件类型，并调用相应的函数
 def handle_system_event(content: str) -> None:
@@ -69,12 +70,12 @@ def handle_system_event(content: str) -> None:
 
 
 # type
-'''
+"""
     "text" | "file" | "urlLink"
-'''
+"""
 
 # content
-'''
+"""
     若isSystemEvent为0，则content的格式为：
     "Hello
     若isSystemEvent为1，则content的格式为：
@@ -105,9 +106,9 @@ def handle_system_event(content: str) -> None:
       title: "AI神器帮助你从小白秒变设计师",
       url: "http://example.url",
     }
-'''
+"""
 # source
-'''
+"""
     {
         // 消息来自群，会有以下对象，否则为空字符串
         "room": {
@@ -170,16 +171,14 @@ def handle_system_event(content: str) -> None:
           "_eventsCount": 0,
         }
     }
-'''
+"""
 
 # isMentioned
-'''
+"""
     0 | 1
-'''
+"""
 
 # isSystemEvent
-'''
+"""
     0 | 1
-'''
-
-
+"""

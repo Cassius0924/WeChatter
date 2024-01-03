@@ -1,4 +1,6 @@
+# 事件解析器类
 from typing import Union
+
 
 # 用于解析消息的事件：login、logout、error
 class EventParser:
@@ -14,7 +16,6 @@ class EventParser:
         if content["event"] == "login":
             return True
         return False
-    
 
     # 解析是否为登出消息
     @staticmethod
@@ -24,7 +25,6 @@ class EventParser:
         if content["event"] == "logout":
             return True
         return False
-
 
     # 解析是否为错误消息
     @staticmethod

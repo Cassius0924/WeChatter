@@ -1,6 +1,8 @@
+# 消息发送类
 import requests
 
 
+# TODO: 封装成类
 # 发送消息：curl -X POST http://localhost:3001/webhook/msg
 def send_text_msg(message: str, to_user_name: str):
     url = "http://localhost:3001/webhook/msg"
@@ -10,8 +12,10 @@ def send_text_msg(message: str, to_user_name: str):
     # print(response)
     # print(response.text)
 
+
 def send_image_msg(image_path: str, to_user_name: str):
     pass
+
 
 def send_file_msg(file_path: str, to_user_name: str):
     pass

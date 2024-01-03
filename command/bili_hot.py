@@ -1,4 +1,6 @@
+# b站热搜命令
 import requests
+
 
 def get_bili_hot_str() -> str:
     hot_search_list = get_bili_hot_list()
@@ -19,4 +21,3 @@ def get_bili_hot_list() -> list:
         return hot_search_list
     print("获取b站热搜失败")
     return []
-

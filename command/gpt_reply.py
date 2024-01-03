@@ -2,6 +2,7 @@
 import g4f
 # from g4f.Provider import Bing
 
+
 def reply_by_gpt4(message) -> str:
     try:
         response = g4f.ChatCompletion.create(

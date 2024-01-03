@@ -1,3 +1,4 @@
+# 消息解析器
 from typing import Tuple
 from admin import send_msg_to_all_admin
 from command_invoker import CommandInvoker
@@ -42,10 +43,9 @@ class MessageParser:
 
         elif cmd == self.__get_cmd_value("weibo-hot"):
             CommandInvoker.cmd_weibo_hot(to_user_name)
-            
+
         elif cmd == self.__get_cmd_value("word"):
             CommandInvoker.cmd_word(message, to_user_name)
-
 
     # 解析消息，判断是否为命令消息
     def __parse_command(self, message: str) -> Tuple[str, dict]:
@@ -57,16 +57,13 @@ class MessageParser:
                 # 带参数指令：
                 # 命令以/开头，和消息之间用空格隔开
                 if message.startswith("/" + key + " "):
-                    message = message[len(key) + 2:]
+                    message = message[len(key) + 2 :]
                     return message, {"desc": value["desc"], "value": value["value"]}
-        return message, {"desc": cmd_dict["None"]["desc"], "value": cmd_dict["None"]["value"]}
-
+        return message, {
+            "desc": cmd_dict["None"]["desc"],
+            "value": cmd_dict["None"]["value"],
+        }
 
     # 获取命令值
     def __get_cmd_value(self, cmd: str) -> int:
         return cmd_dict[cmd]["value"]
-
-
-
-
-
