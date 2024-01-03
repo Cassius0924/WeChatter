@@ -35,11 +35,11 @@ def get_github_trending_list() -> list:
             # comment = article.select_one("p").get_text(strip=True)
             # if comment:
             #     trending_item["comment"] = comment
-            try:
-                specific_text = article.find_all("p")[0].get_text(strip=True)  # 假设目标文本位于第二个<p>标签内
-                trending_item['specific_text'] = specific_text
-            except IndexError:
-                trending_item['specific_text'] = "找不到特定文本"
+
+            paragraph = article.find("p", class_="col-9 color-fg-muted my-1 pr-4")
+            if paragraph:
+                text = paragraph.get_text(strip=True)
+                trending_item = {"comment": text}
 
             programming_language = article.select_one(
                 "span[itemprop='programmingLanguage']"
