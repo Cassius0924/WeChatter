@@ -53,7 +53,7 @@ def get_github_trending_list() -> list:
                     }
                 )
 
-            star_total = article.select_one("div[1] a[0]")
+            star_total = article.select_one("div:nth-of-type(1) a:nth-of-type(1)")
             if star_total:
                 trending_list.append(
                     {
