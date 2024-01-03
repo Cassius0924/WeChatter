@@ -1,5 +1,6 @@
 import requests
 
+
 def get_bili_hot_str() -> str:
     hot_search_list = get_bili_hot_list()
     if len(hot_search_list) == 0:
@@ -19,4 +20,3 @@ def get_bili_hot_list() -> list:
         return hot_search_list
     print("获取b站热搜失败")
     return []
-

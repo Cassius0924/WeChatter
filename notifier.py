@@ -1,7 +1,6 @@
 from admin import send_msg_to_all_admin
-from config import admin_list
-from event_parser import EventParser
 from send_msg import send_text_msg
+
 
 # 消息通知器
 class Notifier:
@@ -13,7 +12,6 @@ class Notifier:
         msg = "收到命令请求"
         send_text_msg(msg, to_user_name)
 
-    
     # 机器人登录登出通知，若是登录（登出）则发送登录（登出）消息给所有管理员
     @staticmethod
     def notify_logged_in() -> None:

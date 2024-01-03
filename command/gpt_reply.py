@@ -1,6 +1,9 @@
 # GPT回复命令
 import g4f
+
+
 # from g4f.Provider import Bing
+
 
 def reply_by_gpt4(message) -> str:
     try:

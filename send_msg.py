@@ -10,8 +10,10 @@ def send_text_msg(message: str, to_user_name: str):
     # print(response)
     # print(response.text)
 
+
 def send_image_msg(image_path: str, to_user_name: str):
     pass
+
 
 def send_file_msg(file_path: str, to_user_name: str):
     pass

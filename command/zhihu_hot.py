@@ -1,5 +1,6 @@
 import requests
 
+
 def get_zhihu_hot_str() -> str:
     hot_search_list = get_zhihu_hot_list()
     if len(hot_search_list) == 0:

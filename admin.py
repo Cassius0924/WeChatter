@@ -1,5 +1,6 @@
-from send_msg import send_text_msg
 from config import admin_list
+from send_msg import send_text_msg
+
 
 # 给所有管理发消息
 def send_msg_to_all_admin(messsage: str) -> None:
