@@ -9,9 +9,7 @@ def get_github_trending_str() -> str:
 
     trending_str = "✨=====GitHub Trending=====✨\n"
     for i, trending in enumerate(trending_list[:10]):  # 只获取前10个趋势
-        trending_str += (
-            f"{i + 1}. {trending['author']} / {trending['repo']}\n  ⭐ {trending['star_total']}total(⭐{trending['star_today']})\n  🔤 {trending['programmingLanguage']}\n  📖 {trending['comment']}\n"
-        )
+        trending_str += f"{i + 1}. {trending['author']} / {trending['repo']}\n  ⭐ {trending['star_total']}total(⭐{trending['star_today']})\n  🔤 {trending['programmingLanguage']}\n  📖 {trending['comment']}\n"
     return trending_str
 
 
@@ -34,9 +32,9 @@ def get_github_trending_list() -> list:
                     trending_item["author"] = repo[1].strip()
                     trending_item["repo"] = repo[2].strip()
 
-            comment = article.select_one("p")
+            comment = article.select_one("p").get_text(strip=True)
             if comment:
-                trending_item["comment"] = comment.text.strip()
+                trending_item["comment"] = comment
 
             programming_language = article.select_one(
                 "span[itemprop='programmingLanguage']"
