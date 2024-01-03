@@ -49,7 +49,6 @@ def get_github_trending_list() -> list:
             if star_total:
                 trending_item["star_total"] = star_total
 
-
             star_today = article.select_one("div:nth-of-type(2) span:nth-of-type(3)")
             if star_today:
                 trending_item["star_today"] = star_today.text.strip()
