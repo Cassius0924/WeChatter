@@ -42,10 +42,10 @@ def get_github_trending_list() -> list:
                 if paragraph.find("a"):
                     # If <a> tags are found, extract text without them
                     text_without_a = ''.join([text for text in paragraph.find_all(text=True, recursive=False) if text.parent.name != 'a'])
-                    trending_item["text"] = text_without_a
+                    trending_item["comment"] = text_without_a
                 else:
                     # If no <a> tags found, extract text normally
-                    trending_item["text"] = paragraph.get_text()
+                    trending_item["comment"] = paragraph.get_text()
 
             programming_language = article.select_one(
                 "span[itemprop='programmingLanguage']"
