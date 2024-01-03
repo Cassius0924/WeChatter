@@ -61,7 +61,7 @@ def get_github_trending_list() -> list:
                     }
                 )
 
-            star_today = article.select_one("div[1] span[2]")
+            star_today = article.select_one("div:nth-of-type(1) span:nth-of-type(2)")
             if star_today:
                 trending_list.append(
                     {
