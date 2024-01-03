@@ -32,11 +32,9 @@ def get_github_trending_list() -> list:
                     trending_item["author"] = repo[1].strip()
                     trending_item["repo"] = repo[2].strip()
 
-            comment = article.select_one(
-                "p", class_="col-9 color-fg-muted my-1 pr-4"
-            ).get_text(strip=True)
-            if comment:
-                trending_item["comment"] = comment
+            # comment = article.select_one("p").get_text(strip=True)
+            # if comment:
+            #     trending_item["comment"] = comment
 
             programming_language = article.select_one(
                 "span[itemprop='programmingLanguage']"
