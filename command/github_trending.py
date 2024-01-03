@@ -36,19 +36,16 @@ def get_github_trending_list() -> list:
             # if comment:
             #     trending_item["comment"] = comment
 
-            paragraph = article.find("p")  # 使用 find 方法查找第一个 <p> 元素
-            if paragraph:  # 检查是否找到了 <p> 元素
-                for a_tag in paragraph.find_all(
-                    "a"
-                ):  # 使用 find_all 方法找到所有的 <a> 元素
-                    a_tag.extract()
-                comment = paragraph.get_text(strip=True)
-                if comment:
-                    trending_item["comment"] = comment
-            else:
-                trending_item[
-                    "comment"
-                ] = "No comment available"  # 如果没有找到 <p> 元素，将评论设置为默认值（或者你想要的任何内容）
+            paragraphs = article.find_all("p")
+            for paragraph in paragraphs:
+                # Check if the <p> contains any <a> tags
+                if paragraph.find("a"):
+                    # If <a> tags are found, extract text without them
+                    text_without_a = ''.join([text for text in paragraph.find_all(text=True, recursive=False) if text.parent.name != 'a'])
+                    trending_item["text"] = text_without_a
+                else:
+                    # If no <a> tags found, extract text normally
+                    trending_item["text"] = paragraph.get_text()
 
             programming_language = article.select_one(
                 "span[itemprop='programmingLanguage']"
