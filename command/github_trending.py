@@ -33,21 +33,21 @@ def get_github_trending_list() -> list:
                     trending_item["author"] = repo[1].strip()
                     trending_item["repo"] = repo[2].strip()
 
-            comment = article.select_one("p")
-            if comment:
-                trending_item["comment"] = comment.text.strip()
-
-            programming_language = article.select_one("span[itemprop='programmingLanguage']")
-            if programming_language:
-                trending_item["programmingLanguage"] = programming_language.text.strip()
-
-            star_total = article.select_one("div:nth-of-type(1) a:nth-of-type(1)")
-            if star_total:
-                trending_item["star_total"] = star_total.text.strip()
-
-            star_today = article.select_one("div:nth-of-type(1) span:nth-of-type(2)")
-            if star_today:
-                trending_item["star_today"] = star_today.text.strip()
+            # comment = article.select_one("p")
+            # if comment:
+            #     trending_item["comment"] = comment.text.strip()
+            #
+            # programming_language = article.select_one("span[itemprop='programmingLanguage']")
+            # if programming_language:
+            #     trending_item["programmingLanguage"] = programming_language.text.strip()
+            #
+            # star_total = article.select_one("div:nth-of-type(1) a:nth-of-type(1)")
+            # if star_total:
+            #     trending_item["star_total"] = star_total.text.strip()
+            #
+            # star_today = article.select_one("div:nth-of-type(1) span:nth-of-type(2)")
+            # if star_today:
+            #     trending_item["star_today"] = star_today.text.strip()
 
             if trending_item:  # Check if the dictionary is not empty before appending
                 trending_list.append(trending_item)
