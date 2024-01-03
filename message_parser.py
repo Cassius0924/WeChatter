@@ -47,6 +47,9 @@ class MessageParser:
         elif cmd == self.__get_cmd_value("word"):
             CommandInvoker.cmd_word(message, to_user_name)
 
+        elif cmd == self.__get_cmd_value("github-trending"):
+            CommandInvoker.cmd_github_trending(to_user_name)
+
     # 解析消息，判断是否为命令消息
     def __parse_command(self, message: str) -> Tuple[str, dict]:
         for value in cmd_dict.values():
