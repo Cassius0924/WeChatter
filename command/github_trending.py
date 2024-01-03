@@ -7,8 +7,7 @@ def get_github_trending_str() -> str:
         return "获取GitHub趋势失败"
     trending_str = "✨=====GitHub Trending=====✨\n"
     for i, trending in enumerate(trending_list[:10]):  # 只获取前10个趋势
-        owner, project = trending.split(" / ")
-        trending_str += f"{i + 1}. {owner} / {project}\n"
+        trending_str += f"{i + 1}. {trending}\n"
     return trending_str
 
 def get_github_trending_list() -> list:
