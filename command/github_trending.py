@@ -39,7 +39,9 @@ def get_github_trending_list() -> list:
             paragraph = article.find("p", class_="col-9 color-fg-muted my-1 pr-4")
             if paragraph:
                 text = paragraph.get_text(strip=True)
-                trending_item = {"comment": text}
+                if text:
+                    trending_item["comment"] = text
+                # trending_item = {"comment": text}
 
             programming_language = article.select_one(
                 "span[itemprop='programmingLanguage']"
