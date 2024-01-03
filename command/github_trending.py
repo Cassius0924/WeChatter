@@ -61,8 +61,6 @@ def get_github_trending_list() -> list:
     print("获取GitHub趋势失败")
     return []
 
-print(get_github_trending_str())
-
 # def get_github_trending_list() -> list:
 #     url = "https://github.com/trending"
 #     response = requests.get(url)
