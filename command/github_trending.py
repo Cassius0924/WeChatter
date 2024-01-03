@@ -3,11 +3,12 @@ from bs4 import BeautifulSoup
 
 def get_github_trending_str() -> str:
     trending_list = get_github_trending_list()
-    if len(trending_list) == 0:
+    if not trending_list:
         return "获取GitHub趋势失败"
+
     trending_str = "✨=====GitHub Trending=====✨\n"
     for i, trending in enumerate(trending_list[:10]):  # 只获取前10个趋势
-        trending_str += f"{i + 1}. {trending}\n"
+        trending_str += f"{i + 1}. {trending['author']} / {trending['repo']}\n"
     return trending_str
 
 def get_github_trending_list() -> list:
@@ -22,9 +23,14 @@ def get_github_trending_list() -> list:
         for article in articles:
             title = article.select_one('h2 a')
             if title:
-                trending_list.append(title.text.strip())# 去除首尾空格
+                repo = title['href'].split('/')
+                if len(repo) >= 3:
+                    trending_list.append({
+                        'author': repo[1].strip(),
+                        'repo': repo[2].strip()
+                    })
 
-        return trending_list[:10]
+        return trending_list[:20]
 
     print("获取GitHub趋势失败")
     return []
