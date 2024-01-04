@@ -9,7 +9,7 @@ from command.transalte import (
     detect_lang,
     check_lang_support,
 )
-from send_msg import send_text_msg, send_file_msg, send_image_msg
+from send_msg import send_text_msg
 
 
 class CommandInvoker:
