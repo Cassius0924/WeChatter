@@ -13,9 +13,10 @@
 ## 功能
 
 - [x] GPT问答，基于[gpt4free](https://github.com/xtekky/gpt4free)
-- [x] 获取b站热搜
+- [x] 获取B站热搜
 - [x] 获取知乎热搜
 - [x] 获取微博热搜
 - [x] 获取抖音热搜
+- [x] 获取GitHub趋势
 - [x] 单词/词语翻译
 
