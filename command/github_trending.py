@@ -55,8 +55,6 @@ def get_github_trending_list() -> list:
             star_today = article.select_one("div:nth-of-type(2) span:nth-of-type(3)")
             if star_today:
                 trending_item["star_today"] = star_today.text.strip().replace("stars ", "")
-            else:
-                trending_item["star_today"] = "error"
 
             if trending_item:  # Check if the dictionary is not empty before appending
                 trending_list.append(trending_item)
