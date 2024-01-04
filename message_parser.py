@@ -61,12 +61,13 @@ class MessageParser:
     def __parse_command(self, content: str) -> Tuple[str, dict]:
         for value in cmd_dict.values():
             for key in value["keys"]:
+                # TODO: 改为以空格为分隔符，取第一个元素
                 # 无参数指令：
-                if content == "/" + key:
+                if content.lower() == "/" + key.lower():
                     return "", {"desc": value["desc"], "value": value["value"]}
                 # 带参数指令：
                 # 命令以/开头，和消息之间用空格隔开
-                if content.startswith("/" + key + " "):
+                if content.lower().startswith("/" + key.lower() + " "):
                     cont = content[len(key) + 2 :]
                     return cont, {"desc": value["desc"], "value": value["value"]}
         return "", {

@@ -4,7 +4,7 @@ import requests
 
 def get_bili_hot_str() -> str:
     hot_list = get_bili_hot_list()
-    if len(hot_list) == 0:
+    if hot_list == []:
         return "获取b站热搜失败"
     hot_str = "✨=====b站热搜=====✨\n"
     for i, hot_search in enumerate(hot_list):
@@ -25,4 +25,4 @@ def get_bili_hot_list() -> list:
         print("获取b站热搜失败")
         return []
     hot_list = response.json()
-    return hot_list
+    return hot_list.get("data", {}).get("list", [])
