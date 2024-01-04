@@ -43,18 +43,16 @@ def get_github_trending_list() -> list:
             )
             if programming_language:
                 trending_item["programmingLanguage"] = programming_language.text.strip()
-            else:
-                trending_item["programmingLanguage"] = "Unknown"
 
             star_total = article.select_one("a.Link--muted")
             if star_total:
                 trending_item["star_total"] = star_total.get_text(strip=True)
-            else:
-                trending_item["star_total"] = "error"
 
             star_today = article.select_one("div:nth-of-type(2) span:nth-of-type(3)")
             if star_today:
-                trending_item["star_today"] = star_today.text.strip().replace("stars ", "")
+                trending_item["star_today"] = star_today.text.strip().replace(
+                    "stars ", ""
+                )
 
             if trending_item:  # Check if the dictionary is not empty before appending
                 trending_list.append(trending_item)
