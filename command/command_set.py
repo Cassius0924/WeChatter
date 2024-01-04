@@ -67,4 +67,9 @@ cmd_dict = {
         "desc": "历史上的今天。",
         "value": 13,
     },
+    "douyin-hot": {
+        "keys": ["抖音热搜", "douyin-hot"],
+        "desc": "获取抖音热搜。",
+        "value": 14,
+    },
 }

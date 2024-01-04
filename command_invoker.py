@@ -10,6 +10,7 @@ from command.transalte import (
     check_lang_support,
 )
 from command.github_trending import get_github_trending_str
+from command.douyin_hot import get_douyin_hot_str
 from send_msg import send_text_msg, send_file_msg, send_image_msg
 
 
@@ -91,3 +92,8 @@ class CommandInvoker:
     @staticmethod
     def cmd_github_trending(to_user_name: str) -> None:
         send_text_msg(get_github_trending_str(), to_user_name)
+
+    # 命令：/douyin-hot
+    @staticmethod
+    def cmd_douyin_hot(to_user_name: str) -> None:
+        send_text_msg(get_douyin_hot_str(), to_user_name)
