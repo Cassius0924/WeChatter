@@ -32,9 +32,9 @@ def get_github_trending_list() -> list:
                     trending_item["author"] = repo[1].strip()
                     trending_item["repo"] = repo[2].strip()
 
-            # comment = article.select_one("p").get_text(strip=True)
-            # if comment:
-            #     trending_item["comment"] = comment
+            comment = article.select_one("p").get_text(strip=True)
+            if comment:
+                trending_item["comment"] = comment
 
             comment_elem = article.select_one("p")
             if comment_elem:
