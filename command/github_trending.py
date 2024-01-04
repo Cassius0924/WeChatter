@@ -9,7 +9,7 @@ def get_github_trending_str() -> str:
 
     trending_str = "✨=====GitHub Trending=====✨\n"
     for i, trending in enumerate(trending_list[:10]):  # 只获取前10个趋势
-        trending_str += f"{i + 1}.🏎️    {trending['author']} / {trending['repo']}\n   ⭐  {trending['star_total']} total (⭐{trending['star_today']})\n   🔤  {trending['programmingLanguage']}\n   📖  {trending['comment']}\n"
+        trending_str += f"{i + 1}. 🏎️     {trending['author']} / {trending['repo']}\n    ⭐  {trending['star_total']} total (⭐{trending['star_today']})\n    🔤  {trending['programmingLanguage']}\n    📖  {trending['comment']}\n"
     return trending_str
 
 
