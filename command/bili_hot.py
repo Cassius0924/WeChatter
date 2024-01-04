@@ -3,21 +3,26 @@ import requests
 
 
 def get_bili_hot_str() -> str:
-    hot_search_list = get_bili_hot_list()
-    if len(hot_search_list) == 0:
+    hot_list = get_bili_hot_list()
+    if hot_list == []:
         return "获取b站热搜失败"
-    hot_search_str = "✨=====b站热搜=====✨\n"
-    for i, hot_search in enumerate(hot_search_list["data"]["list"]):
-        hot_search_str += f"{i + 1}. {hot_search['keyword']}\n"
-    return hot_search_str
+    hot_str = "✨=====b站热搜=====✨\n"
+    for i, hot_search in enumerate(hot_list):
+        hot_str += f"{i + 1}. {hot_search.get('keyword')}\n"
+    return hot_str
 
 
 def get_bili_hot_list() -> list:
-    url = "https://app.bilibili.com/x/v2/search/trending/ranking"
-    response = requests.get(url)
+    response: requests.Response
+    try:
+        url = "https://app.bilibili.com/x/v2/search/trending/ranking"
+        response = requests.get(url, timeout=10)
+    except Exception:
+        print("请求b站热搜失败")
+        return []
 
-    if response.status_code == 200:
-        hot_search_list = response.json()
-        return hot_search_list
-    print("获取b站热搜失败")
-    return []
+    if response.status_code != 200:
+        print("获取b站热搜失败")
+        return []
+    hot_list = response.json()
+    return hot_list.get("data", {}).get("list", [])

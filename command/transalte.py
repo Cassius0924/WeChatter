@@ -84,7 +84,7 @@ def tran_by_reverso_context(content: str, from_lang: str, to_lang: str) -> List:
         "User-Agent": "Mozilla/5.0",
         "Content-Type": "application/json; charset=UTF-8",
     }
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers, timeout=10)
     html = response.text
     soup = BeautifulSoup(html, "html.parser")
     translations_content_div = soup.find(id="translations-content")
