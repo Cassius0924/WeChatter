@@ -1,9 +1,10 @@
 # 翻译命令
-from bs4 import BeautifulSoup, Tag
 from typing import List
-from g4f.Provider.Berlin import json
-import requests
+
 import langid
+import requests
+from bs4 import BeautifulSoup, Tag
+from g4f.Provider.Berlin import json
 
 # 翻译语言字典（何种语言对应何种语言）
 tran_lang_dict = {

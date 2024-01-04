@@ -9,6 +9,8 @@ from command.transalte import (
     detect_lang,
     check_lang_support,
 )
+from command.github_trending import get_github_trending_str
+from command.douyin_hot import get_douyin_hot_str
 from send_msg import send_text_msg, send_file_msg, send_image_msg
 
 
@@ -85,3 +87,13 @@ class CommandInvoker:
     def cmd_today_in_history(to_user_name: str) -> None:
         # 获取历史上的今天
         send_text_msg("历史上的今天功能暂未开放", to_user_name)
+
+    # 命令：/github-trending
+    @staticmethod
+    def cmd_github_trending(to_user_name: str) -> None:
+        send_text_msg(get_github_trending_str(), to_user_name)
+
+    # 命令：/douyin-hot
+    @staticmethod
+    def cmd_douyin_hot(to_user_name: str) -> None:
+        send_text_msg(get_douyin_hot_str(), to_user_name)
