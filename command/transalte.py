@@ -120,9 +120,7 @@ def get_reverso_context_tran_str(content: str, from_lang: str, to_lang: str) -> 
     if transliteration != "":
         transliteration_msg = f"(🔈 注音) <{transliteration}>\n"
         msg += transliteration_msg
-    for i, res in enumerate(result):
-        if i >= 10:
-            break
+    for res in result[:10]:
         msg += res + "\n"
     return msg
 

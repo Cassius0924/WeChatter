@@ -3,6 +3,7 @@ from fastapi import FastAPI, Form
 from message_parser import MessageParser
 import json
 from notifier import Notifier
+from message import Message, MessageType
 
 app = FastAPI()
 message_parser = MessageParser()
@@ -29,16 +30,25 @@ async def recv_msg(
     if isSystemEvent == "1":
         handle_system_event(content)
         return
+
     # 不是系统消息，则是用户发来的消息
-
-    # TODO: 判断是否是群消息，群消息需要@机器人，此限制可以在config里修改
-
     # 获取发送者的名字
     to_user_name = get_user_name(source)
-    if isSystemEvent == "0":
-        print(to_user_name + ": " + content)
-    # 解析消息
-    message_parser.parse_message(content, to_user_name)
+
+    # 构造消息对象
+    message = Message(
+        type=type,
+        content=content,
+        source=source,
+        is_mentioned=isMentioned,
+    )
+
+    # DEBUG
+    print(str(message))
+    print("==" * 20)
+
+    # 用户发来的消息均送给消息解析器处理
+    message_parser.parse_message(message, to_user_name)
 
 
 def get_user_name(source_str: str) -> str:
@@ -62,11 +72,6 @@ def handle_system_event(content: str) -> None:
         pass
     else:
         pass
-
-
-# 登录：curl http://localhost:3001/login\?token\=1213abac
-# 检测登录状态：curl http://localhost:3001/loginCheck\?token\=1213aba
-# 发送消息：curl --location --request POST 'http://localhost:3001/webhook/msg' --header 'Content-Type: application/json' --data-raw '{ "to": "缘", "type": "text", "content": "你好" }'
 
 
 # type
@@ -101,12 +106,13 @@ def handle_system_event(content: str) -> None:
     }
     若type为"urlLink"，则content的格式为：
     {
-      description: "AI技术逐渐成为设计师的灵感库",
+      description: "描述例子",
       thumbnailUrl: "",
-      title: "AI神器帮助你从小白秒变设计师",
+      title: "标题例子",
       url: "http://example.url",
     }
 """
+
 # source
 """
     {
@@ -127,11 +133,9 @@ def handle_system_event(content: str) -> None:
           "_eventsCount": 0,
         },
 
-
         // 消息来自个人，会有以下对象，否则为空字符串
         "to": {
             "id": "@xxx",
-
             "payload": {
                 "alias": "", //备注名
                 "avatar": "xxx",
@@ -144,7 +148,6 @@ def handle_system_event(content: str) -> None:
                 "star": false,
                 "type": 1
             },
-
             "_events": {},
             "_eventsCount": 0,
           },
