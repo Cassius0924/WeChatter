@@ -3,6 +3,8 @@ import json
 from enum import Enum
 from typing import List, Union
 
+from command.command_set import cmd_dict
+
 
 # 消息类型枚举
 class MessageType(Enum):
@@ -83,21 +85,21 @@ class GroupInfo:
 
     @property
     def admin_id_list(self) -> List[str]:
-        return self._admin_id_list
+        return self.__admin_id_list
 
     @admin_id_list.setter
     def admin_id_list(self, admin_id_list: List[str]):
-        self._admin_id_list = admin_id_list
+        self.__admin_id_list = admin_id_list
 
     @property
     def member_list(self) -> List[GroupMemberInfo]:
-        return self._member_list
+        return self.__member_list
 
     @member_list.setter
     def member_list(self, member_list: List[dict]):
-        self._member_list = []
+        self.__member_list = []
         for m in member_list:
-            self._member_list.append(
+            self.__member_list.append(
                 GroupMemberInfo(
                     id=m["id"],
                     name=m["name"],
@@ -144,39 +146,38 @@ class Message:
         self.content = content
         self.source = source
         self.is_mentioned = is_mentioned
+        self.__parse_command()
 
+    # 获取消息类型
     @property
     def type(self) -> MessageType:
-        return self._type
+        return self.__type
 
     @type.setter
     def type(self, type: str):
         if type == "text":
-            self._type = MessageType.TEXT
+            self.__type = MessageType.TEXT
         elif type == "file":
-            self._type = MessageType.FILE
+            self.__type = MessageType.FILE
         elif type == "urlLink":
-            self._type = MessageType.LINK
+            self.__type = MessageType.LINK
         else:
             raise ValueError("消息类型错误")
 
     # 获取消息内容
     @property
-    def content(self) -> str:
-        return self._content
+    def msg(self) -> str:
+        return self.__msg
 
-    @content.setter
-    def content(self, content):
-        self._content = content
-
+    # 获取消息来源
     @property
     def source(self) -> MessageSource:
-        return self._source
+        return self.__source
 
     @source.setter
     def source(self, source_json_str: str):
         if source_json_str == "":
-            self._source = MessageSource()
+            self.__source = MessageSource()
             return
         # 解析json
         source_json = dict()
@@ -192,7 +193,7 @@ class Message:
             name = g_data.get("topic", "")
             admin_id_list = g_data.get("payload", {}).get("adminIdList", [])
             member_list = g_data.get("payload", {}).get("memberList", [])
-            self._source = MessageSource(
+            self.__source = MessageSource(
                 g_info=GroupInfo(
                     id=id,
                     name=name,
@@ -203,7 +204,7 @@ class Message:
         elif source_json["from"] != "":  # 个人消息
             payload = source_json.get("from").get("payload", {})
             if payload == {}:
-                self._source = MessageSource()
+                self.__source = MessageSource()
                 return
             id = payload.get("id", "")
             name = payload.get("name", "")
@@ -214,7 +215,7 @@ class Message:
             city = payload.get("city", "")
             phone_list = payload.get("phone", [])
             is_star = payload.get("star", "")
-            self._source = MessageSource(
+            self.__source = MessageSource(
                 p_info=PersonalInfo(
                     id=id,
                     name=name,
@@ -228,29 +229,61 @@ class Message:
                 )
             )
         else:
-            self._source = MessageSource()
+            self.__source = MessageSource()
 
     @property
-    def is_mentioned(self):
-        return self._is_mentioned
+    def is_mentioned(self) -> bool:
+        return self.__is_mentioned
 
     @is_mentioned.setter
     def is_mentioned(self, is_mentioned: str):
         if is_mentioned == "1":
-            self._is_mentioned = True
+            self.__is_mentioned = True
         else:
-            self._is_mentioned = False
+            self.__is_mentioned = False
+
+    def __parse_command(self) -> None:
+        self.__msg = ""
+        # for value in cmd_dict.values():
+        for cmd, value in cmd_dict.items():
+            for key in value["keys"]:
+                # 第一个空格前的内容即为指令
+                cont_list = self.content.split(" ", 1)
+                if cont_list[0].lower() == "/" + key.lower():
+                    self.__is_cmd = True
+                    self.__cmd = cmd
+                    if len(cont_list) == 2:
+                        self.__msg = cont_list[1]
+                    return
+        self.__is_cmd = False
+        self.__cmd = "None"
+
+    @property
+    def is_command(self) -> bool:
+        return self.__is_cmd
+
+    @property
+    def cmd(self) -> str:
+        return self.__cmd
+
+    @property
+    def cmd_desc(self) -> str:
+        return cmd_dict[self.cmd]["desc"]
+
+    @property
+    def cmd_value(self) -> int:
+        return cmd_dict[self.cmd]["value"]
+
+    # @property
+    # def is_group(self) -> bool:
+    #     pass
+
+    # @property
+    # def is_quote(self) -> bool:
+    #     pass
 
     def __str__(self) -> str:
         return f"消息内容：{self.content}\n消息来源：\n{self.source}\n是否@：{self.is_mentioned}"
-
-    # @property
-    # def is_command(self):
-    #     return self.content.startswith("/")
-
-    # @property
-    # def is_group_command(self):
-    #     return self.is_command and self.is_group
 
 
 """
