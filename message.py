@@ -3,7 +3,7 @@ import json
 import re
 from enum import Enum
 from typing import List, Union
-from BotInfo import BotInfo
+from bot_info import BotInfo
 
 from command.command_set import cmd_dict
 
@@ -135,7 +135,17 @@ class MessageSource:
             return "None"
 
 
-# 消息类，将消息内容、发送者名字、是否群消息、群数据封装成类
+# 消息类
+# msg: 消息内容
+# source: 消息来源
+# is_mentioned: 是否@机器人
+# is_quote: 是否引用机器人消息
+# is_cmd: 是否是命令
+# cmd: 命令
+# cmd_desc: 命令描述
+# cmd_value: 命令值
+
+
 class Message:
     def __init__(
         self,
@@ -188,22 +198,10 @@ class Message:
         except json.JSONDecodeError as e:
             print("消息来源解析失败")
             raise e
-        # 判断是群还是个人
-        if source_json["room"] != "":  # 群消息
-            g_data = source_json["room"]
-            id = g_data["id"]
-            name = g_data.get("topic", "")
-            admin_id_list = g_data.get("payload", {}).get("adminIdList", [])
-            member_list = g_data.get("payload", {}).get("memberList", [])
-            self.__source = MessageSource(
-                g_info=GroupInfo(
-                    id=id,
-                    name=name,
-                    admin_id_list=admin_id_list,
-                    member_list=member_list,
-                )
-            )
-        elif source_json["from"] != "":  # 个人消息
+
+        message_source = MessageSource()
+        # from为发送者信息，无论是个人消息还是群消息，都有from
+        if source_json["from"] != "":
             payload = source_json.get("from").get("payload", {})
             if payload == {}:
                 self.__source = MessageSource()
@@ -217,21 +215,32 @@ class Message:
             city = payload.get("city", "")
             phone_list = payload.get("phone", [])
             is_star = payload.get("star", "")
-            self.__source = MessageSource(
-                p_info=PersonalInfo(
-                    id=id,
-                    name=name,
-                    alias=alias,
-                    gender=gender,
-                    signature=signature,
-                    province=province,
-                    city=city,
-                    phone_list=phone_list,
-                    is_star=is_star,
-                )
+            message_source.p_info = PersonalInfo(
+                id=id,
+                name=name,
+                alias=alias,
+                gender=gender,
+                signature=signature,
+                province=province,
+                city=city,
+                phone_list=phone_list,
+                is_star=is_star,
             )
-        else:
-            self.__source = MessageSource()
+        # room为群信息，只有群消息才有room
+        if source_json["room"] != "":
+            g_data = source_json["room"]
+            id = g_data["id"]
+            payload = g_data.get("payload", {})
+            name = payload.get("topic", "")
+            admin_id_list = payload.get("adminIdList", [])
+            member_list = payload.get("memberList", [])
+            message_source.g_info = GroupInfo(
+                id=id,
+                name=name,
+                admin_id_list=admin_id_list,
+                member_list=member_list,
+            )
+        self.__source = message_source
 
     # 解析命令
     def __parse_command(self) -> None:
@@ -245,10 +254,10 @@ class Message:
                 # 第一个空格前的内容即为指令
                 cont_list = self.content.split(" ", 1)
                 if cont_list[0].lower() == "/" + key.lower():
-                    self.__is_cmd = True    # 是否是命令
-                    self.__cmd = cmd        # 命令
+                    self.__is_cmd = True  # 是否是命令
+                    self.__cmd = cmd  # 命令
                     if len(cont_list) == 2:
-                        self.__msg = cont_list[1] # 消息内容
+                        self.__msg = cont_list[1]  # 消息内容
                     return
         self.__is_cmd = False
         self.__cmd = "None"
@@ -283,7 +292,7 @@ class Message:
     # @property
     # def is_group(self) -> bool:
     #     pass
-   
+
     @property
     def is_quote(self) -> bool:
         if not self.__is_quote:

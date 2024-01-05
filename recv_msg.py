@@ -2,7 +2,7 @@
 import json
 
 from fastapi import FastAPI, Form
-from BotInfo import BotInfo
+from bot_info import BotInfo
 from message import Message
 from message_parser import MessageParser
 from notifier import Notifier
@@ -39,7 +39,7 @@ async def recv_msg(
 
     # 不是系统消息，则是用户发来的消息
     # 获取发送者的名字
-    to_user_name = get_user_name(source)
+    # to = get_user_name(source)
 
     # 构造消息对象
     message = Message(
@@ -50,18 +50,18 @@ async def recv_msg(
     )
 
     # DEBUG
+    print("==" * 20)
     print(str(message))
     print("==" * 20)
 
     # 用户发来的消息均送给消息解析器处理
-    message_parser.parse_message(message, to_user_name)
+    message_parser.parse_message(message)
 
 
 def get_user_name(source_str: str) -> str:
     source_dict = json.loads(source_str)
     if source_dict["from"] == "":
         return ""
-    # return source_dict["from"]["payload"]["name"]
     return source_dict.get("from", {}).get("payload", {}).get("name", "")
 
 

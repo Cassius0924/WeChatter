@@ -11,7 +11,7 @@ from command.transalte import (
 )
 from command.github_trending import get_github_trending_str
 from command.douyin_hot import get_douyin_hot_str
-from send_msg import send_text_msg, send_file_msg, send_image_msg
+from send_msg import SendTo, Sender
 
 
 class CommandInvoker:
@@ -20,39 +20,39 @@ class CommandInvoker:
 
     # 命令：/help
     @staticmethod
-    def cmd_help(to_user_name: str) -> None:
-        send_text_msg(get_help_msg(), to_user_name)
+    def cmd_help(to: SendTo) -> None:
+        Sender.send_text_msg(to, get_help_msg())
 
     # 命令：/gpt
     @staticmethod
-    def cmd_gpt35(message: str, to_user_name: str) -> None:
+    def cmd_gpt35(to: SendTo, message: str) -> None:
         # 获取 gpt3.5 回复
-        send_text_msg(reply_by_gpt35(message), to_user_name)
+        Sender.send_text_msg(to, reply_by_gpt35(message))
 
     # 命令：/gpt4
     @staticmethod
-    def cmd_gpt4(message: str, to_user_name: str) -> None:
-        send_text_msg(reply_by_gpt4(message), to_user_name)
+    def cmd_gpt4(to: SendTo, message: str) -> None:
+        Sender.send_text_msg(to, reply_by_gpt4(message))
 
     # 命令：/bili-hot
     @staticmethod
-    def cmd_bili_hot(to_user_name: str) -> None:
-        send_text_msg(get_bili_hot_str(), to_user_name)
+    def cmd_bili_hot(to: SendTo) -> None:
+        Sender.send_text_msg(to, get_bili_hot_str())
 
     # 命令：/zhihu-hot
     @staticmethod
-    def cmd_zhihu_hot(to_user_name: str) -> None:
-        send_text_msg(get_zhihu_hot_str(), to_user_name)
+    def cmd_zhihu_hot(to: SendTo) -> None:
+        Sender.send_text_msg(to, get_zhihu_hot_str())
 
     # 命令：/weibo-hot
     @staticmethod
-    def cmd_weibo_hot(to_user_name: str) -> None:
-        send_text_msg(get_weibo_hot_str(), to_user_name)
+    def cmd_weibo_hot(to: SendTo) -> None:
+        Sender.send_text_msg(to, get_weibo_hot_str())
 
     # 命令：/word
     # TODO: 改成解释单词，不翻译
     @staticmethod
-    def cmd_word(message: str, to_user_name: str) -> None:
+    def cmd_word(to: SendTo, message: str) -> None:
         # 检测文本语言
         from_lang = detect_lang(message)
         to_lang = "chinese"
@@ -60,7 +60,7 @@ class CommandInvoker:
         # zh -> en
         # other -> zh -> en
         if from_lang == "":
-            send_text_msg("无法检测文本语言", to_user_name)
+            Sender.send_text_msg(to, "无法检测文本语言")
             return
         if from_lang == "chinese":
             to_lang = "english"
@@ -68,32 +68,32 @@ class CommandInvoker:
             to_lang = "english"
         # 获取翻译
         result = get_reverso_context_tran_str(message, from_lang, to_lang)
-        send_text_msg(result, to_user_name)
+        Sender.send_text_msg(to, result)
 
     # 命令：/tran
     @staticmethod
-    def cmd_tran(message: str, to_user_name: str) -> None:
+    def cmd_tran(to: SendTo, message: str) -> None:
         # 获取翻译
-        send_text_msg("翻译功能暂未开放", to_user_name)
+        Sender.send_text_msg(to, "翻译功能暂未开放")
 
     # 命令：/people-daily
     @staticmethod
-    def cmd_people_daily(to_user_name: str) -> None:
+    def cmd_people_daily(to: SendTo) -> None:
         # 获取人民日报
-        send_text_msg("人民日报功能暂未开放", to_user_name)
+        Sender.send_text_msg(to, "人民日报功能暂未开放")
 
     # 命令：/today-in-history
     @staticmethod
-    def cmd_today_in_history(to_user_name: str) -> None:
+    def cmd_today_in_history(to: SendTo) -> None:
         # 获取历史上的今天
-        send_text_msg("历史上的今天功能暂未开放", to_user_name)
+        Sender.send_text_msg(to, "历史上的今天功能暂未开放")
 
     # 命令：/github-trending
     @staticmethod
-    def cmd_github_trending(to_user_name: str) -> None:
-        send_text_msg(get_github_trending_str(), to_user_name)
+    def cmd_github_trending(to: SendTo) -> None:
+        Sender.send_text_msg(to, get_github_trending_str())
 
     # 命令：/douyin-hot
     @staticmethod
-    def cmd_douyin_hot(to_user_name: str) -> None:
-        send_text_msg(get_douyin_hot_str(), to_user_name)
+    def cmd_douyin_hot(to: SendTo) -> None:
+        Sender.send_text_msg(to, get_douyin_hot_str())
