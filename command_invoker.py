@@ -11,6 +11,8 @@ from command.transalte import (
 )
 from command.github_trending import get_github_trending_str
 from command.douyin_hot import get_douyin_hot_str
+from command.pai_post import get_pai_post_str
+from command.today_in_history import get_today_in_history_str
 from send_msg import send_text_msg, send_file_msg, send_image_msg
 
 
@@ -86,7 +88,7 @@ class CommandInvoker:
     @staticmethod
     def cmd_today_in_history(to_user_name: str) -> None:
         # 获取历史上的今天
-        send_text_msg("历史上的今天功能暂未开放", to_user_name)
+        send_text_msg(get_today_in_history_str(), to_user_name)
 
     # 命令：/github-trending
     @staticmethod
@@ -97,3 +99,10 @@ class CommandInvoker:
     @staticmethod
     def cmd_douyin_hot(to_user_name: str) -> None:
         send_text_msg(get_douyin_hot_str(), to_user_name)
+
+    # 命令：/pai-post
+    @staticmethod
+    def cmd_pai_post(to_user_name: str) -> None:
+        send_text_msg(get_pai_post_str(), to_user_name)
+
+
