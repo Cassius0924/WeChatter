@@ -88,7 +88,7 @@ class CommandInvoker:
     @staticmethod
     def cmd_today_in_history(to: SendTo) -> None:
         # 获取历史上的今天
-        Sender.send_text_msg(to, "历史上的今天功能暂未开放")
+        Sender.send_text_msg(to, get_today_in_history_str())
 
     # 命令：/github-trending
     @staticmethod
@@ -102,5 +102,5 @@ class CommandInvoker:
 
     # 命令：/pai-post
     @staticmethod
-    def cmd_pai_post(to_user_name: str) -> None:
-        Sender.send_text_msg(to(), get_pai_post_str())
+    def cmd_pai_post(to: SendTo) -> None:
+        Sender.send_text_msg(to, get_pai_post_str())

@@ -1,3 +1,5 @@
+from typing import List
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -13,7 +15,7 @@ def get_pai_post_str() -> str:
     return pai_post_str
 
 
-def get_pai_post_list() -> list:
+def get_pai_post_list() -> List:
     response: requests.Response
     try:
         url = "https://sspai.com/"

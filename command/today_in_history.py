@@ -1,3 +1,5 @@
+from typing import List
+
 import requests
 
 
@@ -8,11 +10,11 @@ def get_today_in_history_str() -> str:
 
     today_in_history_str = "✨=====历史上的今天=====✨\n"
     for i, today_in_history in enumerate(today_in_history_list):
-        today_in_history_str += f"{i + 1}. ⌚️{today_in_history.get('year')}\n  🌎{today_in_history.get('title')}\n  🌪️{today_in_history.get('desc')}\n"
+        today_in_history_str += f"{i + 1}. 🗓️ {today_in_history.get('year')}\n    🌎 {today_in_history.get('title')}\n    🌪️ {today_in_history.get('desc')}\n"
     return today_in_history_str
 
 
-def get_today_in_history_list() -> list:
+def get_today_in_history_list() -> List:
     response: requests.Response
     try:
         url = "https://60s-view.deno.dev/history"

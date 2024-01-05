@@ -11,7 +11,6 @@ class Notifier:
     @staticmethod
     def notify_received(to: SendTo) -> None:
         msg = "收到命令请求"
-        print(to.p_name)
         Sender.send_text_msg(to, msg)
 
     # 机器人登录登出通知，若是登录（登出）则发送登录（登出）消息给所有管理员

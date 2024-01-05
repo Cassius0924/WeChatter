@@ -10,10 +10,8 @@ class SendTo:
         self.p_name = ""
         self.g_name = ""
         if source.p_info is not None:
-            print(source.p_info.name)
             self.p_name = source.p_info.name
         if source.g_info is not None:
-            print(source.g_info.name)
             self.g_name = source.g_info.name
 
 
