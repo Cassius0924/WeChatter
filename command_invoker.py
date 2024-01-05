@@ -11,6 +11,8 @@ from command.transalte import (
 )
 from command.github_trending import get_github_trending_str
 from command.douyin_hot import get_douyin_hot_str
+from command.pai_post import get_pai_post_str
+from command.today_in_history import get_today_in_history_str
 from send_msg import SendTo, Sender
 
 
@@ -97,3 +99,8 @@ class CommandInvoker:
     @staticmethod
     def cmd_douyin_hot(to: SendTo) -> None:
         Sender.send_text_msg(to, get_douyin_hot_str())
+
+    # 命令：/pai-post
+    @staticmethod
+    def cmd_pai_post(to_user_name: str) -> None:
+        Sender.send_text_msg(to(), get_pai_post_str())
