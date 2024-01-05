@@ -31,6 +31,9 @@ class MessageParser:
         #     pass
 
         # TODO: 判断是否为群消息，群消息需要@机器人，此限制可以在config里修改
+        if message.is_group and not message.is_mentioned:
+            print("该消息为群消息，但未@机器人，不处理")
+            return
 
         to = SendTo(message.source)
         # 是命令消息

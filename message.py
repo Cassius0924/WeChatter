@@ -244,15 +244,24 @@ class Message:
 
     # 解析命令
     def __parse_command(self) -> None:
-        self.__msg = ""
-        # 引用消息的正则表达式
-        quote_pattern = r"(?s)「(.*?)」\n- - - - - - - - - - - - - - -"
+        # 判断是否为引用消息
+        quote_pattern = (
+            r"(?s)「(.*?)」\n- - - - - - - - - - - - - - -"  # 引用消息的正则
+        )
         match_result = re.match(quote_pattern, self.content)
         self.__is_quote = bool(match_result)
+        # 判断是否为群消息
+        self.__is_group = bool(self.source.g_info)
+        # 不带命令前缀和@前缀的消息内容
+        self.__msg = ""
+        content = self.content
+        if self.__is_mentioned and self.__is_group:
+            # 去掉"@机器人名"的前缀
+            content = content.replace(f"@{BotInfo.name} ", "")
         for cmd, value in cmd_dict.items():
             for key in value["keys"]:
                 # 第一个空格前的内容即为指令
-                cont_list = self.content.split(" ", 1)
+                cont_list = content.split(" ", 1)
                 if cont_list[0].lower() == "/" + key.lower():
                     self.__is_cmd = True  # 是否是命令
                     self.__cmd = cmd  # 命令
@@ -289,9 +298,9 @@ class Message:
     def cmd_value(self) -> int:
         return cmd_dict[self.cmd]["value"]
 
-    # @property
-    # def is_group(self) -> bool:
-    #     pass
+    @property
+    def is_group(self) -> bool:
+        return self.__is_group
 
     @property
     def is_quote(self) -> bool:
