@@ -1,7 +1,9 @@
 # 消息类
 import json
+import re
 from enum import Enum
 from typing import List, Union
+from BotInfo import BotInfo
 
 from command.command_set import cmd_dict
 
@@ -231,6 +233,26 @@ class Message:
         else:
             self.__source = MessageSource()
 
+    # 解析命令
+    def __parse_command(self) -> None:
+        self.__msg = ""
+        # 引用消息的正则表达式
+        quote_pattern = r"(?s)「(.*?)」\n- - - - - - - - - - - - - - -"
+        match_result = re.match(quote_pattern, self.content)
+        self.__is_quote = bool(match_result)
+        for cmd, value in cmd_dict.items():
+            for key in value["keys"]:
+                # 第一个空格前的内容即为指令
+                cont_list = self.content.split(" ", 1)
+                if cont_list[0].lower() == "/" + key.lower():
+                    self.__is_cmd = True    # 是否是命令
+                    self.__cmd = cmd        # 命令
+                    if len(cont_list) == 2:
+                        self.__msg = cont_list[1] # 消息内容
+                    return
+        self.__is_cmd = False
+        self.__cmd = "None"
+
     @property
     def is_mentioned(self) -> bool:
         return self.__is_mentioned
@@ -241,22 +263,6 @@ class Message:
             self.__is_mentioned = True
         else:
             self.__is_mentioned = False
-
-    def __parse_command(self) -> None:
-        self.__msg = ""
-        # for value in cmd_dict.values():
-        for cmd, value in cmd_dict.items():
-            for key in value["keys"]:
-                # 第一个空格前的内容即为指令
-                cont_list = self.content.split(" ", 1)
-                if cont_list[0].lower() == "/" + key.lower():
-                    self.__is_cmd = True
-                    self.__cmd = cmd
-                    if len(cont_list) == 2:
-                        self.__msg = cont_list[1]
-                    return
-        self.__is_cmd = False
-        self.__cmd = "None"
 
     @property
     def is_command(self) -> bool:
@@ -277,13 +283,21 @@ class Message:
     # @property
     # def is_group(self) -> bool:
     #     pass
-
-    # @property
-    # def is_quote(self) -> bool:
-    #     pass
+   
+    @property
+    def is_quote(self) -> bool:
+        if not self.__is_quote:
+            return False
+        bot_name = BotInfo.name
+        if bot_name == "":
+            print("机器人名字为空")
+            return False
+        if self.content.startswith(f"「{bot_name}"):
+            return True
+        return False
 
     def __str__(self) -> str:
-        return f"消息内容：{self.content}\n消息来源：\n{self.source}\n是否@：{self.is_mentioned}"
+        return f"消息内容：{self.content}\n消息来源：\n{self.source}\n是否@：{self.is_mentioned}\n是否引用：{self.is_quote}"
 
 
 """

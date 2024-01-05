@@ -1,7 +1,5 @@
 # 消息通知器
 from admin import send_msg_to_all_admin
-from config import admin_list
-from event_parser import EventParser
 from send_msg import send_text_msg
 
 
@@ -21,6 +19,7 @@ class Notifier:
         msg = "微信机器人启动成功"
         send_msg_to_all_admin(msg)
 
+    # FIXME: 登出消息发送不出去，因为发消息时候，机器人已经退出登录了
     @staticmethod
     def notify_logged_out() -> None:
         msg = "微信机器人已退出"
