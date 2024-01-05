@@ -72,4 +72,9 @@ cmd_dict = {
         "desc": "获取抖音热搜。",
         "value": 14,
     },
+    "pai-post": {
+        "keys": ["派早报", "pai-post"],
+        "desc": "获取少数派早报。",
+        "value": 15,
+    },
 }
