@@ -4,6 +4,7 @@ from command_invoker import CommandInvoker
 from message import Message
 from notifier import Notifier
 from send_msg import SendTo
+from main import cr
 
 
 # 消息解析器，用于解析用户发来的消息
@@ -30,8 +31,7 @@ class MessageParser:
         # if message.is_quote:
         #     pass
 
-        # TODO: 判断是否为群消息，群消息需要@机器人，此限制可以在config里修改
-        if message.is_group and not message.is_mentioned:
+        if cr.need_mentioned and message.is_group and not message.is_mentioned:
             print("该消息为群消息，但未@机器人，不处理")
             return
 

@@ -2,6 +2,7 @@
 import requests
 
 from message import MessageSource
+from main import cr
 
 
 # 发送对象类
@@ -17,9 +18,8 @@ class SendTo:
 
 # TODO: 将URL端口保存到配置文件中
 class Sender:
-    # host = "http://localhost"
-    # port = ""
-    # url = f'{host}:{port}/webhook/msg'
+    host = "http://localhost"
+    url = f'{host}:{cr.send_port}/webhook/msg'
 
     # 发送文本消息
     """

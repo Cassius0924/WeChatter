@@ -71,25 +71,31 @@ vim config.ini
 python3 main.py
 ```
 
-## 配置文件
-
-| 配置项| 解释 | 可选值 | 备注 |
-| --- | --- | --- | --- |
-| `admin_list` | 设置管理员,用于接收机器人状态变化通知 || 填入管理员名称（不是备注）|
-| `is_need_mentioned` | 群命令是否需要`@`机器人 |`True` `Flase`| 默认为 `True` |
-| `send_port` | 发送消息的端口 | | 此端口必须和 `wxBotWebhook` 的 Docker 端口相同，默认为 `3001` |
-| `recv_port` | 接受消息的端口 | | 此端口必须和 Docker 中 `RECV_MSG_API` 的端口相同 |
-
 6. 测试机器人
 
 使用另一个微信给机器人发送 `/help` 指令。
+
+
+## 配置文件
+
+项目中的 `config.ini.temp` 为配置文件模版，首次启动项目需要复制一份配置文件，并命名为 `config.ini`。
+
+下表为配置项解释：
+
+| 配置项| 解释 |  备注 |
+| --- | --- |  --- |
+| `admin_list` | 设置管理员,用于接收机器人状态变化通知 | 填入管理员微信名（不是备注）|
+| `bot_name` | 微信机器人的名字 | 不是微信号|
+| `need_mentioned` | 群命令是否需要`@`机器人 | 默认为 `True` |
+| `send_port` | 发送消息的端口 | 此端口必须和 `wxBotWebhook` 的 Docker 端口相同，默认为 `3001` |
+| `recv_port` | 接受消息的端口 | 此端口必须和 Docker 中 `RECV_MSG_API` 的端口相同 |
 
 ## 支持功能
 
 目前机器人支持如下指令：
 
-- [x] GPT问答，基于[gpt4free](https://github.com/xtekky/gpt4free)
-- [x] 获取B站热搜
+- [x] GPT问答，基于[gpt4free](https://github.com/xtekky/gpt4free)实现
+- [x] 获取B站热搜 
 - [x] 获取知乎热搜
 - [x] 获取微博热搜
 - [x] 获取抖音热搜

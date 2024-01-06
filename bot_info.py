@@ -7,7 +7,7 @@ class BotInfo:
     name: str = ""
 
     @staticmethod
-    def update(source: str) -> None:
+    def update_from_source(source: str) -> None:
         source_dict = {}
         try:
             source_dict = json.loads(source)
@@ -20,3 +20,11 @@ class BotInfo:
         payload = to.get("payload", {})
         BotInfo.id = payload.get("id", "")
         BotInfo.name = payload.get("name", "")
+
+    @staticmethod
+    def update_id(id: str) -> None:
+        BotInfo.id = id
+
+    @staticmethod
+    def update_name(name: str) -> None:
+        BotInfo.name = name
