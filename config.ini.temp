@@ -26,3 +26,5 @@ need_mentioned = True
 send_port = 3001
 # 接收消息的端口，RECV_MSG_API的端口（<<4000>>）
 recv_port = 4000
+# 接收消息的接口路径，RECV_MSG_API的路径（<</receive_msg>>）
+recv_api_path = /receive_msg

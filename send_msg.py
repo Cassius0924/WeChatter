@@ -7,8 +7,9 @@ from message import MessageSource
 from main import cr
 
 
-# 发送对象类
 class SendTo:
+    """发送对象类"""
+
     def __init__(self, source: MessageSource):
         self.p_name = ""
         self.g_name = ""
@@ -18,21 +19,24 @@ class SendTo:
             self.g_name = source.g_info.name
 
 
-# 发送消息类型枚举
 class SendMessageType(Enum):
+    """发送消息类型枚举"""
+
     TEXT = "text"
     FILE_URL = "fileUrl"
 
 
-# 发送消息类
 class SendMessage:
+    """发送消息类"""
+
     def __init__(self, type: SendMessageType, content: str):
         self.type = type.value
         self.content = content
 
 
-# 发送消息列表类，用于给同一个对象发送多条消息
 class SendMessageList:
+    """发送消息列表类，用于给同一个对象发送多条消息"""
+
     def __init__(self):
         self.messages: List[SendMessage] = []
 
@@ -57,26 +61,29 @@ response: {
 
 
 def _check(response: requests.Response) -> bool:
+    """检查发送状态"""
     if response.status_code != 200:
         print(f"发送消息失败，状态码：{response.status_code}")
         return False
     result = response.json()
     # 即使code为200，也需要检查success字段
-    task = result["task"]
-    if not result["success"] or not task["successCount"] == task["totalCount"]:
-        print(f"发送消息失败，错误信息：{result['message']}")
-        return False
-    # 部分成功
-    if task["successCount"] > 0 and task["successCount"] < task["totalCount"]:
-        print(
-            f"发送消息部分成功，成功数：{task['successCount']}, 失败数：{task['failedCount']}"
-        )
-        return True
+    task = result.get("task", None)
+    if task is not None:
+        if not result["success"] or not task["successCount"] == task["totalCount"]:
+            print(f"发送消息失败，错误信息：{result['message']}")
+            return False
+        # 部分成功
+        if task["successCount"] > 0 and task["successCount"] < task["totalCount"]:
+            print(
+                f"发送消息部分成功，成功数：{task['successCount']}, 失败数：{task['failedCount']}"
+            )
+            return True
     return True
 
 
-# v2 版本 api 消息发送类
 class Sender:
+    """v2 版本 api 消息发送类"""
+
     host = "http://localhost"
     url = f"{host}:{cr.send_port}/webhook/msg/v2"
 
@@ -104,17 +111,19 @@ class Sender:
 
     @staticmethod
     def send_msg(to: SendTo, message: SendMessage) -> bool:
+        """发送消息（文本或链接文件）"""
         # 群消息
         if to.g_name != "":
-            message.content = f"@{to.p_name}\n{message.content}"
+            if message.type == SendMessageType.TEXT.value:
+                message.content = f"@{to.p_name}\n{message.content}"
             return Sender.send_msg_g(to.g_name, message)
         # 个人消息
         else:
             return Sender.send_msg_p(to.p_name, message)
 
-    # 发送给个人
     @staticmethod
     def send_msg_p(to_p_name: str, message: SendMessage) -> bool:
+        """发送给个人"""
         headers = {"Content-Type": "application/json"}
         data = {
             "to": to_p_name,
@@ -123,9 +132,9 @@ class Sender:
         }
         return _check(requests.post(Sender.url, headers=headers, json=data))
 
-    # 发送给群组
     @staticmethod
     def send_msg_g(to_g_name: str, message: SendMessage) -> bool:
+        """发送给群组"""
         headers = {"Content-Type": "application/json"}
         data = {
             "to": to_g_name,
@@ -200,9 +209,9 @@ class Sender:
     ]'
     """
 
-    # 给多个人发送一条消息
     @staticmethod
     def send_msg_ps(to_p_names: List[str], message: SendMessage) -> bool:
+        """给多个人发送一条消息"""
         headers = {"Content-Type": "application/json"}
         data = []
         for to_p_name in to_p_names:
@@ -214,9 +223,9 @@ class Sender:
             data.append(msg)
         return _check(requests.post(Sender.url, headers=headers, json=data))
 
-    # 给多个群组发送一条消息
     @staticmethod
     def send_msg_gs(to_g_names: List[str], message: SendMessage) -> bool:
+        """给多个群组发送一条消息"""
         headers = {"Content-Type": "application/json"}
         data = []
         for to_g_name in to_g_names:
@@ -240,6 +249,7 @@ class Sender:
 
     @staticmethod
     def send_localfile_msg(to: SendTo, file_path: str) -> bool:
+        """发送本地文件"""
         if to.g_name != "":
             return Sender.send_localfile_msg_g(to.g_name, file_path)
         else:
@@ -247,6 +257,7 @@ class Sender:
 
     @staticmethod
     def send_localfile_msg_p(to_p_name: str, file_path: str) -> bool:
+        """发送本地文件给个人"""
         url = "http://localhost:3001/webhook/msg"
         data = {"to": to_p_name, "isRoom": 0}
         files = {"content": open(file_path, "rb")}
@@ -254,14 +265,16 @@ class Sender:
 
     @staticmethod
     def send_localfile_msg_g(to_g_name: str, file_path: str) -> bool:
+        """发送本地文件给群组"""
         url = "http://localhost:3001/webhook/msg"
         data = {"to": to_g_name, "isRoom": 1}
         files = {"content": open(file_path, "rb")}
         return _check(requests.post(url, data=data, files=files))
 
 
-# v1 版本 api 消息发送类
 class SenderV1:
+    """v1 版本 api 消息发送类"""
+
     host = "http://localhost"
     url = f"{host}:{cr.send_port}/webhook/msg"
 
@@ -278,6 +291,7 @@ class SenderV1:
 
     @staticmethod
     def send_text_msg(to: SendTo, message: str) -> None:
+        """发送文本消息"""
         # 群消息
         if to.g_name != "":
             message = f"@{to.p_name}\n{message}"
@@ -286,17 +300,17 @@ class SenderV1:
         else:
             SenderV1.send_text_msg_p(to.p_name, message)
 
-    # 发送给个人
     @staticmethod
     def send_text_msg_p(to_p_name: str, message: str) -> None:
+        """发送文本消息给个人"""
         url = "http://localhost:3001/webhook/msg"
         headers = {"Content-Type": "application/json"}
         data = {"to": to_p_name, "type": "text", "content": message}
         requests.post(url, headers=headers, json=data)
 
-    # 发送给群组
     @staticmethod
     def send_text_msg_g(to_g_name: str, message: str) -> None:
+        """发送文本消息给群组"""
         url = "http://localhost:3001/webhook/msg"
         headers = {"Content-Type": "application/json"}
         data = {"to": to_g_name, "isRoom": True, "type": "text", "content": message}
@@ -316,6 +330,7 @@ class SenderV1:
 
     @staticmethod
     def send_urlfile_msg(to: SendTo, file_path: str) -> None:
+        """通过文件URL发送文件"""
         if to.g_name != "":
             SenderV1.send_urlfile_msg_g(to.g_name, file_path)
         else:
@@ -323,6 +338,7 @@ class SenderV1:
 
     @staticmethod
     def send_urlfile_msg_p(to_p_name: str, file_url: str) -> None:
+        """通过文件URL发送文件给个人"""
         url = "http://localhost:3001/webhook/msg"
         headers = {"Content-Type": "application/json"}
         data = {"to": to_p_name, "type": "fileUrl", "content": file_url}
@@ -330,6 +346,7 @@ class SenderV1:
 
     @staticmethod
     def send_urlfile_msg_g(to_g_name: str, file_url: str) -> None:
+        """通过文件URL发送文件给群组"""
         url = "http://localhost:3001/webhook/msg"
         headers = {"Content-Type": "application/json"}
         data = {"to": to_g_name, "isRoom": True, "type": "fileUrl", "content": file_url}
@@ -345,6 +362,7 @@ class SenderV1:
 
     @staticmethod
     def send_localfile_msg(to: SendTo, file_path: str) -> None:
+        """发送本地文件"""
         if to.g_name != "":
             SenderV1.send_localfile_msg_g(to.g_name, file_path)
         else:
@@ -352,6 +370,7 @@ class SenderV1:
 
     @staticmethod
     def send_localfile_msg_p(to_p_name: str, file_path: str) -> None:
+        """发送本地文件给个人"""
         url = "http://localhost:3001/webhook/msg"
         data = {"to": to_p_name, "isRoom": 0}
         files = {"content": open(file_path, "rb")}
@@ -359,6 +378,7 @@ class SenderV1:
 
     @staticmethod
     def send_localfile_msg_g(to_g_name: str, file_path: str) -> None:
+        """发送本地文件给群组"""
         url = "http://localhost:3001/webhook/msg"
         data = {"to": to_g_name, "isRoom": 1}
         files = {"content": open(file_path, "rb")}

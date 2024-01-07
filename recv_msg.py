@@ -6,12 +6,13 @@ from bot_info import BotInfo
 from message import Message
 from message_parser import MessageParser
 from notifier import Notifier
+from main import cr
 
 app = FastAPI()
 message_parser = MessageParser()
 
 
-@app.post("/receive_msg")
+@app.post(cr.recv_api_path)
 async def recv_msg(
     type: str = Form(),
     content: str = Form(),
@@ -19,6 +20,7 @@ async def recv_msg(
     isMentioned: str = Form(),
     isSystemEvent: str = Form(),
 ):
+    """接收Docker转发过来的消息的接口"""
     # DEBUG
     # print("==" * 20)
     # print(type)
@@ -39,8 +41,6 @@ async def recv_msg(
         return
 
     # 不是系统消息，则是用户发来的消息
-    # 获取发送者的名字
-    # to = get_user_name(source)
 
     # 构造消息对象
     message = Message(
@@ -59,15 +59,8 @@ async def recv_msg(
     message_parser.parse_message(message)
 
 
-def get_user_name(source_str: str) -> str:
-    source_dict = json.loads(source_str)
-    if source_dict["from"] == "":
-        return ""
-    return source_dict.get("from", {}).get("payload", {}).get("name", "")
-
-
-# 判断系统事件类型，并调用相应的函数
 def handle_system_event(content: str) -> None:
+    """判断系统事件类型，并调用相应的函数"""
     content_dict: dict = json.loads(content)
     # 判断是否为机器人登录消息
     if content_dict["event"] == "login":

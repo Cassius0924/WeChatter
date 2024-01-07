@@ -4,7 +4,7 @@ from command.help import get_help_msg
 from command.bili_hot import get_bili_hot_str
 from command.zhihu_hot import get_zhihu_hot_str
 from command.weibo_hot import get_weibo_hot_str
-from command.transalte import (
+from command.translate import (
     get_reverso_context_tran_str,
     detect_lang,
     check_lang_support,
@@ -13,18 +13,21 @@ from command.github_trending import get_github_trending_str
 from command.douyin_hot import get_douyin_hot_str
 from command.pai_post import get_pai_post_str
 from command.today_in_history import get_today_in_history_str
+from command.qrcode import generate_qrcode
 from send_msg import SendMessage, SendMessageType, SendTo, Sender
 from command.todo import add_todo_task, remove_todo_task, view_todos
 import re
 
 
 class CommandInvoker:
+    """命令调用器"""
+
     def __init__(self) -> None:
         pass
 
-    # 封装发送文本消息
     @staticmethod
     def _send_text_msg(to: SendTo, message: str) -> None:
+        """封装发送文本消息"""
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, message))
 
     # 命令：/help
@@ -124,6 +127,13 @@ class CommandInvoker:
         response = get_pai_post_str()
         CommandInvoker._send_text_msg(to, response)
 
+    # 命令：/qrcode
+    @staticmethod
+    def cmd_qrcode(to: SendTo, message: str) -> None:
+        # 获取二维码
+        response = generate_qrcode(message)
+        Sender.send_localfile_msg(to, response)
+
     # 命令：/todo
     @staticmethod
     def cmd_todo(to: SendTo, message: str, personid: str, personname: str) -> None:
@@ -168,3 +178,4 @@ class CommandInvoker:
         CommandInvoker._send_text_msg(to, remove_result)
         result = view_todos(person_id, person_name)
         CommandInvoker._send_text_msg(to, result)
+
