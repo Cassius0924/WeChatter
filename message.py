@@ -276,7 +276,6 @@ class Message:
             for key in value["keys"]:
                 # 第一个空格前的内容即为指令
                 cont_list = content.split(" ", 1)
-                print(cont_list)
                 if cont_list[0].lower() == command_prefix + key.lower():
                     self.__is_cmd = True  # 是否是命令
                     self.__cmd = cmd  # 命令
