@@ -30,7 +30,7 @@ async def recv_msg(
 
     # 更新机器人信息（id和name）
     # FIXME: 启动服务器后，只有个人消息才能成功更新机器人信息，群消息无法确定机器人的id和name
-    BotInfo.update(source)
+    BotInfo.update_from_source(source)
 
     # 判断是否是系统事件
     if isSystemEvent == "1":
