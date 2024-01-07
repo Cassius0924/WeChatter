@@ -24,10 +24,9 @@ class MessageType(Enum):
 class MessageSender(Enum):
     PERSONAL = 0
     GROUP = 1
-    # TODO: 文件传输助手
+    # TODO: 文件传输助手，公众号文章
     # FILE_HELPER = 2
-    # TODO: 微信运动
-    # WECHAT_SPORT = 3
+    # ARTICLE = 3
 
 
 # 个人消息类
@@ -276,7 +275,6 @@ class Message:
             for key in value["keys"]:
                 # 第一个空格前的内容即为指令
                 cont_list = content.split(" ", 1)
-                print(cont_list)
                 if cont_list[0].lower() == command_prefix + key.lower():
                     self.__is_cmd = True  # 是否是命令
                     self.__cmd = cmd  # 命令
