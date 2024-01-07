@@ -20,6 +20,8 @@ class MessageParser:
         # cmd = message.cmd # 命令
         desc = message.cmd_desc  # 命令描述
         cmd_value = message.cmd_value  # 命令值
+        id = message.source.p_info.id  # 发送者id
+        name = message.source.p_info.name  # 发送者昵称
 
         print(desc)
         # 非命令消息
@@ -74,9 +76,22 @@ class MessageParser:
         elif cmd_value == self.__get_cmd_value("today-in-history"):
             CommandInvoker.cmd_today_in_history(to)
 
+        elif cmd_value == self.__get_cmd_value("pai-post"):
+            CommandInvoker.cmd_pai_post(to)
+
+        elif cmd_value == self.__get_cmd_value("today-in-history"):
+            CommandInvoker.cmd_today_in_history(to)
+
+        elif cmd_value == self.__get_cmd_value("todo"):
+            CommandInvoker.cmd_todo(to, msg, id, name)
+
+        elif cmd_value == self.__get_cmd_value("rmtd"):
+            CommandInvoker.cmd_remove_todo(to, msg, id, name)
+
         elif cmd_value == self.__get_cmd_value("qrcode"):
             CommandInvoker.cmd_qrcode(to, msg)
 
+    # 获取命令值
     def __get_cmd_value(self, cmd: str) -> int:
         """获取命令值"""
         return cmd_dict[cmd]["value"]

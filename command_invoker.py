@@ -15,6 +15,8 @@ from command.pai_post import get_pai_post_str
 from command.today_in_history import get_today_in_history_str
 from command.qrcode import generate_qrcode
 from send_msg import SendMessage, SendMessageType, SendTo, Sender
+from command.todo import add_todo_task, remove_todo_task, view_todos
+import re
 
 
 class CommandInvoker:
@@ -131,3 +133,49 @@ class CommandInvoker:
         # 获取二维码
         response = generate_qrcode(message)
         Sender.send_localfile_msg(to, response)
+
+    # 命令：/todo
+    @staticmethod
+    def cmd_todo(to: SendTo, message: str, personid: str, personname: str) -> None:
+        # 获取用户id
+        person_id = personid
+        # 获取用户名
+        person_name = personname
+        # 判断是查询还是添加
+        if message == "":
+            # 获取待办事项
+            result = view_todos(person_id, person_name)
+            CommandInvoker._send_text_msg(to, result)
+        else:
+            # 添加待办事项
+            add_success = add_todo_task(person_id, message)
+            if add_success:
+                result = view_todos(person_id, person_name)
+                CommandInvoker._send_text_msg(to, result)
+            else:
+                CommandInvoker._send_text_msg(to, "添加失败")
+
+    # 命令：/rmtd
+    @staticmethod
+    def cmd_remove_todo(
+            to: SendTo, message: str, personid: str, personname: str
+    ) -> None:
+        # 获取用户id
+        person_id = personid
+        # 获取用户名
+        person_name = personname
+
+        indices = [
+            int(idx.strip()) - 1
+            for idx in re.split(r"[\s,]+", message)
+            if idx.strip().isdigit()
+        ]
+        if not indices:
+            CommandInvoker._send_text_msg(to, "请输入有效数字来删除待办事项")
+            return
+
+        remove_result = remove_todo_task(person_id, indices)
+        CommandInvoker._send_text_msg(to, remove_result)
+        result = view_todos(person_id, person_name)
+        CommandInvoker._send_text_msg(to, result)
+
