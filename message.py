@@ -6,6 +6,9 @@ from typing import List, Union
 from bot_info import BotInfo
 
 from command.command_set import cmd_dict
+from main import cr
+
+command_prefix = cr.command_prefix
 
 
 # 消息类型枚举
@@ -178,6 +181,17 @@ class Message:
 
     # 获取消息内容
     @property
+    def content(self) -> str:
+        return self.__content
+
+    @content.setter
+    def content(self, content: str):
+        # 对于 iPad、手机端的微信，@名称后面会跟着一个未解码的空格的Unicode编码："@Cassius\u2005/help"
+        # 将第一个\u2005替换为普通空格
+        self.__content = content.replace("\u2005", " ", 1)
+
+    # 获取消息内容
+    @property
     def msg(self) -> str:
         return self.__msg
 
@@ -244,17 +258,17 @@ class Message:
 
     # 解析命令
     def __parse_command(self) -> None:
+        content = self.content
         # 判断是否为引用消息
         quote_pattern = (
             r"(?s)「(.*?)」\n- - - - - - - - - - - - - - -"  # 引用消息的正则
         )
-        match_result = re.match(quote_pattern, self.content)
+        match_result = re.match(quote_pattern, content)
         self.__is_quote = bool(match_result)
         # 判断是否为群消息
         self.__is_group = bool(self.source.g_info)
         # 不带命令前缀和@前缀的消息内容
         self.__msg = ""
-        content = self.content
         if self.__is_mentioned and self.__is_group:
             # 去掉"@机器人名"的前缀
             content = content.replace(f"@{BotInfo.name} ", "")
@@ -262,7 +276,8 @@ class Message:
             for key in value["keys"]:
                 # 第一个空格前的内容即为指令
                 cont_list = content.split(" ", 1)
-                if cont_list[0].lower() == "/" + key.lower():
+                print(cont_list)
+                if cont_list[0].lower() == command_prefix + key.lower():
                     self.__is_cmd = True  # 是否是命令
                     self.__cmd = cmd  # 命令
                     if len(cont_list) == 2:
@@ -283,7 +298,7 @@ class Message:
             self.__is_mentioned = False
 
     @property
-    def is_command(self) -> bool:
+    def is_cmd(self) -> bool:
         return self.__is_cmd
 
     @property

@@ -19,11 +19,9 @@ class MessageParser:
         desc = message.cmd_desc  # 命令描述
         cmd_value = message.cmd_value  # 命令值
 
-        message.cmd_desc
-
         print(desc)
-        # 非命令消息（消息不是以/开头）
-        if cmd_value == 0:
+        # 非命令消息
+        if not message.is_cmd:
             print("该消息不是命令类型")
             return
 
@@ -31,6 +29,7 @@ class MessageParser:
         # if message.is_quote:
         #     pass
 
+        # TODO: 可以为不同的群设置是否need_mentioned
         if cr.need_mentioned and message.is_group and not message.is_mentioned:
             print("该消息为群消息，但未@机器人，不处理")
             return

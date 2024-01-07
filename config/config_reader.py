@@ -8,7 +8,7 @@ from typing import List
 class ConfigReader:
     def __init__(self, config_file="config.ini"):
         self.config_file = config_file
-        self.__cp = ConfigParser(comment_prefixes="#", allow_no_value=True)
+        self.__cp = ConfigParser()
         self.__read_config()
 
     # 读取配置文件
@@ -22,6 +22,7 @@ class ConfigReader:
         self.bot_name: str = self.__cp.get("bot", "bot_name")
 
         # chat信息
+        self.command_prefix: str = self.__cp.get("chat", "command_prefix")
         self.need_mentioned: bool = self.__cp.getboolean("chat", "need_mentioned")
 
         # server信息

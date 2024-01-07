@@ -5,19 +5,19 @@
 # 填入微信名称（不是微信号，也不是微信备注）
 # TODO: 添加管理员的权限，比如是否通知登录登出信息，是否通知报警信息
 [admin]
-admin_list = []
+admin_list = ["AdminName", "AdminName2"]
 # TODO: 黑名单功能，可以将某些人拉入黑名单，机器人不会回复他们的消息
 # ban_list = []
 
 
 [bot]
 # 机器人的微信名称（不是微信号，不带引号）
-bot_name = Cassius
+bot_name = BotName
 
 
 [chat]
 # 命令前缀，用于区分命令和普通消息（<</>>）
-command_prefix = !
+command_prefix = /
 
 # 群消息命令是否需要@机器人才能触发（<<True>>/False）
 need_mentioned = True
