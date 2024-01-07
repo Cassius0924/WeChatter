@@ -24,10 +24,9 @@ class MessageType(Enum):
 class MessageSender(Enum):
     PERSONAL = 0
     GROUP = 1
-    # TODO: 文件传输助手
+    # TODO: 文件传输助手，公众号文章
     # FILE_HELPER = 2
-    # TODO: 微信运动
-    # WECHAT_SPORT = 3
+    # ARTICLE = 3
 
 
 # 个人消息类

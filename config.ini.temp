@@ -3,12 +3,10 @@
 
 # 微信管理员，用于接收机器人的报警信息和登录登出信息
 # 填入微信名称（不是微信号，也不是微信备注）
-# TODO: 添加管理员的权限，比如是否通知登录登出信息，是否通知报警信息
 [admin]
-admin_list = ["AdminName", "AdminName2"]
-# TODO: 黑名单功能，可以将某些人拉入黑名单，机器人不会回复他们的消息
-# ban_list = []
-
+admin_list = ["文件传输助手", "AdminName"]
+# 填入微信群名称（不是群备注）
+admin_group_list = ["AdminGroupName"]
 
 [bot]
 # 机器人的微信名称（不是微信号，不带引号）
