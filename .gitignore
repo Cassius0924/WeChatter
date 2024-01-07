@@ -3,9 +3,12 @@ __pycache__/
 .vscode/
 .idea/
 
-# 忽略开发测试文件
+# 发测试文件
 test*
 
-# 忽略 config.ini 配置文件
+# config.ini 配置文件
 config.ini
+
+# data/ 目录下的所有文件
+data/
 

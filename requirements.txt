@@ -4,3 +4,4 @@ fastapi==0.108.0
 uvicorn==0.25.0
 langid==1.1.6
 BeautifulSoup4==4.11.2
+qrcode==7.4.2

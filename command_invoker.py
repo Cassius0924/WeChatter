@@ -13,16 +13,18 @@ from command.github_trending import get_github_trending_str
 from command.douyin_hot import get_douyin_hot_str
 from command.pai_post import get_pai_post_str
 from command.today_in_history import get_today_in_history_str
+from command.qrcode import generate_qrcode, get_qrcode_url
 from send_msg import SendMessage, SendMessageType, SendTo, Sender
 
 
 class CommandInvoker:
+    """ 命令调用器 """
     def __init__(self) -> None:
         pass
 
-    # 封装发送文本消息
     @staticmethod
     def _send_text_msg(to: SendTo, message: str) -> None:
+        """ 封装发送文本消息 """
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, message))
 
     # 命令：/help
@@ -121,3 +123,11 @@ class CommandInvoker:
     def cmd_pai_post(to: SendTo) -> None:
         response = get_pai_post_str()
         CommandInvoker._send_text_msg(to, response)
+
+    # 命令：/qrcode
+    @staticmethod
+    def cmd_qrcode(to: SendTo, message: str) -> None:
+        # 获取二维码
+        response = generate_qrcode(message)
+        Sender.send_localfile_msg(to, response)
+

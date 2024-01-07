@@ -62,16 +62,17 @@ def _check(response: requests.Response) -> bool:
         return False
     result = response.json()
     # 即使code为200，也需要检查success字段
-    task = result["task"]
-    if not result["success"] or not task["successCount"] == task["totalCount"]:
-        print(f"发送消息失败，错误信息：{result['message']}")
-        return False
-    # 部分成功
-    if task["successCount"] > 0 and task["successCount"] < task["totalCount"]:
-        print(
-            f"发送消息部分成功，成功数：{task['successCount']}, 失败数：{task['failedCount']}"
-        )
-        return True
+    task = result.get("task", None)
+    if task is not None:
+        if not result["success"] or not task["successCount"] == task["totalCount"]:
+            print(f"发送消息失败，错误信息：{result['message']}")
+            return False
+        # 部分成功
+        if task["successCount"] > 0 and task["successCount"] < task["totalCount"]:
+            print(
+                f"发送消息部分成功，成功数：{task['successCount']}, 失败数：{task['failedCount']}"
+            )
+            return True
     return True
 
 
@@ -106,7 +107,8 @@ class Sender:
     def send_msg(to: SendTo, message: SendMessage) -> bool:
         # 群消息
         if to.g_name != "":
-            message.content = f"@{to.p_name}\n{message.content}"
+            if message.type == SendMessageType.TEXT.value:
+                message.content = f"@{to.p_name}\n{message.content}"
             return Sender.send_msg_g(to.g_name, message)
         # 个人消息
         else:
