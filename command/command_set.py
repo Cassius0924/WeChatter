@@ -1,4 +1,5 @@
 # 命令集
+# TODO: 添加参数功能，例如天气查询，可以添加城市参数（/天气 北京）
 cmd_dict = {
     "None": {"keys": ["None"], "desc": "无效指令。", "value": 0},
     "help": {
@@ -75,5 +76,15 @@ cmd_dict = {
         "keys": ["派早报", "pai-post"],
         "desc": "获取少数派早报。",
         "value": 15,
+    },
+    "todo": {
+        "keys": ["待办事项", "todo", "待办"],
+        "desc": "待办事项。",
+        "value": 16,
+    },
+    "rmtd": {
+        "keys": ["删除待办事项", "删除待办", "rmtd", "rm-todo", "remove-todo"],
+        "desc": "删除待办事项。",
+        "value": 17,
     },
 }

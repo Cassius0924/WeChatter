@@ -17,9 +17,6 @@ class ConfigReader:
 
         # admin信息
         self.admin_list: List = json.loads(self.__cp.get("admin", "admin_list"))
-        self.admin_group_list: List = json.loads(
-            self.__cp.get("admin", "admin_group_list")
-        )
 
         # bot信息
         self.bot_name: str = self.__cp.get("bot", "bot_name")
@@ -33,3 +30,4 @@ class ConfigReader:
         self.recv_port: int = self.__cp.getint("server", "recv_port")
 
     # TODO;封装get方法，判断不为空
+
