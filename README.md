@@ -85,10 +85,10 @@ python3 main.py
 | `admin_list` | 设置管理员,用于接收机器人状态变化通知 | 填入管理员微信名（不是备注）|
 | `admin_group_list` | 与 `admin_list` 同理，接收机器人状态变化通知 | 填入群名称（不是群备注）|
 | `bot_name` | 微信机器人的名字 | 不是微信号|
-| `command_prefix` | 机器人命令前缀 | 默认为 `/` ，可以设置为`!`、`~`等。|
+| `command_prefix` | 机器人命令前缀 | 默认为 `/` ，可以设置为`!`、`~`等 |
 | `need_mentioned` | 群命令是否需要@机器人 | 默认为 `True` |
-| `send_port` | 发送消息的端口 | 此端口必须和 `wxBotWebhook` 的 Docker 端口相同，默认为 `3001` |
-| `recv_port` | 接受消息的端口 | 此端口必须和 Docker 中 `RECV_MSG_API` 的端口相同 |
+| `send_port` | 发送消息的端口 | 默认为 `3001`，此端口必须和 `wxBotWebhook` 的 Docker 端口相同 |
+| `recv_port` | 接受消息的端口 | 默认为 `4000`，此端口必须和 Docker 的 `RECV_MSG_API` 参数的端口相同 |
 
 ## 支持命令
 
@@ -104,6 +104,6 @@ python3 main.py
 - [x] 获取少数派早报
 - [x] 获取历史上的今天
 - [x] 二维码生成器
-- [ ] 待办清单（TODO）
+- [x] 待办清单（TODO）
 
 更多命令使用 `/help` 命令查看。
