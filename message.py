@@ -11,8 +11,9 @@ from main import cr
 command_prefix = cr.command_prefix
 
 
-# 消息类型枚举
 class MessageType(Enum):
+    """消息类型枚举"""
+
     TEXT = 0
     FILE = 1
     LINK = 2
@@ -20,8 +21,9 @@ class MessageType(Enum):
     # IMAGE = 3
 
 
-# 消息来源枚举
 class MessageSender(Enum):
+    """消息来源枚举"""
+
     PERSONAL = 0
     GROUP = 1
     # TODO: 文件传输助手，公众号文章
@@ -29,8 +31,9 @@ class MessageSender(Enum):
     # ARTICLE = 3
 
 
-# 个人消息类
 class PersonalInfo:
+    """个人消息类"""
+
     def __init__(
         self,
         id: str,
@@ -57,8 +60,9 @@ class PersonalInfo:
         return f"ID: {self.id}\n昵称：{self.name}\n备注：{self.alias}\n性别：{self.gender}\n签名：{self.signature}\n手机：{self.phone_list}\n星标：{self.is_star}"
 
 
-# 群成员类
 class GroupMemberInfo:
+    """群成员类"""
+
     def __init__(
         self,
         id: str,
@@ -73,8 +77,9 @@ class GroupMemberInfo:
         return f"微信ID：{self.id}\n昵称：{self.name}\n备注：{self.alias}"
 
 
-# 群消息类
 class GroupInfo:
+    """群消息类"""
+
     def __init__(
         self,
         id: str,
@@ -89,6 +94,7 @@ class GroupInfo:
 
     @property
     def admin_id_list(self) -> List[str]:
+        """获取管理员ID列表"""
         return self.__admin_id_list
 
     @admin_id_list.setter
@@ -97,6 +103,7 @@ class GroupInfo:
 
     @property
     def member_list(self) -> List[GroupMemberInfo]:
+        """获取群成员列表"""
         return self.__member_list
 
     @member_list.setter
@@ -118,8 +125,9 @@ class GroupInfo:
         return f"群ID: {self.id}\n群名：{self.name}\n管理员：{self.admin_id_list}\n成员：{str(self.member_list)}"
 
 
-# 消息来源类
 class MessageSource:
+    """消息来源类"""
+
     def __init__(
         self,
         p_info: Union[PersonalInfo, None] = None,
@@ -137,18 +145,19 @@ class MessageSource:
             return "None"
 
 
-# 消息类
-# msg: 消息内容
-# source: 消息来源
-# is_mentioned: 是否@机器人
-# is_quote: 是否引用机器人消息
-# is_cmd: 是否是命令
-# cmd: 命令
-# cmd_desc: 命令描述
-# cmd_value: 命令值
-
-
 class Message:
+    """消息类
+    :property msg: 消息内容
+    :property source: 消息来源
+    :property is_mentioned: 是否@机器人
+    :property is_quote: 是否引用机器人消息
+    :property is_cmd: 是否是命令
+    :property is_group: 是否是群消息
+    :property cmd: 命令
+    :property cmd_desc: 命令描述
+    :property cmd_value: 命令值
+    """
+
     def __init__(
         self,
         type: str,
@@ -178,9 +187,9 @@ class Message:
         else:
             raise ValueError("消息类型错误")
 
-    # 获取消息内容
     @property
     def content(self) -> str:
+        """获取消息内容"""
         return self.__content
 
     @content.setter
@@ -189,14 +198,14 @@ class Message:
         # 将第一个\u2005替换为普通空格
         self.__content = content.replace("\u2005", " ", 1)
 
-    # 获取消息内容
     @property
     def msg(self) -> str:
+        """获取消息内容"""
         return self.__msg
 
-    # 获取消息来源
     @property
     def source(self) -> MessageSource:
+        """获取消息来源"""
         return self.__source
 
     @source.setter
@@ -255,8 +264,8 @@ class Message:
             )
         self.__source = message_source
 
-    # 解析命令
     def __parse_command(self) -> None:
+        """解析命令"""
         content = self.content
         # 判断是否为引用消息
         quote_pattern = (
@@ -286,6 +295,7 @@ class Message:
 
     @property
     def is_mentioned(self) -> bool:
+        """是否@机器人"""
         return self.__is_mentioned
 
     @is_mentioned.setter
@@ -297,26 +307,32 @@ class Message:
 
     @property
     def is_cmd(self) -> bool:
+        """是否是命令"""
         return self.__is_cmd
 
     @property
     def cmd(self) -> str:
+        """命令"""
         return self.__cmd
 
     @property
     def cmd_desc(self) -> str:
+        """命令描述"""
         return cmd_dict[self.cmd]["desc"]
 
     @property
     def cmd_value(self) -> int:
+        """命令值"""
         return cmd_dict[self.cmd]["value"]
 
     @property
     def is_group(self) -> bool:
+        """是否是群消息"""
         return self.__is_group
 
     @property
     def is_quote(self) -> bool:
+        """是否引用机器人消息"""
         if not self.__is_quote:
             return False
         bot_name = BotInfo.name

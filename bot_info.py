@@ -3,11 +3,14 @@ import json
 
 
 class BotInfo:
+    """机器人信息类"""
+
     id: str = ""
     name: str = ""
 
     @staticmethod
     def update_from_source(source: str) -> None:
+        """从消息来源更新机器人信息"""
         source_dict = {}
         try:
             source_dict = json.loads(source)
@@ -23,8 +26,10 @@ class BotInfo:
 
     @staticmethod
     def update_id(id: str) -> None:
+        """更新机器人ID"""
         BotInfo.id = id
 
     @staticmethod
     def update_name(name: str) -> None:
+        """更新机器人名称"""
         BotInfo.name = name

@@ -1,8 +1,10 @@
 # 文件夹管理类
 import os
 
+
 class FolderManager:
-    """ 文件夹管理类 """
+    """文件夹管理类"""
+
     @staticmethod
     def check_and_create(folder_path):
         """
@@ -14,4 +16,3 @@ class FolderManager:
             print(f"未找到文件夹 '{folder_path}' ，已创建。")
         else:
             print(f"文件夹 '{folder_path}' 已存在。")
-

@@ -15,6 +15,5 @@ if __name__ == "__main__":
     FolderManager.check_and_create("data/qrcodes")
     FolderManager.check_and_create("data/todos")
     from recv_msg import app
+
     uvicorn.run(app, host="0.0.0.0", port=cr.recv_port)
-
-

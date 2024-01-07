@@ -7,12 +7,14 @@ from send_msg import SendTo
 from main import cr
 
 
-# 消息解析器，用于解析用户发来的消息
 class MessageParser:
+    """消息解析器，用于解析用户发来的消息"""
+
     def __init__(self) -> None:
         pass
 
     def parse_message(self, message: Message) -> None:
+        """解析消息"""
         # 消息内容格式: /<cmd> <msg>
         msg = message.msg  # 消息内容
         # cmd = message.cmd # 命令
@@ -75,7 +77,6 @@ class MessageParser:
         elif cmd_value == self.__get_cmd_value("qrcode"):
             CommandInvoker.cmd_qrcode(to, msg)
 
-    # 获取命令值
-    # TODO: 改成属性
     def __get_cmd_value(self, cmd: str) -> int:
+        """获取命令值"""
         return cmd_dict[cmd]["value"]

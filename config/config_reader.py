@@ -43,5 +43,6 @@ class ConfigReader:
         # server信息
         self.send_port: int = self.__cp.getint("server", "send_port")
         self.recv_port: int = self.__cp.getint("server", "recv_port")
+        self.recv_api_path: str = self.__cp.get("server", "recv_api_path")
 
     # TODO;封装get方法，判断不为空
