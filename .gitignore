@@ -6,4 +6,6 @@ __pycache__/
 # 忽略开发测试文件
 test*
 
-# 忽略 config.py 配置文件
+# 忽略 config.ini 配置文件
+config.ini
+
