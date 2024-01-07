@@ -4,7 +4,7 @@ from command.help import get_help_msg
 from command.bili_hot import get_bili_hot_str
 from command.zhihu_hot import get_zhihu_hot_str
 from command.weibo_hot import get_weibo_hot_str
-from command.transalte import (
+from command.translate import (
     get_reverso_context_tran_str,
     detect_lang,
     check_lang_support,
