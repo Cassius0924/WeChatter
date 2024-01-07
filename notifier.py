@@ -1,6 +1,6 @@
 # 消息通知器
 from admin import send_msg_to_all_admin
-from send_msg import SendMessage, SendMessageType, SendTo, Sender
+from send_msg import SendTo, Sender
 
 
 # 消息通知器，用于发送非命令产生的消息
@@ -11,7 +11,7 @@ class Notifier:
     @staticmethod
     def notify_received(to: SendTo) -> None:
         msg = "收到命令请求"
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, msg))
+        Sender.send_text_msg(to, msg)
 
     # 机器人登录登出通知，若是登录（登出）则发送登录（登出）消息给所有管理员
     @staticmethod

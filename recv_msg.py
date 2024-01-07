@@ -34,7 +34,6 @@ async def recv_msg(
 
     # 判断是否是系统事件
     if isSystemEvent == "1":
-        print("收到系统事件")
         handle_system_event(content)
         return
 
