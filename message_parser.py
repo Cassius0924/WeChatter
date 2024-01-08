@@ -1,10 +1,10 @@
 # 消息解析器
-from command.command_set import cmd_dict
-from command_invoker import CommandInvoker
+# from command_invoker import CommandInvoker
+from main import cr
 from message import Message
 from notifier import Notifier
 from send_msg import SendTo
-from main import cr
+# from command.command_set import cmd_dict
 
 
 class MessageParser:
@@ -19,9 +19,8 @@ class MessageParser:
         msg = message.msg  # 消息内容
         # cmd = message.cmd # 命令
         desc = message.cmd_desc  # 命令描述
-        cmd_value = message.cmd_value  # 命令值
-        id = message.source.p_info.id  # 发送者id
-        name = message.source.p_info.name  # 发送者昵称
+        # cmd_value = message.cmd_value  # 命令值
+        cmd_func = message.cmd_func  # 命令函数
 
         print(desc)
         # 非命令消息
@@ -43,55 +42,10 @@ class MessageParser:
         # 回复消息已收到
         Notifier.notify_received(to)
         # 开始处理命令
-        if cmd_value == self.__get_cmd_value("help"):
-            CommandInvoker.cmd_help(to)
 
-        elif cmd_value == self.__get_cmd_value("gpt4"):
-            CommandInvoker.cmd_gpt4(to, msg)
-
-        elif cmd_value == self.__get_cmd_value("gpt"):
-            CommandInvoker.cmd_gpt35(to, msg)
-
-        elif cmd_value == self.__get_cmd_value("bili-hot"):
-            CommandInvoker.cmd_bili_hot(to)
-
-        elif cmd_value == self.__get_cmd_value("zhihu-hot"):
-            CommandInvoker.cmd_zhihu_hot(to)
-
-        elif cmd_value == self.__get_cmd_value("weibo-hot"):
-            CommandInvoker.cmd_weibo_hot(to)
-
-        elif cmd_value == self.__get_cmd_value("word"):
-            CommandInvoker.cmd_word(to, msg)
-
-        elif cmd_value == self.__get_cmd_value("github-trending"):
-            CommandInvoker.cmd_github_trending(to)
-
-        elif cmd_value == self.__get_cmd_value("douyin-hot"):
-            CommandInvoker.cmd_douyin_hot(to)
-
-        elif cmd_value == self.__get_cmd_value("pai-post"):
-            CommandInvoker.cmd_pai_post(to)
-
-        elif cmd_value == self.__get_cmd_value("today-in-history"):
-            CommandInvoker.cmd_today_in_history(to)
-
-        elif cmd_value == self.__get_cmd_value("pai-post"):
-            CommandInvoker.cmd_pai_post(to)
-
-        elif cmd_value == self.__get_cmd_value("today-in-history"):
-            CommandInvoker.cmd_today_in_history(to)
-
-        elif cmd_value == self.__get_cmd_value("todo"):
-            CommandInvoker.cmd_todo(to, msg, id, name)
-
-        elif cmd_value == self.__get_cmd_value("rmtd"):
-            CommandInvoker.cmd_remove_todo(to, msg, id, name)
-
-        elif cmd_value == self.__get_cmd_value("qrcode"):
-            CommandInvoker.cmd_qrcode(to, msg)
-
-    # 获取命令值
-    def __get_cmd_value(self, cmd: str) -> int:
-        """获取命令值"""
-        return cmd_dict[cmd]["value"]
+        # 调用命令
+        if cmd_func is not None:
+            cmd_func(to, msg)
+        else:
+            print("该命令未实现")
+    

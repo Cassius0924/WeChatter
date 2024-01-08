@@ -3,9 +3,8 @@ import json
 import re
 from enum import Enum
 from typing import List, Union
-from bot_info import BotInfo
 
-from command.command_set import cmd_dict
+from bot_info import BotInfo
 from main import cr
 
 command_prefix = cr.command_prefix
@@ -144,6 +143,8 @@ class MessageSource:
         else:
             return "None"
 
+
+from command.command_set import cmd_dict # noqa
 
 class Message:
     """消息类
@@ -314,6 +315,11 @@ class Message:
     def cmd(self) -> str:
         """命令"""
         return self.__cmd
+
+    @property
+    def cmd_func(self):
+        """命令函数"""
+        return cmd_dict[self.cmd]["func"]
 
     @property
     def cmd_desc(self) -> str:
