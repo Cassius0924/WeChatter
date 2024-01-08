@@ -11,11 +11,15 @@ class SendTo:
     """发送对象类"""
 
     def __init__(self, source: MessageSource):
+        self.p_id = ""
         self.p_name = ""
+        self.g_id = ""
         self.g_name = ""
         if source.p_info is not None:
+            self.p_id = source.p_info.id
             self.p_name = source.p_info.name
         if source.g_info is not None:
+            self.g_id = source.g_info.id
             self.g_name = source.g_info.name
 
 

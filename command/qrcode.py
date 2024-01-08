@@ -6,9 +6,9 @@ import qrcode
 
 def generate_qrcode(data: str) -> str:
     """生成二维码，返回二维码的保存路径"""
-    qr = qrcode.QRCode(
+    qr = qrcode.QRCode( # type: ignore
         version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        error_correction=qrcode.constants.ERROR_CORRECT_L, # type: ignore
         box_size=10,
         border=4,
     )
