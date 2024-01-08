@@ -1,5 +1,6 @@
 # URL转二维码命令
 from utils.time import get_current_datetime
+from utils.path import get_abs_path
 
 import qrcode
 
@@ -17,13 +18,13 @@ def generate_qrcode(data: str) -> str:
     img = qr.make_image(fill_color="black", back_color="white")
 
     # 保存到 data/qrcodes/ 目录下
-    dt_str = get_current_datetime()
-    path = f"data/qrcodes/{dt_str}.png"
+    datetime_str = get_current_datetime()
+    path = get_abs_path(f"data/qrcodes/{datetime_str}.png")
     img.save(path)
     return path
 
 
-# FIXME: 发送后，二维码后缀名不对，导致微信识别成普通文件
+# FIXME: 目前不可用！发送后，二维码后缀名不对，导致微信识别成普通文件
 def get_qrcode_url(data: str) -> str:
     """获取二维码的url"""
     return f"https://api.qrserver.com/v1/create-qr-code/?data={data}"

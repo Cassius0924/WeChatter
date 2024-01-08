@@ -48,4 +48,3 @@ class MessageParser:
             cmd_func(to, msg)
         else:
             print("该命令未实现")
-    

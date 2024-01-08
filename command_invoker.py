@@ -34,6 +34,7 @@ class CommandInvoker:
     @staticmethod
     def cmd_help(to: SendTo, message: str = "") -> None:
         from command.help import get_help_msg
+
         response = get_help_msg()
         CommandInvoker._send_text_msg(to, response)
 

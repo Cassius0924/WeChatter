@@ -3,6 +3,7 @@ import os
 import json
 from configparser import ConfigParser
 from typing import List
+from utils.path import get_abs_path
 
 
 class ConfigReader:
@@ -10,7 +11,7 @@ class ConfigReader:
 
     def __init__(self, config_file="config.ini"):
         print("读取配置文件中...")
-        self.config_file = config_file
+        self.config_file = get_abs_path(config_file)
         if not self.is_config_exist:
             print("配置文件不存在，请先复制配置文件")
             exit(1)

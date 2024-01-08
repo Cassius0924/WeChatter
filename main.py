@@ -2,7 +2,7 @@
 import uvicorn
 from bot_info import BotInfo
 from config.config_reader import ConfigReader
-from utils.fold_manager import FolderManager
+from utils.folder_manager import FolderManager
 
 # 启动命令：python main.py
 
