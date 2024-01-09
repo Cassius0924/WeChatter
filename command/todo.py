@@ -20,7 +20,7 @@ def _save_todos(person_id: str, content: List[str]) -> None:
     # 上面这样写入会导致中文变成 Unicode 编码，可以使用下面的方式写入
     # with open(file_path, "w", encoding="utf-8") as file:
     #     file.write(json.dumps(content, ensure_ascii=False))
-    
+
 
 
 def add_todo_task(person_id: str, task: str) -> bool:
@@ -55,7 +55,7 @@ def remove_todo_task(person_id: str, task_indices: List[int]) -> str:
         _save_todos(person_id, todos)
         return "删除失败"
 
-    successful_removals = "✅=====成功删除待办事项=====✅\n"
+    successful_removals = "✅成功删除待办事项✅\n"
     successful_removals += "\n".join(
         f"{i + 1}. {task}" for i, task in enumerate(removed_tasks)
     )
@@ -67,7 +67,7 @@ def view_todos(person_id: str, person_name: str) -> str:
     todos = _load_todos(person_id)
     personname = person_name
     if todos:
-        formatted_todos = f"✨====={personname}的待办事项=====✨\n"
+        formatted_todos = f"✨{personname}的待办事项✨\n"
         formatted_todos += "\n".join(f"{i + 1}. {task}" for i, task in enumerate(todos))
         return formatted_todos
     else:

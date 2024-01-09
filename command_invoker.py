@@ -17,6 +17,9 @@ from command.translate import (
 from command.weibo_hot import get_weibo_hot_str
 from command.zhihu_hot import get_zhihu_hot_str
 from send_msg import Sender, SendMessage, SendMessageType, SendTo
+from utils.text_to_image import text_to_image
+from command.paper_people import get_today_paper_pdf_url, get_paper_pdf_url, get_paper_pdf_path, \
+    get_today_paper_pdf_path
 
 
 class CommandInvoker:
@@ -33,10 +36,17 @@ class CommandInvoker:
     # 命令：/help
     @staticmethod
     def cmd_help(to: SendTo, message: str = "") -> None:
-        from command.help import get_help_msg
+        # # 获取帮助信息(文本)
+        # from command.help import get_help_msg
+        # response = get_help_msg()
+        # CommandInvoker._send_text_msg(to, response)
 
-        response = get_help_msg()
-        CommandInvoker._send_text_msg(to, response)
+        # 获取帮助信息(图片)
+        from command.help import get_help_msg
+        help_msg = get_help_msg()
+        response = text_to_image(help_msg)
+        if response:
+            Sender.send_localfile_msg(to, response)
 
     # 命令：/gpt
     @staticmethod
@@ -97,12 +107,39 @@ class CommandInvoker:
         response = "翻译功能暂未开放"
         CommandInvoker._send_text_msg(to, response)
 
-    # 命令：/people-daily
+    # 命令：/people
     @staticmethod
     def cmd_people_daily(to: SendTo, message: str = "") -> None:
-        # 获取人民日报
-        response = "人民日报功能暂未开放"
-        CommandInvoker._send_text_msg(to, response)
+        """发送人民日报url"""
+        """发送当天01版本的人民日报url"""
+        if message.lower() == "url":
+            response = get_today_paper_pdf_url()
+            CommandInvoker._send_text_msg(to, response)
+        elif message.lower().startswith("url"):
+            """发送特定日期特定版本的url"""
+            parts = message.lower().split()
+            if len(parts) == 2 and parts[0] == "url" and parts[1].isdigit():
+                response = get_paper_pdf_url(parts[1])
+                if response:
+                    CommandInvoker._send_text_msg(to, response)
+                if response is None:
+                    e = "输入的日期版本号不符合要求，请重新输入\n若要获取2021年1月2日03版的人民日报的url，请输入\n/people url 2021010203"
+                    CommandInvoker._send_text_msg(to, e)
+        else:
+            """发送人民日报PDF文件"""
+            """发送特定日期特定版本的人民日报PDF"""
+            if message != "":
+                path = get_paper_pdf_path(message)
+                if path:
+                    Sender.send_localfile_msg(to, path)
+                if path is None:
+                    e = "输入的日期版本号不符合要求，请重新输入\n若要获取2021年1月2日03版的人民日报的pdf，请输入\n/people 2021010203"
+                    CommandInvoker._send_text_msg(to, e)
+
+            """发送当天01版本的人民日报PDF"""
+            if message == "":
+                path = get_today_paper_pdf_path()
+                Sender.send_localfile_msg(to, path)
 
     # 命令：/today-in-history
     @staticmethod
