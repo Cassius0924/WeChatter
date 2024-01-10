@@ -28,3 +28,23 @@ def get_current_time() -> str:
     返回格式化后的时间字符串
     """
     return time.strftime("%H:%M:%S", time.localtime())
+
+
+def get_current_year_month() -> str:
+    """获取当前年月
+    返回格式化后的年月字符串
+    """
+    return time.strftime("%Y-%m", time.localtime())
+
+
+def get_current_day() -> str:
+    """获取当前日
+    返回格式化后的日字符串
+    """
+    return time.strftime("%d", time.localtime())
+
+def get_current_ymd() -> str:
+    """获取当前年月日
+    返回格式化后的年月日字符串
+    """
+    return time.strftime("%Y%m%d", time.localtime())

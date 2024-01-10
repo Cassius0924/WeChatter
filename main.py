@@ -14,6 +14,7 @@ if __name__ == "__main__":
     # 检查数据文件夹是否存在，不存在则创建
     FolderManager.check_and_create("data/qrcodes")
     FolderManager.check_and_create("data/todos")
+    FolderManager.check_and_create("data/text_image")
     from recv_msg import app
 
     uvicorn.run(app, host="0.0.0.0", port=cr.recv_port)
