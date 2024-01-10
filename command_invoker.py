@@ -33,7 +33,7 @@ class CommandInvoker:
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, message))
 
     @staticmethod
-    def _send_FILE_URL_msg(to: SendTo, message: str = "") -> None:
+    def _send_file_url_msg(to: SendTo, message: str = "") -> None:
         """封装发送文件URL消息"""
         Sender.send_msg(to, SendMessage(SendMessageType.FILE_URL, message))
 
@@ -115,13 +115,12 @@ class CommandInvoker:
     @staticmethod
     def cmd_people_daily(to: SendTo, message: str = "") -> None:
         """发送人民日报url"""
-        """发送当天01版本的人民日报url"""
-        """发送当天01版本的人民日报PDF"""
+        # 发送当天01版本的人民日报PDF
         if message.lower() == "url":
             url = get_paper_people_url()
             CommandInvoker._send_text_msg(to, url)
         elif message.lower().startswith("url"):
-            """发送特定日期特定版本的url"""
+            # 发送特定日期特定版本的url
             parts = message.lower().split()
             if len(parts) == 2 and parts[0] == "url" and parts[1].isdigit():
                 url = get_paper_people_pdf_url(parts[1])
@@ -131,20 +130,20 @@ class CommandInvoker:
                     e = "输入的日期版本号不符合要求，请重新输入\n若要获取2021年1月2日03版的人民日报的url，请输入\n/people url 2021010203"
                     CommandInvoker._send_text_msg(to, e)
         else:
-            """发送人民日报PDF文件"""
-            """发送特定日期特定版本的人民日报PDF"""
+            # 发送人民日报PDF文件
+            # 发送特定日期特定版本的人民日报PDF
             if message != "":
                 url = get_paper_people_pdf_url(message)
                 if url:
-                    CommandInvoker._send_FILE_URL_msg(to, url)
+                    CommandInvoker._send_file_url_msg(to, url)
                 if url is None:
                     e = "输入的日期版本号不符合要求，请重新输入\n若要获取2021年1月2日03版的人民日报的pdf，请输入\n/people 2021010203"
                     CommandInvoker._send_text_msg(to, e)
 
-            """发送当天01版本的人民日报PDF"""
+            # 发送当天01版本的人民日报PDF
             if message == "":
                 url = get_paper_people_url()
-                CommandInvoker._send_FILE_URL_msg(to, url)
+                CommandInvoker._send_file_url_msg(to, url)
 
     # 命令：/today-in-history
     @staticmethod
