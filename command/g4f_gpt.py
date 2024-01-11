@@ -2,10 +2,7 @@
 import g4f
 
 
-# from g4f.Provider import Bing
-
-
-def reply_by_gpt4(message) -> str:
+def reply_by_g4f_gpt4(message: str) -> str:
     try:
         response = g4f.ChatCompletion.create(
             model=g4f.models.gpt_4,
@@ -16,10 +13,11 @@ def reply_by_gpt4(message) -> str:
     except Exception as e:
         print(e)
         return "调用gpt4失败"
-    return response_to_str(response)
+    return _response_to_str(response)
 
 
-def reply_by_gpt35(message) -> str:
+def reply_by_g4f_gpt35(message: str) -> str:
+    """使用GPT3.5回复"""
     try:
         response = g4f.ChatCompletion.create(
             model=g4f.models.gpt_35_turbo,
@@ -28,10 +26,10 @@ def reply_by_gpt35(message) -> str:
     except Exception as e:
         print(e)
         return "调用gpt3.5失败"
-    return response_to_str(response)
+    return _response_to_str(response)
 
 
-def response_to_str(response) -> str:
+def _response_to_str(response) -> str:
     str = ""
     for message in response:
         str += message

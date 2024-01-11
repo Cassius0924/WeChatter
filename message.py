@@ -144,7 +144,8 @@ class MessageSource:
             return "None"
 
 
-from command.command_set import cmd_dict # noqa
+from command.command_set import cmd_dict  # noqa
+
 
 class Message:
     """消息类

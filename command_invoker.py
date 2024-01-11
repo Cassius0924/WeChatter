@@ -4,7 +4,7 @@ import re
 from command.bili_hot import get_bili_hot_str
 from command.douyin_hot import get_douyin_hot_str
 from command.github_trending import get_github_trending_str
-from command.gpt_reply import reply_by_gpt4, reply_by_gpt35
+from command.g4f_gpt import reply_by_g4f_gpt4, reply_by_g4f_gpt35
 from command.pai_post import get_pai_post_str
 from command.qrcode import generate_qrcode
 from command.today_in_history import get_today_in_history_str
@@ -17,6 +17,8 @@ from command.translate import (
 from command.weibo_hot import get_weibo_hot_str
 from command.zhihu_hot import get_zhihu_hot_str
 from send_msg import Sender, SendMessage, SendMessageType, SendTo
+from main import cr
+from command.copilot_gpt4 import CopilotGPT4
 
 
 class CommandInvoker:
@@ -41,14 +43,45 @@ class CommandInvoker:
     # 命令：/gpt
     @staticmethod
     def cmd_gpt35(to: SendTo, message: str = "") -> None:
-        response = reply_by_gpt35(message)
-        CommandInvoker._send_text_msg(to, response)
+        # g4f 优先级低于 Copilot GPT4
+        if not cr.cp_gpt4_enable:
+            response = reply_by_g4f_gpt35(message)
+            CommandInvoker._send_text_msg(to, response)
+            return
+        # Copilot GPT4 服务
+        # 无内容则创建对话
+        id = to.p_id
+        if message == "":
+            CopilotGPT4.create_chat(id)
+            CommandInvoker._send_text_msg(to, "创建新对话成功")
+        # else:
+        # response = CopilotGPT4.chat(message)
+        # CommandInvoker._send_text_msg(to, response)
 
     # 命令：/gpt4
     @staticmethod
     def cmd_gpt4(to: SendTo, message: str = "") -> None:
-        response = reply_by_gpt4(message)
-        CommandInvoker._send_text_msg(to, response)
+        if not cr.cp_gpt4_enable:
+            response = reply_by_g4f_gpt4(message)
+            CommandInvoker._send_text_msg(to, response)
+            return
+        # Copilot GPT4 服务
+        id = to.p_id
+        if message == "":  # /gpt4
+            CopilotGPT4.create_chat(id)
+            CommandInvoker._send_text_msg(to, "创建新对话成功")
+        elif message == "list":  # /gpt4 list
+            response = CopilotGPT4.get_chats_list_str(id)
+            CommandInvoker._send_text_msg(to, response)
+        else:  # /gpt4 <message>
+            # 获取文件夹下最新的对话记录
+            chat_info = CopilotGPT4.get_chat_info(id, 0)
+            # 如果没有对话记录，则创建新对话
+            if chat_info == {}:
+                CopilotGPT4.create_chat(id, model="gpt-4")
+                CommandInvoker._send_text_msg(to, "无历史对话记录，创建新对话成功")
+            response = CopilotGPT4.chat(id, chat_info, message)
+            CommandInvoker._send_text_msg(to, response)
 
     # 命令：/bili-hot
     @staticmethod

@@ -13,7 +13,8 @@ class MessageParser:
     def __init__(self) -> None:
         pass
 
-    def parse_message(self, message: Message) -> None:
+    @staticmethod
+    def parse_message(message: Message) -> None:
         """解析消息"""
         # 消息内容格式: /<cmd> <msg>
         msg = message.msg  # 消息内容

@@ -9,7 +9,6 @@ from notifier import Notifier
 from main import cr
 
 app = FastAPI()
-message_parser = MessageParser()
 
 
 @app.post(cr.recv_api_path)
@@ -56,7 +55,7 @@ async def recv_msg(
     print("==" * 20)
 
     # 用户发来的消息均送给消息解析器处理
-    message_parser.parse_message(message)
+    MessageParser.parse_message(message)
 
 
 def handle_system_event(content: str) -> None:
