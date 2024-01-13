@@ -19,9 +19,14 @@ class PathManager:
     @staticmethod
     def join_path(*args) -> str:
         """拼接路径"""
+        if len(args) == 1:
+            return args[0]
+        if len(args) == 0:
+            return ""
         return os.path.join(*args)
 
     @staticmethod
-    def is_file_exist(file_path: str) -> bool:
+    def is_file_exist(*args) -> bool:
         """检查文件是否存在"""
-        return os.path.exists(file_path)
+        path = PathManager.join_path(*args)
+        return os.path.exists(path)

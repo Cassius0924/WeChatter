@@ -39,8 +39,8 @@ class CommandInvoker:
 
         response = get_help_msg()
         CommandInvoker._send_text_msg(to, response)
-
     # 命令：/gpt
+
     @staticmethod
     def cmd_gpt35(to: SendTo, message: str = "") -> None:
         # g4f 优先级低于 Copilot GPT4
@@ -68,20 +68,44 @@ class CommandInvoker:
         # Copilot GPT4 服务
         id = to.p_id
         if message == "":  # /gpt4
+            chat_info = CopilotGPT4.get_chat_info(id, 1)
+            # 判断对话是否有效
+            if not CopilotGPT4.is_chat_valid(chat_info):
+                CommandInvoker._send_text_msg(to, "对话未开始，继续上一次对话")
+                return
             CopilotGPT4.create_chat(id)
             CommandInvoker._send_text_msg(to, "创建新对话成功")
-        elif message == "list":  # /gpt4 list
-            response = CopilotGPT4.get_chats_list_str(id)
-            CommandInvoker._send_text_msg(to, response)
         else:  # /gpt4 <message>
             # 获取文件夹下最新的对话记录
-            chat_info = CopilotGPT4.get_chat_info(id, 0)
+            chat_info = CopilotGPT4.get_chat_info(id, 1)
             # 如果没有对话记录，则创建新对话
             if chat_info == {}:
-                CopilotGPT4.create_chat(id, model="gpt-4")
+                chat_info = CopilotGPT4.create_chat(id, model="gpt-4")
                 CommandInvoker._send_text_msg(to, "无历史对话记录，创建新对话成功")
             response = CopilotGPT4.chat(id, chat_info, message)
             CommandInvoker._send_text_msg(to, response)
+    
+    # 命令：/gpt4-list
+    @staticmethod
+    def cmd_gpt4_list(to: SendTo, message: str = "") -> None:
+        id = to.p_id
+        response = CopilotGPT4.get_chat_list_str(id)
+        CommandInvoker._send_text_msg(to, response)
+
+    # 命令：/gpt4-continue
+    @staticmethod
+    def cmd_gpt4_continue(to: SendTo, message: str = "") -> None:
+        id = to.p_id
+        # 判断message是否为数字
+        if not message.isdigit():
+            CommandInvoker._send_text_msg(to, "请输入数字")
+            return
+        chat_info = CopilotGPT4.continue_chat(id, int(message))
+        if chat_info == {}:
+            CommandInvoker._send_text_msg(to, "对话不存在")
+            return
+        response = CopilotGPT4.get_brief_conversation_str(chat_info)
+        CommandInvoker._send_text_msg(to, response)
 
     # 命令：/bili-hot
     @staticmethod

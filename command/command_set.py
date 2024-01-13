@@ -13,13 +13,25 @@ cmd_dict = {
     "gpt4": {
         "keys": ["gpt4"],
         "desc": "调用GPT4进行回答。",
-        "value": 2,
+        "value": 20,
         "func": CommandInvoker.cmd_gpt4,
+    },
+    "gpt4-list": {
+        "keys": ["gpt4-list", "gpt4记录"],
+        "desc": "列出GPT4对话记录。",
+        "value": 21,
+        "func": CommandInvoker.cmd_gpt4_list,
+    },
+    "gpt4-continue": {
+        "keys": ["gpt4-continue", "gpt4继续"],
+        "desc": "继续GPT4对话。",
+        "value": 22,
+        "func": CommandInvoker.cmd_gpt4_continue,
     },
     "gpt": {
         "keys": ["gpt"],
         "desc": "调用GPT3.5进行回答。",
-        "value": 3,
+        "value": 30,
         "func": CommandInvoker.cmd_gpt35,
     },
     "image-stitch": {
@@ -111,5 +123,11 @@ cmd_dict = {
         "desc": "删除待办事项。",
         "value": 18,
         "func": CommandInvoker.cmd_remove_todo,
+    },
+    "schedule": {
+        "keys": ["课程表", "schedule"],
+        "desc": "课程表。",
+        "value": 19,
+        "func": None,
     },
 }
