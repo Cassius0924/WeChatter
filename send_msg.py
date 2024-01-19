@@ -1,4 +1,5 @@
 # 消息发送类
+from collections.abc import Callable
 from enum import Enum
 from typing import List
 import requests
@@ -85,6 +86,14 @@ def _check(response: requests.Response) -> bool:
     return True
 
 
+def _retry(times: int, func: Callable) -> bool:
+    """重试函数"""
+    for _ in range(times):
+        if func():
+            return True
+    return False
+
+
 class Sender:
     """v2 版本 api 消息发送类"""
 
@@ -134,7 +143,10 @@ class Sender:
             "isRoom": False,
             "data": {"type": message.type, "content": message.content},
         }
-        return _check(requests.post(Sender.url, headers=headers, json=data))
+        # 判断是否发送成功，如果失败则重试，最多重试 3 次
+        return _retry(
+            3, lambda: _check(requests.post(Sender.url, headers=headers, json=data))
+        )
 
     @staticmethod
     def send_msg_g(to_g_name: str, message: SendMessage) -> bool:
@@ -145,7 +157,10 @@ class Sender:
             "isRoom": True,
             "data": {"type": message.type, "content": message.content},
         }
-        return _check(requests.post(Sender.url, headers=headers, json=data))
+        # 判断是否发送成功，如果失败则重试，最多重试 3 次
+        return _retry(
+            3, lambda: _check(requests.post(Sender.url, headers=headers, json=data))
+        )
 
     # 给同一个对象发送多条消息
     """
@@ -181,7 +196,9 @@ class Sender:
         for message in messages.messages:
             msg = {"type": message.type, "content": message.content}
             data["data"].append(msg)
-        return _check(requests.post(Sender.url, headers=headers, json=data))
+        return _retry(
+            3, lambda: _check(requests.post(Sender.url, headers=headers, json=data))
+        )
 
     # 给同一个群组发送多条消息
     @staticmethod
@@ -191,7 +208,9 @@ class Sender:
         for message in messages.messages:
             msg = {"type": message.type, "content": message.content}
             data["data"].append(msg)
-        return _check(requests.post(Sender.url, headers=headers, json=data))
+        return _retry(
+            3, lambda: _check(requests.post(Sender.url, headers=headers, json=data))
+        )
 
     # 给多个人发送一条消息（群发）
     """
@@ -225,7 +244,9 @@ class Sender:
                 "data": {"type": message.type, "content": message.content},
             }
             data.append(msg)
-        return _check(requests.post(Sender.url, headers=headers, json=data))
+        return _retry(
+            3, lambda: _check(requests.post(Sender.url, headers=headers, json=data))
+        )
 
     @staticmethod
     def send_msg_gs(to_g_names: List[str], message: SendMessage) -> bool:
@@ -239,7 +260,9 @@ class Sender:
                 "data": {"type": message.type, "content": message.content},
             }
             data.append(msg)
-        return _check(requests.post(Sender.url, headers=headers, json=data))
+        return _retry(
+            3, lambda: _check(requests.post(Sender.url, headers=headers, json=data))
+        )
 
     # TODO: 给多个人发送多条消息
 
@@ -265,7 +288,7 @@ class Sender:
         url = "http://localhost:3001/webhook/msg"
         data = {"to": to_p_name, "isRoom": 0}
         files = {"content": open(file_path, "rb")}
-        return _check(requests.post(url, data=data, files=files))
+        return _retry(3, lambda: _check(requests.post(url, data=data, files=files)))
 
     @staticmethod
     def send_localfile_msg_g(to_g_name: str, file_path: str) -> bool:
@@ -273,7 +296,7 @@ class Sender:
         url = "http://localhost:3001/webhook/msg"
         data = {"to": to_g_name, "isRoom": 1}
         files = {"content": open(file_path, "rb")}
-        return _check(requests.post(url, data=data, files=files))
+        return _retry(3, lambda: _check(requests.post(url, data=data, files=files)))
 
 
 class SenderV1:
