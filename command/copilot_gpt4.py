@@ -2,7 +2,6 @@
 from typing import Dict, List, Union
 import requests
 from utils.path import PathManager as pm
-from utils.file_manager import FileManager as fm
 from utils.time import get_current_timestamp
 from sqlite.sqlite_manager import SqliteManager
 from main import cr
@@ -65,8 +64,8 @@ class CopilotGPT4:
     ) -> ChatInfo:
         """创建一个新的对话"""
         # 生成上一次对话的主题
-        CopilotGPT4._generate_chating_chat_topic(wx_id)
-        CopilotGPT4._set_all_chats_unchating(wx_id)
+        CopilotGPT4._generate_chating_chat_topic(wx_id, model)
+        CopilotGPT4._set_all_chats_unchating(wx_id, model)
         timestamp = get_current_timestamp()
         chat_info = ChatInfo(
             wx_id=wx_id,
@@ -85,9 +84,9 @@ class CopilotGPT4:
         sql = (
             "SELECT chat_id "
             "FROM copilot_chats "
-            "WHERE wx_id = ? AND is_chating = TRUE"
+            "WHERE wx_id = ? AND is_chating = TRUE AND chat_model = ? "
         )
-        result = sqlm.fetch_one(sql, (wx_id,))
+        result = sqlm.fetch_one(sql, (wx_id, model))
         chat_info.chat_id = result[0]
         # 插入对话记录
         sqlm.insert(
@@ -102,31 +101,31 @@ class CopilotGPT4:
         return chat_info
 
     @staticmethod
-    def continue_chat(wx_id: str, chat_index: int) -> Union[ChatInfo, None]:
+    def continue_chat(wx_id: str, model: str, chat_index: int) -> Union[ChatInfo, None]:
         """继续对话，从对话记录文件中读取对话记录
         :param wx_id: 微信用户ID
         :param chat_index: 对话记录索引（从1开始）
         :return: 简略的对话记录
         """
         # 读取对话记录文件
-        chat_info = CopilotGPT4.get_chat_info(wx_id, chat_index)
-        # 读取失败
+        chat_info = CopilotGPT4.get_chat_info(wx_id, model, chat_index)
         if chat_info is None:
             return None
-        if not CopilotGPT4.is_chat_valid(chat_info):
+        chating_chat_info = CopilotGPT4.get_chating_chat_info(wx_id, model)
+        if not CopilotGPT4.is_chat_valid(chating_chat_info):
             # 如果对话无效，则删除该对话记录后再继续对话
-            CopilotGPT4._delete_chat(wx_id, chat_info.chat_id)
+            CopilotGPT4._delete_chat(wx_id, chating_chat_info.chat_id)
         else:
             # 生成上一次对话的主题
-            CopilotGPT4._generate_chating_chat_topic(wx_id)
-        CopilotGPT4._set_chating_chat(wx_id, chat_info.chat_id)
+            CopilotGPT4._generate_chating_chat_topic(wx_id, model)
+        CopilotGPT4._set_chating_chat(wx_id, model, chat_info.chat_id)
         return chat_info
 
     @staticmethod
-    def _set_chating_chat(wx_id: str, chat_id: int) -> None:
+    def _set_chating_chat(wx_id: str, model: str, chat_id: int) -> None:
         """设置正在进行中的对话记录"""
         # 先将所有对话记录的 is_chating 字段设置为 False
-        CopilotGPT4._set_all_chats_unchating(wx_id)
+        CopilotGPT4._set_all_chats_unchating(wx_id, model)
         sqlm = SqliteManager()
         sqlm.update(
             "copilot_chats",
@@ -137,11 +136,11 @@ class CopilotGPT4:
     @staticmethod
     def _delete_chat(wx_id: str, chat_id: int) -> None:
         """删除对话记录"""
-        # 先删除对话元数据
         sqlm = SqliteManager()
-        sqlm.delete("copilot_chats", f"wx_id = '{wx_id}' AND chat_id = {chat_id}")
-        # 再删除对话记录
+        # 先删除对话记录
         sqlm.delete("chat_conversations", f"chat_id = {chat_id}")
+        # 再删除对话元数据
+        sqlm.delete("copilot_chats", f"wx_id = '{wx_id}' AND chat_id = {chat_id}")
 
     @staticmethod
     def get_brief_conversation_str(chat_info: ChatInfo) -> str:
@@ -160,8 +159,6 @@ class CopilotGPT4:
                 conversation_str += f"🤖：{content}\n"
             elif conv["role"] == "user":
                 conversation_str += f"💬：{content}\n"
-        conversation_str += "====================\n"
-        conversation_str += "对话已选中，输入 /gpt4 命令继续对话"
         return conversation_str
 
     @staticmethod
@@ -189,9 +186,9 @@ class CopilotGPT4:
         CopilotGPT4._update_chat(chat_info)
 
     @staticmethod
-    def _generate_chating_chat_topic(wx_id: str) -> None:
+    def _generate_chating_chat_topic(wx_id: str, model: str) -> None:
         """生成正在进行的对话的主题"""
-        chat_info = CopilotGPT4.get_chating_chat_info(wx_id)
+        chat_info = CopilotGPT4.get_chating_chat_info(wx_id, model)
         if chat_info is None:
             return
         # 只生成一次对话主题
@@ -206,13 +203,13 @@ class CopilotGPT4:
         CopilotGPT4._update_chat(chat_info)
 
     @staticmethod
-    def _set_all_chats_unchating(wx_id: str) -> None:
+    def _set_all_chats_unchating(wx_id: str, model: str) -> None:
         """将所有对话记录的 is_chating 字段设置为 False"""
         sqlm = SqliteManager()
         sqlm.update(
             "copilot_chats",
             {"is_chating": False},
-            f"wx_id = '{wx_id}'",
+            f"wx_id = '{wx_id}' AND chat_model = '{model}'",
         )
 
     @staticmethod
@@ -224,19 +221,19 @@ class CopilotGPT4:
         return True
 
     @staticmethod
-    def _list_chat_info(wx_id: str) -> List:
+    def _list_chat_info(wx_id: str, model: str) -> List:
         """列出用户的所有对话记录"""
         # 读取对话记录文件夹，按照 chat_talk_time 字段倒序排序，取前20个
         sqlm = SqliteManager()
         sql = (
             "SELECT chat_id, wx_id, chat_created_time, chat_talk_time, chat_topic, chat_model, is_chating "
             "FROM copilot_chats "
-            "WHERE wx_id = ? "
+            "WHERE wx_id = ? AND chat_model = ? "
             "ORDER BY "
             "CASE WHEN is_chating THEN 1 ELSE 0 END DESC, "
             "chat_talk_time DESC LIMIT 20 "
         )
-        result = sqlm.fetch_all(sql, (wx_id,))
+        result = sqlm.fetch_all(sql, (wx_id, model))
         chat_info_list = []
         for chat in result:
             chat_info_list.append(
@@ -253,9 +250,9 @@ class CopilotGPT4:
         return chat_info_list
 
     @staticmethod
-    def get_chat_list_str(wx_id: str) -> str:
+    def get_chat_list_str(wx_id: str, model: str) -> str:
         """获取用户的所有对话记录"""
-        chat_info_list = CopilotGPT4._list_chat_info(wx_id)
+        chat_info_list = CopilotGPT4._list_chat_info(wx_id, model)
         chat_info_list_str = "✨===GPT4对话记录===✨\n"
         if chat_info_list == []:
             chat_info_list_str += "     📭 无对话记录"
@@ -266,25 +263,6 @@ class CopilotGPT4:
             else:
                 chat_info_list_str += f"{i+1}. {chat.chat_topic}\n"
         return chat_info_list_str
-
-    @staticmethod
-    def _list_chat_info_file(wx_id: str) -> List[str]:
-        """获取对话记录文件名列表"""
-        # 读取对话记录文件
-        files = fm.list_files(pm.join_path(CopilotGPT4.save_path, wx_id))
-        # 文件名是时间戳开头，所以按照字母倒序排序，第一个就是最新的
-        files.sort(reverse=True)
-        return files
-
-    @staticmethod
-    def _get_chat_info_file(wx_id: str, chat_index: int) -> str:
-        """获取对话记录文件名"""
-        # 读取对话记录文件，save_path/wx_id 的第 conversation_index 个文件
-        files = CopilotGPT4._list_chat_info_file(wx_id)
-        if len(files) <= chat_index - 1:
-            print("对话记录文件不存在")
-            return ""
-        return files[chat_index - 1]
 
     @staticmethod
     def _update_chat(chat_info: ChatInfo, newconv: List = []) -> None:
@@ -315,24 +293,19 @@ class CopilotGPT4:
             )
 
     @staticmethod
-    def _delete_old_chat(wx_id: str) -> None:
-        """删除旧的对话记录，保持20个最新的对话记录"""
-        pass
-
-    @staticmethod
-    def get_chat_info(wx_id: str, chat_index: int) -> Union[ChatInfo, None]:
+    def get_chat_info(wx_id: str, model: str, chat_index: int) -> Union[ChatInfo, None]:
         """获取用户的对话信息"""
         chat_index = chat_index - 1
         sql = (
             "SELECT chat_id, wx_id, chat_created_time, chat_talk_time, chat_topic, chat_model, is_chating "
             "FROM copilot_chats "
-            "WHERE wx_id = ? "
+            "WHERE wx_id = ? AND chat_model = ? "
             "ORDER BY "
             "CASE WHEN is_chating THEN 1 ELSE 0 END DESC, "
             "chat_talk_time DESC LIMIT 20 "
         )
         sqlm = SqliteManager()
-        result = sqlm.fetch_all(sql, (wx_id,))
+        result = sqlm.fetch_all(sql, (wx_id, model))
         if result == []:
             return None
         if len(result) <= chat_index:
@@ -372,16 +345,16 @@ class CopilotGPT4:
         return conversations
 
     @staticmethod
-    def get_chating_chat_info(wx_id: str) -> Union[ChatInfo, None]:
+    def get_chating_chat_info(wx_id: str, model: str) -> Union[ChatInfo, None]:
         """获取正在进行中的对话信息"""
         # 获取对话元信息
         sql = (
             "SELECT chat_id, wx_id, chat_created_time, chat_talk_time, chat_topic, chat_model, is_chating "
             "FROM copilot_chats "
-            "WHERE wx_id = ? AND is_chating = TRUE"
+            "WHERE wx_id = ? AND is_chating = TRUE AND chat_model = ? "
         )
         sqlm = SqliteManager()
-        meta_info = sqlm.fetch_one(sql, (wx_id,))
+        meta_info = sqlm.fetch_one(sql, (wx_id, model))
         if meta_info is None:
             return None
         # 获取对话记录

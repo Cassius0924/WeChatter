@@ -66,6 +66,8 @@ async def recv_msg(
     # 用户发来的消息均送给消息解析器处理
     MessageParser.parse_message(message)
 
+    # return {"success": True, "data": {"type": "text", "content": "hello world！"}}
+
 
 def handle_system_event(content: str) -> None:
     """判断系统事件类型，并调用相应的函数"""
