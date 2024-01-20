@@ -230,4 +230,3 @@ class CommandInvoker:
         CommandInvoker._send_text_msg(to, remove_result)
         result = view_todos(to.p_id, to.p_name)
         CommandInvoker._send_text_msg(to, result)
-

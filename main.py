@@ -12,15 +12,14 @@ cr = ConfigReader("config.ini")
 
 def main():
     BotInfo.update_name(cr.bot_name)
-    # 检查数据文件夹是否存在，不存在则创建
+    # 创建文件夹
     FileManager.check_and_create_folder("data/qrcodes")
     FileManager.check_and_create_folder("data/todos")
-    # FileManager.check_and_create_folder("data/copilot_gpt4/chats")
-
+    # 创建文件
+    FileManager.check_and_create_file("data/wechatbot.sqlite")
+    # 创建数据库表
     sqlite_manager = SqliteManager("data/wechatbot.sqlite")
-    # sqlite_manager.check_and_create_table("wx_users", ["id INTEGER PRIMARY KEY", "chat TEXT"])
-    # sqlite_manager.check_and_create_table("copilot_chats", ["id INTEGER PRIMARY KEY", "chat TEXT"])
-    # sqlite_manager.check_and_create_table("chat_conversations", ["id INTEGER PRIMARY KEY", "chat TEXT"])
+    sqlite_manager.excute_folder("sqlite/sqls")
 
     from recv_msg import app
 

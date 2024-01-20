@@ -2,6 +2,7 @@
 import sqlite3
 from typing import List, Tuple
 from utils.path import PathManager as pm
+from utils.file_manager import FileManager as fm
 
 
 # 单例模式
@@ -11,19 +12,9 @@ class Singleton(object):
         self._instance = {}
 
     def __call__(self, *args, **kwargs):
-        # if self._cls not in self._instance:
-        #     self._instance[self._cls] = self._cls()
-        # return self._instance[self._cls]
         if self._cls not in self._instance:
             self._instance[self._cls] = self._cls(*args, **kwargs)
         return self._instance[self._cls]
-
-    # q: 当这个类当作装饰器使用时，运行逻辑是怎么样的
-    # a: 1. 例如：@Singleton class SqliteManager: ...
-    #    2. 在新建一个 SqliteManager 的实例时，会先把 SqliteManager 传入 Singleton 的 __init__ 方法
-    #    3. 然后调用 __call__ 方法，返回一个 SqliteManager 的实例
-    #    4. 之后再新建 SqliteManager 的实例时，就会直接返回之前创建的实例
-    #    5. 这样就保证了 SqliteManager 的实例只有一个
 
 
 @Singleton
@@ -115,3 +106,22 @@ class SqliteManager:
         result = self.fetch_one(sql)
         if result is None:
             self.create_table(table, columns)
+
+    def excute_file(self, file_path: str) -> None:
+        """运行.SQL文件
+        :param file_path: SQL文件路径
+        """
+        sql_script = ""
+        with open(file_path, "r", encoding="utf-8") as f:
+            sql_script = f.read()
+        self.cursor.executescript(sql_script)
+        self.conn.commit()
+
+    def excute_folder(self, folder_path: str) -> None:
+        """运行文件夹下所有.SQL文件
+        :param folder_path: SQL文件夹路径
+        """
+        sql_files = fm.list_files(folder_path, suffixs=[".sql"])
+        for sql_file in sql_files:
+            path = pm.join_path(folder_path, sql_file)
+            self.excute_file(path)
