@@ -2,6 +2,7 @@ __pycache__/
 
 .vscode/
 .idea/
+.ruff_cache/
 
 # 发测试文件
 test*
@@ -9,6 +10,4 @@ test*
 # config.ini 配置文件
 config.ini
 
-# data/ 目录下的所有文件
 data/
-

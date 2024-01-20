@@ -1,11 +1,54 @@
 # 使用 Copilot-GPT4-Server 回复
-from typing import Dict, List
+from typing import Dict, List, Union
 import requests
-import json
 from utils.path import PathManager as pm
 from utils.file_manager import FileManager as fm
 from utils.time import get_current_timestamp
+from sqlite.sqlite_manager import SqliteManager
 from main import cr
+
+
+DEFAULT_TOPIC = "（对话进行中*）"
+DEFAULT_MODEL = "gpt-4"
+DEFAULT_CONVERSATIONS = [{"role": "system", "content": "你是一位乐于助人的助手"}]
+
+
+class ChatInfo:
+    """对话信息（与 copilot_chats 表对应）"""
+
+    def __init__(
+        self,
+        wx_id: str = "",
+        chat_created_time: int = -1,
+        chat_talk_time: int = -1,
+        chat_topic: str = DEFAULT_TOPIC,
+        chat_model: str = DEFAULT_MODEL,
+        conversations: List[Dict] = DEFAULT_CONVERSATIONS,
+        is_chating: bool = False,
+        chat_id: int = -1,
+    ):
+        self.chat_id = chat_id
+        self.wx_id = wx_id
+        self.chat_created_time = chat_created_time
+        self.chat_talk_time = chat_talk_time
+        self.chat_topic = chat_topic
+        self.chat_model = chat_model
+        self.conversations = conversations
+        self.is_chating = is_chating
+
+    @property
+    def has_topic(self) -> bool:
+        """是否有对话主题"""
+        if self.chat_topic == DEFAULT_TOPIC:
+            return False
+        return True
+
+    @property
+    def dict(self) -> Dict:
+        """将对象转为字典（删去 conversations 字段）"""
+        chat_info_dict = self.__dict__.copy()
+        chat_info_dict.pop("conversations")
+        return chat_info_dict
 
 
 class CopilotGPT4:
@@ -17,76 +60,97 @@ class CopilotGPT4:
 
     @staticmethod
     def create_chat(
-        person_id: str,
-        system_content: str = "你是一个乐于助人的助手",
-        model: str = "gpt-4",
-    ) -> Dict:
+        wx_id: str,
+        model: str,
+    ) -> ChatInfo:
         """创建一个新的对话"""
-        # 创建个人文件夹
-        if not fm.is_folder_exist(CopilotGPT4.save_path, person_id):
-            print("创建文件夹")
-            fm.create_folder(CopilotGPT4.save_path, person_id)
-        else:
-            # 生成上一次对话的主题
-            CopilotGPT4._generate_previous_chat_topic(person_id)
-            # 修改文件名前缀
-            CopilotGPT4._update_chating_prefix_to_chat(person_id, 2)
+        # 生成上一次对话的主题
+        CopilotGPT4._generate_chating_chat_topic(wx_id)
+        CopilotGPT4._set_all_chats_unchating(wx_id)
         timestamp = get_current_timestamp()
-        chat_info = {
-            "create_time": timestamp,
-            "last_chat_time": timestamp,
-            "has_topic": False,
-            "topic": "💬无主题对话（对话进行中）",
-            "model": model,
-            "conversation": [{"role": "system", "content": system_content}],
-        }
+        chat_info = ChatInfo(
+            wx_id=wx_id,
+            chat_created_time=timestamp,
+            chat_talk_time=timestamp,
+            chat_model=model,
+            is_chating=True,
+        )
         # 保存对话记录
-        CopilotGPT4._save_chat(person_id, chat_info)
+        chat_info_dict = chat_info.dict
+        # 删去 chat_id 字段，让数据库自动生成
+        chat_info_dict.pop("chat_id")
+        sqlm = SqliteManager()
+        sqlm.insert("copilot_chats", chat_info_dict)
+        # 获取 SQLite 自动生成的 chat_id
+        sql = (
+            "SELECT chat_id "
+            "FROM copilot_chats "
+            "WHERE wx_id = ? AND is_chating = TRUE"
+        )
+        result = sqlm.fetch_one(sql, (wx_id,))
+        chat_info.chat_id = result[0]
+        # 插入对话记录
+        sqlm.insert(
+            "chat_conversations",
+            {
+                "chat_id": chat_info.chat_id,
+                "conversation_role": chat_info.conversations[0]["role"],
+                "conversation_content": chat_info.conversations[0]["content"],
+                "conversation_timestamp": get_current_timestamp(),
+            },
+        )
         return chat_info
 
     @staticmethod
-    def continue_chat(person_id: str, chat_index: int) -> Dict:
+    def continue_chat(wx_id: str, chat_index: int) -> Union[ChatInfo, None]:
         """继续对话，从对话记录文件中读取对话记录
-        :param person_id: 用户ID
-        :param conversation_index: 对话记录索引（从1开始）
+        :param wx_id: 微信用户ID
+        :param chat_index: 对话记录索引（从1开始）
         :return: 简略的对话记录
         """
         # 读取对话记录文件
-        chat_info = CopilotGPT4._read_chat(person_id, chat_index)
+        chat_info = CopilotGPT4.get_chat_info(wx_id, chat_index)
         # 读取失败
-        if chat_info == {}:
-            return {}
-        # 生成上一次对话的主题
-        CopilotGPT4._generate_previous_chat_topic(person_id)
-        CopilotGPT4._update_chat_prefix_to_chating(person_id, chat_index)
-        CopilotGPT4._update_chating_prefix_to_chat(person_id, 2)
-        # 修正选中的对话记录文件的文件名
-        return chat_info["conversation"]
+        if chat_info is None:
+            return None
+        if not CopilotGPT4.is_chat_valid(chat_info):
+            # 如果对话无效，则删除该对话记录后再继续对话
+            CopilotGPT4._delete_chat(wx_id, chat_info.chat_id)
+        else:
+            # 生成上一次对话的主题
+            CopilotGPT4._generate_chating_chat_topic(wx_id)
+        CopilotGPT4._set_chating_chat(wx_id, chat_info.chat_id)
+        return chat_info
 
     @staticmethod
-    # def _fix_chat_info_file_name(person_id: str, chat_index: int) -> None:
-    def _update_chat_prefix_to_chating(person_id: str, chat_index: int) -> None:
-        """将正在对话的文件名前缀 chat_ 修改为 chating_"""
-        # 读取对话记录文件，save_path/person_id 的第 conversation_index 个文件
-        chat_index = chat_index - 1
-        files = CopilotGPT4._list_chat_info_file(person_id)
-        if len(files) <= chat_index:
-            print("对话记录文件不存在")
-            return
-        file_name = files[chat_index]
-        print(file_name)
-        if file_name.startswith("chat_"):
-            file_path = pm.join_path(CopilotGPT4.save_path, person_id, file_name)
-            fm.rename_file(file_path, "chating_" + file_name[5:])
+    def _set_chating_chat(wx_id: str, chat_id: int) -> None:
+        """设置正在进行中的对话记录"""
+        # 先将所有对话记录的 is_chating 字段设置为 False
+        CopilotGPT4._set_all_chats_unchating(wx_id)
+        sqlm = SqliteManager()
+        sqlm.update(
+            "copilot_chats",
+            {"is_chating": True},
+            f"wx_id = '{wx_id}' AND chat_id = {chat_id}",
+        )
 
     @staticmethod
-    def get_brief_conversation_str(chat_info: Dict) -> str:
+    def _delete_chat(wx_id: str, chat_id: int) -> None:
+        """删除对话记录"""
+        # 先删除对话元数据
+        sqlm = SqliteManager()
+        sqlm.delete("copilot_chats", f"wx_id = '{wx_id}' AND chat_id = {chat_id}")
+        # 再删除对话记录
+        sqlm.delete("chat_conversations", f"chat_id = {chat_id}")
+
+    @staticmethod
+    def get_brief_conversation_str(chat_info: ChatInfo) -> str:
         """获取对话记录的字符串"""
-        conversation_str = "✨ GPT4对话记录 ✨\n"
+        conversation_str = f"✨==={chat_info.chat_topic}===✨\n"
         if chat_info == []:
             conversation_str += "无对话记录"
             return conversation_str
-        for conv in chat_info[-10:]:
+        for conv in chat_info.conversations[-10:]:
             content = conv["content"][:30]
             if len(conv["content"]) > 30:
                 content += "..."
@@ -95,7 +159,7 @@ class CopilotGPT4:
             elif conv["role"] == "assistant":
                 conversation_str += f"🤖：{content}\n"
             elif conv["role"] == "user":
-                conversation_str += f"💬: {content}\n"
+                conversation_str += f"💬：{content}\n"
         conversation_str += "====================\n"
         conversation_str += "对话已选中，输入 /gpt4 命令继续对话"
         return conversation_str
@@ -111,173 +175,248 @@ class CopilotGPT4:
         return content_list
 
     @staticmethod
-    def _generate_previous_chat_topic(person_id: str) -> None:
-        """更新上一次对话的主题"""
-        chat_info = CopilotGPT4.get_chat_info(person_id, 1)
-        if chat_info == {}:
-            return
-        if chat_info["has_topic"]:
+    def _generate_chat_topic(chat_info: ChatInfo) -> None:
+        """生成对话的主题"""
+        # 只生成一次对话主题
+        if chat_info.has_topic:
             return
         # 生成对话主题
-        topic = CopilotGPT4._generate_chat_topic(person_id, chat_info)
+        topic = CopilotGPT4._generate_chat_topic(chat_info)
         if topic == "":
             return
         # 更新对话主题
-        chat_info["topic"] = topic
-        chat_info["has_topic"] = True
-        CopilotGPT4._save_chat(person_id, chat_info)
+        chat_info.chat_topic = topic
+        CopilotGPT4._update_chat(chat_info)
 
     @staticmethod
-    def _update_chating_prefix_to_chat(person_id: str, chat_index: int) -> None:
-        """将正在对话的文件名前缀 chating_ 修改为 chat_"""
-        chat_index = chat_index - 1
-        files = CopilotGPT4._list_chat_info_file(person_id)
-        if len(files) <= chat_index:
-            print("对话记录文件不存在")
+    def _generate_chating_chat_topic(wx_id: str) -> None:
+        """生成正在进行的对话的主题"""
+        chat_info = CopilotGPT4.get_chating_chat_info(wx_id)
+        if chat_info is None:
             return
-        file_name = files[chat_index]
-        if file_name.startswith("chating_"):
-            file_path = pm.join_path(CopilotGPT4.save_path, person_id, file_name)
-            fm.rename_file(file_path, "chat_" + file_name[8:])
+        # 只生成一次对话主题
+        if chat_info.has_topic:
+            return
+        # 生成对话主题
+        topic = CopilotGPT4._generate_chat_topic(chat_info)
+        if topic == "":
+            return
+        # 更新对话主题
+        chat_info.chat_topic = topic
+        CopilotGPT4._update_chat(chat_info)
 
     @staticmethod
-    def is_chat_valid(chat_info: Dict) -> bool:
+    def _set_all_chats_unchating(wx_id: str) -> None:
+        """将所有对话记录的 is_chating 字段设置为 False"""
+        sqlm = SqliteManager()
+        sqlm.update(
+            "copilot_chats",
+            {"is_chating": False},
+            f"wx_id = '{wx_id}'",
+        )
+
+    @staticmethod
+    def is_chat_valid(chat_info: ChatInfo) -> bool:
         """判断对话是否有效"""
         # 通过 conversation 长度判断对话是否有效
-        if chat_info == {}:
-            return False
-        if len(chat_info["conversation"]) <= 1:
+        if len(chat_info.conversations) <= 1:
             return False
         return True
 
     @staticmethod
-    def _list_chat_info(person_id: str) -> List[Dict]:
+    def _list_chat_info(wx_id: str) -> List:
         """列出用户的所有对话记录"""
-        # 读取对话记录文件夹
-        # 读取对话记录文件
-        files = CopilotGPT4._list_chat_info_file(person_id)
-        # 取前20个文件
-        files = files[:20]
+        # 读取对话记录文件夹，按照 chat_talk_time 字段倒序排序，取前20个
+        sqlm = SqliteManager()
+        sql = (
+            "SELECT chat_id, wx_id, chat_created_time, chat_talk_time, chat_topic, chat_model, is_chating "
+            "FROM copilot_chats "
+            "WHERE wx_id = ? "
+            "ORDER BY "
+            "CASE WHEN is_chating THEN 1 ELSE 0 END DESC, "
+            "chat_talk_time DESC LIMIT 20 "
+        )
+        result = sqlm.fetch_all(sql, (wx_id,))
         chat_info_list = []
-        for file in files:
-            file_path = pm.join_path(CopilotGPT4.save_path, person_id, file)
-            with open(file_path, "r", encoding="utf-8") as f:
-                chat_info_list.append(json.load(f))
+        for chat in result:
+            chat_info_list.append(
+                ChatInfo(
+                    chat_id=chat[0],
+                    wx_id=chat[1],
+                    chat_created_time=chat[2],
+                    chat_talk_time=chat[3],
+                    chat_topic=chat[4],
+                    chat_model=chat[5],
+                    is_chating=chat[6],
+                )
+            )
         return chat_info_list
 
     @staticmethod
-    def get_chat_list_str(person_id: str) -> str:
+    def get_chat_list_str(wx_id: str) -> str:
         """获取用户的所有对话记录"""
-        chat_info_list = CopilotGPT4._list_chat_info(person_id)
+        chat_info_list = CopilotGPT4._list_chat_info(wx_id)
+        chat_info_list_str = "✨===GPT4对话记录===✨\n"
         if chat_info_list == []:
-            return "无对话记录"
-        chat_info_list_str = "✨ GPT4对话记录 ✨\n"
+            chat_info_list_str += "     📭 无对话记录"
+            return chat_info_list_str
         for i, chat in enumerate(chat_info_list):
-            chat_info_list_str += f"{i+1}. {chat['topic']}\n"
+            if chat.is_chating:
+                chat_info_list_str += f"{i+1}. 💬{chat.chat_topic}\n"
+            else:
+                chat_info_list_str += f"{i+1}. {chat.chat_topic}\n"
         return chat_info_list_str
 
     @staticmethod
-    def _read_chat(person_id: str, chat_index: int) -> Dict:
-        """读取对话记录文件"""
-        file_name = CopilotGPT4._get_chat_info_file(person_id, chat_index)
-        if file_name == "":
-            return {}
-        file_path = pm.join_path(CopilotGPT4.save_path, person_id, file_name)
-        result = {}
-        # 读取 JSON 文件，conversation 字段是对话记录
-        with open(file_path, "r", encoding="utf-8") as file:
-            result = json.load(file)
-        return result
-
-    @staticmethod
-    def _list_chat_info_file(person_id: str) -> List[str]:
+    def _list_chat_info_file(wx_id: str) -> List[str]:
         """获取对话记录文件名列表"""
         # 读取对话记录文件
-        files = fm.list_files(pm.join_path(CopilotGPT4.save_path, person_id))
+        files = fm.list_files(pm.join_path(CopilotGPT4.save_path, wx_id))
         # 文件名是时间戳开头，所以按照字母倒序排序，第一个就是最新的
         files.sort(reverse=True)
         return files
 
     @staticmethod
-    def _get_chat_info_file(person_id: str, chat_index: int) -> str:
+    def _get_chat_info_file(wx_id: str, chat_index: int) -> str:
         """获取对话记录文件名"""
-        # 读取对话记录文件，save_path/person_id 的第 conversation_index 个文件
-        files = CopilotGPT4._list_chat_info_file(person_id)
+        # 读取对话记录文件，save_path/wx_id 的第 conversation_index 个文件
+        files = CopilotGPT4._list_chat_info_file(wx_id)
         if len(files) <= chat_index - 1:
             print("对话记录文件不存在")
             return ""
         return files[chat_index - 1]
 
     @staticmethod
-    def _save_chat(person_id: str, chat_info: Dict) -> None:
+    def _update_chat(chat_info: ChatInfo, newconv: List = []) -> None:
         """保存对话记录
-        :param conversation: 对话记录
+        :param chat_info: 对话记录数据
+        :param newconv: 新增对话记录
         """
-        # 文件名由时间戳和对话主题组成
-        create_time = chat_info["create_time"]
-        # 以"chating"前缀开头表示正在进行中的对话
-        save_path = pm.join_path(
-            CopilotGPT4.save_path, person_id, f"chating_{str(create_time)}" + ".json"
-        )
         # 对话记录格式
-        chat_info["last_chat_time"] = get_current_timestamp()
-        with open(save_path, "w", encoding="utf-8") as f:
-            f.write(json.dumps(chat_info, ensure_ascii=False))
-        # CopilotGPT4._delete_old_chats(person_id)
-        # 删除旧的对话记录，保持20个最新的对话记录
+        chat_info.chat_talk_time = get_current_timestamp()
+        sqlm = SqliteManager()
+        chat_info_dict = chat_info.dict
+        # 更新对话元数据
+        sqlm.update(
+            "copilot_chats",
+            chat_info_dict,
+            f"chat_id = {chat_info.chat_id}",
+        )
+        # 插入对话记录
+        for conv in newconv:
+            sqlm.insert(
+                "chat_conversations",
+                {
+                    "chat_id": chat_info.chat_id,
+                    "conversation_role": conv["role"],
+                    "conversation_content": conv["content"],
+                    "conversation_timestamp": get_current_timestamp(),
+                },
+            )
 
     @staticmethod
-    def _delete_old_chat(person_id: str) -> None:
+    def _delete_old_chat(wx_id: str) -> None:
         """删除旧的对话记录，保持20个最新的对话记录"""
-        # 读取对话记录文件夹
-        # 读取对话记录文件
-        files = CopilotGPT4._list_chat_info_file(person_id)
-        # 删除旧的对话记录，保持20个最新的对话记录
-        if len(files) > 20:
-            for file in files[20:]:
-                file_path = pm.join_path(CopilotGPT4.save_path, person_id, file)
-                fm.delete_file(file_path)
+        pass
 
     @staticmethod
-    def get_chat_info(person_id: str, chat_index: int) -> Dict:
+    def get_chat_info(wx_id: str, chat_index: int) -> Union[ChatInfo, None]:
         """获取用户的对话信息"""
-        # 读取对话记录文件，save_path/person_id 的第一个文件
-        file_name = CopilotGPT4._get_chat_info_file(person_id, chat_index)
-        # 无对话记录
-        if file_name == "":
-            return {}
-        file_path = pm.join_path(CopilotGPT4.save_path, person_id, file_name)
-        chat_info = {}
-        # 读取 JSON 文件
-        with open(file_path, "r", encoding="utf-8") as file:
-            chat_info = json.load(file)
+        chat_index = chat_index - 1
+        sql = (
+            "SELECT chat_id, wx_id, chat_created_time, chat_talk_time, chat_topic, chat_model, is_chating "
+            "FROM copilot_chats "
+            "WHERE wx_id = ? "
+            "ORDER BY "
+            "CASE WHEN is_chating THEN 1 ELSE 0 END DESC, "
+            "chat_talk_time DESC LIMIT 20 "
+        )
+        sqlm = SqliteManager()
+        result = sqlm.fetch_all(sql, (wx_id,))
+        if result == []:
+            return None
+        if len(result) <= chat_index:
+            return None
+        chat = result[chat_index]
+        # 获取对话记录
+        conv = CopilotGPT4._get_chat_conversations(chat[0])
+        chat_info = ChatInfo(
+            chat_id=chat[0],
+            wx_id=chat[1],
+            chat_created_time=chat[2],
+            chat_talk_time=chat[3],
+            chat_topic=chat[4],
+            chat_model=chat[5],
+            conversations=conv,
+            is_chating=chat[6],
+        )
         return chat_info
 
     @staticmethod
-    def chat(person_id: str, chat_info: Dict, message: str) -> str:
-        """使用 Copilot-GPT4-Server 持续对话"""
-        # 对外暴露的对话方法，必须保存对话记录
-        response = CopilotGPT4._chat(
-            person_id=person_id, chat_info=chat_info, message=message, is_save=True
+    def _get_chat_conversations(chat_id: int) -> List:
+        sql = (
+            "SELECT conversation_role, conversation_content, conversation_timestamp FROM chat_conversations "
+            "WHERE chat_id = ?"
         )
-        return response
+        sqlm = SqliteManager()
+        result = sqlm.fetch_all(sql, (chat_id,))
+        conversations = []
+        for conv in result:
+            conversations.append(
+                {
+                    "role": conv[0],
+                    "content": conv[1],
+                    "timestamp": conv[2],
+                }
+            )
+        return conversations
 
     @staticmethod
-    def _chat(
-        person_id: str, chat_info: Dict, message: str, is_save: bool = True
-    ) -> str:
+    def get_chating_chat_info(wx_id: str) -> Union[ChatInfo, None]:
+        """获取正在进行中的对话信息"""
+        # 获取对话元信息
+        sql = (
+            "SELECT chat_id, wx_id, chat_created_time, chat_talk_time, chat_topic, chat_model, is_chating "
+            "FROM copilot_chats "
+            "WHERE wx_id = ? AND is_chating = TRUE"
+        )
+        sqlm = SqliteManager()
+        meta_info = sqlm.fetch_one(sql, (wx_id,))
+        if meta_info is None:
+            return None
+        # 获取对话记录
+        conv = CopilotGPT4._get_chat_conversations(meta_info[0])
+        return ChatInfo(
+            chat_id=meta_info[0],
+            wx_id=meta_info[1],
+            chat_created_time=meta_info[2],
+            chat_talk_time=meta_info[3],
+            chat_topic=meta_info[4],
+            chat_model=meta_info[5],
+            conversations=conv,
+            is_chating=meta_info[6],
+        )
+
+    @staticmethod
+    def chat(chat_info: ChatInfo, message: str) -> str:
+        """使用 Copilot-GPT4-Server 持续对话"""
+        # 对外暴露的对话方法，必须保存对话记录
+        return CopilotGPT4._chat(chat_info=chat_info, message=message, is_save=True)
+
+    @staticmethod
+    def _chat(chat_info: ChatInfo, message: str, is_save: bool = True) -> str:
         """使用 Copilot-GPT4-Server 持续对话
         :param message: 用户消息
         :param is_save: 是否保存此轮对话记录
         """
-        # TODO: 判断是否创建了对话
-        # if len(CopilotGPT4.conv) <= 0:
-
-        conversation = chat_info["conversation"]
-        conversation.append({"role": "user", "content": message})
+        newconv = []
+        conversations = chat_info.conversations.copy()
+        # 将conversation 内字典的所有 timestamp 字段删除
+        for conv in conversations:
+            conv.pop("timestamp")
+        newconv.append({"role": "user", "content": message})
         # 发送请求
         try:
-            # print(conversation)
             response = requests.post(
                 CopilotGPT4.api,
                 headers={
@@ -285,17 +424,16 @@ class CopilotGPT4:
                     "Content-Type": "application/json",
                 },
                 json={
-                    "model": chat_info["model"],
-                    "messages": conversation,
+                    "model": chat_info.chat_model,
+                    # "messages": str(conv)
+                    "messages": conversations + newconv,
                 },
             )
         except Exception as e:
             print(e)
-            conversation.pop()
             return "调用Copilot-GPT4-Server失败"
 
         if response.status_code != 200:
-            conversation.pop()
             return "调用Copilot-GPT4-Server失败"
 
         # 解析返回值JSON
@@ -305,71 +443,32 @@ class CopilotGPT4:
         except Exception as e:
             print(response.text)
             print(e)
-            conversation.pop()
             return "解析Copilot-GPT4-Server JSON失败"
         # 判断是否有 error 或 code 字段
         if "error" in response_json or "code" in response_json:
-            conversation.pop()
             return "Copilot-GPT4-Server返回值错误"
         msg = response_json["choices"][0]["message"]
         msg_content = msg.get("content", "调用Copilot-GPT4-Server失败")
         # 将返回的 assistant 回复添加到对话记录中
-        conversation.append({"role": "assistant", "content": msg_content})
-        # 如果不保存此轮对话，则删除最后两条对话
         if is_save:
-            CopilotGPT4._save_chat(person_id, chat_info)
-        else:
-            conversation.pop()
-            conversation.pop()
-        print("#" * 20)
+            newconv.append({"role": "assistant", "content": msg_content})
+            chat_info.conversations.extend(newconv)
+            CopilotGPT4._update_chat(chat_info, newconv)
+        print("#" * 30)
         print(msg_content)
         return msg_content
 
     @staticmethod
-    def _add_u_conv(conversation: List, msg: str) -> List:
-        """添加一条用户对话"""
-        conversation.append({"role": "user", "content": msg})
-        return conversation
-
-    @staticmethod
-    def _add_a_conv(conversation: List, msg: str) -> List:
-        """添加一条助手对话"""
-        conversation.append({"role": "assistant", "content": msg})
-        return conversation
-
-    @staticmethod
-    def _generate_chat_topic(person_id: str, chat_info: Dict) -> str:
+    def _generate_chat_topic(chat_info: ChatInfo) -> str:
         """生成对话主题，用于保存对话记录"""
         # 通过 conversation 长度判断对话是否有效
 
-        if len(chat_info["conversation"]) <= 1:
+        if len(chat_info.conversations) <= 1:
             return ""
         # 通过一次对话生成对话主题，但这次对话不保存到对话记录中
-        prompt = "请用10个字以内总结一下这次对话的主题"
-        topic = CopilotGPT4._chat(
-            person_id=person_id, chat_info=chat_info, message=prompt, is_save=False
-        )
+        prompt = "请用10个字以内总结一下这次对话的主题，不带任何标点符号"
+        topic = CopilotGPT4._chat(chat_info=chat_info, message=prompt, is_save=False)
         # 限制主题长度
         if len(topic) > 21:
             topic = topic[:21] + "..."
         return topic
-
-
-"""
-一次 Chat 信息的 JSON 格式
-{
-  "last_chat_time": "2024-01-02 00:00:00",
-  "topic": "Topic",
-  "model": "gpt-4",
-  "conversation": [
-    {
-      "role": "system",
-      "content": "你是一个乐于助人的助手"
-    },
-    {
-      "role": "user",
-      "content": "你好"
-    }
-  ]
-}
-"""

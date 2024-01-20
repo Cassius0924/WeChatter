@@ -29,14 +29,14 @@ recv_port = 4000
 # 接收消息的接口路径，RECV_MSG_API的路径（<</receive_msg>>）
 recv_api_path = /receive_msg
 
-
+# TODO: 支持OpenAI官方API
 [copilot-gpt4]
 # 是否启用 Copilot GPT4 服务（True/<<False>>）
 cp_gpt4_enable = False
+# Copilot GPT4 服务的 API 地址，必须包含http(s)://（<<http://localhost>>）
+cp_gpt4_api_host = http://localhost
 # Copilot GPT4 服务的端口（<<999>>）
 cp_gpt4_port = 999
-# Copilot GPT4 服务的 API 地址（<<http://localhost>>）
-cp_gpt4_api_host = http://localhost
 # Copilot 的 Token
 cp_token = ghu_your_token
 

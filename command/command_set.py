@@ -11,16 +11,16 @@ cmd_dict = {
         "func": CommandInvoker.cmd_help,
     },
     "gpt4": {
-        "keys": ["gpt4"],
+        "keys": ["gpt", "gpt4"],
         "desc": "调用GPT4进行回答。",
         "value": 20,
         "func": CommandInvoker.cmd_gpt4,
     },
-    "gpt4-list": {
-        "keys": ["gpt4-list", "gpt4记录"],
+    "gpt4-chats": {
+        "keys": ["gpt4-chats", "gpt4对话记录"],
         "desc": "列出GPT4对话记录。",
         "value": 21,
-        "func": CommandInvoker.cmd_gpt4_list,
+        "func": CommandInvoker.cmd_gpt4_chats,
     },
     "gpt4-continue": {
         "keys": ["gpt4-continue", "gpt4继续"],
@@ -28,17 +28,17 @@ cmd_dict = {
         "value": 22,
         "func": CommandInvoker.cmd_gpt4_continue,
     },
-    "gpt": {
-        "keys": ["gpt"],
+    "gpt4-record": {
+        "keys": ["gpt4-record", "gpt4记录"],
+        "desc": "获取GPT4对话记录。",
+        "value": 23,
+        "func": CommandInvoker.cmd_gpt4_record,
+    },
+    "gpt35": {
+        "keys": ["gpt35", "gpt3.5"],
         "desc": "调用GPT3.5进行回答。",
         "value": 30,
         "func": CommandInvoker.cmd_gpt35,
-    },
-    "image-stitch": {
-        "keys": ["图片拼接", "image-stitch"],
-        "desc": "调用图像拼接。",
-        "value": 4,
-        "func": None,
     },
     "github-trending": {
         "keys": ["github趋势", "github-trending"],

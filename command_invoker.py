@@ -39,8 +39,8 @@ class CommandInvoker:
 
         response = get_help_msg()
         CommandInvoker._send_text_msg(to, response)
-    # 命令：/gpt
 
+    # 命令：/gpt35
     @staticmethod
     def cmd_gpt35(to: SendTo, message: str = "") -> None:
         # g4f 优先级低于 Copilot GPT4
@@ -52,7 +52,7 @@ class CommandInvoker:
         # 无内容则创建对话
         id = to.p_id
         if message == "":
-            CopilotGPT4.create_chat(id)
+            CopilotGPT4.create_chat(wx_id=id, model="gpt-3.5")
             CommandInvoker._send_text_msg(to, "创建新对话成功")
         # else:
         # response = CopilotGPT4.chat(message)
@@ -66,42 +66,46 @@ class CommandInvoker:
             CommandInvoker._send_text_msg(to, response)
             return
         # Copilot GPT4 服务
-        id = to.p_id
+        wx_id = to.p_id
+        # 获取文件夹下最新的对话记录
+        chat_info = CopilotGPT4.get_chating_chat_info(wx_id)
         if message == "":  # /gpt4
-            chat_info = CopilotGPT4.get_chat_info(id, 1)
             # 判断对话是否有效
-            if not CopilotGPT4.is_chat_valid(chat_info):
-                CommandInvoker._send_text_msg(to, "对话未开始，继续上一次对话")
+            if chat_info is None or CopilotGPT4.is_chat_valid(chat_info):
+                CopilotGPT4.create_chat(wx_id=wx_id, model="gpt-4")
+                CommandInvoker._send_text_msg(to, "创建新对话成功")
                 return
-            CopilotGPT4.create_chat(id)
-            CommandInvoker._send_text_msg(to, "创建新对话成功")
+            CommandInvoker._send_text_msg(to, "对话未开始，继续上一次对话")
         else:  # /gpt4 <message>
-            # 获取文件夹下最新的对话记录
-            chat_info = CopilotGPT4.get_chat_info(id, 1)
             # 如果没有对话记录，则创建新对话
-            if chat_info == {}:
-                chat_info = CopilotGPT4.create_chat(id, model="gpt-4")
+            if chat_info is None:
+                chat_info = CopilotGPT4.create_chat(wx_id=wx_id, model="gpt-4")
                 CommandInvoker._send_text_msg(to, "无历史对话记录，创建新对话成功")
-            response = CopilotGPT4.chat(id, chat_info, message)
+            response = CopilotGPT4.chat(chat_info, message)
             CommandInvoker._send_text_msg(to, response)
-    
-    # 命令：/gpt4-list
+
+    # 命令：/gpt4-chats
     @staticmethod
-    def cmd_gpt4_list(to: SendTo, message: str = "") -> None:
-        id = to.p_id
-        response = CopilotGPT4.get_chat_list_str(id)
+    def cmd_gpt4_chats(to: SendTo, message: str = "") -> None:
+        response = CopilotGPT4.get_chat_list_str(to.p_id)
         CommandInvoker._send_text_msg(to, response)
+
+    # TODO: 获取当前对话的对话记录，加参数则获取指定对话的对话记录
+    # 命令：/gpt4-record
+    @staticmethod
+    def cmd_gpt4_record(to: SendTo, message: str = "") -> None:
+        pass
 
     # 命令：/gpt4-continue
     @staticmethod
     def cmd_gpt4_continue(to: SendTo, message: str = "") -> None:
-        id = to.p_id
+        wx_id = to.p_id
         # 判断message是否为数字
         if not message.isdigit():
-            CommandInvoker._send_text_msg(to, "请输入数字")
+            CommandInvoker._send_text_msg(to, "请输入对话记录编号")
             return
-        chat_info = CopilotGPT4.continue_chat(id, int(message))
-        if chat_info == {}:
+        chat_info = CopilotGPT4.continue_chat(wx_id=wx_id, chat_index=int(message))
+        if chat_info is None:
             CommandInvoker._send_text_msg(to, "对话不存在")
             return
         response = CopilotGPT4.get_brief_conversation_str(chat_info)
@@ -226,3 +230,4 @@ class CommandInvoker:
         CommandInvoker._send_text_msg(to, remove_result)
         result = view_todos(to.p_id, to.p_name)
         CommandInvoker._send_text_msg(to, result)
+
