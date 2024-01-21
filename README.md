@@ -111,7 +111,6 @@ python3 main.py
 
 | 配置项| 解释 |  备注 |
 | --- | --- |  --- |
-| `cp_gpt4_enable` | | |
 | `cp_gpt4_port` | | |
 | `cp_gpt4_api_host` | | |
 | `cp_token` | | |
@@ -120,7 +119,7 @@ python3 main.py
 
 目前机器人支持如下命令：
 
-- [x] GPT问答，基于 [gpt4free](https://github.com/xtekky/gpt4free) 实现
+- [x] GPT问答，基于 [Copilot-GPT4-Server](https://github.com/aaamoon/copilot-gpt4-service)
 - [x] 获取B站热搜
 - [x] 获取知乎热搜
 - [x] 获取微博热搜

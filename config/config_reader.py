@@ -48,9 +48,6 @@ class ConfigReader:
 
         # copilot-gpt4 配置
         self.cp_gpt4_port: int = self.__cp.getint("copilot-gpt4", "cp_gpt4_port")
-        self.cp_gpt4_enable: bool = self.__cp.getboolean(
-            "copilot-gpt4", "cp_gpt4_enable"
-        )
         self.cp_gpt4_api_host: str = self.__cp.get("copilot-gpt4", "cp_gpt4_api_host")
         self.cp_token: str = self.__cp.get("copilot-gpt4", "cp_token")
 

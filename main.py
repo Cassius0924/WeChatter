@@ -7,10 +7,12 @@ from sqlite.sqlite_manager import SqliteManager
 
 # 启动命令：python main.py
 
+
 cr = ConfigReader("config.ini")
 
 
 def main():
+    # TODO: 检测command_set文件配置是否合理
     BotInfo.update_name(cr.bot_name)
     # 创建文件夹
     FileManager.check_and_create_folder("data/qrcodes")
