@@ -124,4 +124,5 @@ class SqliteManager:
         sql_files = fm.list_files(folder_path, suffixs=[".sql"])
         for sql_file in sql_files:
             path = pm.join_path(folder_path, sql_file)
-            self.excute_file(path)
+            abs_path = pm.get_abs_path(path)
+            self.excute_file(abs_path)
