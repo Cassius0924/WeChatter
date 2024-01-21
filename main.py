@@ -1,9 +1,10 @@
 # 项目启动文件
 import uvicorn
-from bot_info import BotInfo
-from config.config_reader import ConfigReader
-from utils.file_manager import FileManager
-from sqlite.sqlite_manager import SqliteManager
+
+from wechatter.bot.bot_info import BotInfo
+from wechatter.config.config_reader import ConfigReader
+from wechatter.sqlite.sqlite_manager import SqliteManager
+from wechatter.utils.file_manager import FileManager
 
 # 启动命令：python main.py
 
@@ -19,12 +20,12 @@ def main():
     FileManager.check_and_create_folder("data/todos")
     FileManager.check_and_create_folder("data/text_image")
     # 创建文件
-    FileManager.check_and_create_file("data/wechatbot.sqlite")
+    FileManager.check_and_create_file("data/wechatter.sqlite")
     # 创建数据库表
-    sqlite_manager = SqliteManager("data/wechatbot.sqlite")
-    sqlite_manager.excute_folder("sqlite/sqls")
+    sqlite_manager = SqliteManager("data/wechatter.sqlite")
+    sqlite_manager.excute_folder("wechatter/sqlite/sqls")
 
-    from recv_msg import app
+    from wechatter.app.app import app
 
     uvicorn.run(app, host="0.0.0.0", port=cr.recv_port)
 
