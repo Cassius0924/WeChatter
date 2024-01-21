@@ -5,6 +5,7 @@ from command.bili_hot import get_bili_hot_str
 from command.douyin_hot import get_douyin_hot_str
 from command.github_trending import get_github_trending_str
 from command.pai_post import get_pai_post_str
+from command.paper_people import get_paper_people_pdf_url, get_paper_people_url
 from command.qrcode import generate_qrcode
 from command.today_in_history import get_today_in_history_str
 from command.todo import add_todo_task, remove_todo_task, view_todos
@@ -17,11 +18,17 @@ from command.weibo_hot import get_weibo_hot_str
 from command.zhihu_hot import get_zhihu_hot_str
 from send_msg import Sender, SendMessage, SendMessageType, SendTo
 from command.copilot_gpt4 import CopilotGPT4
+from utils.text_to_image import text_to_image
 
 
 def _send_text_msg(to: SendTo, message: str = "") -> None:
     """封装发送文本消息"""
     Sender.send_msg(to, SendMessage(SendMessageType.TEXT, message))
+
+
+def _send_file_url_msg(to: SendTo, message: str = "") -> None:
+    """封装发送文件URL消息"""
+    Sender.send_msg(to, SendMessage(SendMessageType.FILE_URL, message))
 
 
 def _gptx(model: str, to: SendTo, message: str = "") -> None:
@@ -92,10 +99,18 @@ class CommandInvoker:
     # 命令：/help
     @staticmethod
     def cmd_help(to: SendTo, message: str = "") -> None:
+        # # 获取帮助信息(文本)
+        # from command.help import get_help_msg
+        # response = get_help_msg()
+        # CommandInvoker._send_text_msg(to, response)
+
+        # 获取帮助信息(图片)
         from command.help import get_help_msg
 
-        response = get_help_msg()
-        _send_text_msg(to, response)
+        help_msg = get_help_msg()
+        response = text_to_image(help_msg)
+        if response:
+            Sender.send_localfile_msg(to, response)
 
     # 命令：/gpt35
     @staticmethod
@@ -190,12 +205,39 @@ class CommandInvoker:
         response = "翻译功能暂未开放"
         _send_text_msg(to, response)
 
-    # 命令：/people-daily
+    # 命令：/people
     @staticmethod
     def cmd_people_daily(to: SendTo, message: str = "") -> None:
-        # 获取人民日报
-        response = "人民日报功能暂未开放"
-        _send_text_msg(to, response)
+        """发送人民日报url"""
+        # 发送当天01版本的人民日报PDF
+        if message.lower() == "url":
+            url = get_paper_people_url()
+            _send_text_msg(to, url)
+        elif message.lower().startswith("url"):
+            # 发送特定日期特定版本的url
+            parts = message.lower().split()
+            if len(parts) == 2 and parts[0] == "url" and parts[1].isdigit():
+                url = get_paper_people_pdf_url(parts[1])
+                if url:
+                    _send_text_msg(to, url)
+                if url is None:
+                    e = "输入的日期版本号不符合要求，请重新输入\n若要获取2021年1月2日03版的人民日报的url，请输入\n/people url 2021010203"
+                    _send_text_msg(to, e)
+        else:
+            # 发送人民日报PDF文件
+            # 发送特定日期特定版本的人民日报PDF
+            if message != "":
+                url = get_paper_people_pdf_url(message)
+                if url:
+                    _send_file_url_msg(to, url)
+                if url is None:
+                    e = "输入的日期版本号不符合要求，请重新输入\n若要获取2021年1月2日03版的人民日报的pdf，请输入\n/people 2021010203"
+                    _send_text_msg(to, e)
+
+            # 发送当天01版本的人民日报PDF
+            if message == "":
+                url = get_paper_people_url()
+                _send_file_url_msg(to, url)
 
     # 命令：/today-in-history
     @staticmethod

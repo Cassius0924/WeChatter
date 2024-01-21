@@ -17,6 +17,7 @@ def main():
     # 创建文件夹
     FileManager.check_and_create_folder("data/qrcodes")
     FileManager.check_and_create_folder("data/todos")
+    FileManager.check_and_create_folder("data/text_image")
     # 创建文件
     FileManager.check_and_create_file("data/wechatbot.sqlite")
     # 创建数据库表

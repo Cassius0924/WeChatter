@@ -59,7 +59,7 @@ def remove_todo_task(person_id: str, task_indices: List[int]) -> str:
         _save_todos(person_id, todos)
         return "删除失败"
 
-    successful_removals = "✅=====成功删除待办事项=====✅\n"
+    successful_removals = "✅成功删除待办事项✅\n"
     successful_removals += "\n".join(
         f"{i + 1}. {task}" for i, task in enumerate(removed_tasks)
     )
@@ -71,7 +71,7 @@ def view_todos(person_id: str, person_name: str) -> str:
     todos = _load_todos(person_id)
     personname = person_name
     if todos:
-        formatted_todos = f"✨====={personname}的待办事项=====✨\n"
+        formatted_todos = f"✨{personname}的待办事项✨\n"
         formatted_todos += "\n".join(f"{i + 1}. {task}" for i, task in enumerate(todos))
         return formatted_todos
     else:

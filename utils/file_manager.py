@@ -13,8 +13,6 @@ class FileManager:
         检查文件是否存在，如果不存在则创建
         :param *paths: 文件夹路径（可变参数）
         """
-        # q: 如何传多个参数
-        # a: 用 *args，def check_and_create(*args)
         path = pm.join_path(*paths)
         abs_path = pm.get_abs_path(path)
         if not os.path.exists(abs_path):
