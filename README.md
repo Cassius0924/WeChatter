@@ -39,37 +39,27 @@ docker logs -f wxBotWebhook
 
 ### 启动服务器
 
-1. 先将项目`git clone`下来：
+1. 下载源代码
 
 ```bash
-git clone https://github.com/Cassius0924/WeChatBot
+git clone https://github.com/Cassius0924/WeChatter
+cd WeChatter
 ```
 
-2. 进入项目文件夹
-
-```bash
-cd WeChatBot
-```
-
-3. 复制配置文件
+2. 复制并编辑配置文件
 
 ```bash
 cp config.ini.example config.ini
-```
-
-4. 根据`config.ini`内的注释修改配置文件，详见[配置文件](#配置文件)
-
-```bash
 vim config.ini
 ```
 
-5. 启动服务器
+3. 启动服务器
 
 ```bash
 python3 main.py
 ```
 
-6. 测试机器人
+4. 测试机器人
 
 使用另一个微信给机器人发送 `/help` 指令。
 
@@ -111,9 +101,9 @@ python3 main.py
 
 | 配置项| 解释 |  备注 |
 | --- | --- |  --- |
-| `cp_gpt4_port` | | |
-| `cp_gpt4_api_host` | | |
-| `cp_token` | | |
+| `cp_gpt4_port` | CopilotGPT4 服务的端口 | |
+| `cp_gpt4_api_host` | CopilotGPT4 服务的API地址 | |
+| `cp_token` | Copilot 的 Token | 以 `ghu_` 开头的字符串 |
 
 ## 支持命令
 
@@ -132,3 +122,4 @@ python3 main.py
 - [x] 待办清单（TODO）
 
 更多命令使用 `/help` 命令查看。
+
