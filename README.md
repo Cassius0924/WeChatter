@@ -54,7 +54,7 @@ cd WeChatBot
 3. 复制配置文件
 
 ```bash
-cp config.ini.temp config.ini
+cp config.ini.example config.ini
 ```
 
 4. 根据`config.ini`内的注释修改配置文件，详见[配置文件](#配置文件)
@@ -73,29 +73,54 @@ python3 main.py
 
 使用另一个微信给机器人发送 `/help` 指令。
 
-
 ## 配置文件
 
-项目中的 `config.ini.temp` 为配置文件模版，首次启动项目需要复制一份配置文件，并命名为 `config.ini`。
+项目中的 `config.ini.example` 为配置文件模版，首次启动项目需要复制一份配置文件，并命名为 `config.ini`。 编辑 `config.ini`。
 
 下表为配置项解释：
 
+### ⚙️ Admin 配置
+
 | 配置项| 解释 |  备注 |
 | --- | --- |  --- |
-| `admin_list` | 设置管理员,用于接收机器人状态变化通知 | 填入管理员微信名（不是备注）|
+| `admin_list` | 设置管理员,用于接收机器人状态变化k通知 | 填入管理员微信名（不是备注）|
 | `admin_group_list` | 与 `admin_list` 同理，接收机器人状态变化通知 | 填入群名称（不是群备注）|
-| `bot_name` | 微信机器人的名字 | 不是微信号|
+
+### ⚙️ Bot 配置
+
+| 配置项| 解释 |  备注 |
+| --- | --- |  --- |
+| `bot_name` | 微信机器人的名字 | 不是微信号 |
+
+### ⚙️ Chat 配置
+
+| 配置项| 解释 |  备注 |
+| --- | --- |  --- |
 | `command_prefix` | 机器人命令前缀 | 默认为 `/` ，可以设置为`!`、`~`等 |
 | `need_mentioned` | 群命令是否需要@机器人 | 默认为 `True` |
+
+### ⚙️ Server 配置
+
+| 配置项| 解释 |  备注 |
+| --- | --- |  --- |
 | `send_port` | 发送消息的端口 | 默认为 `3001`，此端口必须和 `wxBotWebhook` 的 Docker 端口相同 |
 | `recv_port` | 接受消息的端口 | 默认为 `4000`，此端口必须和 Docker 的 `RECV_MSG_API` 参数的端口相同 |
+| `recv_api_path` | 接受消息的接口路径 | 默认为 `/receive_msg`，此路径为 `RECV_MSG_API` 的路径 |
+
+### ⚙️ Copilot GPT4 配置
+
+| 配置项| 解释 |  备注 |
+| --- | --- |  --- |
+| `cp_gpt4_port` | | |
+| `cp_gpt4_api_host` | | |
+| `cp_token` | | |
 
 ## 支持命令
 
 目前机器人支持如下命令：
 
-- [x] GPT问答，基于 [gpt4free](https://github.com/xtekky/gpt4free) 实现
-- [x] 获取B站热搜 
+- [x] GPT问答，基于 [Copilot-GPT4-Server](https://github.com/aaamoon/copilot-gpt4-service)
+- [x] 获取B站热搜
 - [x] 获取知乎热搜
 - [x] 获取微博热搜
 - [x] 获取抖音热搜

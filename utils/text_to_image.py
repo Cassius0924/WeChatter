@@ -1,12 +1,13 @@
 from PIL import Image, ImageDraw, ImageFont
+from utils.path import PathManager
 
 
 def text_to_image(data: str) -> str:
-    image_width = 1000  # Width of the image
-    line_height = 30  # Height of each line
-    num_columns = 2  # Number of columns for text
+    image_width = 1000  # 图片宽度
+    line_height = 30  # 行高
+    num_columns = 2  # 列数
 
-    background_color = (255, 255, 255)  # White
+    background_color = (255, 255, 255)  # 白色
 
     # 根据换行符(\n)将文本分成几行
     lines = data.split("\n")
@@ -18,7 +19,7 @@ def text_to_image(data: str) -> str:
     image = Image.new("RGB", (image_width, image_height), background_color)
 
     # 选择字体和字体大小
-    font_path = "../assets/fonts/SimHei.ttf"  # Replace with your font file path
+    font_path = PathManager.get_abs_path("assets/fonts/SimHei.ttf")
     font_size = 25
     font = ImageFont.truetype(font_path, font_size)
 
@@ -26,7 +27,7 @@ def text_to_image(data: str) -> str:
     draw = ImageDraw.Draw(image)
 
     # 定义文本颜色
-    text_color = (0, 0, 0)  # Black
+    text_color = (0, 0, 0)  # 黑色
 
     # 定义初始文本位置(左上角)
     x_position = 50
@@ -45,6 +46,6 @@ def text_to_image(data: str) -> str:
         y_position = 50  # 重置下一列的y_position
 
     # 保存图像
-    output_image_path = "data/text_image/help.png"
+    output_image_path = PathManager.get_abs_path("data/text_image/help.png")
     image.save(output_image_path)
     return output_image_path

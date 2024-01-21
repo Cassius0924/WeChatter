@@ -8,6 +8,7 @@ admin_list = ["文件传输助手", "AdminName"]
 # 填入微信群名称（不是群备注）
 admin_group_list = ["AdminGroupName"]
 
+
 [bot]
 # 机器人的微信名称（不是微信号，不带引号）
 bot_name = BotName
@@ -28,3 +29,15 @@ send_port = 3001
 recv_port = 4000
 # 接收消息的接口路径，RECV_MSG_API的路径（<</receive_msg>>）
 recv_api_path = /receive_msg
+
+
+[copilot-gpt4]
+# Copilot GPT4 服务的 API 地址，必须包含http(s)://（<<http://localhost>>）
+cp_gpt4_api_host = http://localhost
+# Copilot GPT4 服务的端口（<<999>>）
+cp_gpt4_port = 999
+# Copilot 的 Token
+cp_token = ghu_your_token
+
+
+

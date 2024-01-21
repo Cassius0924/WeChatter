@@ -1,11 +1,14 @@
 import json
 import os
 from typing import List
-from utils.path import get_abs_path
+from utils.path import PathManager as pm
+
 
 def _load_todos(person_id: str) -> List[str]:
     """加载特定用户的待办事项"""
-    file_path = get_abs_path(os.path.join("data", "todos", f"p{person_id}_todo.json"))
+    file_path = pm.get_abs_path(
+        os.path.join("data", "todos", f"p{person_id}_todo.json")
+    )
     if os.path.exists(file_path):
         with open(file_path, "r", encoding="utf-8") as file:
             return json.load(file)
@@ -14,13 +17,14 @@ def _load_todos(person_id: str) -> List[str]:
 
 def _save_todos(person_id: str, content: List[str]) -> None:
     """保存待办事项到特定用户的 JSON 文件中"""
-    file_path = get_abs_path(os.path.join("data", "todos", f"p{person_id}_todo.json"))
+    file_path = pm.get_abs_path(
+        os.path.join("data", "todos", f"p{person_id}_todo.json")
+    )
     with open(file_path, "w", encoding="utf-8") as file:
         file.write(json.dumps(content, ensure_ascii=False))
     # 上面这样写入会导致中文变成 Unicode 编码，可以使用下面的方式写入
     # with open(file_path, "w", encoding="utf-8") as file:
     #     file.write(json.dumps(content, ensure_ascii=False))
-
 
 
 def add_todo_task(person_id: str, task: str) -> bool:

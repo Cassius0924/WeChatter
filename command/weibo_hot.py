@@ -27,6 +27,4 @@ def get_weibo_hot_list() -> List:
         print("获取微博热搜失败")
         return []
     hot_dict = response.json()
-    return (
-        hot_dict.get("data", {}).get("cards", [])[0].get("card_group", [])[:20]
-    )
+    return hot_dict.get("data", {}).get("cards", [])[0].get("card_group", [])[:20]

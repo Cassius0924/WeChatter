@@ -1,15 +1,15 @@
 # URL转二维码命令
 from utils.time import get_current_datetime
-from utils.path import get_abs_path
+from utils.path import PathManager as pm
 
 import qrcode
 
 
 def generate_qrcode(data: str) -> str:
     """生成二维码，返回二维码的保存路径"""
-    qr = qrcode.QRCode( # type: ignore
+    qr = qrcode.QRCode(  # type: ignore
         version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_L, # type: ignore
+        error_correction=qrcode.constants.ERROR_CORRECT_L,  # type: ignore
         box_size=10,
         border=4,
     )
@@ -19,7 +19,7 @@ def generate_qrcode(data: str) -> str:
 
     # 保存到 data/qrcodes/ 目录下
     datetime_str = get_current_datetime()
-    path = get_abs_path(f"data/qrcodes/{datetime_str}.png")
+    path = pm.get_abs_path(f"data/qrcodes/{datetime_str}.png")
     img.save(path)
     return path
 

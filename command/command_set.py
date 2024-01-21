@@ -1,7 +1,6 @@
 # 命令集
 from command_invoker import CommandInvoker
 
-
 cmd_dict = {
     "None": {"keys": ["None"], "desc": "无效指令。", "value": 0, "func": None},
     "help": {
@@ -13,20 +12,50 @@ cmd_dict = {
     "gpt4": {
         "keys": ["gpt4"],
         "desc": "调用GPT4进行回答。",
-        "value": 2,
+        "value": 20,
         "func": CommandInvoker.cmd_gpt4,
     },
-    "gpt": {
+    "gpt4-chats": {
+        "keys": ["gpt4-chats", "gpt4对话记录"],
+        "desc": "列出GPT4对话记录。",
+        "value": 21,
+        "func": CommandInvoker.cmd_gpt4_chats,
+    },
+    "gpt4-continue": {
+        "keys": ["gpt4-continue", "gpt4继续"],
+        "desc": "继续GPT4对话。",
+        "value": 22,
+        "func": CommandInvoker.cmd_gpt4_continue,
+    },
+    "gpt4-record": {
+        "keys": ["gpt4-record", "gpt4记录"],
+        "desc": "获取GPT4对话记录。",
+        "value": 23,
+        "func": CommandInvoker.cmd_gpt4_record,
+    },
+    "gpt35": {
         "keys": ["gpt"],
         "desc": "调用GPT3.5进行回答。",
-        "value": 3,
+        "value": 30,
         "func": CommandInvoker.cmd_gpt35,
     },
-    "image-stitch": {
-        "keys": ["图片拼接", "image-stitch"],
-        "desc": "调用图像拼接。",
-        "value": 4,
-        "func": None,
+    "gpt-chats": {
+        "keys": ["gpt-chats", "gpt对话记录"],
+        "desc": "列出GPT3.5对话记录。",
+        "value": 31,
+        "func": CommandInvoker.cmd_gpt35_chats,
+    },
+    "gpt-continue": {
+        "keys": ["gpt-continue", "gpt继续"],
+        "desc": "继续GPT3.5对话。",
+        "value": 32,
+        "func": CommandInvoker.cmd_gpt35_continue,
+    },
+    "gpt-record": {
+        "keys": ["gpt-record", "gpt记录"],
+        "desc": "获取GPT3.5对话记录。",
+        "value": 33,
+        "func": CommandInvoker.cmd_gpt35_record,
     },
     "github-trending": {
         "keys": ["github趋势", "github-trending"],
@@ -111,5 +140,11 @@ cmd_dict = {
         "desc": "删除待办事项。",
         "value": 18,
         "func": CommandInvoker.cmd_remove_todo,
+    },
+    "schedule": {
+        "keys": ["课程表", "schedule"],
+        "desc": "课程表。",
+        "value": 19,
+        "func": None,
     },
 }

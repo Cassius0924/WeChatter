@@ -38,7 +38,7 @@ class PersonalInfo:
         id: str,
         name: str,
         alias: str = "",
-        gender: str = "",
+        gender: int = -1,
         signature: str = "",
         province: str = "",
         city: str = "",
@@ -129,22 +129,23 @@ class MessageSource:
 
     def __init__(
         self,
-        p_info: Union[PersonalInfo, None] = None,
+        p_info: PersonalInfo = PersonalInfo("None", "None"),
         g_info: Union[GroupInfo, None] = None,
     ):
         self.p_info = p_info
         self.g_info = g_info
 
     def __str__(self) -> str:
-        if self.p_info is not None:
+        if self.g_info is not None:
             return str(self.p_info)
-        elif self.g_info is not None:
+        elif self.p_info is not None:
             return str(self.g_info)
         else:
             return "None"
 
 
-from command.command_set import cmd_dict # noqa
+from command.command_set import cmd_dict  # noqa
+
 
 class Message:
     """消息类
@@ -232,7 +233,7 @@ class Message:
             id = payload.get("id", "")
             name = payload.get("name", "")
             alias = payload.get("alias", "")
-            gender = payload.get("gender", "")
+            gender = int(payload.get("gender", -1))
             signature = payload.get("signature", "")
             province = payload.get("province", "")
             city = payload.get("city", "")

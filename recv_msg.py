@@ -6,10 +6,10 @@ from bot_info import BotInfo
 from message import Message
 from message_parser import MessageParser
 from notifier import Notifier
+from sqlite.sqlite_manager import SqliteManager
 from main import cr
 
 app = FastAPI()
-message_parser = MessageParser()
 
 
 @app.post(cr.recv_api_path)
@@ -50,13 +50,23 @@ async def recv_msg(
         is_mentioned=isMentioned,
     )
 
+    # 向用户表中添加该用户
+    check_and_add_user(
+        user_id=message.source.p_info.id,
+        user_name=message.source.p_info.name,
+        user_alias=message.source.p_info.alias,
+        user_gender=message.source.p_info.gender,
+    )
+
     # DEBUG
     print("==" * 20)
     print(str(message))
     print("==" * 20)
 
     # 用户发来的消息均送给消息解析器处理
-    message_parser.parse_message(message)
+    MessageParser.parse_message(message)
+
+    # return {"success": True, "data": {"type": "text", "content": "hello world！"}}
 
 
 def handle_system_event(content: str) -> None:
@@ -73,6 +83,34 @@ def handle_system_event(content: str) -> None:
         pass
     else:
         pass
+
+
+# TODO: 判断传入的参数和数据库中的数据是否一致，若不一致，则更新数据库中的数据
+def check_and_add_user(
+    user_id: str, user_name: str = "", user_alias: str = "", user_gender: int = -1
+) -> None:
+    """判断用户表中是否有该用户，若没有，则添加该用户"""
+    sqlite_manager = SqliteManager()
+    sql = "SELECT * FROM wx_users WHERE wx_id = ?"
+    result = sqlite_manager.fetch_one(sql, (user_id,))
+    if result is not None:
+        return
+    # 该用户不存在，添加该用户
+    gender = "unknown"
+    if user_gender == 1:
+        gender = "male"
+    elif user_gender == 0:
+        gender = "female"
+    sql = "INSERT INTO wx_users(wx_id, wx_name, wx_alias, wx_gender) VALUES(?, ?, ?, ?)"
+    sqlite_manager.insert(
+        "wx_users",
+        {
+            "wx_id": user_id,
+            "wx_name": user_name,
+            "wx_alias": user_alias,
+            "wx_gender": gender,
+        },
+    )
 
 
 # type
