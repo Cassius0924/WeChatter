@@ -29,6 +29,17 @@ class ConfigReader:
         """读取配置文件"""
         self.__cp.read(self.config_file, encoding="utf-8")
 
+        # wechatter 配置
+        self.wechatter_port: int = self.__cp.getint("wechatter", "wechatter_port")
+
+        # wx-bot-webhook 配置
+        self.wx_webhook_port: int = self.__cp.getint(
+            "wx-bot-webhook", "wx_webhook_port"
+        )
+        self.wx_webhook_recv_api_path: str = self.__cp.get(
+            "wx-bot-webhook", "wx_webhook_recv_api_path"
+        )
+
         # admin 配置
         self.admin_list: List = json.loads(self.__cp.get("admin", "admin_list"))
         self.admin_group_list: List = json.loads(
@@ -42,14 +53,23 @@ class ConfigReader:
         self.command_prefix: str = self.__cp.get("chat", "command_prefix")
         self.need_mentioned: bool = self.__cp.getboolean("chat", "need_mentioned")
 
-        # server 配置
-        self.send_port: int = self.__cp.getint("server", "send_port")
-        self.recv_port: int = self.__cp.getint("server", "recv_port")
-        self.recv_api_path: str = self.__cp.get("server", "recv_api_path")
-
         # copilot-gpt4 配置
-        self.cp_gpt4_port: int = self.__cp.getint("copilot-gpt4", "cp_gpt4_port")
         self.cp_gpt4_api_host: str = self.__cp.get("copilot-gpt4", "cp_gpt4_api_host")
+        self.cp_gpt4_port: int = self.__cp.getint("copilot-gpt4", "cp_gpt4_port")
         self.cp_token: str = self.__cp.get("copilot-gpt4", "cp_token")
+
+        # github-webhook 配置
+        self.github_webhook_enabled: bool = self.__cp.getboolean(
+            "github-webhook", "github_webhook_enabled"
+        )
+        self.github_webhook_api_path: str = self.__cp.get(
+            "github-webhook", "github_webhook_api_path"
+        )
+        self.github_webhook_receiver_list: List = json.loads(
+            self.__cp.get("github-webhook", "github_webhook_receiver_list")
+        )
+        self.github_webhook_receive_group_list: List = json.loads(
+            self.__cp.get("github-webhook", "github_webhook_receive_group_list")
+        )
 
     # TODO;封装get方法，判断不为空

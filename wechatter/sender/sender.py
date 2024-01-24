@@ -45,7 +45,7 @@ class Sender:
     """v2 版本 api 消息发送类"""
 
     host = "http://localhost"
-    url = f"{host}:{cr.send_port}/webhook/msg/v2"
+    url = f"{host}:{cr.wx_webhook_port}/webhook/msg/v2"
 
     # 发送文本消息或链接文件
     """
@@ -264,7 +264,7 @@ class SenderV1:
     """v1 版本 api 消息发送类"""
 
     host = "http://localhost"
-    url = f"{host}:{cr.send_port}/webhook/msg"
+    url = f"{host}:{cr.wx_webhook_port}/webhook/msg"
 
     # 发送文本消息
     """

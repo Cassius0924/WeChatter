@@ -12,7 +12,7 @@ from wechatter.sqlite.sqlite_manager import SqliteManager
 router = APIRouter()
 
 
-@router.post(cr.recv_api_path)
+@router.post(cr.wx_webhook_recv_api_path)
 async def recv_wechat_msg(
     type: str = Form(),
     content: str = Form(),

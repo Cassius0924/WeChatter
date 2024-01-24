@@ -27,7 +27,7 @@ def main():
 
     from wechatter.app.app import app
 
-    uvicorn.run(app, host="0.0.0.0", port=cr.recv_port)
+    uvicorn.run(app, host="0.0.0.0", port=cr.wechatter_port)
 
 
 if __name__ == "__main__":
