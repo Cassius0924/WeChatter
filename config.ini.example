@@ -1,9 +1,22 @@
 # 微信机器人配置文件
 # 配置文件示例: https://www.github.com/Cassius0924/WeChatBot
 
+
+[wechatter]
+# 微信机器人服务的端口，接收消息的端口，RECV_MSG_API的端口（<<4000>>）
+wechatter_port = 4000
+
+
+[wx-bot-webhook]
+# 发送消息的端口，wxBotWebhook Docker 的端口（<<3001>>）
+wx_webhook_port = 3001
+# 接收消息的接口路径，RECV_MSG_API的路径（<</receive_msg>>）
+wx_webhook_recv_api_path = /receive_msg
+
+
+[admin]
 # 微信管理员，用于接收机器人的报警信息和登录登出信息
 # 填入微信名称（不是微信号，也不是微信备注）
-[admin]
 admin_list = ["文件传输助手", "AdminName"]
 # 填入微信群名称（不是群备注）
 admin_group_list = ["AdminGroupName"]
@@ -17,18 +30,8 @@ bot_name = BotName
 [chat]
 # 命令前缀，用于区分命令和普通消息（<</>>）
 command_prefix = /
-
 # 群消息命令是否需要@机器人才能触发（<<True>>/False）
 need_mentioned = True
-
-
-[server]
-# 发送消息的端口，Docker 的端口（<<3001>>）
-send_port = 3001
-# 接收消息的端口，RECV_MSG_API的端口（<<4000>>）
-recv_port = 4000
-# 接收消息的接口路径，RECV_MSG_API的路径（<</receive_msg>>）
-recv_api_path = /receive_msg
 
 
 [copilot-gpt4]
@@ -40,4 +43,12 @@ cp_gpt4_port = 999
 cp_token = ghu_your_token
 
 
-
+[github-webhook]
+# 是否接收 GitHub Webhook （True/<<False>>）
+github_webhook_enabled = True
+# 接收 GitHub Webhook 的接口路径（<</webhook/github>>）
+github_webhook_api_path = /webhook/github
+# 接收 GitHub Webhook 的微信用户
+github_webhook_receiver_list = []
+# 接收 GitHub Webhook 的微信群
+github_webhook_receive_group_list = []

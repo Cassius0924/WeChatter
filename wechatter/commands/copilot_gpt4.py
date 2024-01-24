@@ -1,5 +1,5 @@
 # 使用 Copilot-GPT4-Server 回复
-from typing import Dict, List, Union
+from typing import List, Union
 
 import requests
 from wechatter.sqlite.sqlite_manager import SqliteManager
@@ -23,7 +23,7 @@ class ChatInfo:
         chat_talk_time: int = -1,
         chat_topic: str = DEFAULT_TOPIC,
         chat_model: str = DEFAULT_MODEL,
-        conversations: List[Dict] = DEFAULT_CONVERSATIONS,
+        conversations: List[dict] = DEFAULT_CONVERSATIONS,
         is_chating: bool = False,
         chat_id: int = -1,
     ):
@@ -44,7 +44,7 @@ class ChatInfo:
         return True
 
     @property
-    def dict(self) -> Dict:
+    def dict(self) -> dict:
         """将对象转为字典（删去 conversations 字段）"""
         chat_info_dict = self.__dict__.copy()
         chat_info_dict.pop("conversations")

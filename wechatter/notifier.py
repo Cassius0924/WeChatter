@@ -21,11 +21,11 @@ class Notifier:
     def notify_logged_in() -> None:
         """通知登录成功"""
         msg = "微信机器人启动成功"
-        Sender.send_msg_to_all_admin(msg)
+        Sender.send_msg_to_admins(msg)
 
     # FIXME: 登出消息发送不出去，因为发消息时候，机器人已经退出登录了
     @staticmethod
     def notify_logged_out() -> None:
         """通知已退出登录"""
         msg = "微信机器人已退出"
-        Sender.send_msg_to_all_admin(msg)
+        Sender.send_msg_to_admins(msg)
