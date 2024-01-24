@@ -17,10 +17,10 @@ def handle_issue_comment(data: dict):
     message = (
         "==== GitHub Comment 事件 ====\n"
         f"💬 有评论被 {payload.action.capitalize()} ！\n"
-        f"仓库：{payload.repository.full_name}\n"
-        f"创建者：{payload.issue.user.login}\n"
-        f"标题：{payload.issue.title}\n"
-        f"内容：{content}\n"
-        f"查看详情：{payload.issue.html_url}"
+        f"📚 仓库：{payload.repository.full_name}\n"
+        f"📝 标题：{payload.issue.title}\n"
+        f"📃 内容：{content}\n"
+        f"🧑‍💻 创建者：{payload.issue.user.login}\n"
+        f"🔗 查看详情：{payload.issue.html_url}"
     )
     Sender.send_msg_to_github_webhook_receivers(message)

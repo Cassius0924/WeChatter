@@ -10,9 +10,9 @@ def handle_pr_review(data: dict):
     message = (
         "==== GitHub Pull Request Review 事件 ====\n"
         f"⬇️ 有 PR Review 被 {payload.review.state.capitalize()} ！\n"
-        f"仓库：{payload.repository.full_name}\n"
-        f"标题：{payload.pull_request.title}\n"
-        f"创建者：{payload.pull_request.user.login}\n"
-        f"查看详情：{payload.pull_request.html_url}"
+        f"📚 仓库：{payload.repository.full_name}\n"
+        f"📝 标题：{payload.pull_request.title}\n"
+        f"🧑‍💻 创建者：{payload.pull_request.user.login}\n"
+        f"🔗 查看详情：{payload.pull_request.html_url}"
     )
     Sender.send_msg_to_github_webhook_receivers(message)

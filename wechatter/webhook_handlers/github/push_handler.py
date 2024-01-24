@@ -13,12 +13,12 @@ def handle_push(data: dict):
     message = (
         "==== GitHub Push 事件 ====\n"
         "🚀 新的代码已经推送到了仓库！\n"
-        f"仓库：{payload.repository.full_name}\n"
-        f"提交者：{payload.pusher.name}\n"
-        f"分支：{payload.ref}\n"
+        f"📚 仓库：{payload.repository.full_name}\n"
+        f"🌱 分支：{payload.ref}\n"
+        f"🧑‍💻 提交者：{payload.pusher.name}\n"
     )
     if len(payload.commits) != 0:
-        message += f"提交信息：{payload.commits[0].message}\n"
-    message += f"查看详情：{branch_url}"
+        message += f"📃 提交信息：{payload.commits[0].message}\n"
+    message += f"🔗 查看详情：{branch_url}"
 
     Sender.send_msg_to_github_webhook_receivers(message)

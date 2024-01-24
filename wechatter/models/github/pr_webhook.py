@@ -35,6 +35,8 @@ class PullRequest(BaseModel):
     body: Optional[str]
     base: PrBranch
     head: PrBranch
+    merged: bool
+    merged_by: Optional[User]
 
 
 class GithubPrWebhook(BaseModel):
