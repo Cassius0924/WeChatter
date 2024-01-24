@@ -189,8 +189,8 @@ class Message:
             content = content.replace(f"@{BotInfo.name} ", "")
         for cmd, value in cmd_dict.items():
             for key in value["keys"]:
-                # 第一个空格前的内容即为指令
-                cont_list = content.split(" ", 1)
+                # 第一个空格或回车前的内容即为指令
+                cont_list = re.split(r"\s|\n", content, 1)
                 if cont_list[0].lower() == cr.command_prefix + key.lower():
                     self.__is_cmd = True  # 是否是命令
                     self.__cmd = cmd  # 命令
