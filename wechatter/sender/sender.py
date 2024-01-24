@@ -246,7 +246,7 @@ class Sender:
         return _retry(3, lambda: _check(requests.post(url, data=data, files=files)))
 
     @staticmethod
-    def send_msg_to_all_admin(message: str) -> None:
+    def send_msg_to_admins(message: str) -> None:
         """发送消息给所有管理员"""
         if len(cr.admin_list) == 0:
             print("管理员列表为空")
@@ -257,6 +257,23 @@ class Sender:
             return
         Sender.send_msg_gs(
             cr.admin_group_list, SendMessage(SendMessageType.TEXT, message)
+        )
+
+    @staticmethod
+    def send_msg_to_github_webhook_receivers(message: str) -> None:
+        """发送消息给所有 GitHub Webhook 接收者"""
+        if len(cr.github_webhook_receiver_list) == 0:
+            print("GitHub Webhook 接收者列表为空")
+            return
+        Sender.send_msg_ps(
+            cr.github_webhook_receiver_list, SendMessage(SendMessageType.TEXT, message)
+        )
+        if len(cr.github_webhook_receive_group_list) == 0:
+            print("GitHub Webhook 接收者群列表为空")
+            return
+        Sender.send_msg_gs(
+            cr.github_webhook_receive_group_list,
+            SendMessage(SendMessageType.TEXT, message),
         )
 
 
