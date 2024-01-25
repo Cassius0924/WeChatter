@@ -18,7 +18,8 @@ def handle_push(data: dict):
         f"🧑‍💻 提交者：{payload.pusher.name}\n"
     )
     if len(payload.commits) != 0:
-        message += f"📃 提交信息：{payload.commits[0].message}\n"
+        # 最后一个commit的message
+        message += f"📃 提交信息：{payload.commits.pop().message}\n"
     message += f"🔗 查看详情：{branch_url}"
 
     Sender.send_msg_to_github_webhook_receivers(message)
