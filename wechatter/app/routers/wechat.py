@@ -1,6 +1,7 @@
 import json
+from typing import Union
 
-from fastapi import APIRouter, Form
+from fastapi import APIRouter, Form, UploadFile
 from main import cr
 from wechatter.bot.bot_info import BotInfo
 from wechatter.commands import commands
@@ -16,7 +17,7 @@ router = APIRouter()
 @router.post(cr.wx_webhook_recv_api_path)
 async def recv_wechat_msg(
     type: str = Form(),
-    content: str = Form(),
+    content: Union[UploadFile, str] = Form(),
     source: str = Form(),
     isMentioned: str = Form(),
     isSystemEvent: str = Form(),
@@ -32,7 +33,6 @@ async def recv_wechat_msg(
     # print("==" * 20)
 
     # 更新机器人信息（id和name）
-    # FIXME: 启动服务器后，只有个人消息才能成功更新机器人信息，群消息无法确定机器人的id和name
     BotInfo.update_from_source(source)
 
     # 判断是否是系统事件
@@ -42,6 +42,10 @@ async def recv_wechat_msg(
         return
 
     # 不是系统消息，则是用户发来的消息
+    if type == "file":
+        print(f"收到文件：{content.filename}")
+        return
+
     # 解析命令
     # 构造消息对象
     message = Message(
@@ -64,8 +68,7 @@ async def recv_wechat_msg(
     print("==" * 20)
 
     if cr.message_forwarding_enabled:
-        message_forwarder = MessageForwarder(cr.message_forwarding_rules)
-        message_forwarder.forward_message(message)
+        MessageForwarder(cr.message_forwarding_rules).forward_message(message)
 
     # 传入命令字典，构造消息处理器
     message_handler = MessageHandler(commands)
