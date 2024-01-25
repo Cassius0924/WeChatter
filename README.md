@@ -71,40 +71,40 @@ python3 main.py
 
 ### ⚙️ WeChatter 配置
 
-| 配置项| 解释 |  备注 |
+| 配置项 | 解释 | 备注 |
 | --- | --- |  --- |
 | `wechatter_port` | WeChattter服务器的端口，接受消息的端口 | 默认为 `4000`，需和 `wxbotwebhook` Docker 的 `RECV_MSG_API` 参数的端口一致 |
 
 ### ⚙️ WxBotWebhook 配置
 
-| 配置项| 解释 |  备注 |
+| 配置项 | 解释 | 备注 |
 | --- | --- |  --- |
 | `wx_webhook_port` | 发送消息的端口 | 默认为 `3001`，需和 `wxBotWebhook` 的 Docker 端口一致 |
 | `wx_webhook_recv_api_path` | 接收消息的接口路径 | 默认为 `/receive_msg`，此路径为 `RECV_MSG_API` 的路径 |
 
 ### ⚙️ Admin 配置
 
-| 配置项| 解释 |  备注 |
+| 配置项 | 解释 | 备注 |
 | --- | --- |  --- |
 | `admin_list` | 设置管理员,用于接收机器人状态变化通知 | 填入管理员微信名（不是备注） |
 | `admin_group_list` | 与 `admin_list` 同理，接收机器人状态变化通知 | 填入群名称（不是群备注） |
 
 ### ⚙️ Bot 配置
 
-| 配置项| 解释 |  备注 |
+| 配置项 | 解释 | 备注 |
 | --- | --- |  --- |
 | `bot_name` | 微信机器人的名字 | 微信名称，非微信号 |
 
 ### ⚙️ Chat 配置
 
-| 配置项| 解释 |  备注 |
+| 配置项 | 解释 | 备注 |
 | --- | --- |  --- |
 | `command_prefix` | 机器人命令前缀 | 默认为 `/` ，可以设置为`>>`、`!` 等 |
 | `need_mentioned` | 群聊中的命令是否需要@机器人 | 默认为 `True` |
 
 ### ⚙️ Copilot GPT4 配置
 
-| 配置项| 解释 |  备注 |
+| 配置项 | 解释 |  备注 |
 | --- | --- |  --- |
 | `cp_gpt4_api_host` | CopilotGPT4 服务的API地址 | 默认为 `http://localhost` |
 | `cp_gpt4_port` | CopilotGPT4 服务的端口 | 默认为 `8080` |
@@ -112,16 +112,24 @@ python3 main.py
 
 ### ⚙️ GitHub Webhook 配置
 
-| 配置项| 解释 |  备注 |
+| 配置项 | 解释 | 备注 |
 | --- | --- |  --- |
 | `github_webhook_enabled` | 功能开关，是否接收 GitHub Webhook | 默认为 `False` |
 | `github_webhook_api_path` | 接收 GitHub Webhook 的接口路径 | 默认为 `/webhook/github` |
 | `github_webhook_receiver_list` | 接收 GitHub Webhook 的微信用户 |  |
 | `github_webhook_receive_group_list` | 接收 GitHub Webhook 的微信群 | |
 
-## 支持命令
+### ⚙️ Message Forwarding 配置
 
-目前机器人支持如下命令：
+| 配置项 | 子项 | 解释 | 备注 |
+| --- | --- |  --- | --- |
+| `message_forwarding_enabled` | | 功能开关，是否开启消息转发 | 默认为 `False` |
+| `message_forwarding_rules` | | 消息规则列表，每个规则包含三个字段：`froms`, `to_persons` 和 `to_groups` | 一个由字典组成的JSON列表，最后的 `]` 不能单独一行 |
+| ➤➤➤ | `froms` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称 |
+| ➤➤➤ | `to_persons` | 消息转发目标用户列表，即消息接收用户 | 可以填多个用户名称或为空列表 |
+| ➤➤➤ | `to_groups` | 消息转发目标群列表，即消息接收群 | 可以填多个群名称或为空列表 |
+
+## 支持的命令
 
 - [x] GPT问答，基于 [Copilot-GPT4-Server](https://github.com/aaamoon/copilot-gpt4-service)
 - [x] 获取B站热搜
@@ -139,9 +147,13 @@ python3 main.py
 > [!TIP]
 > 更多命令使用 `/help` 命令查看。
 
+## 支持的功能
+
+- [x] 消息转发，需[配置](#⚙️ GitHub Forwarding 配置)
+
 ## 支持的 Webhook
 
-- [x] GitHub 仓库 Webhook
+- [x] GitHub 仓库 Webhook，需[配置](#⚙️ GitHub Webhook 配置)
 
 > [!NOTE]
-> 需要在 GitHub 仓库 Settings 中添加 Webhook 和项目 `config.init` 文件中配置 `github-webhook` 相关配置。
+> 需要在 GitHub 仓库 Settings 中添加 Webhook
