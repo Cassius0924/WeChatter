@@ -3,6 +3,21 @@ from typing import List
 
 import requests
 
+from wechatter.sender import Sender
+from wechatter.commands.handlers import command
+from wechatter.models.message import SendMessage, SendMessageType, SendTo
+
+
+@command(
+    command="weibo-hot",
+    keys=["微博热搜", "weibo-hot"],
+    desc="获取微博热搜。",
+    value=130,
+)
+def weibo_hot_command_handler(to: SendTo, message: str = "") -> None:
+    response = get_weibo_hot_str()
+    Sender.send_msg(to, SendMessage(SendMessageType.TEXT, response))
+
 
 def get_weibo_hot_str() -> str:
     hot_list = get_weibo_hot_list()

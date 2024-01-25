@@ -5,9 +5,9 @@ from enum import Enum
 from typing import Union
 
 from main import cr
-from wechatter.bot.bot_info import BotInfo
-from wechatter.message.group_info import GroupInfo
-from wechatter.message.person_info import PersonInfo
+
+from wechatter.models.message.group_info import GroupInfo
+from wechatter.models.message.person_info import PersonInfo
 
 
 class MessageType(Enum):
@@ -49,20 +49,13 @@ class MessageSource:
             return "None"
 
 
-from wechatter.commands.command_set import cmd_dict  # noqa
-
-
 class Message:
     """消息类
-    :property msg: 消息内容
+    :property content: 消息内容
     :property source: 消息来源
     :property is_mentioned: 是否@机器人
     :property is_quote: 是否引用机器人消息
-    :property is_cmd: 是否是命令
     :property is_group: 是否是群消息
-    :property cmd: 命令
-    :property cmd_desc: 命令描述
-    :property cmd_value: 命令值
     """
 
     def __init__(
@@ -71,12 +64,15 @@ class Message:
         content: str,
         source: str,
         is_mentioned: str = "0",
+        command: dict = {},
     ):
         self.type = type
         self.content = content
-        self.source = source
+        self.source: MessageSource = source
         self.is_mentioned = is_mentioned
-        self.__parse_command()
+        self.is_group = bool(self.source.g_info)
+        self.is_quote = content
+        self.command = command
 
     # 获取消息类型
     @property
@@ -171,34 +167,38 @@ class Message:
             )
         self.__source = message_source
 
-    def __parse_command(self) -> None:
-        """解析命令"""
-        content = self.content
-        # 判断是否为引用消息
-        quote_pattern = (
-            r"(?s)「(.*?)」\n- - - - - - - - - - - - - - -"  # 引用消息的正则
-        )
-        match_result = re.match(quote_pattern, content)
-        self.__is_quote = bool(match_result)
-        # 判断是否为群消息
-        self.__is_group = bool(self.source.g_info)
-        # 不带命令前缀和@前缀的消息内容
-        self.__msg = ""
-        if self.__is_mentioned and self.__is_group:
-            # 去掉"@机器人名"的前缀
-            content = content.replace(f"@{BotInfo.name} ", "")
-        for cmd, value in cmd_dict.items():
-            for key in value["keys"]:
-                # 第一个空格前的内容即为指令
-                cont_list = content.split(" ", 1)
-                if cont_list[0].lower() == cr.command_prefix + key.lower():
-                    self.__is_cmd = True  # 是否是命令
-                    self.__cmd = cmd  # 命令
-                    if len(cont_list) == 2:
-                        self.__msg = cont_list[1]  # 消息内容
-                    return
-        self.__is_cmd = False
-        self.__cmd = "None"
+    # def __parse_message(self) -> None:
+    #     """解析命令"""
+    # 判断是否为群消息
+
+    # def __parse_command(self) -> None:
+    #     """解析命令"""
+    #     content = self.content
+    #     # 判断是否为引用消息
+    #     quote_pattern = (
+    #         r"(?s)「(.*?)」\n- - - - - - - - - - - - - - -"  # 引用消息的正则
+    #     )
+    #     match_result = re.match(quote_pattern, content)
+    #     self.__is_quote = bool(match_result)
+    #     # 判断是否为群消息
+    #     self.__is_group = bool(self.source.g_info)
+    #     # 不带命令前缀和@前缀的消息内容
+    #     self.__msg = ""
+    #     if self.__is_mentioned and self.__is_group:
+    #         # 去掉"@机器人名"的前缀
+    #         content = content.replace(f"@{BotInfo.name} ", "")
+    #     for cmd, value in ch.command_infos.items():
+    #         for key in value["keys"]:
+    #             # 第一个空格或回车前的内容即为指令
+    #             cont_list = re.split(r"\s|\n", content, 1)
+    #             if cont_list[0].lower() == cr.command_prefix + key.lower():
+    #                 self.__is_cmd = True  # 是否是命令
+    #                 self.__cmd = cmd  # 命令
+    #                 if len(cont_list) == 2:
+    #                     self.__msg = cont_list[1]  # 消息内容
+    #                 return
+    #     self.__is_cmd = False
+    #     self.__cmd = "None"
 
     @property
     def is_mentioned(self) -> bool:
@@ -212,48 +212,56 @@ class Message:
         else:
             self.__is_mentioned = False
 
-    @property
-    def is_cmd(self) -> bool:
-        """是否是命令"""
-        return self.__is_cmd
+    # @property
+    # def is_cmd(self) -> bool:
+    #     """是否是命令"""
+    #     return self.__is_cmd
 
-    @property
-    def cmd(self) -> str:
-        """命令"""
-        return self.__cmd
+    # @property
+    # def cmd(self) -> str:
+    #     """命令"""
+    #     return self.__cmd
 
-    @property
-    def cmd_func(self):
-        """命令函数"""
-        return cmd_dict[self.cmd]["func"]
+    # @property
+    # def cmd_handler(self):
+    #     """命令函数"""
+    #     return ch.command_handlers.get(self.cmd)
 
-    @property
-    def cmd_desc(self) -> str:
-        """命令描述"""
-        return cmd_dict[self.cmd]["desc"]
+    # @property
+    # def cmd_desc(self) -> str:
+    #     """命令描述"""
+    #     return ch.command_infos.get(self.cmd).desc
 
-    @property
-    def cmd_value(self) -> int:
-        """命令值"""
-        return cmd_dict[self.cmd]["value"]
+    # @property
+    # def cmd_value(self) -> int:
+    #     """命令值"""
+    #     return ch.command_infos.get(self.cmd).value
 
     @property
     def is_group(self) -> bool:
         """是否是群消息"""
         return self.__is_group
 
+    @is_group.setter
+    def is_group(self, is_group: bool):
+        self.__is_group = is_group
+
     @property
     def is_quote(self) -> bool:
         """是否引用机器人消息"""
-        if not self.__is_quote:
-            return False
-        bot_name = BotInfo.name
-        if bot_name == "":
-            print("机器人名字为空")
-            return False
-        if self.content.startswith(f"「{bot_name}"):
-            return True
-        return False
+        return self.__is_quote
+
+    @is_quote.setter
+    def is_quote(self, content: str):
+        self.__is_quote = False
+        # 判断是否为引用消息
+        quote_pattern = (
+            r"(?s)「(.*?)」\n- - - - - - - - - - - - - - -"  # 引用消息的正则
+        )
+        match_result = re.match(quote_pattern, content)
+        # 判断是否为引用机器人消息
+        if bool(match_result) and content.startswith(f"「{cr.bot_name}"):
+            self.__is_quote = True
 
     def __str__(self) -> str:
         return f"消息内容：{self.content}\n消息来源：\n{self.source}\n是否@：{self.is_mentioned}\n是否引用：{self.is_quote}"

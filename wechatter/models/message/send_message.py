@@ -1,7 +1,6 @@
 from enum import Enum
 from typing import List
-
-from wechatter.message.message import MessageSource
+from wechatter.models.message.message import MessageSource
 
 
 class SendTo:

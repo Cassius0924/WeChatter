@@ -5,3 +5,6 @@ from .push_webhook import GithubPushWebhook
 from .pr_webhook import GithubPrWebhook
 from .pr_review_webhook import GithubPrReviewWebhook
 from .star_webhook import GithubStarWebhook
+from .create_webhook import GithubCreateWebhook
+from .delete_webhook import GithubDeleteWebhook
+from .fork_webhook import GithubForkWebhook

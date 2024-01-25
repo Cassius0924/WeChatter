@@ -3,6 +3,21 @@ from typing import List
 import requests
 from bs4 import BeautifulSoup
 
+from wechatter.commands.handlers import command
+from wechatter.models.message import SendMessage, SendMessageType, SendTo
+from wechatter.sender import Sender
+
+
+@command(
+    command="pai-post",
+    keys=["派早报", "pai-post"],
+    desc="获取少数派早报。",
+    value=70,
+)
+def pai_post_command_handler(to: SendTo, message: str = "") -> None:
+    response = get_pai_post_str()
+    Sender.send_msg(to, SendMessage(SendMessageType.TEXT, response))
+
 
 def get_pai_post_str() -> str:
     pai_post_list = get_pai_post_list()

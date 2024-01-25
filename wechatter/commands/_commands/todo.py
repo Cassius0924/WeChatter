@@ -1,8 +1,58 @@
 import json
 import os
+import re
 from typing import List
 
+from wechatter.commands.handlers import command
+from wechatter.models.message import SendMessage, SendMessageType, SendTo
+from wechatter.sender import Sender
 from wechatter.utils.path_manager import PathManager as pm
+
+
+@command(
+    command="todo",
+    keys=["待办事项", "待办", "todo"],
+    desc="获取待办事项。",
+    value=110,
+)
+def todo_command_handler(to: SendTo, message: str = "") -> None:
+    # 判断是查询还是添加
+    if message == "":
+        # 获取待办事项
+        result = view_todos(to.p_id, to.p_name)
+        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
+    else:
+        # 添加待办事项
+        add_success = add_todo_task(to.p_id, message)
+        if add_success:
+            result = view_todos(to.p_id, to.p_name)
+            Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
+        else:
+            Sender.send_msg(to, SendMessage(SendMessageType.TEXT, "添加失败"))
+
+
+@command(
+    command="remove-todo",
+    keys=["删除待办事项", "remove-todo", "rmtd"],
+    desc="删除待办事项。",
+    value=111,
+)
+def remove_todo_command_handler(to: SendTo, message: str = "") -> None:
+    indices = [
+        int(idx.strip()) - 1
+        for idx in re.split(r"[\s,]+", message)
+        if idx.strip().isdigit()
+    ]
+    if not indices:
+        Sender.send_msg(
+            to, SendMessage(SendMessageType.TEXT, "请输入有效数字来删除待办事项")
+        )
+        return
+
+    remove_result = remove_todo_task(to.p_id, indices)
+    Sender.send_msg(to, SendMessage(SendMessageType.TEXT, remove_result))
+    result = view_todos(to.p_id, to.p_name)
+    Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
 
 
 def _load_todos(person_id: str) -> List[str]:

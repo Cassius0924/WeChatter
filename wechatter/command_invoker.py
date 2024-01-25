@@ -20,8 +20,8 @@ from wechatter.commands.translate import (
 )
 from wechatter.commands.weibo_hot import get_weibo_hot_str
 from wechatter.commands.zhihu_hot import get_zhihu_hot_str
-from wechatter.sender.send_message import SendMessage, SendMessageType, SendTo
-from wechatter.sender.sender import Sender
+from wechatter.models.message import SendMessage, SendMessageType, SendTo
+from wechatter.sender import Sender
 from wechatter.utils.text_to_image import text_to_image
 
 

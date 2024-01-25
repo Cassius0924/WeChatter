@@ -1,6 +1,6 @@
-from wechatter.webhook_handlers.hanlders import github_webhook_handler
-from wechatter.models import GithubPingWebhook
+from wechatter.models.github import GithubPingWebhook
 from wechatter.sender import Sender
+from wechatter.webhook_handlers.hanlders import github_webhook_handler
 
 
 @github_webhook_handler("ping")

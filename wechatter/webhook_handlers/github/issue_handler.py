@@ -1,6 +1,6 @@
-from wechatter.models import GithubIssueWebhook
-from wechatter.webhook_handlers.hanlders import github_webhook_handler
+from wechatter.models.github import GithubIssueWebhook
 from wechatter.sender.sender import Sender
+from wechatter.webhook_handlers.hanlders import github_webhook_handler
 
 
 @github_webhook_handler("issues")

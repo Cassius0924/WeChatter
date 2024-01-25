@@ -72,4 +72,12 @@ class ConfigReader:
             self.__cp.get("github-webhook", "github_webhook_receive_group_list")
         )
 
+        # message-forwarding 配置
+        self.message_forwarding_enabled: bool = self.__cp.getboolean(
+            "message-forwarding", "message_forwarding_enabled"
+        )
+        self.message_forwarding_rules: List = json.loads(
+            self.__cp.get("message-forwarding", "message_forwarding_rules")
+        )
+
     # TODO;封装get方法，判断不为空

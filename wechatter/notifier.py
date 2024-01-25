@@ -1,6 +1,6 @@
 # 消息通知器
-from wechatter.sender.send_message import SendMessage, SendMessageType, SendTo
-from wechatter.sender.sender import Sender
+from wechatter.models.message import SendMessage, SendMessageType, SendTo
+from wechatter.sender import Sender
 
 
 class Notifier:
