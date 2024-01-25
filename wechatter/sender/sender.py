@@ -1,10 +1,11 @@
+import time
 from collections.abc import Callable
 from typing import List
 
 import requests
-
 from main import cr
-from wechatter.sender.send_message import (
+
+from wechatter.models.message import (
     SendMessage,
     SendMessageList,
     SendMessageType,
@@ -36,6 +37,7 @@ def _check(response: requests.Response) -> bool:
 def _retry(times: int, func: Callable) -> bool:
     """重试函数"""
     for _ in range(times):
+        time.sleep(0.5)
         if func():
             return True
     return False
@@ -266,7 +268,8 @@ class Sender:
             print("GitHub Webhook 接收者列表为空")
             return
         Sender.send_msg_ps(
-            cr.github_webhook_receiver_list, SendMessage(SendMessageType.TEXT, message)
+            cr.github_webhook_receiver_list,
+            SendMessage(SendMessageType.TEXT, message),
         )
         if len(cr.github_webhook_receive_group_list) == 0:
             print("GitHub Webhook 接收者群列表为空")

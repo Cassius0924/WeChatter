@@ -1,6 +1,22 @@
 from typing import List
+
 import requests
 from bs4 import BeautifulSoup
+
+from wechatter.commands.handlers import command
+from wechatter.models.message import SendMessage, SendMessageType, SendTo
+from wechatter.sender import Sender
+
+
+@command(
+    command="github-trending",
+    keys=["GitHub趋势", "github-trending"],
+    desc="获取GitHub趋势。",
+    value=60,
+)
+def github_trending_command_handler(to: SendTo, message: str = "") -> None:
+    response = get_github_trending_str()
+    Sender.send_msg(to, SendMessage(SendMessageType.TEXT, response))
 
 
 def get_github_trending_str() -> str:

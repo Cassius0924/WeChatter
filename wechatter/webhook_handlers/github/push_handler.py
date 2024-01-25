@@ -1,6 +1,6 @@
-from wechatter.webhook_handlers.hanlders import github_webhook_handler
-from wechatter.models import GithubPushWebhook
+from wechatter.models.github import GithubPushWebhook
 from wechatter.sender import Sender
+from wechatter.webhook_handlers.hanlders import github_webhook_handler
 
 
 @github_webhook_handler("push")

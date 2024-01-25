@@ -1,6 +1,18 @@
 # b站热搜命令
 import requests
 
+from wechatter.commands.handlers import command
+from wechatter.models.message import SendMessage, SendMessageType, SendTo
+from wechatter.sender import Sender
+
+
+@command(
+    command="bili-hot", keys=["b站热搜", "bili-hot"], desc="获取b站热搜。", value=20
+)
+def cmd_bili_hot(to: SendTo, message: str = "") -> None:
+    response = get_bili_hot_str()
+    Sender.send_msg(to, SendMessage(SendMessageType.TEXT, response))
+
 
 def get_bili_hot_str() -> str:
     hot_list = get_bili_hot_list()

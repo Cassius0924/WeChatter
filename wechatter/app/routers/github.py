@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Request, status
 from fastapi.responses import JSONResponse
 from main import cr
+
 from wechatter.webhook_handlers import github_webhook_handlers as handlers
 
 router = APIRouter()

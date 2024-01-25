@@ -1,6 +1,6 @@
 github_webhook_handlers = {}
 """
-'储存所有的 GitHub 事件 Handler
+储存所有的 GitHub 事件 Handler
 """
 
 

@@ -3,6 +3,21 @@ from typing import List
 
 import requests
 
+from wechatter.commands.handlers import command
+from wechatter.models.message import SendMessage, SendMessageType, SendTo
+from wechatter.sender import Sender
+
+
+@command(
+    command="zhihu-hot",
+    keys=["知乎热搜", "zhihu-hot"],
+    desc="获取知乎热搜。",
+    value=140,
+)
+def zhihu_hot_command_handler(to: SendTo, message: str = "") -> None:
+    response = get_zhihu_hot_str()
+    Sender.send_msg(to, SendMessage(SendMessageType.TEXT, response))
+
 
 def get_zhihu_hot_str() -> str:
     hot_list = get_zhihu_hot_list()

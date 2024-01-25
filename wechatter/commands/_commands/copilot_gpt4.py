@@ -2,15 +2,153 @@
 from typing import List, Union
 
 import requests
+from main import cr
+
+from wechatter.commands.handlers import command
+from wechatter.models.message import SendMessage, SendMessageType, SendTo
+from wechatter.sender import Sender
 from wechatter.sqlite.sqlite_manager import SqliteManager
 from wechatter.utils.path_manager import PathManager as pm
 from wechatter.utils.time import get_current_timestamp
 
-from main import cr
-
 DEFAULT_TOPIC = "（对话进行中*）"
 DEFAULT_MODEL = "gpt-4"
 DEFAULT_CONVERSATIONS = [{"role": "system", "content": "你是一位乐于助人的助手"}]
+
+
+@command(command="gpt35", keys=["gpt"], desc="使用GPT3.5进行对话。", value=30)
+def gpt35_command_handler(to: SendTo, message: str = "") -> None:
+    _gptx("gpt-3.5-turbo", to, message)
+
+
+@command(
+    command="gpt35-chats",
+    keys=["gpt-chats", "gpt对话记录"],
+    desc="列出GPT3.5对话记录。",
+    value=31,
+)
+def gpt35_chats_command_handler(to: SendTo, message: str = "") -> None:
+    _gptx_chats("gpt-3.5-turbo", to, message)
+
+
+@command(
+    command="gpt35-record",
+    keys=["gpt-record", "gpt记录"],
+    desc="获取GPT3.5对话记录。",
+    value=32,
+)
+def gpt35_record_command_handler(to: SendTo, message: str = "") -> None:
+    _gptx_record("gpt-3.5-turbo", to, message)
+
+
+@command(
+    command="gpt35-continue",
+    keys=["gpt-continue", "gpt继续"],
+    desc="继续GPT3.5对话。",
+    value=33,
+)
+def gpt35_continue_command_handler(to: SendTo, message: str = "") -> None:
+    _gptx_continue("gpt-3.5-turbo", to, message)
+
+
+@command(command="gpt4", keys=["gpt4"], desc="使用GPT4进行对话。", value=40)
+def gpt4_command_handler(to: SendTo, message: str = "") -> None:
+    _gptx("gpt-4", to, message)
+
+
+@command(
+    command="gpt4-chats",
+    keys=["gpt4-chats", "gpt4对话记录"],
+    desc="列出GPT4对话记录。",
+    value=41,
+)
+def gpt4_chats_command_handler(to: SendTo, message: str = "") -> None:
+    _gptx_chats("gpt-4", to, message)
+
+
+@command(
+    command="gpt4-record",
+    keys=["gpt4-record", "gpt记录"],
+    desc="获取GPT4对话记录。",
+    value=42,
+)
+def gpt4_record_command_handler(to: SendTo, message: str = "") -> None:
+    _gptx_record("gpt-4", to, message)
+
+
+@command(command="gpt4-continue", keys=["gpt4继续"], desc="继续GPT4对话。", value=43)
+def gpt4_continue_command_handler(to: SendTo, message: str = "") -> None:
+    _gptx_continue("gpt-4", to, message)
+
+
+# TODO:
+# 命令：/gpt4-remove
+def gpt4_remove_command_handler(to: SendTo, message: str = "") -> None:
+    pass
+
+
+def _send_text_msg(to: SendTo, message: str = "") -> None:
+    """封装发送文本消息"""
+    Sender.send_msg(to, SendMessage(SendMessageType.TEXT, message))
+
+
+def _gptx(model: str, to: SendTo, message: str = "") -> None:
+    wx_id = to.p_id
+    # 获取文件夹下最新的对话记录
+    chat_info = CopilotGPT4.get_chating_chat_info(wx_id, model)
+    if message == "":  # /gpt4
+        # 判断对话是否有效
+        if chat_info is None or CopilotGPT4.is_chat_valid(chat_info):
+            CopilotGPT4.create_chat(wx_id=wx_id, model=model)
+            _send_text_msg(to, "创建新对话成功")
+            return
+        _send_text_msg(to, "对话未开始，继续上一次对话")
+    else:  # /gpt4 <message>
+        # 如果没有对话记录，则创建新对话
+        if chat_info is None:
+            chat_info = CopilotGPT4.create_chat(wx_id=wx_id, model=model)
+            _send_text_msg(to, "无历史对话记录，创建新对话成功")
+        response = CopilotGPT4.chat(chat_info, message)
+        _send_text_msg(to, response)
+
+
+def _gptx_chats(model: str, to: SendTo, message: str = "") -> None:
+    response = CopilotGPT4.get_chat_list_str(to.p_id, model)
+    _send_text_msg(to, response)
+
+
+def _gptx_record(model: str, to: SendTo, message: str = "") -> None:
+    wx_id = to.p_id
+    chat_info = None
+    if message == "":
+        # 获取当前对话的对话记录
+        chat_info = CopilotGPT4.get_chating_chat_info(wx_id, model)
+    else:
+        # 获取指定对话的对话记录
+        chat_info = CopilotGPT4.get_chat_info(wx_id, model, int(message))
+    if chat_info is None:
+        _send_text_msg(to, "对话不存在")
+        return
+    response = CopilotGPT4.get_brief_conversation_str(chat_info)
+    _send_text_msg(to, response)
+
+
+def _gptx_continue(model: str, to: SendTo, message: str = "") -> None:
+    wx_id = to.p_id
+    # 判断message是否为数字
+    if not message.isdigit():
+        _send_text_msg(to, "请输入对话记录编号")
+        return
+    chat_info = CopilotGPT4.continue_chat(
+        wx_id=wx_id, model=model, chat_index=int(message)
+    )
+    if chat_info is None:
+        _send_text_msg(to, "对话不存在")
+        return
+    response = CopilotGPT4.get_brief_conversation_str(chat_info)
+    response += "====================\n"
+    response += "对话已选中，输入命令继续对话"
+    _send_text_msg(to, response)
 
 
 class ChatInfo:

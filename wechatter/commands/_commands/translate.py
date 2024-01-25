@@ -6,6 +6,37 @@ import langid
 import requests
 from bs4 import BeautifulSoup, Tag
 
+from wechatter.commands.handlers import command
+from wechatter.models.message import SendMessage, SendMessageType, SendTo
+from wechatter.sender import Sender
+
+
+@command(
+    command="word",
+    keys=["word", "单词"],
+    desc="翻译单词或短语。",
+    value=120,
+)
+def word_command_handler(to: SendTo, message: str = "") -> None:
+    # 检测文本语言
+    from_lang = detect_lang(message)
+    to_lang = "chinese"
+    # en -> zh
+    # zh -> en
+    # other -> zh -> en
+    if from_lang == "":
+        response = "无法识别语言"
+        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, response))
+        return
+    if from_lang == "chinese":
+        to_lang = "english"
+    elif from_lang != "english" and not check_lang_support(from_lang, "chinese"):
+        to_lang = "english"
+    # 获取翻译
+    response = get_reverso_context_tran_str(message, from_lang, to_lang)
+    Sender.send_msg(to, SendMessage(SendMessageType.TEXT, response))
+
+
 # 翻译语言字典（何种语言对应何种语言）
 tran_lang_dict = {
     "chinese": ["english", "spanish", "french"],

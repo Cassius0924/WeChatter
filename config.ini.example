@@ -52,3 +52,25 @@ github_webhook_api_path = /webhook/github
 github_webhook_receiver_list = []
 # 接收 GitHub Webhook 的微信群
 github_webhook_receive_group_list = []
+
+
+[message-forward]
+# 微信消息转发给其他微信用户
+# 是否开启消息转发（True/<<False>>）
+message_forwarding_enabled = True
+# 消息转发规则列表（JSON格式）
+# 每个规则是一个字典，包含三个字段：froms, to_persons, to_groups
+# froms: 消息转发来源列表，即消息发送者（们）的微信名称（用户或群）
+# to_persons: 消息转发目标用户列表，即消息接收者（们）的微信名称（仅用户）
+# to_groups: 消息转发目标群列表，即（多个）消息接收群名称（仅群）
+message_forwarding_rules = [
+    {
+        "froms": ["SenderName", "SenderGroupName"],
+        "to_persons": ["ReceiverName1", "ReceiverName2"],
+        "to_groups": ["ReceiverGroupName"]
+    },
+    {
+        "froms": ["小A"],
+        "to_persons": ["小B"],
+        "to_groups": ["小C"]
+    }]
