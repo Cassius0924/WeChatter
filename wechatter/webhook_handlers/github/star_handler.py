@@ -7,7 +7,6 @@ from wechatter.webhook_handlers.hanlders import github_webhook_handler
 def handle_star(data: dict):
     payload = GithubStarWebhook(**data)
     print(f"Star {payload.action} by {payload.sender.login}.")
-    # Star +1 或 -1
     if payload.action == "created":
         message = (
             "==== GitHub Star 事件 ====\n"

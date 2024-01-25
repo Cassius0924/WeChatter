@@ -6,3 +6,6 @@ from .push_handler import handle_push  # noqa: F401
 from .pr_handler import handle_pr  # noqa: F401
 from .pr_review_handler import handle_pr_review  # noqa: F401
 from .star_handler import handle_star  # noqa: F401
+from .create_handler import handle_create  # noqa: F401
+from .delete_handler import handle_delete  # noqa: F401
+from .fork_handler import handle_fork  # noqa: F401
