@@ -149,11 +149,11 @@ python3 main.py
 
 ## 支持的功能
 
-- [x] 消息转发，需[配置](#⚙️ GitHub Forwarding 配置)
+- [x] 消息转发，需[配置](# ⚙️ GitHub Forwarding 配置)
 
 ## 支持的 Webhook
 
-- [x] GitHub 仓库 Webhook，需[配置](#⚙️ GitHub Webhook 配置)
+- [x] GitHub 仓库 Webhook，需[配置](# ⚙️ GitHub Webhook 配置)
 
 > [!NOTE]
 > 需要在 GitHub 仓库 Settings 中添加 Webhook
