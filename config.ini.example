@@ -54,7 +54,7 @@ github_webhook_receiver_list = []
 github_webhook_receive_group_list = []
 
 
-[message-forward]
+[message-forwarding]
 # 微信消息转发给其他微信用户
 # 是否开启消息转发（True/<<False>>）
 message_forwarding_enabled = True

@@ -68,7 +68,7 @@ class Message:
     ):
         self.type = type
         self.content = content
-        self.source = source
+        self.source: MessageSource = source
         self.is_mentioned = is_mentioned
         self.is_group = bool(self.source.g_info)
         self.is_quote = content

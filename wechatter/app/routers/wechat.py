@@ -1,14 +1,14 @@
 import json
 
 from fastapi import APIRouter, Form
-
 from main import cr
 from wechatter.bot.bot_info import BotInfo
-from wechatter.models.message import Message
+from wechatter.commands import commands
 from wechatter.message import MessageHandler
+from wechatter.message_forwarder import MessageForwarder
+from wechatter.models.message import Message
 from wechatter.notifier import Notifier
 from wechatter.sqlite.sqlite_manager import SqliteManager
-from wechatter.commands import commands
 
 router = APIRouter()
 
@@ -63,7 +63,9 @@ async def recv_wechat_msg(
     print(str(message))
     print("==" * 20)
 
-    # MessageForwarder.forward_message(message)
+    if cr.message_forwarding_enabled:
+        message_forwarder = MessageForwarder(cr.message_forwarding_rules)
+        message_forwarder.forward_message(message)
 
     # 传入命令字典，构造消息处理器
     message_handler = MessageHandler(commands)
