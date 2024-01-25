@@ -266,18 +266,18 @@ class Sender:
         """发送消息给所有 GitHub Webhook 接收者"""
         if len(cr.github_webhook_receiver_list) == 0:
             print("GitHub Webhook 接收者列表为空")
-            return
-        Sender.send_msg_ps(
-            cr.github_webhook_receiver_list,
-            SendMessage(SendMessageType.TEXT, message),
-        )
+        else:
+            Sender.send_msg_ps(
+                cr.github_webhook_receiver_list,
+                SendMessage(SendMessageType.TEXT, message),
+            )
         if len(cr.github_webhook_receive_group_list) == 0:
             print("GitHub Webhook 接收者群列表为空")
-            return
-        Sender.send_msg_gs(
-            cr.github_webhook_receive_group_list,
-            SendMessage(SendMessageType.TEXT, message),
-        )
+        else:
+            Sender.send_msg_gs(
+                cr.github_webhook_receive_group_list,
+                SendMessage(SendMessageType.TEXT, message),
+            )
 
 
 class SenderV1:
