@@ -1,10 +1,10 @@
 # 消息解析器
 import re
 
-from main import cr
+import wechatter.config as config
+from wechatter.bot.bot_info import BotInfo
 from wechatter.models.message import Message, SendTo
 from wechatter.notifier import Notifier
-from wechatter.bot.bot_info import BotInfo
 
 
 class MessageHandler:
@@ -33,7 +33,7 @@ class MessageHandler:
         #     pass
 
         # TODO: 可以为不同的群设置是否need_mentioned
-        if cr.need_mentioned and message.is_group and not message.is_mentioned:
+        if config.need_mentioned and message.is_group and not message.is_mentioned:
             print("该消息为群消息，但未@机器人，不处理")
             return
 
@@ -69,7 +69,7 @@ class MessageHandler:
             cont_list = re.split(r"\s|\n", content, 1)
             # 去掉命令前缀
             no_prefix = cont_list[0].replace(
-                cr.command_prefix, "", len(cr.command_prefix)
+                config.command_prefix, "", len(config.command_prefix)
             )
             if no_prefix.lower() in info["keys"]:
                 cmd_dict["command"] = command

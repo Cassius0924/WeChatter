@@ -1,8 +1,8 @@
 import json
 from typing import Union
 
+import wechatter.config as config
 from fastapi import APIRouter, Form, UploadFile
-from main import cr
 from wechatter.bot.bot_info import BotInfo
 from wechatter.commands import commands
 from wechatter.message import MessageHandler
@@ -14,7 +14,7 @@ from wechatter.sqlite.sqlite_manager import SqliteManager
 router = APIRouter()
 
 
-@router.post(cr.wx_webhook_recv_api_path)
+@router.post(config.wx_webhook_recv_api_path)
 async def recv_wechat_msg(
     type: str = Form(),
     content: Union[UploadFile, str] = Form(),
@@ -67,8 +67,8 @@ async def recv_wechat_msg(
     print(str(message))
     print("==" * 20)
 
-    if cr.message_forwarding_enabled:
-        MessageForwarder(cr.message_forwarding_rules).forward_message(message)
+    if config.message_forwarding_enabled:
+        MessageForwarder(config.message_forwarding_rules).forward_message(message)
 
     # 传入命令字典，构造消息处理器
     message_handler = MessageHandler(commands)
