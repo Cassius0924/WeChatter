@@ -1,12 +1,12 @@
-# 基于 WxBotWebhook 的微信机器人
+# 基于 wechatbot-webhook 的微信机器人
 
 ## 介绍
 
-基于[wechatbot-webhook](https://github.com/danni-cool/wechatbot-webhook)
+基于 [wechatbot-webhook](https://github.com/danni-cool/wechatbot-webhook)
 
 ## 快速开始
 
-### 运行 wxBotWebhook
+### 运行 wechatbot-webhook
 
 1. 拉取 Docker 镜像
 
