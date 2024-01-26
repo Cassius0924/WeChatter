@@ -56,12 +56,42 @@ vim config.ini
 3. 启动 WeChatter
 
 ```bash
-python3 wechatter.py
+python3 main.py
 ```
 
 4. 测试机器人
 
 使用另一个微信给机器人发送 `/help` 指令。
+
+## 支持的命令
+
+- [x] GPT问答，基于 [Copilot-GPT4-Server](https://github.com/aaamoon/copilot-gpt4-service)
+- [x] 获取B站热搜
+- [x] 获取知乎热搜
+- [x] 获取微博热搜
+- [x] 获取抖音热搜
+- [x] 获取GitHub趋势
+- [x] 单词/词语翻译
+- [x] 获取少数派早报
+- [x] 获取历史上的今天
+- [x] 二维码生成器
+- [x] 待办清单（TODO）
+- [x] 获取人民日报PDF
+- [x] 获取天气预报
+
+> [!TIP]
+> 更多命令使用 `/help` 命令查看。
+
+## 支持的功能
+
+- [x] 消息转发，需[配置](#%EF%B8%8F-message-forwarding-配置)
+
+## 支持的 Webhook
+
+- [x] GitHub 仓库 Webhook，需[配置](#%EF%B8%8F-github-webhook-配置)
+
+> [!NOTE]
+> 需要在 GitHub 仓库 Settings 中添加 Webhook
 
 ## 配置文件
 
@@ -129,31 +159,7 @@ python3 wechatter.py
 | ➤➤➤ | `to_persons` | 消息转发目标用户列表，即消息接收用户 | 可以填多个用户名称或为空列表 |
 | ➤➤➤ | `to_groups` | 消息转发目标群列表，即消息接收群 | 可以填多个群名称或为空列表 |
 
-## 支持的命令
-
-- [x] GPT问答，基于 [Copilot-GPT4-Server](https://github.com/aaamoon/copilot-gpt4-service)
-- [x] 获取B站热搜
-- [x] 获取知乎热搜
-- [x] 获取微博热搜
-- [x] 获取抖音热搜
-- [x] 获取GitHub趋势
-- [x] 单词/词语翻译
-- [x] 获取少数派早报
-- [x] 获取历史上的今天
-- [x] 二维码生成器
-- [x] 待办清单（TODO）
-- [x] 获取人民日报PDF
-
-> [!TIP]
-> 更多命令使用 `/help` 命令查看。
-
-## 支持的功能
-
-- [x] 消息转发，需[配置](#%EF%B8%8F-message-forwarding-配置)
-
-## 支持的 Webhook
-
-- [x] GitHub 仓库 Webhook，需[配置](#%EF%B8%8F-github-webhook-配置)
+## 插件化
 
 > [!NOTE]
-> 需要在 GitHub 仓库 Settings 中添加 Webhook
+> 开发中...
