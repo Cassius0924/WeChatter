@@ -53,10 +53,10 @@ cp config.ini.example config.ini
 vim config.ini
 ```
 
-3. 启动服务器
+3. 启动 WeChatter
 
 ```bash
-python3 main.py
+python3 wechatter.py
 ```
 
 4. 测试机器人

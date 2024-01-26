@@ -6,9 +6,6 @@ from wechatter.config.config_reader import ConfigReader
 from wechatter.sqlite.sqlite_manager import SqliteManager
 from wechatter.utils.file_manager import FileManager
 
-# 启动命令：python main.py
-
-
 cr = ConfigReader("config.ini")
 
 
