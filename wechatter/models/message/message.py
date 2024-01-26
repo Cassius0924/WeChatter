@@ -4,8 +4,7 @@ import re
 from enum import Enum
 from typing import Union
 
-from main import cr
-
+import wechatter.config as config
 from wechatter.models.message.group_info import GroupInfo
 from wechatter.models.message.person_info import PersonInfo
 
@@ -260,7 +259,7 @@ class Message:
         )
         match_result = re.match(quote_pattern, content)
         # 判断是否为引用机器人消息
-        if bool(match_result) and content.startswith(f"「{cr.bot_name}"):
+        if bool(match_result) and content.startswith(f"「{config.bot_name}"):
             self.__is_quote = True
 
     def __str__(self) -> str:
