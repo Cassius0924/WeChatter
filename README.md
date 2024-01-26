@@ -56,7 +56,7 @@ vim config.ini
 3. 启动 WeChatter
 
 ```bash
-python3 wechatter.py
+python3 main.py
 ```
 
 4. 测试机器人
@@ -158,3 +158,8 @@ python3 wechatter.py
 | ➤➤➤ | `froms` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称 |
 | ➤➤➤ | `to_persons` | 消息转发目标用户列表，即消息接收用户 | 可以填多个用户名称或为空列表 |
 | ➤➤➤ | `to_groups` | 消息转发目标群列表，即消息接收群 | 可以填多个群名称或为空列表 |
+
+## 插件化
+
+> [!NOTE]
+> 开发中...
