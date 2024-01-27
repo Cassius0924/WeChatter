@@ -1,3 +1,4 @@
+import time
 from typing import List
 
 import requests
@@ -28,7 +29,8 @@ def get_food_str(message: str) -> str:
     for i, food in enumerate(food_list[:10]):
         food_id = food.get('foodId')
         food_details = get_food_details(food_id)
-        food_str += f"{i + 1}.  {food.get('name')}\n    {food_id}{food_details}\n\n"
+        food_str += f"{i + 1}.  {food.get('name')}\n{food_details}\n\n"
+        time.sleep(0.1)
     return food_str
 
 
