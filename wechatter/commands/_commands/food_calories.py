@@ -28,22 +28,22 @@ def get_food_str(message: str) -> str:
 
     #fixme: 由于食物详情接口有限制，暂时只可以获取第三和第九食物的详情
     #
-    # for i, food in enumerate(food_list[:10]):
-    #     food_id = food.get('foodId')
-    #     food_details = get_food_details(food_id)
-    #     if not food_details:
-    #         error = f"获取食物详情失败: {food.get('name')}"
-    #         food_details = error
-    #         return food_details
-    #     food_str += f"{i + 1}.  {food.get('name')}\n{food_id}\n{food_details}\n\n"
+    for i, food in enumerate(food_list[:20]):
+        food_id = food.get('foodId')
+        food_details = get_food_details(food_id)
+        if not food_details:
+            error = f"获取食物详情失败: {food.get('name')}"
+            food_details = error
+            return food_details
+        food_str += f"{i + 1}.  {food.get('name')}\n{food_id}\n{food_details}\n\n"
 
-    food_id = food_list[0].get('foodId')
-    food_details = get_food_details(food_id)
-    if not food_details:
-        error = f"获取食物详情失败: {food_list[0].get('name')}"
-        food_details = error
-        return food_details
-    food_str += f"{food_list[0].get('name')}\n{food_id}{food_details}\n\n"
+    # food_id = food_list[0].get('foodId')
+    # food_details = get_food_details(food_id)
+    # if not food_details:
+    #     error = f"获取食物详情失败: {food_list[0].get('name')}"
+    #     food_details = error
+    #     return food_details
+    # food_str += f"{food_list[0].get('name')}\n{food_id}{food_details}\n\n"
     return food_str
 
 
