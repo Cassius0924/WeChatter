@@ -49,7 +49,10 @@ def get_food_list(message: str) -> List:
 
 
 def get_food_value(food, key, default_value=""):
-    return food.get(key, default_value)
+    value = food.get(key, default_value)
+    if not value:
+        return print(f"获取{key}失败")
+    return value
 
 def get_food_details(food_id: str) -> str:
     if not food_id:
