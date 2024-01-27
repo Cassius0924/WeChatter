@@ -21,8 +21,9 @@ def food_calories_command_handler(to: SendTo, message: str = "") -> None:
 
 def get_food_str(message: str) -> str:
     food_list = get_food_list(message)
-    if food_list == []:
+    if not food_list:
         return "获取食物列表失败"
+
     food_str = "✨=====食物列表=====✨\n"
     for i, food in enumerate(food_list[:10]):
         food_id = food.get('foodId')
@@ -71,7 +72,7 @@ def get_food_details(food_id: str) -> str:
     iron = food.get('iron', iron)
     calcium = food.get('calcium', calcium)
     gi_value = food.get('glycemicInfoData', {}).get('gi', {}).get('value', gi_value)
-    gi_label = food.get('glycemicInfoData', {}).get('gi', {}).get('label', gi_label)
+    gi_label = food.get('glycemicInfoData', {}).get('gi',   {}).get('label', gi_label)
     gl_value = food.get('glycemicInfoData', {}).get('gl', {}).get('value', gl_value)
     gl_label = food.get('glycemicInfoData', {}).get('gl', {}).get('label', gl_label)
     health_tips = food.get('healthTips', health_tips)
