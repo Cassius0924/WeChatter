@@ -25,14 +25,14 @@ def get_food_str(message: str) -> str:
         return "获取食物列表失败"
 
     food_str = "✨=====食物列表=====✨\n"
-    for i, food in enumerate(food_list[0]):
+    for i, food in enumerate(food_list[:10]):
         food_id = food.get('foodId')
         food_details = get_food_details(food_id)
         if not food_details:
             error = f"获取食物详情失败: {food.get('name')}"
             food_details = error
             return food_details
-        food_str += f"{i + 1}.  {food.get('name')}\n{food_details}\n\n"
+        food_str += f"{i + 1}.  {food.get('name')}\n{food_id}\n{food_details}\n\n"
     return food_str
 
 
