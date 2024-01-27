@@ -43,7 +43,7 @@ def get_food_str(message: str) -> str:
         error = f"获取食物详情失败: {food_list[0].get('name')}"
         food_details = error
         return food_details
-    food_str += f"{food_list[2].get('name')}\n{food_id}{food_details}\n\n"
+    food_str += f"{food_list[0].get('name')}\n{food_id}{food_details}\n\n"
     return food_str
 
 
@@ -77,6 +77,7 @@ def get_food_details(food_id: str) -> str:
         return ""
 
     food_details = response.json()
+    food_str = f"\n{food_details.get('code')}\n{food_details.get('msg')}\n"
     food = food_details.get("data", {})
 
     calory = get_food_value(food, 'calory', "")
@@ -94,7 +95,7 @@ def get_food_details(food_id: str) -> str:
     health_tips = get_food_value(food, 'healthTips', "")
     health_suggest = get_food_value(food, 'healthSuggest', "")
 
-    food_str = (
+    food_str += (
         f"热量:{calory}卡路里    蛋白质:{protein}g\n"
         f"脂肪:{fat}g    碳水化合物:{carbohydrate}g\n"
         f"钠值:{natrium}mg    锌值:{zinc}mg\n"
