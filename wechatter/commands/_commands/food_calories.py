@@ -35,7 +35,10 @@ def get_food_str(message: str) -> str:
             error = f"获取食物详情失败: {food.get('name')}"
             food_details = error
             return food_details
-        food_str += f"{i + 1}.  {food.get('name')}\n{food_id}\n{food_details}\n\n"
+        if i == 2:
+            food_str += f"1.{food.get('name')}\n{food_details}\n\n"
+        elif i == 8:
+            food_str += f"2.{food.get('name')}\n{food_details}\n\n"
 
     # food_id = food_list[0].get('foodId')
     # food_details = get_food_details(food_id)
