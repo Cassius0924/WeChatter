@@ -26,7 +26,7 @@ def get_food_str(message: str) -> str:
     food_str = "✨===食物列表===✨\n"
     for i, food in enumerate(food_list[:20]):
         width = 20 - len(food.get("name"))
-        food_str += f"{i + 1}.  {food.get('name')}      {food.get('calory')}\n"
+        food_str += f"{i + 1}.  {food.get('name')}      {str(food.get('calory')).rjust(width)}大卡\n"
     return food_str
 
 
