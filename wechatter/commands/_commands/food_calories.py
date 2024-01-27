@@ -27,7 +27,7 @@ def get_food_str(message: str) -> str:
     for i, food in enumerate(food_list[:5]):
         food_id = food.get('foodId')
         food_details = get_food_details(food_id)
-        food_str += f"{i + 1}.  {food.get('name')}    热量:{str(food.get('calory')).rjust(10)}大卡\n{food_details}\n\n"
+        food_str += f"{i + 1}.  {food.get('name')}\n{food_details}\n\n"
     return food_str
 
 
@@ -43,6 +43,10 @@ def get_food_list(message: str) -> List:
     return food_list.get("data", {}).get("list", [])
 
 
+def get_food_value(food, key, default_value=""):
+    return food.get(key, default_value)
+
+
 def get_food_details(food_id: str) -> str:
     if food_id == []:
         return "获取食物id失败"
@@ -53,8 +57,33 @@ def get_food_details(food_id: str) -> str:
 
     if response.status_code != 200:
         print("获取食物详情失败")
-        return []
+        return ""
     food_details = response.json()
     food = food_details.get("data", {})
-    food_str = f"热量:{food.get('calory')}卡路里    蛋白质:{food.get('protein')}g\n脂肪:{food.get('fat')}g    碳水化合物:{food.get('carbohydrate')}g\n钠值:{food.get('natrium')}mg    锌值:{food.get('zinc')}mg\n铁值:{food.get('iron')}mg    钙值:{food.get('calcium')}mg\ngi值:{food.get('glycemicInfoData').get('gi').get('value')}({food.get('glycemicInfoData').get('gi').get('label')})    gl值:{food.get('glycemicInfoData').get('gl').get('value')}({food.get('glycemicInfoData').get('gi').get('label')})\n{food.get('healthTips')}({food.get('healthSuggest')})"
+
+    calory = get_food_value(food, 'calory', "0")
+    protein = get_food_value(food, 'protein', "0")
+    fat = get_food_value(food, 'fat', "0")
+    carbohydrate = get_food_value(food, 'carbohydrate', "0")
+    natrium = get_food_value(food, 'natrium', "0")
+    zinc = get_food_value(food, 'zinc', "0")
+    iron = get_food_value(food, 'iron', "0")
+    calcium = get_food_value(food, 'calcium', "0")
+    gi_value = get_food_value(food.get('glycemicInfoData', {}).get('gi', {}), 'value', "无数据")
+    gi_label = get_food_value(food.get('glycemicInfoData', {}).get('gi', {}), 'label', "无数据")
+    gl_value = get_food_value(food.get('glycemicInfoData', {}).get('gl', {}), 'value', "无数据")
+    gl_label = get_food_value(food.get('glycemicInfoData', {}).get('gl', {}), 'label', "无数据")
+    health_tips = get_food_value(food, 'healthTips', "无数据")
+    health_suggest = get_food_value(food, 'healthSuggest', "无数据")
+
+    food_str = (
+        f"热量:{calory}卡路里    蛋白质:{protein}g\n"
+        f"脂肪:{fat}g    碳水化合物:{carbohydrate}g\n"
+        f"钠值:{natrium}mg    锌值:{zinc}mg\n"
+        f"铁值:{iron}mg    钙值:{calcium}mg\n"
+        f"gi值:{gi_value}({gi_label})    gl值:{gl_value}({gl_label})\n"
+        f"{health_tips}({health_suggest})"
+    )
+
+    # food_str = f"热量:{food.get('calory')}卡路里    蛋白质:{food.get('protein')}g\n脂肪:{food.get('fat')}g    碳水化合物:{food.get('carbohydrate')}g\n钠值:{food.get('natrium')}mg    锌值:{food.get('zinc')}mg\n铁值:{food.get('iron')}mg    钙值:{food.get('calcium')}mg\ngi值:{food.get('glycemicInfoData').get('gi').get('value')}({food.get('glycemicInfoData').get('gi').get('label')})    gl值:{food.get('glycemicInfoData').get('gl').get('value')}({food.get('glycemicInfoData').get('gi').get('label')})\n{food.get('healthTips')}({food.get('healthSuggest')})"
     return food_str
