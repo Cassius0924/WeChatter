@@ -25,7 +25,7 @@ def get_food_str(message: str) -> str:
         return "获取食物列表失败"
 
     food_str = "✨=====食物列表=====✨\n"
-    for i, food in enumerate(food_list[:2]):
+    for i, food in enumerate(food_list[:10]):
         food_id = food.get('foodId')
         food_details = get_food_details(food_id)
         food_str += f"{i + 1}.  {food.get('name')}\n{food_details}\n\n"
@@ -44,15 +44,14 @@ def get_food_list(message: str) -> List:
     return food_list.get("data", {}).get("list", {})
 
 
+def get_food_value(food, key, default_value=""):
+    return food.get(key, default_value)
+
 def get_food_details(food_id: str) -> str:
     if not food_id:
         return "获取食物id失败"
 
-    # 初始值
-    calory = protein = fat = carbohydrate = natrium = zinc = iron = calcium = gi_value = gi_label = gl_value = gl_label = health_tips = health_suggest = ""
-
-    url = (
-        f"https://www.mxnzp.com/api/food_heat/food/details?foodId={food_id}&app_id=pprqn2hfekkrr8k8&app_secret=nVFcuE6htNjhtGIkJURrS2qQm8L3HUCR")
+    url = f"https://www.mxnzp.com/api/food_heat/food/details?foodId={food_id}&app_id=pprqn2hfekkrr8k8&app_secret=nVFcuE6htNjhtGIkJURrS2qQm8L3HUCR"
     response = requests.get(url, timeout=10)
 
     if response.status_code != 200:
@@ -62,23 +61,21 @@ def get_food_details(food_id: str) -> str:
     food_details = response.json()
     food = food_details.get("data", {})
 
-    # 如果某个键存在，用实际值替代初始值
-    calory = food.get('calory', calory)
-    protein = food.get('protein', protein)
-    fat = food.get('fat', fat)
-    carbohydrate = food.get('carbohydrate', carbohydrate)
-    natrium = food.get('natrium', natrium)
-    zinc = food.get('zinc', zinc)
-    iron = food.get('iron', iron)
-    calcium = food.get('calcium', calcium)
-    gi_value = food.get('glycemicInfoData', {}).get('gi', {}).get('value', gi_value)
-    gi_label = food.get('glycemicInfoData', {}).get('gi',   {}).get('label', gi_label)
-    gl_value = food.get('glycemicInfoData', {}).get('gl', {}).get('value', gl_value)
-    gl_label = food.get('glycemicInfoData', {}).get('gl', {}).get('label', gl_label)
-    health_tips = food.get('healthTips', health_tips)
-    health_suggest = food.get('healthSuggest', health_suggest)
+    calory = get_food_value(food, 'calory', "")
+    protein = get_food_value(food, 'protein', "")
+    fat = get_food_value(food, 'fat', "")
+    carbohydrate = get_food_value(food, 'carbohydrate', "")
+    natrium = get_food_value(food, 'natrium', "")
+    zinc = get_food_value(food, 'zinc', "")
+    iron = get_food_value(food, 'iron', "")
+    calcium = get_food_value(food, 'calcium', "")
+    gi_value = get_food_value(food.get('glycemicInfoData', {}).get('gi', {}), 'value', "")
+    gi_label = get_food_value(food.get('glycemicInfoData', {}).get('gi', {}), 'label', "")
+    gl_value = get_food_value(food.get('glycemicInfoData', {}).get('gl', {}), 'value', "")
+    gl_label = get_food_value(food.get('glycemicInfoData', {}).get('gl', {}), 'label', "")
+    health_tips = get_food_value(food, 'healthTips', "")
+    health_suggest = get_food_value(food, 'healthSuggest', "")
 
-    # 格式化输出字符串
     food_str = (
         f"热量:{calory}卡路里    蛋白质:{protein}g\n"
         f"脂肪:{fat}g    碳水化合物:{carbohydrate}g\n"
