@@ -40,7 +40,7 @@ def get_food_list(message: str) -> List:
         print("获取食物列表失败")
         return []
     food_list = response.json()
-    return food_list.get("data", {}).get("list", [])
+    return food_list.get("data", {}).get("list", {})
 
 
 def get_food_details(food_id: str) -> str:
