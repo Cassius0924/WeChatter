@@ -42,7 +42,7 @@ def get_food_list(message: str) -> List:
     response = requests.get(url, timeout=10)
 
     if response.status_code != 200:
-        print("获取食物列表失败")
+        print(f"获取食物列表失败，状态码：{response.status_code}, 响应内容：{response.text}")
         return []
     food_list = response.json()
     return food_list.get("data", {}).get("list", [])
@@ -62,7 +62,7 @@ def get_food_details(food_id: str) -> str:
     response = requests.get(url, timeout=10)
 
     if response.status_code != 200:
-        print("获取食物详情失败")
+        print(f"获取食物详情失败，食物id：{food_id}, 状态码：{response.status_code}, 响应内容：{response.text}")
         return ""
 
     food_details = response.json()
