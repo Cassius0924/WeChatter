@@ -23,9 +23,9 @@ def get_food_str(message: str) -> str:
     food_list = get_food_list(message)
     if food_list == []:
         return "获取食物列表失败"
-    food_str = "✨===食物列表===✨\n"
+    food_str = "✨=====食物列表=====✨\n"
     for i, food in enumerate(food_list[:20]):
-        width = 20 - len(food.get("name"))
+        width = 20
         food_str += f"{i + 1}.  {food.get('name')}      {str(food.get('calory')).rjust(width)}大卡\n"
     return food_str
 
