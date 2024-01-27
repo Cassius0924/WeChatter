@@ -38,7 +38,7 @@ def get_food_str(message: str) -> str:
 
 def get_food_list(message: str) -> List:
     url = (
-        f"https://www.mxnzp.com/api/food_heat/food/search?keyword={message}&page=1&app_id=pprqn2hfekkrr8k8&app_secret=nVFcuE6htNjhtGIkJURrS2qQm8L3HUCR")
+        f"https://www.mxnzp.com/api/food_heat/food/search?keyword={message}&page=2&app_id=pprqn2hfekkrr8k8&app_secret=nVFcuE6htNjhtGIkJURrS2qQm8L3HUCR")
     response = requests.get(url, timeout=10)
 
     if response.status_code != 200:
