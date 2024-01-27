@@ -27,10 +27,11 @@ def get_food_str(message: str) -> str:
 
     food_str = "✨=====食物列表=====✨\n"
     for i, food in enumerate(food_list[:10]):
+        time.sleep(0.1)
         food_id = food.get('foodId')
         food_details = get_food_details(food_id)
         food_str += f"{i + 1}.  {food.get('name')}\n{food_details}\n\n"
-        time.sleep(0.1)
+        # time.sleep(0.1)
     return food_str
 
 
