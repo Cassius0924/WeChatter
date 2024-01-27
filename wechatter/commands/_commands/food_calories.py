@@ -28,7 +28,7 @@ def get_food_str(message: str) -> str:
 
     #fixme: 由于食物详情接口有限制，暂时只可以获取第三和第九食物的详情
     #
-    for i, food in enumerate(food_list[:20]):
+    for i, food in enumerate(food_list[:8]):
         food_id = food.get('foodId')
         food_details = get_food_details(food_id)
         if not food_details:
@@ -80,7 +80,6 @@ def get_food_details(food_id: str) -> str:
         return ""
 
     food_details = response.json()
-    food_str = f"\n{food_details.get('code')}\n{food_details.get('msg')}\n"
     food = food_details.get("data", {})
 
     calory = get_food_value(food, 'calory', "")
@@ -98,8 +97,8 @@ def get_food_details(food_id: str) -> str:
     health_tips = get_food_value(food, 'healthTips', "")
     health_suggest = get_food_value(food, 'healthSuggest', "")
 
-    food_str += (
-        f"热量:{calory}卡路里    蛋白质:{protein}g\n"
+    food_str = (
+        f"热量:{calory}大卡    蛋白质:{protein}g\n"
         f"脂肪:{fat}g    碳水化合物:{carbohydrate}g\n"
         f"钠值:{natrium}mg    锌值:{zinc}mg\n"
         f"铁值:{iron}mg    钙值:{calcium}mg\n"
