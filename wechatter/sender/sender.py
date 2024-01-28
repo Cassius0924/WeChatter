@@ -183,6 +183,8 @@ class Sender:
     @staticmethod
     def send_msg_ps(to_p_names: List[str], message: SendMessage) -> bool:
         """给多个人发送一条消息"""
+        if to_p_names == []:
+            return False
         headers = {"Content-Type": "application/json"}
         data = []
         for to_p_name in to_p_names:
@@ -199,6 +201,8 @@ class Sender:
     @staticmethod
     def send_msg_gs(to_g_names: List[str], message: SendMessage) -> bool:
         """给多个群组发送一条消息"""
+        if to_g_names == []:
+            return False
         headers = {"Content-Type": "application/json"}
         data = []
         for to_g_name in to_g_names:

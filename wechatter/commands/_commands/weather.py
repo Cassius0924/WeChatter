@@ -313,6 +313,7 @@ def get_weather_str(city_name: str) -> str:
     future_str = ""
     for index, hour in enumerate(future_weather):
         future_str += f"{qxbm[hour['ja']]}{hour['jb']}° "
+    # TODO: TIP 设计
     message = (
         f"🏙️ {c_data['cityname']} 📅 {date}\n"
         f"🌡️ 温度: {temp['min'][1]}°C ~ {temp['max'][1]}°C\n"

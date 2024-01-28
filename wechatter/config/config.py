@@ -48,3 +48,7 @@ message_forwarding_enabled = config_reader.getboolean(
 message_forwarding_rules = config_reader.getlist(
     "message-forwarding", "message_forwarding_rules"
 )
+
+# weather-cron 配置
+weather_cron_enabled = config_reader.getboolean("weather-cron", "weather_cron_enabled")
+weather_cron_rules = config_reader.getlist("weather-cron", "weather_cron_rules")
