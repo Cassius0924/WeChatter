@@ -1,6 +1,7 @@
-import wechatter.config as config
 from fastapi import APIRouter, Request, status
 from fastapi.responses import JSONResponse
+
+import wechatter.config as config
 from wechatter.webhook_handlers import github_webhook_handlers as handlers
 
 router = APIRouter()

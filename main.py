@@ -1,10 +1,11 @@
 # 项目启动文件
 import uvicorn
+
 import wechatter.config as config
+from wechatter.app.app import app
 from wechatter.bot.bot_info import BotInfo
 from wechatter.sqlite.sqlite_manager import SqliteManager
 from wechatter.utils.file_manager import FileManager
-from wechatter.app.app import app
 
 
 def main():

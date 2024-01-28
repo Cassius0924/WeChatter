@@ -5,11 +5,12 @@ from typing import List
 import requests
 from bs4 import BeautifulSoup
 from requests import Response
+
 from wechatter.commands.handlers import command
 from wechatter.models.message import SendMessage, SendMessageType, SendTo
 from wechatter.sender import Sender
-from wechatter.utils.time import get_current_ymd, get_current_hour, get_current_minute
 from wechatter.utils.path_manager import PathManager
+from wechatter.utils.time import get_current_hour, get_current_minute, get_current_ymd
 
 
 @command(

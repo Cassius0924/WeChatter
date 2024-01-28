@@ -3,9 +3,9 @@ from typing import List
 
 import requests
 
-from wechatter.sender import Sender
 from wechatter.commands.handlers import command
 from wechatter.models.message import SendMessage, SendMessageType, SendTo
+from wechatter.sender import Sender
 
 
 @command(

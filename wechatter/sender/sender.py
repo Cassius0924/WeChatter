@@ -3,6 +3,7 @@ from collections.abc import Callable
 from typing import List
 
 import requests
+
 import wechatter.config as config
 from wechatter.models.message import (
     SendMessage,
