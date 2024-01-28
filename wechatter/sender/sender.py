@@ -3,8 +3,7 @@ from collections.abc import Callable
 from typing import List
 
 import requests
-from main import cr
-
+import wechatter.config as config
 from wechatter.models.message import (
     SendMessage,
     SendMessageList,
@@ -47,7 +46,7 @@ class Sender:
     """v2 版本 api 消息发送类"""
 
     host = "http://localhost"
-    url = f"{host}:{cr.wx_webhook_port}/webhook/msg/v2"
+    url = f"{host}:{config.wx_webhook_port}/webhook/msg/v2"
 
     # 发送文本消息或链接文件
     """
@@ -184,6 +183,8 @@ class Sender:
     @staticmethod
     def send_msg_ps(to_p_names: List[str], message: SendMessage) -> bool:
         """给多个人发送一条消息"""
+        if to_p_names == []:
+            return False
         headers = {"Content-Type": "application/json"}
         data = []
         for to_p_name in to_p_names:
@@ -200,6 +201,8 @@ class Sender:
     @staticmethod
     def send_msg_gs(to_g_names: List[str], message: SendMessage) -> bool:
         """给多个群组发送一条消息"""
+        if to_g_names == []:
+            return False
         headers = {"Content-Type": "application/json"}
         data = []
         for to_g_name in to_g_names:
@@ -250,32 +253,34 @@ class Sender:
     @staticmethod
     def send_msg_to_admins(message: str) -> None:
         """发送消息给所有管理员"""
-        if len(cr.admin_list) == 0:
+        if len(config.admin_list) == 0:
             print("管理员列表为空")
             return
-        Sender.send_msg_ps(cr.admin_list, SendMessage(SendMessageType.TEXT, message))
-        if len(cr.admin_group_list) == 0:
+        Sender.send_msg_ps(
+            config.admin_list, SendMessage(SendMessageType.TEXT, message)
+        )
+        if len(config.admin_group_list) == 0:
             print("管理员群列表为空")
             return
         Sender.send_msg_gs(
-            cr.admin_group_list, SendMessage(SendMessageType.TEXT, message)
+            config.admin_group_list, SendMessage(SendMessageType.TEXT, message)
         )
 
     @staticmethod
     def send_msg_to_github_webhook_receivers(message: str) -> None:
         """发送消息给所有 GitHub Webhook 接收者"""
-        if len(cr.github_webhook_receiver_list) == 0:
+        if len(config.github_webhook_receiver_list) == 0:
             print("GitHub Webhook 接收者列表为空")
         else:
             Sender.send_msg_ps(
-                cr.github_webhook_receiver_list,
+                config.github_webhook_receiver_list,
                 SendMessage(SendMessageType.TEXT, message),
             )
-        if len(cr.github_webhook_receive_group_list) == 0:
+        if len(config.github_webhook_receive_group_list) == 0:
             print("GitHub Webhook 接收者群列表为空")
         else:
             Sender.send_msg_gs(
-                cr.github_webhook_receive_group_list,
+                config.github_webhook_receive_group_list,
                 SendMessage(SendMessageType.TEXT, message),
             )
 
@@ -284,7 +289,7 @@ class SenderV1:
     """v1 版本 api 消息发送类"""
 
     host = "http://localhost"
-    url = f"{host}:{cr.wx_webhook_port}/webhook/msg"
+    url = f"{host}:{config.wx_webhook_port}/webhook/msg"
 
     # 发送文本消息
     """

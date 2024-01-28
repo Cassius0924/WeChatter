@@ -2,6 +2,27 @@
 import time
 
 
+def get_current_hour() -> int:
+    """获取当前小时
+    返回当前小时
+    """
+    return time.localtime().tm_hour
+
+
+def get_current_minute() -> int:
+    """获取当前分钟
+    返回当前分钟
+    """
+    return time.localtime().tm_min
+
+
+def get_current_second() -> int:
+    """获取当前秒
+    返回当前秒
+    """
+    return time.localtime().tm_sec
+
+
 def get_current_timestamp() -> int:
     """获取当前时间戳
     返回当前时间戳

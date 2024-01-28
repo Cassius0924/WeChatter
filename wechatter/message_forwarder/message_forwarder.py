@@ -12,20 +12,6 @@ class MessageForwarder:
     def forward_message(self, message: Message):
         """消息转发"""
 
-        """
-        message_forwarding_rules = [
-            {
-                "froms": ["SenderName", "SenderGroupName"],
-                "to_persons": ["ReceiverName1", "ReceiverName2"],
-                "to_groups": ["ReceiverGroupName"]
-            },
-            {
-                "froms": ["小A"],
-                "to_persons": ["小B"],
-                "to_groups": ["小C"]
-            }
-        ]
-        """
         # 判断消息来源
         from_name = ""
         if message.is_group:

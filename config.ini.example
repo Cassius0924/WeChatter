@@ -62,14 +62,50 @@ message_forwarding_enabled = True
 # froms: 消息转发来源列表，即消息发送者（们）的微信名称（用户或群）
 # to_persons: 消息转发目标用户列表，即消息接收者（们）的微信名称（仅用户）
 # to_groups: 消息转发目标群列表，即（多个）消息接收群名称（仅群）
-message_forwarding_rules = [
-    {
+message_forwarding_rules = [ {
         "froms": ["SenderName", "SenderGroupName"],
         "to_persons": ["ReceiverName1", "ReceiverName2"],
         "to_groups": ["ReceiverGroupName"]
-    },
-    {
+    }, {
         "froms": ["小A"],
         "to_persons": ["小B"],
         "to_groups": ["小C"]
     }]
+
+
+[weather-cron]
+# 天气预报自动推送定时任务
+# 是否开启天气预报自动推送定时任务（True/<<False>>）
+weather_cron_enabled = True
+# 自动推送规则列表（JSON格式）
+# 每个规则是一个字典，包含两个字段：cron, tasks
+# cron: 定时任务的 Cron 表达式，即执行时间。详见：https://apscheduler.readthedocs.io/en/3.x/modules/triggers/cron.html
+# tasks: 任务内容列表，即每次执行的任务，包含三个字段：to_persons, to_groups, city
+# to_persons: 消息接收者（们）的微信名称（仅用户）
+# to_groups: 消息接收群名称（仅群）
+# city: 城市名称
+weather_cron_rules = [ {
+        "cron": {
+          "year": "*",
+          "month": "*",
+          "day": "*",
+          "week": "*",
+          "day_of_week": "*",
+          "hour": "7",
+          "minute": "0",
+          "second": "0",
+          "start_date": null,
+          "end_date": null,
+          "timezone": "Asia/Shanghai"
+        },
+        "tasks": [ {
+          "city": "汕尾",
+          "to_persons": ["缘"],
+          "to_groups": ["WeChatter"]
+        }, {
+          "city": "宜宾",
+          "to_persons": ["南北总关心"],
+          "to_groups": []
+        } ]
+    } ]
+

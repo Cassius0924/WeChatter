@@ -6,3 +6,4 @@ BeautifulSoup4==4.11.2
 qrcode==7.4.2
 Pillow~=10.1.0
 bs4~=0.0.1
+apscheduler==3.10.4

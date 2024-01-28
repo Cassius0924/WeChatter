@@ -1,13 +1,12 @@
+import wechatter.config as config
 from fastapi import APIRouter, Request, status
 from fastapi.responses import JSONResponse
-from main import cr
-
 from wechatter.webhook_handlers import github_webhook_handlers as handlers
 
 router = APIRouter()
 
 
-@router.post(cr.github_webhook_api_path)
+@router.post(config.github_webhook_api_path)
 async def recv_github_webhook(request: Request):
     """接收 GitHub Webhook"""
     data = await request.json()
