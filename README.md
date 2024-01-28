@@ -161,12 +161,12 @@ python3 main.py
 
 ### ⚙️ Weather Cron 配置
 
-| 配置项 | 子项 | 解释 | 备注 |
-| --- | --- |  --- | --- |
-| `weather_cron_enabled` | | 功能开关，是否开启定时天气推送 | 默认为 `False` |
-| `weather_cron_rules` | | 推送规则列表，每个规则包含两个字段：`cron` 和 `tasks` | 规则是由字典组成的JSON列表 |
+| 配置项 | 解释 | 备注 |
+| --- | --- |  --- |
+| `weather_cron_enabled` | 功能开关，是否开启定时天气推送 | 默认为 `False` |
+| `weather_cron_rules` | 推送规则列表，每个规则包含两个字段：`cron` 和 `tasks` | 规则是由字典组成的JSON列表 |
 
-关于`cron`和`tasks`的配置见[Weather Cron 配置详细](docs/config_detail.md#weather-cron配置详细)
+关于`cron`和`tasks`的配置见[Weather Cron 配置详细](docs/config_detail.md#weather-cron-配置详细)
 
 ## 插件化
 
