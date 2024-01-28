@@ -28,6 +28,8 @@ def parse_weather_cron_rules(
             hour=cron["hour"],
             minute=cron["minute"],
             second=cron["second"],
+            start_date=cron["start_date"],
+            end_date=cron["end_date"],
             timezone=cron["timezone"],
         )
 

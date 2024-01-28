@@ -94,16 +94,18 @@ weather_cron_rules = [ {
           "hour": "7",
           "minute": "0",
           "second": "0",
+          "start_date": null,
+          "end_date": null,
           "timezone": "Asia/Shanghai"
         },
         "tasks": [ {
+          "city": "汕尾",
           "to_persons": ["缘"],
-          "to_groups": ["WeChatter"],
-          "city": "汕尾"
+          "to_groups": ["WeChatter"]
         }, {
+          "city": "宜宾",
           "to_persons": ["南北总关心"],
-          "to_groups": [],
-          "city": "宜宾"
+          "to_groups": []
         } ]
     } ]
 
