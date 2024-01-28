@@ -170,9 +170,8 @@ def _get_city_id(city_name: str) -> int:
             print("读取城市代码失败")
             return -1
     # 遍历JSON
-    for city_id in city_ids:
-        if city_name in city_id["cities"].keys():
-            return city_id["cities"][city_name]
+    if city_name in city_ids.keys():
+        return city_ids[city_name]
     return -1
 
 
