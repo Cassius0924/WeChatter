@@ -46,8 +46,7 @@ def _retry(times: int, func: Callable) -> bool:
 class Sender:
     """v2 版本 api 消息发送类"""
 
-    host = "http://localhost"
-    url = f"{host}:{config.wx_webhook_port}/webhook/msg/v2"
+    url = f"{config.wx_webhook_host}:{config.wx_webhook_port}/webhook/msg/v2"
 
     # 发送文本消息或链接文件
     """
@@ -238,18 +237,20 @@ class Sender:
     @staticmethod
     def send_localfile_msg_p(to_p_name: str, file_path: str) -> bool:
         """发送本地文件给个人"""
-        url = "http://localhost:3001/webhook/msg"
         data = {"to": to_p_name, "isRoom": 0}
         files = {"content": open(file_path, "rb")}
-        return _retry(3, lambda: _check(requests.post(url, data=data, files=files)))
+        return _retry(
+            3, lambda: _check(requests.post(Sender.url, data=data, files=files))
+        )
 
     @staticmethod
     def send_localfile_msg_g(to_g_name: str, file_path: str) -> bool:
         """发送本地文件给群组"""
-        url = "http://localhost:3001/webhook/msg"
         data = {"to": to_g_name, "isRoom": 1}
         files = {"content": open(file_path, "rb")}
-        return _retry(3, lambda: _check(requests.post(url, data=data, files=files)))
+        return _retry(
+            3, lambda: _check(requests.post(Sender.url, data=data, files=files))
+        )
 
     @staticmethod
     def send_msg_to_admins(message: str) -> None:
@@ -289,8 +290,7 @@ class Sender:
 class SenderV1:
     """v1 版本 api 消息发送类"""
 
-    host = "http://localhost"
-    url = f"{host}:{config.wx_webhook_port}/webhook/msg"
+    url = f"{config.wx_webhook_host}:{config.wx_webhook_port}/webhook/msg"
 
     # 发送文本消息
     """
