@@ -1,4 +1,3 @@
-# TODO: 全局变量
 from wechatter.config.config_reader import ConfigReader
 
 config_reader = ConfigReader(config_file="config.ini")
