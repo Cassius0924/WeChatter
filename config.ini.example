@@ -7,6 +7,8 @@ wechatter_port = 4000
 
 
 [wx-bot-webhook]
+# 发送消息的 API 地址，必须包含http(s)://（<<http://localhost>>）
+wx_webhook_host = http://localhost
 # 发送消息的端口，wxBotWebhook Docker 的端口（<<3001>>）
 wx_webhook_port = 3001
 # 接收消息的接口路径，RECV_MSG_API的路径（<</receive_msg>>）

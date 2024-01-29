@@ -1,4 +1,5 @@
 from typing import List
+
 from wechatter.models.message import Message, SendMessage, SendMessageType
 from wechatter.sender import Sender
 

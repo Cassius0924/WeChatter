@@ -1,6 +1,7 @@
 from typing import List
 
 from apscheduler.schedulers.background import BackgroundScheduler
+
 from wechatter.models.scheduler import CronTask
 
 CRON_TASKS: List[CronTask] = []

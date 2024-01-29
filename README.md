@@ -85,6 +85,7 @@ python3 main.py
 ## 支持的功能
 
 - [x] 消息转发，需[配置](#%EF%B8%8F-message-forwarding-配置)
+- [x] 天气预报定时推送，需[配置](#%EF%B8%8F-weather-cron-配置)
 
 ## 支持的 Webhook
 
@@ -109,6 +110,7 @@ python3 main.py
 
 | 配置项 | 解释 | 备注 |
 | --- | --- |  --- |
+| `wx_webhook_host` | 发送消息的地址 | 默认为 `localhost`，需和 `wxBotWebhook` 的 Docker IP 地址一致 |
 | `wx_webhook_port` | 发送消息的端口 | 默认为 `3001`，需和 `wxBotWebhook` 的 Docker 端口一致 |
 | `wx_webhook_recv_api_path` | 接收消息的接口路径 | 默认为 `/receive_msg`，此路径为 `RECV_MSG_API` 的路径 |
 

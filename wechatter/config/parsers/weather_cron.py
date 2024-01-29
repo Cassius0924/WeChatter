@@ -1,4 +1,5 @@
 from typing import List
+
 from apscheduler.triggers.cron import CronTrigger
 
 from wechatter.commands._commands.weather import get_weather_str

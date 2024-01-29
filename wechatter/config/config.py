@@ -1,13 +1,13 @@
 # TODO: 全局变量
 from wechatter.config.config_reader import ConfigReader
 
-
 config_reader = ConfigReader(config_file="config.ini")
 
 # wechatter 配置
 wechatter_port = config_reader.getint("wechatter", "wechatter_port")
 
 # wx-bot-webhook 配置
+wx_webhook_host = config_reader.get("wx-bot-webhook", "wx_webhook_host")
 wx_webhook_port = config_reader.getint("wx-bot-webhook", "wx_webhook_port")
 wx_webhook_recv_api_path = config_reader.get(
     "wx-bot-webhook", "wx_webhook_recv_api_path"

@@ -4,9 +4,6 @@ __pycache__/
 .idea/
 .ruff_cache/
 
-# 发测试文件
-test*
-
 # config.ini 配置文件
 config.ini
 

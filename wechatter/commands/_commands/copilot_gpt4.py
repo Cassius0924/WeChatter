@@ -2,6 +2,7 @@
 from typing import List, Union
 
 import requests
+
 import wechatter.config as config
 from wechatter.commands.handlers import command
 from wechatter.models.message import SendMessage, SendMessageType, SendTo

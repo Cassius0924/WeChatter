@@ -2,8 +2,8 @@ from fastapi import FastAPI
 
 import wechatter.app.routers as routers
 import wechatter.config as config
-from wechatter.scheduler import Scheduler
 from wechatter.config.parsers import parse_weather_cron_rules
+from wechatter.scheduler import Scheduler
 
 app = FastAPI()
 

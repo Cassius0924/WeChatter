@@ -1,6 +1,8 @@
 from typing import List
+
 from pydantic import BaseModel
-from wechatter.models.github.base import Author, Committer, User, Pusher, Repository
+
+from wechatter.models.github.base import Author, Committer, Pusher, Repository, User
 
 
 class Commit(BaseModel):
