@@ -1,5 +1,6 @@
 from pydantic import BaseModel
-from wechatter.models.github.base import User, Repository, Reactions
+
+from wechatter.models.github.base import Reactions, Repository, User
 from wechatter.models.github.issue_webhook import Issue
 
 

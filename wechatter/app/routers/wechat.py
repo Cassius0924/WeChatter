@@ -1,8 +1,9 @@
 import json
 from typing import Union
 
-import wechatter.config as config
 from fastapi import APIRouter, Form, UploadFile
+
+import wechatter.config as config
 from wechatter.bot.bot_info import BotInfo
 from wechatter.commands import commands
 from wechatter.message import MessageHandler

@@ -1,5 +1,6 @@
-from apscheduler.triggers.cron import CronTrigger
 from typing import Callable
+
+from apscheduler.triggers.cron import CronTrigger
 
 
 class CronTask:
