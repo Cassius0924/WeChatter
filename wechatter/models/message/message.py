@@ -97,7 +97,6 @@ class Message:
     @content.setter
     def content(self, content: str):
         # 对于 iPad、手机端的微信，@名称后面会跟着一个未解码的空格的Unicode编码："@Cassius\u2005/help"
-        # 将第一个\u2005替换为普通空格
         self.__content = content.replace("\u2005", " ", 1)
 
     @property
@@ -166,39 +165,6 @@ class Message:
             )
         self.__source = message_source
 
-    # def __parse_message(self) -> None:
-    #     """解析命令"""
-    # 判断是否为群消息
-
-    # def __parse_command(self) -> None:
-    #     """解析命令"""
-    #     content = self.content
-    #     # 判断是否为引用消息
-    #     quote_pattern = (
-    #         r"(?s)「(.*?)」\n- - - - - - - - - - - - - - -"  # 引用消息的正则
-    #     )
-    #     match_result = re.match(quote_pattern, content)
-    #     self.__is_quote = bool(match_result)
-    #     # 判断是否为群消息
-    #     self.__is_group = bool(self.source.g_info)
-    #     # 不带命令前缀和@前缀的消息内容
-    #     self.__msg = ""
-    #     if self.__is_mentioned and self.__is_group:
-    #         # 去掉"@机器人名"的前缀
-    #         content = content.replace(f"@{BotInfo.name} ", "")
-    #     for cmd, value in ch.command_infos.items():
-    #         for key in value["keys"]:
-    #             # 第一个空格或回车前的内容即为指令
-    #             cont_list = re.split(r"\s|\n", content, 1)
-    #             if cont_list[0].lower() == cr.command_prefix + key.lower():
-    #                 self.__is_cmd = True  # 是否是命令
-    #                 self.__cmd = cmd  # 命令
-    #                 if len(cont_list) == 2:
-    #                     self.__msg = cont_list[1]  # 消息内容
-    #                 return
-    #     self.__is_cmd = False
-    #     self.__cmd = "None"
-
     @property
     def is_mentioned(self) -> bool:
         """是否@机器人"""
@@ -210,31 +176,6 @@ class Message:
             self.__is_mentioned = True
         else:
             self.__is_mentioned = False
-
-    # @property
-    # def is_cmd(self) -> bool:
-    #     """是否是命令"""
-    #     return self.__is_cmd
-
-    # @property
-    # def cmd(self) -> str:
-    #     """命令"""
-    #     return self.__cmd
-
-    # @property
-    # def cmd_handler(self):
-    #     """命令函数"""
-    #     return ch.command_handlers.get(self.cmd)
-
-    # @property
-    # def cmd_desc(self) -> str:
-    #     """命令描述"""
-    #     return ch.command_infos.get(self.cmd).desc
-
-    # @property
-    # def cmd_value(self) -> int:
-    #     """命令值"""
-    #     return ch.command_infos.get(self.cmd).value
 
     @property
     def is_group(self) -> bool:
@@ -264,54 +205,3 @@ class Message:
 
     def __str__(self) -> str:
         return f"消息内容：{self.content}\n消息来源：\n{self.source}\n是否@：{self.is_mentioned}\n是否引用：{self.is_quote}"
-
-
-"""
-  {
-    // 消息来自群，会有以下对象，否则为空字符串
-    "room": {
-      "id": "@@xxx",
-      "topic": "abc" // 群名
-      "payload": {
-        "adminIdList": [],
-        "memberList": [{
-            id: '@xxxx',
-            name:'昵称',
-            alias: '备注名'
-           }
-        ]
-      },
-    },
-
-    // 消息来自个人，会有以下对象，否则为空字符串
-    "to": {
-        "id": "@xxx",
-        "payload": {
-            "alias": "", //备注名
-            "gender": 1,
-            "name": "xxx",
-            "phone": [],
-            "signature": "hard mode",
-            "star": false,
-            "type": 1
-        },
-      },
-
-    // 消息发送方
-    "from": {
-      "id": "@xxx",
-      "payload": {
-        "alias": "",
-        "city": "北京",
-        "gender": 1,
-        "id": "@xxxx",
-        "name": "abc", //昵称
-        "phone": [],
-        "province": "北京",
-        "star": false,
-        "type": 1
-      },
-    }
-
-  }
-"""
