@@ -1,6 +1,6 @@
 # 翻译命令
 import json
-from typing import List
+from typing import List, Dict
 
 import langid
 import requests
@@ -18,27 +18,32 @@ from wechatter.sender import Sender
     value=120,
 )
 def word_command_handler(to: SendTo, message: str = "") -> None:
+    to_lang = "chinese"
     # 检测文本语言
     from_lang = detect_lang(message)
-    to_lang = "chinese"
-    # en -> zh
-    # zh -> en
-    # other -> zh -> en
+
+    # 自动翻译 en -> zh, zh -> en, other -> zh --if not--> en
     if from_lang == "":
-        response = "无法识别语言"
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, response))
+        error_message = "无法识别语言"
+        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
         return
     if from_lang == "chinese":
         to_lang = "english"
     elif from_lang != "english" and not check_lang_support(from_lang, "chinese"):
         to_lang = "english"
+
     # 获取翻译
-    response = get_reverso_context_tran_str(message, from_lang, to_lang)
-    Sender.send_msg(to, SendMessage(SendMessageType.TEXT, response))
+    try:
+        response = get_reverso_context_tran_str(message, from_lang, to_lang)
+        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, response))
+    except Exception as e:
+        error_message = f"翻译失败，错误信息：{e}"
+        print(error_message)
+        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
 
 
 # 翻译语言字典（何种语言对应何种语言）
-tran_lang_dict = {
+TRAN_LANG_DICT = {
     "chinese": ["english", "spanish", "french"],
     "english": [
         "chinese",
@@ -71,7 +76,7 @@ tran_lang_dict = {
     "russian": ["english", "spanish", "french", "japanese", "italian", "german"],
 }
 
-langid_dict = {
+LANGID_DICT = {
     "zh": "chinese",
     "en": "english",
     "ru": "russian",
@@ -82,7 +87,7 @@ langid_dict = {
     "de": "german",
 }
 
-lang_emoji_dict = {
+LANG_EMOJI_DICT = {
     "chinese": "🇨🇳",
     "english": "🇺🇸",
     "russian": "🇷🇺",
@@ -93,7 +98,7 @@ lang_emoji_dict = {
     "german": "🇩🇪",
 }
 
-model_dict = {
+MODEL_DICT = {
     "chinese": "zh-pinyin",
     "russian": "ru-wikipedia",
     "japanese": "ja-latin",
@@ -103,19 +108,61 @@ model_dict = {
 }
 
 
+# 获取翻译字符串
+def get_reverso_context_tran_str(content: str, from_lang: str, to_lang: str) -> str:
+    try:
+        response = get_reverso_context_response(content, from_lang, to_lang)
+        result = parse_reverso_context_response(response)
+    except Exception as e:
+        raise Exception(e)
+
+    try:
+        # 加上默认值，注音非必要
+        transliteration = get_transliteration_response_json(content, from_lang).get(
+            "transliteration", ""
+        )
+    except Exception as e:
+        raise Exception(e)
+
+    tran_direction_msg = (
+        LANG_EMOJI_DICT.get(from_lang, "") + "->" + LANG_EMOJI_DICT.get(to_lang, "")
+    )
+    msg = f'({tran_direction_msg}) "{content}" 翻译:\n'
+    if transliteration != "":
+        transliteration_msg = f"(🔈 注音) <{transliteration}>\n"
+        msg += transliteration_msg
+    for res in result[:10]:
+        msg += res + "\n"
+    return msg
+
+
 # 使用Reverso Context翻译（主要用于翻译单词或短语）
 # API: https://context.reverso.net/translation/
 # 示例：https://context.reverso.net/translation/english-chinese/Hello
 # Curl: curl https://context.reverso.net/translation/chinese-english/你好 -H "User-Agent: Mozilla/5.0" -H "Content-Type: application/json; charset=UTF-8"
-def tran_by_reverso_context(content: str, from_lang: str, to_lang: str) -> List:
+def get_reverso_context_response(
+    content: str, from_lang: str, to_lang: str
+) -> requests.Response:
     if not check_lang_support(from_lang, to_lang):
-        return ["不支持的语言"]
-    url = f"https://context.reverso.net/translation/{from_lang}-{to_lang}/{content}"
-    headers = {
-        "User-Agent": "Mozilla/5.0",
-        "Content-Type": "application/json; charset=UTF-8",
-    }
-    response = requests.get(url, headers=headers, timeout=10)
+        raise Exception(f"不支持的语言翻译：{from_lang} -> {to_lang}")
+
+    try:
+        url = f"https://context.reverso.net/translation/{from_lang}-{to_lang}/{content}"
+        headers = {
+            "User-Agent": "Mozilla/5.0",
+            "Content-Type": "application/json; charset=UTF-8",
+        }
+        response = requests.get(url, headers=headers, timeout=10)
+    except Exception as e:
+        raise Exception(f"请求Reverso Context API失败，错误信息：{e}")
+
+    if response.status_code != 200:
+        raise Exception(f"Reverso Context API返回非200状态码：{response.status_code}")
+
+    return response
+
+
+def parse_reverso_context_response(response: requests.Response) -> List:
     html = response.text
     soup = BeautifulSoup(html, "html.parser")
     translations_content_div = soup.find(id="translations-content")
@@ -126,64 +173,52 @@ def tran_by_reverso_context(content: str, from_lang: str, to_lang: str) -> List:
             for i in translations_content_div.find_all("span", class_="display-term")
         ]
     else:
-        result = ["翻译失败"]
+        raise Exception("单词或短语翻译失败，请输入正确的单词或短语（不支持句子翻译）")
+
     if len(result) == 0:
-        result = ["翻译失败"]
+        result = ["无翻译结果"]
     return result
-
-
-# 检查语言是否支持
-def check_lang_support(from_lang: str, to_lang: str) -> bool:
-    if from_lang in tran_lang_dict.keys():
-        if to_lang in tran_lang_dict[from_lang]:
-            return True
-    return False
-
-
-# 获取翻译字符串
-def get_reverso_context_tran_str(content: str, from_lang: str, to_lang: str) -> str:
-    result = tran_by_reverso_context(content, from_lang, to_lang)
-    tran_direction_msg = (
-        lang_emoji_dict.get(from_lang, "") + "->" + lang_emoji_dict.get(to_lang, "")
-    )
-    transliteration = get_transliteration(content, from_lang)
-    msg = f'({tran_direction_msg}) "{content}" 翻译:\n'
-    if transliteration != "":
-        transliteration_msg = f"(🔈 注音) <{transliteration}>\n"
-        msg += transliteration_msg
-    for res in result[:10]:
-        msg += res + "\n"
-    return msg
-
-
-# 检测文本语言
-def detect_lang(content: str) -> str:
-    lang, _ = langid.classify(content)
-    return langid_dict.get(lang, "")
 
 
 # 获取音译注音
 # API: https://lang-utils-api.reverso.net/transliteration
 # 示例: https://lang-utils-api.reverso.net/transliteration/?text=你好&model=zh-pinyin
-def get_transliteration(content: str, lang: str) -> str:
+def get_transliteration_response_json(content: str, lang: str) -> Dict:
     if not check_model_by_lang(lang):
         return ""
-    model = model_dict.get(lang, "")
-    url = f"https://lang-utils-api.reverso.net/transliteration/?text={content}&model={model}"
-    headers = {"User-Agent": "Mozilla/5.0", "Accpet": "application/json"}
-    response = requests.get(url, headers=headers)
-    result = ""
+    model = MODEL_DICT.get(lang, "")
     try:
-        data = json.loads(response.text)
-        result = data.get("transliteration", "")
+        url = f"https://lang-utils-api.reverso.net/transliteration/?text={content}&model={model}"
+        headers = {"User-Agent": "Mozilla/5.0", "Accpet": "application/json"}
+        response = requests.get(url, headers=headers)
     except Exception as e:
-        print(e)
-        return ""
-    return result
+        raise Exception(f"请求音译注音API失败，错误信息：{e}")
+
+    if response.status_code != 200:
+        raise Exception(f"音译注音API返回非200状态码：{response.status_code}")
+
+    try:
+        return json.loads(response.text)
+    except Exception as e:
+        raise Exception(f"解析音译注音API失败，错误信息：{e}")
 
 
 # 检查音译注音模型是否支持
 def check_model_by_lang(lang: str) -> bool:
-    if lang in model_dict.keys():
+    if lang in MODEL_DICT.keys():
         return True
     return False
+
+
+# 检查语言是否支持
+def check_lang_support(from_lang: str, to_lang: str) -> bool:
+    if from_lang in TRAN_LANG_DICT.keys():
+        if to_lang in TRAN_LANG_DICT[from_lang]:
+            return True
+    return False
+
+
+# 检测文本语言
+def detect_lang(content: str) -> str:
+    lang, _ = langid.classify(content)
+    return LANGID_DICT.get(lang, "")

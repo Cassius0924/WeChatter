@@ -1,6 +1,6 @@
 # 天气命令
 import json
-from typing import List
+from typing import List, Dict
 
 import requests
 from bs4 import BeautifulSoup
@@ -20,8 +20,13 @@ from wechatter.utils.time import get_current_hour, get_current_minute, get_curre
     value=160,
 )
 def weather_command_handler(to: SendTo, message: str = "") -> None:
-    response = get_weather_str(message)
-    Sender.send_msg(to, SendMessage(SendMessageType.TEXT, response))
+    try:
+        response = get_weather_str(message)
+        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, response))
+    except Exception as e:
+        error_message = f"获取天气预报失败，错误信息：{e}"
+        print(error_message)
+        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
 
 
 # class WeatherTip:
@@ -61,7 +66,7 @@ def weather_command_handler(to: SendTo, message: str = "") -> None:
 #
 # windJB = ["<3级", "3-4级", "4-5级", "5-6级", "6-7级", "7-8级", "8-9级", "9-10级", "10-11级", "11-12级"]
 
-qxbm = {
+WEATHER_CONDITIONS = {
     0: "晴",
     1: "多云",
     2: "阴",
@@ -119,7 +124,7 @@ qxbm = {
     302: "雪",
 }
 
-time_emojis = {
+TIME_EMOJIS = {
     0: "🕛",
     1: "🕐",
     2: "🕑",
@@ -160,50 +165,58 @@ def _get_city_id(city_name: str) -> int:
     :return: 城市代码
     """
     # 读取JSON
-    with open(
-        PathManager.get_abs_path("assets/weather_china/city_ids.json"),
-        "r",
-        encoding="utf-8",
-    ) as f:
-        try:
+    try:
+        with open(
+            PathManager.get_abs_path("assets/weather_china/city_ids.json"),
+            "r",
+            encoding="utf-8",
+        ) as f:
             city_ids = json.load(f)
-        except Exception:
-            print("读取城市代码失败")
-            return -1
+    except Exception as e:
+        raise Exception(f"读取城市代码JSON失败，错误信息：{e}")
+
     # 遍历JSON
     if city_name in city_ids.keys():
         return city_ids[city_name]
-    return -1
+
+    # 未找到城市
+    raise Exception(f"未找到城市：{city_name}")
 
 
-def _get_hourly_weather(city_id: int) -> dict:
+def _get_hourly_weather_response(city_id: int) -> requests.Response:
     response: Response
     try:
         url = f"http://www.weather.com.cn/weather1dn/{city_id}.shtml"
         response = requests.get(url)
         response.encoding = "utf-8"
-    except Exception:
-        print("获取天气失败")
-        return {}
+    except Exception as e:
+        raise Exception(f"请求中国天气网API失败，错误信息：{e}")
 
     if response.status_code != 200:
-        print("获取天气失败")
-        return {}
+        raise Exception(f"中国天气网API返回非200状态码：{response.status_code}")
+
+    return response
+
+
+def _parse_hourly_weather_response(response: requests.Response) -> Dict:
     soup = BeautifulSoup(response.text, "html.parser")
     weather_chart_div = soup.find("div", class_="todayRight")
     # 获取hour3data
-    data = weather_chart_div.find("script").string
-    hour3data = json.loads(data.split("var hour3data=")[1].split(";")[0])
-    event_day = json.loads(data.split("var eventDay =")[1].split(";")[0])
-    event_night = json.loads(data.split("var eventNight =")[1].split(";")[0])
-    temp = {"max": event_day, "min": event_night}
-    sun_rise = json.loads(data.split("var sunup =")[1].split(";")[0])
-    sun_set = json.loads(data.split("var sunset =")[1].split(";")[0])
-    sun_time = {"sun_rise": sun_rise, "sun_set": sun_set}
-    helper_div = soup.find("div", class_="weather_shzs")
-    dls = helper_div.find("div", class_="lv").find_all("dl")
-    uv = dls[0].find("em").string
-    air = dls.pop().find("em").string
+    try:
+        data = weather_chart_div.find("script").string
+        hour3data = json.loads(data.split("var hour3data=")[1].split(";")[0])
+        event_day = json.loads(data.split("var eventDay =")[1].split(";")[0])
+        event_night = json.loads(data.split("var eventNight =")[1].split(";")[0])
+        temp = {"max": event_day, "min": event_night}
+        sun_rise = json.loads(data.split("var sunup =")[1].split(";")[0])
+        sun_set = json.loads(data.split("var sunset =")[1].split(";")[0])
+        sun_time = {"sun_rise": sun_rise, "sun_set": sun_set}
+        helper_div = soup.find("div", class_="weather_shzs")
+        dls = helper_div.find("div", class_="lv").find_all("dl")
+        uv = dls[0].find("em").string
+        air = dls.pop().find("em").string
+    except Exception as e:
+        raise Exception(f"解析中国天气网API失败，错误信息：{e}")
 
     return {
         "weather": hour3data,
@@ -214,7 +227,7 @@ def _get_hourly_weather(city_id: int) -> dict:
     }
 
 
-def _get_current_weather(city_id: int) -> dict:
+def _get_current_weather_response_json(city_id: int) -> Dict:
     # 获取当前天气
     response: Response
     headers = {
@@ -223,21 +236,24 @@ def _get_current_weather(city_id: int) -> dict:
         "Referer": "http://www.weather.com.cn/",
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
     }
+
     try:
         url = f"http://d1.weather.com.cn/sk_2d/{city_id}.html"
         response = requests.get(url, headers=headers)
         response.encoding = "utf-8"
-    except Exception:
-        print("获取天气失败")
-        return {}
+    except Exception as e:
+        raise Exception(f"请求中国天气网API失败，错误信息：{e}")
 
     if response.status_code != 200:
-        print("获取天气失败")
-        return {}
-    return json.loads(response.text.split("=")[1])
+        raise Exception(f"中国天气网API返回非200状态码：{response.status_code}")
+
+    try:
+        return json.loads(response.text.split("=")[1])
+    except Exception as e:
+        raise Exception(f"解析中国天气网API失败，错误信息：{e}")
 
 
-def _get_sun_time(sunset: List, sunrise: List) -> dict:
+def _get_sun_time(sunset: List, sunrise: List) -> Dict:
     # 计算当前时间的总分钟数
     now_all_m = get_current_hour() * 60 + get_current_minute()
 
@@ -297,11 +313,22 @@ def _get_future_weather(h_data: List, now_h: int, hours: int) -> List:
 
 
 def get_weather_str(city_name: str) -> str:
-    city_id = _get_city_id(city_name)
-    if city_id == -1:
-        return "城市名错误"
-    _h_data = _get_hourly_weather(city_id)
-    c_data = _get_current_weather(city_id)
+    try:
+        city_id = _get_city_id(city_name)
+    except Exception as e:
+        raise Exception(e)
+
+    try:
+        response = _get_hourly_weather_response(city_id)
+        _h_data = _parse_hourly_weather_response(response)
+    except Exception as e:
+        raise Exception(e)
+
+    try:
+        c_data = _get_current_weather_response_json(city_id)
+    except Exception as e:
+        raise Exception(e)
+
     h = int(c_data["time"].split(":")[0])
     h_data = _h_data["weather"]
     temp = _h_data["temp"]
@@ -312,12 +339,12 @@ def get_weather_str(city_name: str) -> str:
     future_weather = _get_future_weather(h_data, h, 5)
     future_str = ""
     for index, hour in enumerate(future_weather):
-        future_str += f"{qxbm[hour['ja']]}{hour['jb']}° "
+        future_str += f"{WEATHER_CONDITIONS[hour['ja']]}{hour['jb']}° "
     # TODO: TIP 设计
     message = (
         f"🏙️ {c_data['cityname']} 📅 {date}\n"
         f"🌡️ 温度: {temp['min'][1]}°C ~ {temp['max'][1]}°C\n"
-        f"🌤️ 天气: {c_data['weather']}（{time_emojis[h]}当前{c_data['temp']}°C）\n"
+        f"🌤️ 天气: {c_data['weather']}（{TIME_EMOJIS[h]}当前{c_data['temp']}°C）\n"
         f"📈 逐时: {future_str}\n"
         f"☀️ {sun_time['sun_rise_name']}: {sun_time['sun_rise']} {sun_time['sun_set_name']}: {sun_time['sun_set']}\n"
         f"💨 {c_data['WS']} 😷{_h_data['air']} 💧{c_data['SD']} 🌞{_h_data['uv']}\n"
