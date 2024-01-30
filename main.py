@@ -9,6 +9,8 @@ from wechatter.app.app import app
 from wechatter.bot.bot_info import BotInfo
 from wechatter.sqlite.sqlite_manager import SqliteManager
 
+from wechatter.init_logger import init_logger
+
 
 def main():
     BotInfo.update_name(config.bot_name)
@@ -22,11 +24,8 @@ def main():
     sqlite_manager = SqliteManager("data/wechatter.sqlite")
     sqlite_manager.excute_folder("wechatter/sqlite/sqls")
     # 日志文件
-    logger.add(
-        "logs/wechatter_{time:YYYY-MM-DD}.log",
-        rotation="00:00",
-        encoding="utf-8",
-    )
+    # 将 FastAPI 的日志输出到文件中
+    init_logger()
     logger.info("Wechatter 启动成功！")
     # 启动uvicorn
     uvicorn.run(app, host="0.0.0.0", port=config.wechatter_port)
