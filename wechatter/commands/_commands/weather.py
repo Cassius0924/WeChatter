@@ -77,16 +77,6 @@ WEATHER_CONDITIONS = {
     7: "小雨",
     8: "中雨",
     9: "大雨",
-    "00": "晴",
-    "01": "多云",
-    "02": "阴",
-    "03": "阵雨",
-    "04": "雷阵雨",
-    "05": "雷阵雨伴有冰雹",
-    "06": "雨夹雪",
-    "07": "小雨",
-    "08": "中雨",
-    "09": "大雨",
     10: "暴雨",
     11: "大暴雨",
     12: "特大暴雨",
@@ -339,7 +329,7 @@ def get_weather_str(city_name: str) -> str:
     future_weather = _get_future_weather(h_data, h, 5)
     future_str = ""
     for index, hour in enumerate(future_weather):
-        future_str += f"{WEATHER_CONDITIONS[hour['ja']]}{hour['jb']}° "
+        future_str += f"{WEATHER_CONDITIONS[int(hour['ja'])]}{hour['jb']}° "
     # TODO: TIP 设计
     message = (
         f"🏙️ {c_data['cityname']} 📅 {date}\n"
