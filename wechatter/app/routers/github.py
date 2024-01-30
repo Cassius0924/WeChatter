@@ -5,7 +5,6 @@ from loguru import logger
 import wechatter.config as config
 from wechatter.webhook_handlers import github_webhook_handlers as handlers
 
-
 router = APIRouter()
 
 

@@ -1,6 +1,6 @@
 # 天气命令
 import json
-from typing import List, Dict
+from typing import Dict, List
 
 import requests
 from bs4 import BeautifulSoup

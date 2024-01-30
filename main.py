@@ -1,15 +1,13 @@
 # 项目启动文件
 import uvicorn
-
 from loguru import logger
 
 import wechatter.config as config
 import wechatter.utils.file_manager as fm
 from wechatter.app.app import app
 from wechatter.bot.bot_info import BotInfo
-from wechatter.sqlite.sqlite_manager import SqliteManager
-
 from wechatter.init_logger import init_logger
+from wechatter.sqlite.sqlite_manager import SqliteManager
 
 
 def main():
