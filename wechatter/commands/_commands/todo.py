@@ -6,7 +6,7 @@ from typing import List
 from wechatter.commands.handlers import command
 from wechatter.models.message import SendMessage, SendMessageType, SendTo
 from wechatter.sender import Sender
-from wechatter.utils.path_manager import PathManager as pm
+import wechatter.utils.path_manager as pm
 
 
 # TODO: 使用SQLite进行数据持久化

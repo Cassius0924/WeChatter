@@ -1,3 +1,5 @@
+from loguru import logger
+
 from wechatter.models.github import GithubIssueCommentWebhook
 from wechatter.sender.sender import Sender
 from wechatter.webhook_handlers.hanlders import github_webhook_handler
@@ -6,7 +8,7 @@ from wechatter.webhook_handlers.hanlders import github_webhook_handler
 @github_webhook_handler("issue_comment")
 def handle_issue_comment(data: dict):
     payload = GithubIssueCommentWebhook(**data)
-    print(
+    logger.info(
         f"Comment {payload.comment.id} was {payload.action} by {payload.comment.user.login}."
     )
     content = ""

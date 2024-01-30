@@ -4,7 +4,7 @@ import os
 from configparser import ConfigParser
 from typing import List
 
-from wechatter.utils.path_manager import PathManager as pm
+import wechatter.utils.path_manager as pm
 
 
 class ConfigReader:

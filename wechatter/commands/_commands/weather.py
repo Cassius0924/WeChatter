@@ -6,10 +6,10 @@ import requests
 from bs4 import BeautifulSoup
 from requests import Response
 
+import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
 from wechatter.models.message import SendMessage, SendMessageType, SendTo
 from wechatter.sender import Sender
-from wechatter.utils.path_manager import PathManager
 from wechatter.utils.time import get_current_hour, get_current_minute, get_current_ymd
 
 
@@ -157,9 +157,7 @@ def _get_city_id(city_name: str) -> int:
     # 读取JSON
     try:
         with open(
-            PathManager.get_abs_path("assets/weather_china/city_ids.json"),
-            "r",
-            encoding="utf-8",
+            pm.get_abs_path("assets/weather_china/city_ids.json"), "r", encoding="utf-8"
         ) as f:
             city_ids = json.load(f)
     except Exception as e:

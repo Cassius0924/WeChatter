@@ -1,3 +1,5 @@
+from loguru import logger
+
 from wechatter.models.github import GithubPrWebhook
 from wechatter.sender import Sender
 from wechatter.webhook_handlers.hanlders import github_webhook_handler
@@ -6,7 +8,7 @@ from wechatter.webhook_handlers.hanlders import github_webhook_handler
 @github_webhook_handler("pull_request")
 def handle_pr(data: dict):
     payload = GithubPrWebhook(**data)
-    print(
+    logger.info(
         f"Pull Request {payload.pull_request.number} was {payload.action} by {payload.pull_request.user.login}."
     )
     # 如果是closed，判断是否是合并
