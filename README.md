@@ -46,14 +46,20 @@ git clone https://github.com/Cassius0924/WeChatter
 cd WeChatter
 ```
 
-2. 复制并编辑配置文件
+2. 安装依赖项
+
+```bash
+pip install -r requirements.txt
+```
+
+3. 复制并编辑配置文件
 
 ```bash
 cp config.ini.example config.ini
 vim config.ini
 ```
 
-3. 启动 WeChatter
+4. 启动 WeChatter
 
 ```bash
 python3 main.py
