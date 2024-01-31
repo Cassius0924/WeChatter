@@ -46,6 +46,7 @@ class Sender:
     """v2 版本 api 消息发送类"""
 
     url = f"{config.wx_webhook_host}:{config.wx_webhook_port}/webhook/msg/v2"
+    v1_url = f"{config.wx_webhook_host}:{config.wx_webhook_port}/webhook/msg"
 
     # 发送文本消息或链接文件
     """
@@ -239,7 +240,7 @@ class Sender:
         data = {"to": to_p_name, "isRoom": 0}
         files = {"content": open(file_path, "rb")}
         return _retry(
-            3, lambda: _check(requests.post(Sender.url, data=data, files=files))
+            3, lambda: _check(requests.post(Sender.v1_url, data=data, files=files))
         )
 
     @staticmethod
@@ -248,7 +249,8 @@ class Sender:
         data = {"to": to_g_name, "isRoom": 1}
         files = {"content": open(file_path, "rb")}
         return _retry(
-            3, lambda: _check(requests.post(Sender.url, data=data, files=files))
+            3,
+            lambda: _check(requests.post(Sender.v1_url, data=data, files=files)),
         )
 
     @staticmethod
