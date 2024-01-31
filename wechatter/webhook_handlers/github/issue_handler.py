@@ -1,3 +1,5 @@
+from loguru import logger
+
 from wechatter.models.github import GithubIssueWebhook
 from wechatter.sender.sender import Sender
 from wechatter.webhook_handlers.hanlders import github_webhook_handler
@@ -6,7 +8,7 @@ from wechatter.webhook_handlers.hanlders import github_webhook_handler
 @github_webhook_handler("issues")
 def handle_issue(data: dict):
     payload = GithubIssueWebhook(**data)
-    print(
+    logger.info(
         f"Issue {payload.issue.number} was {payload.action} by {payload.issue.user.login}."
     )
     message = (

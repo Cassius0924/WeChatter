@@ -1,5 +1,6 @@
 # b站热搜命令
 from typing import Dict
+
 import requests
 
 from wechatter.commands.handlers import command

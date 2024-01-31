@@ -1,6 +1,6 @@
 from PIL import Image, ImageDraw, ImageFont
 
-from wechatter.utils.path_manager import PathManager
+import wechatter.utils.path_manager as pm
 
 
 def text_to_image(data: str) -> str:
@@ -20,7 +20,7 @@ def text_to_image(data: str) -> str:
     image = Image.new("RGB", (image_width, image_height), background_color)
 
     # 选择字体和字体大小
-    font_path = PathManager.get_abs_path("assets/fonts/SimHei.ttf")
+    font_path = pm.get_abs_path("assets/fonts/SimHei.ttf")
     font_size = 25
     font = ImageFont.truetype(font_path, font_size)
 
@@ -47,6 +47,6 @@ def text_to_image(data: str) -> str:
         y_position = 50  # 重置下一列的y_position
 
     # 保存图像
-    output_image_path = PathManager.get_abs_path("data/text_image/help.png")
+    output_image_path = pm.get_abs_path("data/text_image/help.png")
     image.save(output_image_path)
     return output_image_path

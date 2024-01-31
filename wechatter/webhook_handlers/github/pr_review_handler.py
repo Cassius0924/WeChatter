@@ -1,3 +1,5 @@
+from loguru import logger
+
 from wechatter.models.github import GithubPrReviewWebhook
 from wechatter.sender import Sender
 from wechatter.webhook_handlers.hanlders import github_webhook_handler
@@ -6,7 +8,9 @@ from wechatter.webhook_handlers.hanlders import github_webhook_handler
 @github_webhook_handler("pull_request_review")
 def handle_pr_review(data: dict):
     payload = GithubPrReviewWebhook(**data)
-    print(f"Pull Request Review {payload.review.state} by {payload.review.user.login}.")
+    logger.info(
+        f"Pull Request Review {payload.review.state} by {payload.review.user.login}."
+    )
     message = (
         "==== GitHub Pull Request Review 事件 ====\n"
         f"⬇️ 有 PR Review 被 {payload.review.state.capitalize()} ！\n"
