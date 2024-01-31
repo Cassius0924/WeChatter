@@ -1,10 +1,10 @@
 # URL转二维码命令
 import qrcode
 
+import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
 from wechatter.models.message import SendTo
 from wechatter.sender import Sender
-from wechatter.utils.path_manager import PathManager as pm
 from wechatter.utils.time import get_current_datetime
 
 

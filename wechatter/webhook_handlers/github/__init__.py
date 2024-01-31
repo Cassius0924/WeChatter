@@ -9,7 +9,6 @@ from .pr_review_handler import handle_pr_review
 from .push_handler import handle_push
 from .star_handler import handle_star
 
-
 __all__ = [
     "handle_create",
     "handle_delete",

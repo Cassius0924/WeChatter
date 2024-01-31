@@ -1,3 +1,5 @@
+from loguru import logger
+
 from wechatter.models.github import GithubDeleteWebhook
 from wechatter.sender import Sender
 from wechatter.webhook_handlers.hanlders import github_webhook_handler
@@ -7,7 +9,7 @@ from wechatter.webhook_handlers.hanlders import github_webhook_handler
 def handle_delete(data: dict):
     payload = GithubDeleteWebhook(**data)
     if payload.ref_type == "branch":
-        print(f"Branch {payload.ref} was deleted by {payload.sender.login}")
+        logger.info(f"Branch {payload.ref} was deleted by {payload.sender.login}")
         message = (
             "==== GitHub Delete 事件 ====\n"
             f"🚮 有分支被删除了！\n"
@@ -18,7 +20,7 @@ def handle_delete(data: dict):
         )
         Sender.send_msg_to_github_webhook_receivers(message)
     elif payload.ref_type == "tag":
-        print(f"Tag {payload.ref} was deleted by {payload.sender.login}")
+        logger.info(f"Tag {payload.ref} was deleted by {payload.sender.login}")
         message = (
             "==== GitHub Delete 事件 ====\n"
             f"🚮 有标签被删除了！\n"

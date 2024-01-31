@@ -1,3 +1,5 @@
+from loguru import logger
+
 from wechatter.models.github import GithubCreateWebhook
 from wechatter.sender import Sender
 from wechatter.webhook_handlers.hanlders import github_webhook_handler
@@ -7,7 +9,7 @@ from wechatter.webhook_handlers.hanlders import github_webhook_handler
 def handle_create(data: dict):
     payload = GithubCreateWebhook(**data)
     if payload.ref_type == "branch":
-        print(f"Branche {payload.ref} was created by {payload.sender.login}.")
+        logger.info(f"Branche {payload.ref} was created by {payload.sender.login}.")
         message = (
             "==== GitHub Create 事件 ====\n"
             "🆕 有新的分支创建！\n"
@@ -18,7 +20,7 @@ def handle_create(data: dict):
         )
         Sender.send_msg_to_github_webhook_receivers(message)
     elif payload.ref_type == "tag":
-        print(f"Tag {payload.ref} was created by {payload.sender.login}.")
+        logger.info(f"Tag {payload.ref} was created by {payload.sender.login}.")
         message = (
             "==== GitHub Create 事件 ====\n"
             "🆕 有新的标签创建！\n"

@@ -1,3 +1,5 @@
+from loguru import logger
+
 from wechatter.models.github import GithubPushWebhook
 from wechatter.sender import Sender
 from wechatter.webhook_handlers.hanlders import github_webhook_handler
@@ -6,7 +8,9 @@ from wechatter.webhook_handlers.hanlders import github_webhook_handler
 @github_webhook_handler("push")
 def handle_push(data: dict):
     payload = GithubPushWebhook(**data)
-    print(f"Push event on {payload.ref} in repository {payload.repository.full_name}.")
+    logger.info(
+        f"Push event on {payload.ref} in repository {payload.repository.full_name}."
+    )
     branch_url = payload.repository.html_url + "/tree/" + payload.ref.split("/")[-1]
     # 用 h5 的 a 标签，用于在微信中打开（经测试微信会吞掉 href 里的链接），下面方法失效
     # branch_url = '<a href=" https://github.com/Cassius0924 ">查看详情</a>'

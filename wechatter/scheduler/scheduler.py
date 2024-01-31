@@ -1,6 +1,7 @@
 from typing import List
 
 from apscheduler.schedulers.background import BackgroundScheduler
+from loguru import logger
 
 from wechatter.models.scheduler import CronTask
 
@@ -26,9 +27,9 @@ class Scheduler:
         for ct in CRON_TASKS:
             self.scheduler.add_job(ct.func, ct.trigger)
         self.scheduler.start()
-        print("定时任务已启动")
+        logger.info("定时任务已启动")
 
     def shutdown(self):
         """停止定时任务"""
         self.scheduler.shutdown()
-        print("定时任务已停止")
+        logger.info("定时任务已停止")

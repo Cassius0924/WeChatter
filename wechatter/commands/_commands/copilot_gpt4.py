@@ -4,11 +4,11 @@ from typing import List, Union
 import requests
 
 import wechatter.config as config
+import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
 from wechatter.models.message import SendMessage, SendMessageType, SendTo
 from wechatter.sender import Sender
 from wechatter.sqlite.sqlite_manager import SqliteManager
-from wechatter.utils.path_manager import PathManager as pm
 from wechatter.utils.time import get_current_timestamp
 
 DEFAULT_TOPIC = "（对话进行中*）"
@@ -197,10 +197,7 @@ class CopilotGPT4:
     save_path = pm.get_abs_path("data/copilot_gpt4/chats/")
 
     @staticmethod
-    def create_chat(
-        wx_id: str,
-        model: str,
-    ) -> ChatInfo:
+    def create_chat(wx_id: str, model: str) -> ChatInfo:
         """创建一个新的对话"""
         # 生成上一次对话的主题
         CopilotGPT4._generate_chating_chat_topic(wx_id, model)
@@ -479,7 +476,7 @@ class CopilotGPT4:
                     "role": conv[0],
                     "content": conv[1],
                     "timestamp": conv[2],
-                }
+                },
             )
         return conversations
 

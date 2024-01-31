@@ -1,15 +1,15 @@
 # 天气命令
 import json
-from typing import List, Dict
+from typing import Dict, List
 
 import requests
 from bs4 import BeautifulSoup
 from requests import Response
 
+import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
 from wechatter.models.message import SendMessage, SendMessageType, SendTo
 from wechatter.sender import Sender
-from wechatter.utils.path_manager import PathManager
 from wechatter.utils.time import get_current_hour, get_current_minute, get_current_ymd
 
 
@@ -77,16 +77,6 @@ WEATHER_CONDITIONS = {
     7: "小雨",
     8: "中雨",
     9: "大雨",
-    "00": "晴",
-    "01": "多云",
-    "02": "阴",
-    "03": "阵雨",
-    "04": "雷阵雨",
-    "05": "雷阵雨伴有冰雹",
-    "06": "雨夹雪",
-    "07": "小雨",
-    "08": "中雨",
-    "09": "大雨",
     10: "暴雨",
     11: "大暴雨",
     12: "特大暴雨",
@@ -167,9 +157,7 @@ def _get_city_id(city_name: str) -> int:
     # 读取JSON
     try:
         with open(
-            PathManager.get_abs_path("assets/weather_china/city_ids.json"),
-            "r",
-            encoding="utf-8",
+            pm.get_abs_path("assets/weather_china/city_ids.json"), "r", encoding="utf-8"
         ) as f:
             city_ids = json.load(f)
     except Exception as e:
@@ -339,7 +327,7 @@ def get_weather_str(city_name: str) -> str:
     future_weather = _get_future_weather(h_data, h, 5)
     future_str = ""
     for index, hour in enumerate(future_weather):
-        future_str += f"{WEATHER_CONDITIONS[hour['ja']]}{hour['jb']}° "
+        future_str += f"{WEATHER_CONDITIONS[int(hour['ja'])]}{hour['jb']}° "
     # TODO: TIP 设计
     message = (
         f"🏙️ {c_data['cityname']} 📅 {date}\n"

@@ -2,8 +2,8 @@
 import sqlite3
 from typing import List, Tuple
 
-from wechatter.utils.file_manager import FileManager as fm
-from wechatter.utils.path_manager import PathManager as pm
+import wechatter.utils.file_manager as fm
+import wechatter.utils.path_manager as pm
 
 
 # 单例模式

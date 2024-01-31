@@ -1,3 +1,5 @@
+from loguru import logger
+
 from wechatter.models.github import GithubPingWebhook
 from wechatter.sender import Sender
 from wechatter.webhook_handlers.hanlders import github_webhook_handler
@@ -6,7 +8,7 @@ from wechatter.webhook_handlers.hanlders import github_webhook_handler
 @github_webhook_handler("ping")
 def handle_ping(data: dict):
     payload = GithubPingWebhook(**data)
-    print(f"Ping from {payload.repository.full_name}.")
+    logger.info(f"Ping from {payload.repository.full_name}.")
     message = (
         "==== GitHub Ping 事件 ====\n"
         "❇️ 有 Ping 事件！\n"
