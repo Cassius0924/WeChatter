@@ -1,6 +1,7 @@
 from typing import List
 
 import requests
+import json
 
 from wechatter.commands.handlers import command
 from wechatter.models.message import SendMessage, SendMessageType, SendTo
@@ -74,7 +75,8 @@ def get_food_namelist(message: str) -> List:
         return []
 
     try:
-        data = response.json().loads(response.text)
+        text = response.text
+        data = json.loads(text)
         food_list = data["list"]
         return food_list
     except Exception as e:
