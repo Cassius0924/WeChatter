@@ -71,8 +71,6 @@ def get_food_namelist(message: str) -> List:
     }
 
     response = requests.post(url, headers=headers, data=data)
-    if response.status_code != 200:
-        return []
 
     try:
         text = response.text
