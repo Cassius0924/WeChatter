@@ -14,7 +14,6 @@ from wechatter.sender import Sender
     value=51,
 )
 def food_calories_command_handler(to: SendTo, message: str = "") -> None:
-    # 获取食物热量
     try:
         response = get_food_str(message)
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, response))
@@ -75,7 +74,9 @@ def get_food_namelist(message: str) -> List:
         return []
 
     try:
-        return response.json().get("list")
+        data = response.json().loads(response.text)
+        food_list = data["list"]
+        return food_list
     except Exception as e:
         print(f"解析食物列表失败, 错误信息: {str(e)}")
         return []
