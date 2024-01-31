@@ -16,6 +16,7 @@ LOGURU_FORMAT = (
 LOG_FILE = "logs/wechatter_{time:YYYY-MM-DD}.log"
 
 
+# 将 FastAPI 的日志记录到 Loguru 中
 class InterceptHandler(logging.Handler):
     def emit(self, record):
         # 获取对应的 Loguru 级别（如果存在）

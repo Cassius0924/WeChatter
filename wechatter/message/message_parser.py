@@ -1,6 +1,8 @@
 # 消息解析器
 import re
 
+from loguru import logger
+
 import wechatter.config as config
 from wechatter.bot.bot_info import BotInfo
 from wechatter.models.message import Message, SendTo
@@ -19,13 +21,12 @@ class MessageHandler:
         content = message.content  # 消息内容
         # 消息内容格式: /<cmd> <arg>
         cmd_dict = self.parse_command(content, message.is_mentioned, message.is_group)
-        cmd_desc = cmd_dict["desc"]
 
-        print(cmd_desc)
+        logger.info(cmd_dict["desc"])
 
         # 非命令消息
         if cmd_dict["command"] == "None":
-            print("该消息不是命令类型")
+            logger.info("该消息不是命令类型")
             return
 
         # TODO: 判断是否引用消息，接着判断引用是否为“可引用的命令回复”消息
@@ -34,7 +35,7 @@ class MessageHandler:
 
         # TODO: 可以为不同的群设置是否need_mentioned
         if config.need_mentioned and message.is_group and not message.is_mentioned:
-            print("该消息为群消息，但未@机器人，不处理")
+            logger.debug("该消息为群消息，但未@机器人，不处理")
             return
 
         to = SendTo(message.source)
@@ -48,7 +49,7 @@ class MessageHandler:
         if cmd_handler is not None:
             cmd_handler(to, cmd_dict["arg"])
         else:
-            print("该命令未实现")
+            logger.error("该命令未实现")
         return
 
     def parse_command(self, content: str, is_mentioned: bool, is_group: bool) -> dict:

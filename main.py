@@ -2,15 +2,24 @@
 import uvicorn
 from loguru import logger
 
-import wechatter.config as config
 import wechatter.utils.file_manager as fm
-from wechatter.app.app import app
-from wechatter.bot.bot_info import BotInfo
 from wechatter.init_logger import init_logger
-from wechatter.sqlite.sqlite_manager import SqliteManager
 
 
 def main():
+    # 初始化 logger
+    init_logger()
+
+    # isort: off
+    # 在初始化 logger 之后导入 config 模块
+    from wechatter.config import config
+
+    # 为了让此文件的 config 模块是首次导入，下面这些模块需要放到 config 导入之后
+    from wechatter.app.app import app
+    from wechatter.bot.bot_info import BotInfo
+    from wechatter.sqlite.sqlite_manager import SqliteManager
+    # isort: on
+
     BotInfo.update_name(config.bot_name)
     # 创建文件夹
     fm.check_and_create_folder("data/qrcodes")
@@ -21,9 +30,7 @@ def main():
     # 创建数据库表
     sqlite_manager = SqliteManager("data/wechatter.sqlite")
     sqlite_manager.excute_folder("wechatter/sqlite/sqls")
-    # 日志文件
-    # 将 FastAPI 的日志输出到文件中
-    init_logger()
+
     logger.info("Wechatter 启动成功！")
     # 启动uvicorn
     uvicorn.run(app, host="0.0.0.0", port=config.wechatter_port)
