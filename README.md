@@ -1,12 +1,12 @@
-# 基于 WxBotWebhook 的微信机器人
+# WeChatter
 
 ## 介绍
 
-基于[wechatbot-webhook](https://github.com/danni-cool/wechatbot-webhook)
+基于 [wechatbot-webhook](https://github.com/danni-cool/wechatbot-webhook) 的微信机器人💬，支持 GPT 问答、热搜、天气预报、消息转发、Webhook提醒等功能。
 
 ## 快速开始
 
-### 运行 wxBotWebhook
+### 运行 wechatbot-webhook
 
 1. 拉取 Docker 镜像
 
@@ -53,7 +53,7 @@ cp config.ini.example config.ini
 vim config.ini
 ```
 
-3. 启动服务器
+3. 启动 WeChatter
 
 ```bash
 python3 main.py
@@ -62,6 +62,37 @@ python3 main.py
 4. 测试机器人
 
 使用另一个微信给机器人发送 `/help` 指令。
+
+## 支持的命令
+
+- [x] GPT问答，基于 [Copilot-GPT4-Server](https://github.com/aaamoon/copilot-gpt4-service)
+- [x] 获取B站热搜
+- [x] 获取知乎热搜
+- [x] 获取微博热搜
+- [x] 获取抖音热搜
+- [x] 获取GitHub趋势
+- [x] 单词/词语翻译
+- [x] 获取少数派早报
+- [x] 获取历史上的今天
+- [x] 二维码生成器
+- [x] 待办清单（TODO）
+- [x] 获取人民日报PDF
+- [x] 获取天气预报
+
+> [!TIP]
+> 更多命令使用 `/help` 命令查看。
+
+## 支持的功能
+
+- [x] 消息转发，需[配置](#%EF%B8%8F-message-forwarding-配置)
+- [x] 天气预报定时推送，需[配置](#%EF%B8%8F-weather-cron-配置)
+
+## 支持的 Webhook
+
+- [x] GitHub 仓库 Webhook，需[配置](#%EF%B8%8F-github-webhook-配置)
+
+> [!NOTE]
+> 需要在 GitHub 仓库 Settings 中添加 Webhook
 
 ## 配置文件
 
@@ -79,6 +110,7 @@ python3 main.py
 
 | 配置项 | 解释 | 备注 |
 | --- | --- |  --- |
+| `wx_webhook_host` | 发送消息的地址 | 默认为 `localhost`，需和 `wxBotWebhook` 的 Docker IP 地址一致 |
 | `wx_webhook_port` | 发送消息的端口 | 默认为 `3001`，需和 `wxBotWebhook` 的 Docker 端口一致 |
 | `wx_webhook_recv_api_path` | 接收消息的接口路径 | 默认为 `/receive_msg`，此路径为 `RECV_MSG_API` 的路径 |
 
@@ -124,36 +156,24 @@ python3 main.py
 | 配置项 | 子项 | 解释 | 备注 |
 | --- | --- |  --- | --- |
 | `message_forwarding_enabled` | | 功能开关，是否开启消息转发 | 默认为 `False` |
-| `message_forwarding_rules` | | 消息规则列表，每个规则包含三个字段：`froms`, `to_persons` 和 `to_groups` | 一个由字典组成的JSON列表，最后的 `]` 不能单独一行 |
+| `message_forwarding_rules` | | 消息规则列表，每个规则包含三个字段：`froms`, `to_persons` 和 `to_groups` | 规则是由字典组成的JSON列表，最后的 `]` 不能单独一行 |
 | ➤➤➤ | `froms` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称 |
 | ➤➤➤ | `to_persons` | 消息转发目标用户列表，即消息接收用户 | 可以填多个用户名称或为空列表 |
 | ➤➤➤ | `to_groups` | 消息转发目标群列表，即消息接收群 | 可以填多个群名称或为空列表 |
 
-## 支持的命令
+### ⚙️ Weather Cron 配置
 
-- [x] GPT问答，基于 [Copilot-GPT4-Server](https://github.com/aaamoon/copilot-gpt4-service)
-- [x] 获取B站热搜
-- [x] 获取知乎热搜
-- [x] 获取微博热搜
-- [x] 获取抖音热搜
-- [x] 获取GitHub趋势
-- [x] 单词/词语翻译
-- [x] 获取少数派早报
-- [x] 获取历史上的今天
-- [x] 二维码生成器
-- [x] 待办清单（TODO）
-- [x] 获取人民日报PDF
+| 配置项 | 解释 | 备注 |
+| --- | --- |  --- |
+| `weather_cron_enabled` | 功能开关，是否开启定时天气推送 | 默认为 `False` |
+| `weather_cron_rules` | 推送规则列表，每个规则包含两个字段：`cron` 和 `tasks` | 规则是由字典组成的JSON列表 |
 
-> [!TIP]
-> 更多命令使用 `/help` 命令查看。
+关于`cron`和`tasks`的配置见[Weather Cron 配置详细](docs/config_detail.md#weather-cron-配置详细)
 
-## 支持的功能
-
-- [x] 消息转发，需[配置](#%EF%B8%8F-message-forwarding-配置)
-
-## 支持的 Webhook
-
-- [x] GitHub 仓库 Webhook，需[配置](#%EF%B8%8F-github-webhook-配置)
+## 插件化
 
 > [!NOTE]
-> 需要在 GitHub 仓库 Settings 中添加 Webhook
+> 开发中...
+
+> [!WARNING]
+> 本项目仍在开发中，欢迎提出建议和意见。

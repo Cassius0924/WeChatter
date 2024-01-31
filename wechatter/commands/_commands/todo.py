@@ -9,6 +9,7 @@ from wechatter.sender import Sender
 from wechatter.utils.path_manager import PathManager as pm
 
 
+# TODO: 使用SQLite进行数据持久化
 @command(
     command="todo",
     keys=["待办事项", "待办", "todo"],

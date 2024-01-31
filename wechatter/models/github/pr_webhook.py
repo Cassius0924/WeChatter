@@ -1,6 +1,8 @@
 from typing import Optional
+
 from pydantic import BaseModel
-from wechatter.models.github.base import User, Repository
+
+from wechatter.models.github.base import Repository, User
 
 
 class PrRepository(Repository):

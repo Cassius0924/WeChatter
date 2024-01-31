@@ -1,5 +1,6 @@
 from enum import Enum
 from typing import List
+
 from wechatter.models.message.message import MessageSource
 
 
