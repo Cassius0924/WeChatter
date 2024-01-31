@@ -48,7 +48,7 @@ def get_food_str(message: str) -> str:
         Fat = food_list[i][9]
         Carbohydrate = food_list[i][12]
         Dietary_fiber = food_list[i][13]
-        food_str += f"{i + 1}. {food_name}\n✅能量:{energy_str}\n✅俗名:{Another_name:<12}✅英文名:{English_name}\n✅可食部分:{Edible:<10}✅水分:{Water}\n✅蛋白质:{Protein:<11}✅脂肪:{Fat}\n✅碳水化合物:{Carbohydrate:<9}✅膳食纤维:{Dietary_fiber}\n\n"
+        food_str += f"{i + 1}. {food_name}\n✅能量:{energy_str}\n✅俗名:{Another_name:<12}✅英文名:{English_name}\n✅可食部分:{Edible:<8}✅水分:{Water}\n✅蛋白质:{Protein:<10}✅脂肪:{Fat}\n✅碳水化合物:{Carbohydrate:<6}✅膳食纤维:{Dietary_fiber}\n\n"
     return food_str
 
 def get_food_namelist(message: str) -> List:
