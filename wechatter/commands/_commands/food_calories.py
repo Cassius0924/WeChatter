@@ -43,9 +43,6 @@ def get_food_list_html(name: str, href: str) -> str:
     response: requests.Response
 
     keyword = get_URL_encoding(name)  # 获取URL编码
-    href = get_food_href_list(href)  # 获取食物链接
-    if not href:
-        raise Exception("damn")
 
     try:
         url = f"https://www.boohee.com{href}"
@@ -117,7 +114,6 @@ def get_URL_encoding(message: str) -> str:
 
 
 def get_food_href_list(message: str) -> List[Dict[str, str]]:
-    print(message)
     try:
         url = f"https://www.boohee.com/food/search?keyword={message}"
         headers = {
@@ -143,7 +139,7 @@ def get_food_href_list(message: str) -> List[Dict[str, str]]:
         if href_list_item:
             href_list.append(href_list_item)
 
-    # if not href_list:
-    #     raise Exception("解析食物链接失败")
+    if not href_list:
+        raise Exception("解析食物链接失败")
 
     return href_list
