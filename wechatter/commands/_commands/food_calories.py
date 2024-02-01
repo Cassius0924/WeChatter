@@ -30,7 +30,7 @@ def get_food_str(message: str) -> str:
     if not food_list:
         return "获取食物列表失败"
 
-    food_str = "✨=====食物列表=====✨\n🔵=====含量(100克)=====🔵\n"
+    food_str = "✨=====食物列表=====✨\n🔵====含量(100克)====🔵\n"
     for i, food in enumerate(food_list[:5]):
         food_name = food.get("name")
         food_all_name = food.get("all_name")
@@ -85,7 +85,6 @@ def get_food_list_html(name: str, href: str) -> str:
     #
     food_detail += f"✅{energy:<10}{Energy}\n✅{carbohydrate:<10}{Carbohydrate}\n✅{fat:<10}{Fat}\n✅{protein:<10}{Protein}\n✅{dietary_fiber:<10}{Dietary_fiber}\n"
 
-    print(get_food_det)
     return food_detail
 
 
