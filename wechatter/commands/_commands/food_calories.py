@@ -86,7 +86,7 @@ def get_food_list_html(name: str, href: str) -> str:
 
     return food_detail
 
-def get_food_detail(response: str) -> list[dict[str, Any]]:
+def get_food_detail(response: str) -> list:
 
     soup = BeautifulSoup(response, "html.parser")
     food_detail = []
