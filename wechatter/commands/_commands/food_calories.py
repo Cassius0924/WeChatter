@@ -38,6 +38,8 @@ def get_food_str(message: str) -> str:
 
         food_str += f"{i + 1}. {food_name}\n{food_detail}\n\n"
 
+    return food_str
+
 
 def get_food_list_html(name: str, href: str) -> str:
     response: requests.Response
