@@ -117,7 +117,23 @@ def get_URL_encoding(message: str) -> str:
 def get_food_href_list(message: str) -> List[Dict[str, str]]:
     try:
         url = f"https://www.boohee.com/food/search?keyword={message}"
-        response = requests.get(url, timeout=10)
+        headers = {
+            'authority': 'www.boohee.com',
+            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
+            'cookie': 'Hm_lvt_7263598dfd4db0dc29539a51f116b23a=1706356236; acw_tc=0b68a81617067204120465900e927fd6fbf44399a30eebaf658011ec9947f3; _mboohee_session=a2lsRSt1djJCL3ppNDRmdU53bUovSHpvbVBSaCswMTFwME5nSTZXWGJQbExMR1dqV1ozTkJxMTBHRXl4ZmpjMDZkUHd6NE9CUUF6MW9ZMW1ZSUgyR0hQbElHcm1xQXVzNXFwRDVGQjlpVWpJd0RlODZmWGNsMlpRWC8wYkxVbitFaHZ0WVA2VDc3aUp4bGdSZkx6dnN3PT0tLTUxdDVvbWxVcUVGMFhESnB6VzZJS2c9PQ^%^3D^%^3D--adf27b85cfd243fb59157fff7a23794f47d05460; Hm_lpvt_7263598dfd4db0dc29539a51f116b23a=1706720434',
+            'referer': 'https://www.boohee.com/food',
+            'sec-ch-ua': '^\^"Not A(Brand^\^";v=^\^"99^\^", ^\^"Microsoft Edge^\^";v=^\^"121^\^", ^\^"Chromium^\^";v=^\^"121^\^""',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '^\^"Windows^\^"',
+            'sec-fetch-dest': 'document',
+            'sec-fetch-mode': 'navigate',
+            'sec-fetch-site': 'same-origin',
+            'sec-fetch-user': '?1',
+            'upgrade-insecure-requests': '1',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
+        }
+        response = requests.get(url, timeout=10, headers=headers)
     except Exception as e:
         raise Exception(f"获取食物链接失败，错误信息：{e}")
 
