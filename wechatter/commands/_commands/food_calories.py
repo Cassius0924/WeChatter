@@ -33,10 +33,11 @@ def get_food_str(message: str) -> str:
     food_str = "✨===食物列表===✨\n  每100克含量\n"
     for i, food in enumerate(food_list[:5]):
         food_name = food.get("name")
+        food_all_name = food.get("all_name")
         food_href = food.get("href")
         food_detail = get_food_list_html(food_name, food_href)
 
-        food_str += f"{i + 1}. {food_name}\n{food_detail}\n"
+        food_str += f"{i + 1}. {food_all_name}\n{food_detail}\n"
 
     return food_str
 
@@ -135,6 +136,7 @@ def get_food_href_list(message: str) -> List[Dict[str, str]]:
         name = article.select_one("a").text.strip()
         if name:
             href_list_item["name"] = name.split("，")[0]
+            href_list_item["all_name"] = name
         href = article.a["href"]
         if href:
             href_list_item["href"] = href
