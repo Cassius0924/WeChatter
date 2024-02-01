@@ -19,30 +19,15 @@ from wechatter.utils import get_request
 )
 def pai_post_command_handler(to: SendTo, message: str = "") -> None:
     try:
-        response = get_pai_post_str()
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, response))
+        response = get_request(url="https://sspai.com/")
+        pai_post_list = parse_pai_post_response(response)
+        result = generate_pai_post_message(pai_post_list)
     except Exception as e:
         error_message = f"获取少数派早报失败，错误信息：{e}"
         logger.error(error_message)
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
-
-
-def get_pai_post_str() -> str:
-    response = get_request(url="https://sspai.com/")
-    try:
-        pai_post_list = parse_pai_post_response(response)
-    except Bs4ParsingError:
-        logger.error("少数派早报列表返回值格式错误")
-        raise Bs4ParsingError("少数派早报列表返回值格式错误")
-
-    if not pai_post_list:
-        return "少数派早报列表为空"
-
-    pai_post_str = "✨=====派早报=====✨\n"
-    for i, pai_post in enumerate(pai_post_list):
-        pai_post_str += f"{i + 1}. {pai_post.get('title')}\n"
-
-    return pai_post_str
+    else:
+        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
 
 
 def parse_pai_post_response(response: requests.Response) -> List[Dict[str, str]]:
@@ -60,6 +45,17 @@ def parse_pai_post_response(response: requests.Response) -> List[Dict[str, str]]
             pai_post_list.append(pai_post_item)
 
     if not pai_post_list:
-        raise Bs4ParsingError
+        raise Bs4ParsingError("少数派早报列表返回值格式错误")
 
     return pai_post_list
+
+
+def generate_pai_post_message(pai_post_list: List) -> str:
+    if not pai_post_list:
+        return "少数派早报列表为空"
+
+    pai_post_str = "✨=====派早报=====✨\n"
+    for i, pai_post in enumerate(pai_post_list):
+        pai_post_str += f"{i + 1}. {pai_post.get('title')}\n"
+
+    return pai_post_str
