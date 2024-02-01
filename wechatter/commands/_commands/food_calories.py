@@ -123,7 +123,7 @@ def get_food_href_list(message: str) -> List[Dict[str, str]]:
 
     soup = BeautifulSoup(response.text, "html.parser")
     href_list = []
-    articles = soup.select("div.text-box pull-left")
+    articles = soup.select("div.text-box")
     for article in articles:
         href_list_item = {}
 
@@ -137,7 +137,7 @@ def get_food_href_list(message: str) -> List[Dict[str, str]]:
         if href_list_item:
             href_list.append(href_list_item)
 
-    # if not href_list:
-    #     raise Exception("解析食物链接失败")
+    if not href_list:
+        raise Exception("解析食物链接失败")
 
     return href_list
