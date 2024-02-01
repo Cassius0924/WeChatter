@@ -13,19 +13,22 @@ from wechatter.utils import get_request_json
 )
 def bili_hot_command_handler(to: SendTo, message: str = "") -> None:
     try:
-        r_json = get_request_json(
-            url="https://app.bilibili.com/x/v2/search/trending/ranking"
-        )
-        hot_list = extract_bili_hot_data(r_json)
-        response = generate_bili_hot_message(hot_list)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, response))
+        result = get_bili_hot_str()
     except Exception as e:
         error_message = f"获取Bilibili热搜失败，错误信息: {str(e)}"
         logger.error(error_message)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, message))
+        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
+    else:
+        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
 
 
-def extract_bili_hot_data(r_json: Dict) -> List:
+def get_bili_hot_str() -> str:
+    response = get_request_json(url="https://app.bilibili.com/x/v2/search/trending/ranking")
+    hot_list = _extract_bili_hot_data(response)
+    return _generate_bili_hot_message(hot_list)
+
+
+def _extract_bili_hot_data(r_json: Dict) -> List:
     try:
         hot_list = r_json["data"]["list"]
     except (KeyError, TypeError) as e:
@@ -34,7 +37,7 @@ def extract_bili_hot_data(r_json: Dict) -> List:
     return hot_list
 
 
-def generate_bili_hot_message(hot_list: List) -> str:
+def _generate_bili_hot_message(hot_list: List) -> str:
     if not hot_list:
         return "暂无Bilibili热搜"
 

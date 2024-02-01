@@ -1,0 +1,202 @@
+[
+    {
+        "author": "danielmiessler",
+        "repo": "fabric",
+        "comment": "fabric is an open-source framework for augmenting humans using AI.",
+        "programmingLanguage": "Python",
+        "star_total": "2,538",
+        "star_today": "1,139 today"
+    },
+    {
+        "author": "InkboxSoftware",
+        "repo": "excelCPU",
+        "comment": "16-bit CPU for Excel, and related files",
+        "programmingLanguage": "Python",
+        "star_total": "2,507",
+        "star_today": "337 today"
+    },
+    {
+        "author": "f",
+        "repo": "awesome-chatgpt-prompts",
+        "comment": "This repo includes ChatGPT prompt curation to use ChatGPT better.",
+        "programmingLanguage": "HTML",
+        "star_total": "98,933",
+        "star_today": "115 today"
+    },
+    {
+        "author": "all-in-aigc",
+        "repo": "aicover",
+        "comment": "ai cover generator",
+        "programmingLanguage": "TypeScript",
+        "star_total": "973",
+        "star_today": "205 today"
+    },
+    {
+        "author": "facebookresearch",
+        "repo": "codellama",
+        "comment": "Inference code for CodeLlama models",
+        "programmingLanguage": "Python",
+        "star_total": "12,972",
+        "star_today": "197 today"
+    },
+    {
+        "author": "webprodigies",
+        "repo": "plura-production",
+        "comment": "No description.",
+        "programmingLanguage": "TypeScript",
+        "star_total": "315",
+        "star_today": "43 today"
+    },
+    {
+        "author": "ExOK",
+        "repo": "Celeste64",
+        "comment": "A game made by the Celeste developers in a week(ish, closer to 2)",
+        "programmingLanguage": "C#",
+        "star_total": "895",
+        "star_today": "170 today"
+    },
+    {
+        "author": "haotian-liu",
+        "repo": "LLaVA",
+        "comment": "[NeurIPS'23 Oral] Visual Instruction Tuning (LLaVA) built towards GPT-4V level capabilities and beyond.",
+        "programmingLanguage": "Python",
+        "star_total": "13,169",
+        "star_today": "155 today"
+    },
+    {
+        "author": "mlflow",
+        "repo": "mlflow",
+        "comment": "Open source platform for the machine learning lifecycle",
+        "programmingLanguage": "Python",
+        "star_total": "16,583",
+        "star_today": "127 today"
+    },
+    {
+        "author": "PKU-YuanGroup",
+        "repo": "MoE-LLaVA",
+        "comment": "Mixture-of-Experts for Large Vision-Language Models",
+        "programmingLanguage": "Python",
+        "star_total": "689",
+        "star_today": "219 today"
+    },
+    {
+        "author": "containerd",
+        "repo": "containerd",
+        "comment": "An open and reliable container runtime",
+        "programmingLanguage": "Go",
+        "star_total": "15,771",
+        "star_today": "96 today"
+    },
+    {
+        "author": "refinedev",
+        "repo": "refine",
+        "comment": "A React Framework for building internal tools, admin panels, dashboards & B2B apps with unmatched flexibility.",
+        "programmingLanguage": "TypeScript",
+        "star_total": "20,830",
+        "star_today": "125 today"
+    },
+    {
+        "author": "skyzh",
+        "repo": "mini-lsm",
+        "comment": "A tutorial of building an LSM-Tree storage engine in a week!",
+        "programmingLanguage": "Rust",
+        "star_total": "1,851",
+        "star_today": "82 today"
+    },
+    {
+        "author": "leptonai",
+        "repo": "search_with_lepton",
+        "comment": "Building a quick conversation-based search demo with Lepton AI.",
+        "programmingLanguage": "TypeScript",
+        "star_total": "5,112",
+        "star_today": "491 today"
+    },
+    {
+        "author": "vercel",
+        "repo": "next.js",
+        "comment": "The React Framework",
+        "programmingLanguage": "JavaScript",
+        "star_total": "117,655",
+        "star_today": "51 today"
+    },
+    {
+        "author": "practical-tutorials",
+        "repo": "project-based-learning",
+        "comment": "Curated list of project-based tutorials",
+        "programmingLanguage": "",
+        "star_total": "154,805",
+        "star_today": ""
+    },
+    {
+        "author": "microsoft",
+        "repo": "sample-app-aoai-chatGPT",
+        "comment": "[PREVIEW] Sample code for a simple web chat experience targeting chatGPT through AOAI.",
+        "programmingLanguage": "Python",
+        "star_total": "969",
+        "star_today": "69 today"
+    },
+    {
+        "author": "curl",
+        "repo": "curl",
+        "comment": "A command line tool and library for transferring data with URL syntax, supporting DICT, FILE, FTP, FTPS, GOPHER, GOPHERS, HTTP, HTTPS, IMAP, IMAPS, LDAP, LDAPS, MQTT, POP3, POP3S, RTMP, RTMPS, RTSP, SCP, SFTP, SMB, SMBS, SMTP, SMTPS, TELNET, TFTP, WS and WSS. libcurl offers a myriad of powerful features",
+        "programmingLanguage": "C",
+        "star_total": "33,134",
+        "star_today": "14 today"
+    },
+    {
+        "author": "deanxv",
+        "repo": "coze-discord-proxy",
+        "comment": "\u4ee3\u7406discord-bot\uff0capi\u8c03\u7528coze-bot",
+        "programmingLanguage": "Go",
+        "star_total": "573",
+        "star_today": "62 today"
+    },
+    {
+        "author": "open-compass",
+        "repo": "opencompass",
+        "comment": "OpenCompass is an LLM evaluation platform, supporting a wide range of models (InternLM2,GPT-4,LLaMa2, Qwen,GLM, Claude, etc) over 100+ datasets.",
+        "programmingLanguage": "Python",
+        "star_total": "1,848",
+        "star_today": "31 today"
+    },
+    {
+        "author": "xlucn",
+        "repo": "oh-my-foss-android",
+        "comment": "\u4e2a\u4eba\u6536\u96c6\u7684\u5b9e\u7528\u3001\u826f\u5fc3\u5f00\u6e90\u5b89\u5353\u8f6f\u4ef6",
+        "programmingLanguage": "",
+        "star_total": "1,251",
+        "star_today": ""
+    },
+    {
+        "author": "microsoft",
+        "repo": "terminal",
+        "comment": "The new Windows Terminal and the original Windows console host, all in the same place!",
+        "programmingLanguage": "C++",
+        "star_total": "92,410",
+        "star_today": "25 today"
+    },
+    {
+        "author": "chrismaltby",
+        "repo": "gb-studio",
+        "comment": "A quick and easy to use drag and drop retro game creator for your favourite handheld video game system",
+        "programmingLanguage": "C",
+        "star_total": "7,901",
+        "star_today": "15 today"
+    },
+    {
+        "author": "lizongying",
+        "repo": "my-tv",
+        "comment": "\u6211\u7684\u7535\u89c6 \u7535\u89c6\u76f4\u64ad\u8f6f\u4ef6\uff0c\u5b89\u88c5\u5373\u53ef\u4f7f\u7528",
+        "programmingLanguage": "C",
+        "star_total": "4,649",
+        "star_today": "493 today"
+    },
+    {
+        "author": "sudheerj",
+        "repo": "reactjs-interview-questions",
+        "comment": "List of top 500 ReactJS Interview Questions & Answers....Coding exercise questions are coming soon!!",
+        "programmingLanguage": "JavaScript",
+        "star_total": "34,814",
+        "star_today": "87 today"
+    }
+]

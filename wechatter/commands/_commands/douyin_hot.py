@@ -16,20 +16,22 @@ from wechatter.utils import get_request_json
 )
 def douyin_hot_command_handler(to: SendTo, message: str = "") -> None:
     try:
-        r_json = get_request_json(
-            url="https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/"
-        )
-        hot_list = extract_douyin_hot_data(r_json)
-        response = generate_douyin_hot_message(hot_list)
+        result = get_douyin_hot_str()
     except Exception as e:
         error_message = f"获取抖音热搜失败，错误信息: {str(e)}"
         logger.error(error_message)
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
     else:
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, response))
+        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
 
+def get_douyin_hot_str() -> str:
+    r_json = get_request_json(
+        url="https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/"
+    )
+    hot_list = _extract_douyin_hot_data(r_json)
+    return _generate_douyin_hot_message(hot_list)
 
-def extract_douyin_hot_data(r_json: Dict) -> List:
+def _extract_douyin_hot_data(r_json: Dict) -> List:
     try:
         hot_list = r_json["word_list"]
     except (KeyError, TypeError) as e:
@@ -38,7 +40,7 @@ def extract_douyin_hot_data(r_json: Dict) -> List:
     return hot_list
 
 
-def generate_douyin_hot_message(hot_list: List) -> str:
+def _generate_douyin_hot_message(hot_list: List) -> str:
     if not hot_list:
         return "暂无抖音热搜"
 
