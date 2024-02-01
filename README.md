@@ -65,13 +65,13 @@ vim config.ini
 python3 main.py
 ```
 
-4. 测试机器人
+5. 测试机器人
 
 使用另一个微信给机器人发送 `/help` 指令。
 
 ## 支持的命令
 
-- [x] GPT问答，基于 [Copilot-GPT4-Server](https://github.com/aaamoon/copilot-gpt4-service)
+- [x] GPT问答，基于 [Copilot-GPT4-Server](https://github.com/aaamoon/copilot-gpt4-service)，需[配置](#%EF%B8%8F-copilot-gpt4-配置)
 - [x] 获取B站热搜
 - [x] 获取知乎热搜
 - [x] 获取微博热搜

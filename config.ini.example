@@ -101,13 +101,12 @@ weather_cron_rules = [ {
           "timezone": "Asia/Shanghai"
         },
         "tasks": [ {
-          "city": "汕尾",
-          "to_persons": ["缘"],
-          "to_groups": ["WeChatter"]
+          "city": "天河",
+          "to_persons": ["张三", "Tom"],
+          "to_groups": ["测试群"]
         }, {
-          "city": "宜宾",
-          "to_persons": ["南北总关心"],
+          "city": "北京",
+          "to_persons": ["李四"],
           "to_groups": []
         } ]
     } ]
-
