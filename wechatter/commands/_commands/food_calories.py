@@ -61,33 +61,33 @@ def get_food_list_html(name: str, href: str) -> str:
     if not get_food_det:
         raise Exception("获取食物列表失败")
 
-    food_detail = "nig"
-    # name
-    energy = get_food_det[2]["name"]
-    carbohydrate = get_food_det[3]["name"]
-    fat = get_food_det[4]["name"]
-    protein = get_food_det[5]["name"]
-    dietary_fiber = get_food_det[6]["name"]
-    calcium = get_food_det[16]["name"]
-    iron = get_food_det[17]["name"]
-    zinc = get_food_det[18]["name"]
+    food_detail = ""
+    # # name
+    # energy = get_food_det[2]["name"]
+    # carbohydrate = get_food_det[3]["name"]
+    # fat = get_food_det[4]["name"]
+    # protein = get_food_det[5]["name"]
+    # dietary_fiber = get_food_det[6]["name"]
+    # calcium = get_food_det[16]["name"]
+    # iron = get_food_det[17]["name"]
+    # zinc = get_food_det[18]["name"]
+    #
+    # # value
+    # Energy = get_food_det[2]["value"]
+    # Carbohydrate = get_food_det[3]["value"]
+    # Fat = get_food_det[4]["value"]
+    # Protein = get_food_det[5]["value"]
+    # Dietary_fiber = get_food_det[6]["value"]
+    # Calcium = get_food_det[16]["value"]
+    # Iron = get_food_det[17]["value"]
+    # Zinc = get_food_det[18]["value"]
+    #
+    # food_detail += f"✅{energy:<10}{Energy}\n✅{carbohydrate:<10}{Carbohydrate}\n✅{fat:<10}{Fat}\n✅{protein:<10}{Protein}\n✅{dietary_fiber:<10}{Dietary_fiber}\n✅{calcium:<10}{Calcium}\n✅{iron:<10}{Iron}\n✅{zinc:<10}{Zinc}\n"
 
-    # value
-    Energy = get_food_det[2]["value"]
-    Carbohydrate = get_food_det[3]["value"]
-    Fat = get_food_det[4]["value"]
-    Protein = get_food_det[5]["value"]
-    Dietary_fiber = get_food_det[6]["value"]
-    Calcium = get_food_det[16]["value"]
-    Iron = get_food_det[17]["value"]
-    Zinc = get_food_det[18]["value"]
-
-    food_detail += f"✅{energy:<10}{Energy}\n✅{carbohydrate:<10}{Carbohydrate}\n✅{fat:<10}{Fat}\n✅{protein:<10}{Protein}\n✅{dietary_fiber:<10}{Dietary_fiber}\n✅{calcium:<10}{Calcium}\n✅{iron:<10}{Iron}\n✅{zinc:<10}{Zinc}\n"
-
-    # for nutrient in get_food_det:
-    #     nutrient_name = nutrient.get("name")
-    # nutrient_value = nutrient.get("value")
-    # food_detail += f"✅{nutrient_name:<10}{nutrient_value}\n"
+    for nutrient in get_food_det:
+        nutrient_name = nutrient.get("name")
+    nutrient_value = nutrient.get("value")
+    food_detail += f"✅{nutrient_name:<10}{nutrient_value}\n"
     return food_detail
 
 
