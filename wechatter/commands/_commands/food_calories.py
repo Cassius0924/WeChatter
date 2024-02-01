@@ -1,8 +1,7 @@
-from typing import List, Dict, Any
-
-import requests
+from typing import List, Dict
 from urllib.parse import quote
 
+import requests
 from bs4 import BeautifulSoup
 
 from wechatter.commands.handlers import command
@@ -62,7 +61,7 @@ def get_food_list_html(name: str, href: str) -> str:
         raise Exception("获取食物列表失败")
 
     food_detail = ""
-    #name
+    # name
     energy = food_all_deatil[2]["name"]
     carbohydrate = food_all_deatil[3]["name"]
     fat = food_all_deatil[4]["name"]
@@ -72,7 +71,7 @@ def get_food_list_html(name: str, href: str) -> str:
     iron = food_all_deatil[17]["name"]
     zinc = food_all_deatil[18]["name"]
 
-    #value
+    # value
     Energy = food_all_deatil[2]["value"]
     Carbohydrate = food_all_deatil[3]["value"]
     Fat = food_all_deatil[4]["value"]
@@ -86,8 +85,8 @@ def get_food_list_html(name: str, href: str) -> str:
 
     return food_detail
 
-def get_food_detail(response: str) -> list:
 
+def get_food_detail(response: str) -> list:
     soup = BeautifulSoup(response, "html.parser")
     food_detail = []
     articles = soup.find_all("dd")
@@ -114,10 +113,13 @@ def get_URL_encoding(message: str) -> str:
     url_encoding = quote(message)
     return url_encoding
 
+
 def get_food_href_list(message: str) -> List[Dict[str, str]]:
+
+    key = get_URL_encoding(message)
     try:
-        url = f"https://www.boohee.com/food/search?keyword={message}"
-        response = requests.get(url,timeout=10)
+        url = f"https://www.boohee.com/food/search?keyword={key}"
+        response = requests.get(url, timeout=10)
     except Exception as e:
         raise Exception(f"获取食物链接失败，错误信息：{e}")
 
@@ -133,7 +135,6 @@ def get_food_href_list(message: str) -> List[Dict[str, str]]:
         href = article.a["href"]
         if href:
             href_list_item["href"] = href
-
 
         if href_list_item:
             href_list.append(href_list_item)
