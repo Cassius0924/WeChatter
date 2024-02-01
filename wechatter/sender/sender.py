@@ -1,3 +1,4 @@
+import json
 import time
 from collections.abc import Callable
 from typing import List
@@ -30,6 +31,9 @@ def _check(response: requests.Response) -> bool:
         if task["successCount"] > 0 and task["successCount"] < task["totalCount"]:
             logger.warning(f"发送消息部分成功，成功数：{task['successCount']}")
             return True
+
+    body = json.loads(response.request.body.decode("utf-8"))
+    logger.info(f"发送消息成功，发送给：{body['to']}，发送的内容：{body['data']}")
     return True
 
 
@@ -46,6 +50,7 @@ class Sender:
     """v2 版本 api 消息发送类"""
 
     url = f"{config.wx_webhook_host}:{config.wx_webhook_port}/webhook/msg/v2"
+    v1_url = f"{config.wx_webhook_host}:{config.wx_webhook_port}/webhook/msg"
 
     # 发送文本消息或链接文件
     """
@@ -239,7 +244,7 @@ class Sender:
         data = {"to": to_p_name, "isRoom": 0}
         files = {"content": open(file_path, "rb")}
         return _retry(
-            3, lambda: _check(requests.post(Sender.url, data=data, files=files))
+            3, lambda: _check(requests.post(Sender.v1_url, data=data, files=files))
         )
 
     @staticmethod
@@ -248,7 +253,8 @@ class Sender:
         data = {"to": to_g_name, "isRoom": 1}
         files = {"content": open(file_path, "rb")}
         return _retry(
-            3, lambda: _check(requests.post(Sender.url, data=data, files=files))
+            3,
+            lambda: _check(requests.post(Sender.v1_url, data=data, files=files)),
         )
 
     @staticmethod

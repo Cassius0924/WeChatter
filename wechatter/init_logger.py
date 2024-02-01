@@ -4,6 +4,8 @@ import sys
 
 from loguru import logger
 
+from wechatter.utils.path_manager import get_abs_path
+
 # 使用环境变量中的 LOG_LEVEL
 LOG_LEVEL = logging.getLevelName(os.environ.get("LOG_LEVEL", "INFO"))
 
@@ -13,9 +15,10 @@ LOGURU_FORMAT = (
     "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
 )
 
-LOG_FILE = "logs/wechatter_{time:YYYY-MM-DD}.log"
+LOG_FILE = get_abs_path("logs/wechatter_{time:YYYY-MM-DD}.log")
 
 
+# 将 FastAPI 的日志记录到 Loguru 中
 class InterceptHandler(logging.Handler):
     def emit(self, record):
         # 获取对应的 Loguru 级别（如果存在）

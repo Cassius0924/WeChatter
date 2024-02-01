@@ -1,7 +1,7 @@
 # 使用 Copilot-GPT4-Server 回复
 from typing import List, Union
 
-import requests
+from loguru import logger
 
 import wechatter.config as config
 import wechatter.utils.path_manager as pm
@@ -9,6 +9,7 @@ from wechatter.commands.handlers import command
 from wechatter.models.message import SendMessage, SendMessageType, SendTo
 from wechatter.sender import Sender
 from wechatter.sqlite.sqlite_manager import SqliteManager
+from wechatter.utils import post_request_json
 from wechatter.utils.time import get_current_timestamp
 
 DEFAULT_TOPIC = "（对话进行中*）"
@@ -68,7 +69,7 @@ def gpt4_chats_command_handler(to: SendTo, message: str = "") -> None:
 
 @command(
     command="gpt4-record",
-    keys=["gpt4-record", "gpt记录"],
+    keys=["gpt4-record", "gpt4记录"],
     desc="获取GPT4对话记录。",
     value=42,
 )
@@ -76,7 +77,12 @@ def gpt4_record_command_handler(to: SendTo, message: str = "") -> None:
     _gptx_record("gpt-4", to, message)
 
 
-@command(command="gpt4-continue", keys=["gpt4继续"], desc="继续GPT4对话。", value=43)
+@command(
+    command="gpt4-continue",
+    keys=["gpt4-continue", "gpt4继续"],
+    desc="继续GPT4对话。",
+    value=43,
+)
 def gpt4_continue_command_handler(to: SendTo, message: str = "") -> None:
     _gptx_continue("gpt-4", to, message)
 
@@ -100,16 +106,25 @@ def _gptx(model: str, to: SendTo, message: str = "") -> None:
         # 判断对话是否有效
         if chat_info is None or CopilotGPT4.is_chat_valid(chat_info):
             CopilotGPT4.create_chat(wx_id=wx_id, model=model)
+            logger.info("创建新对话成功")
             _send_text_msg(to, "创建新对话成功")
             return
+        logger.info("对话未开始，继续上一次对话")
         _send_text_msg(to, "对话未开始，继续上一次对话")
     else:  # /gpt4 <message>
         # 如果没有对话记录，则创建新对话
         if chat_info is None:
             chat_info = CopilotGPT4.create_chat(wx_id=wx_id, model=model)
+            logger.info("无历史对话记录，创建新对话成功")
             _send_text_msg(to, "无历史对话记录，创建新对话成功")
-        response = CopilotGPT4.chat(chat_info, message)
-        _send_text_msg(to, response)
+        try:
+            response = CopilotGPT4.chat(chat_info, message)
+            logger.info(response)
+            _send_text_msg(to, response)
+        except Exception as e:
+            error_message = f"调用Copilot-GPT4-Server失败，错误信息：{e}"
+            logger.error(error_message)
+            _send_text_msg(to, error_message)
 
 
 def _gptx_chats(model: str, to: SendTo, message: str = "") -> None:
@@ -127,9 +142,11 @@ def _gptx_record(model: str, to: SendTo, message: str = "") -> None:
         # 获取指定对话的对话记录
         chat_info = CopilotGPT4.get_chat_info(wx_id, model, int(message))
     if chat_info is None:
+        logger.waring("对话不存在")
         _send_text_msg(to, "对话不存在")
         return
     response = CopilotGPT4.get_brief_conversation_str(chat_info)
+    logger.info(response)
     _send_text_msg(to, response)
 
 
@@ -137,17 +154,21 @@ def _gptx_continue(model: str, to: SendTo, message: str = "") -> None:
     wx_id = to.p_id
     # 判断message是否为数字
     if not message.isdigit():
+        logger.info("请输入对话记录编号")
         _send_text_msg(to, "请输入对话记录编号")
         return
     chat_info = CopilotGPT4.continue_chat(
         wx_id=wx_id, model=model, chat_index=int(message)
     )
     if chat_info is None:
-        _send_text_msg(to, "对话不存在")
+        waring_message = "选择历史对话失败，对话不存在"
+        logger.waring(waring_message)
+        _send_text_msg(to, waring_message)
         return
     response = CopilotGPT4.get_brief_conversation_str(chat_info)
     response += "====================\n"
     response += "对话已选中，输入命令继续对话"
+    logger.info(response)
     _send_text_msg(to, response)
 
 
@@ -200,7 +221,7 @@ class CopilotGPT4:
     def create_chat(wx_id: str, model: str) -> ChatInfo:
         """创建一个新的对话"""
         # 生成上一次对话的主题
-        CopilotGPT4._generate_chating_chat_topic(wx_id, model)
+        CopilotGPT4._save_chating_chat_topic(wx_id, model)
         CopilotGPT4._set_all_chats_unchating(wx_id, model)
         timestamp = get_current_timestamp()
         chat_info = ChatInfo(
@@ -253,7 +274,7 @@ class CopilotGPT4:
             CopilotGPT4._delete_chat(wx_id, chating_chat_info.chat_id)
         else:
             # 生成上一次对话的主题
-            CopilotGPT4._generate_chating_chat_topic(wx_id, model)
+            CopilotGPT4._save_chating_chat_topic(wx_id, model)
         CopilotGPT4._set_chating_chat(wx_id, model, chat_info.chat_id)
         return chat_info
 
@@ -306,37 +327,6 @@ class CopilotGPT4:
                 conv["content"] = conv["content"][:20] + "..."
             content_list.append(conv["content"])
         return content_list
-
-    @staticmethod
-    def _generate_chat_topic(chat_info: ChatInfo) -> None:
-        """生成对话的主题"""
-        # 只生成一次对话主题
-        if chat_info.has_topic:
-            return
-        # 生成对话主题
-        topic = CopilotGPT4._generate_chat_topic(chat_info)
-        if topic == "":
-            return
-        # 更新对话主题
-        chat_info.chat_topic = topic
-        CopilotGPT4._update_chat(chat_info)
-
-    @staticmethod
-    def _generate_chating_chat_topic(wx_id: str, model: str) -> None:
-        """生成正在进行的对话的主题"""
-        chat_info = CopilotGPT4.get_chating_chat_info(wx_id, model)
-        if chat_info is None:
-            return
-        # 只生成一次对话主题
-        if chat_info.has_topic:
-            return
-        # 生成对话主题
-        topic = CopilotGPT4._generate_chat_topic(chat_info)
-        if topic == "":
-            return
-        # 更新对话主题
-        chat_info.chat_topic = topic
-        CopilotGPT4._update_chat(chat_info)
 
     @staticmethod
     def _set_all_chats_unchating(wx_id: str, model: str) -> None:
@@ -525,60 +515,58 @@ class CopilotGPT4:
             if "timestamp" in conv:
                 conv.pop("timestamp")
         newconv.append({"role": "user", "content": message})
+
         # 发送请求
-        try:
-            response = requests.post(
-                CopilotGPT4.api,
-                headers={
-                    "Authorization": CopilotGPT4.bearer_token,
-                    "Content-Type": "application/json",
-                },
-                json={
-                    "model": chat_info.chat_model,
-                    # "messages": str(conv)
-                    "messages": conversations + newconv,
-                },
-            )
-        except Exception as e:
-            print(e)
-            return "调用Copilot-GPT4-Server失败"
+        headers = {
+            "Authorization": CopilotGPT4.bearer_token,
+            "Content-Type": "application/json",
+        }
+        json = {"model": chat_info.chat_model, "messages": conversations + newconv}
+        r_json = post_request_json(
+            url=CopilotGPT4.api, headers=headers, json=json, timeout=60
+        )
 
-        if response.status_code != 200:
-            return "调用Copilot-GPT4-Server失败"
-
-        # 解析返回值JSON
-        response_json = {}
-        try:
-            response_json = response.json()
-        except Exception as e:
-            print(response.text)
-            print(e)
-            return "解析Copilot-GPT4-Server JSON失败"
         # 判断是否有 error 或 code 字段
-        if "error" in response_json or "code" in response_json:
-            return "Copilot-GPT4-Server返回值错误"
-        msg = response_json["choices"][0]["message"]
+        if "error" in r_json or "code" in r_json:
+            raise ValueError("Copilot-GPT4-Server返回值错误")
+
+        msg = r_json["choices"][0]["message"]
         msg_content = msg.get("content", "调用Copilot-GPT4-Server失败")
         # 将返回的 assistant 回复添加到对话记录中
         if is_save:
             newconv.append({"role": "assistant", "content": msg_content})
             chat_info.conversations.extend(newconv)
             CopilotGPT4._update_chat(chat_info, newconv)
-        print("#" * 30)
-        print(msg_content)
         return msg_content
+
+    @staticmethod
+    def _save_chating_chat_topic(wx_id: str, model: str) -> None:
+        """生成正在进行的对话的主题"""
+        chat_info = CopilotGPT4.get_chating_chat_info(wx_id, model)
+        if chat_info is None or chat_info.has_topic:
+            return
+        # 生成对话主题
+        if not CopilotGPT4.is_chat_valid(chat_info):
+            logger.error("对话记录长度小于1")
+            return
+
+        topic = CopilotGPT4._generate_chat_topic(chat_info)
+        if topic == "":
+            logger.error("生成对话主题失败")
+            raise ValueError("生成对话主题失败")
+        # 更新对话主题
+        chat_info.chat_topic = topic
+        CopilotGPT4._update_chat(chat_info)
 
     @staticmethod
     def _generate_chat_topic(chat_info: ChatInfo) -> str:
         """生成对话主题，用于保存对话记录"""
-        # 通过 conversation 长度判断对话是否有效
-
-        if len(chat_info.conversations) <= 1:
-            return ""
+        assert CopilotGPT4.is_chat_valid(chat_info)
         # 通过一次对话生成对话主题，但这次对话不保存到对话记录中
         prompt = "请用10个字以内总结一下这次对话的主题，不带任何标点符号"
         topic = CopilotGPT4._chat(chat_info=chat_info, message=prompt, is_save=False)
         # 限制主题长度
         if len(topic) > 21:
             topic = topic[:21] + "..."
+        logger.info(f"生成对话主题：{topic}")
         return topic
