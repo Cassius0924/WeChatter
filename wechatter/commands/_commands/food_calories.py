@@ -88,7 +88,7 @@ def get_food_list_html(name: str, href: str) -> str:
         nutrient_name = nutrient.get("name")
     nutrient_value = nutrient.get("value")
     food_detail += f"✅{nutrient_name:<10}{nutrient_value}\n"
-    print(food_detail)
+    print(get_food_det)
     return food_detail
 
 
