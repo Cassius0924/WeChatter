@@ -36,7 +36,7 @@ def get_food_str(message: str) -> str:
         food_href = food.get("href")
         food_detail = get_food_list_html(food_name, food_href)
 
-        food_str += f"{i + 1}. {food_name}\n{food_detail}\n\n"
+        food_str += f"{i + 1}. {food_name}\n{food_detail}\n"
 
     return food_str
 
@@ -82,7 +82,7 @@ def get_food_list_html(name: str, href: str) -> str:
     # Iron = get_food_det[17]["value"]
     # Zinc = get_food_det[18]["value"]
     #
-    food_detail += f"✅{energy:<10}{Energy}\n✅{carbohydrate:<10}{Carbohydrate}\n✅{fat:<10}{Fat}\n✅{protein:<10}{Protein}\n✅{dietary_fiber:<10}{Dietary_fiber}\n\n"
+    food_detail += f"✅{energy:<10}{Energy}\n✅{carbohydrate:<10}{Carbohydrate}\n✅{fat:<10}{Fat}\n✅{protein:<10}{Protein}\n✅{dietary_fiber:<10}{Dietary_fiber}\n"
 
     print(get_food_det)
     return food_detail
