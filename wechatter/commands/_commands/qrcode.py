@@ -1,5 +1,6 @@
 # URL转二维码命令
 import qrcode
+from loguru import logger
 
 import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
@@ -21,7 +22,7 @@ def qrcode_command_handler(to: SendTo, message: str = "") -> None:
         Sender.send_localfile_msg(to, response)
     except Exception as e:
         error_message = f"生成二维码失败，错误信息：{e}"
-        print(error_message)
+        logger.error(error_message)
         Sender.send_text_msg(to, error_message)
 
 
@@ -42,8 +43,12 @@ def generate_qrcode(data: str) -> str:
     path = pm.get_abs_path(f"data/qrcodes/{datetime_str}.png")
     try:
         img.save(path)
-    except Exception as e:
-        raise f"保存二维码失败：{e}"
+    except PermissionError:
+        logger.error(f"保存 {path} 失败，权限不足")
+        raise PermissionError(f"保存 {path} 失败，权限不足")
+    except Exception:
+        logger.error(f"保存 {path} 失败")
+        raise Exception(f"保存 {path} 失败")
     return path
 
 

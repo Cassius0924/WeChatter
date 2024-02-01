@@ -1,3 +1,5 @@
+from loguru import logger
+
 from wechatter.commands.handlers import command
 from wechatter.models.message import SendMessage, SendMessageType, SendTo
 from wechatter.sender import Sender
@@ -18,8 +20,8 @@ def people_daily_command_handler(to: SendTo, message: str = "") -> None:
             url = get_today_people_daliy_url()
             _send_file_url_msg(to, url)
         except Exception as e:
-            error_message = "获取今天的人民日报失败，请稍后再试。"
-            print(error_message, e)
+            error_message = f"获取今日人民日报失败，错误信息：{e}"
+            logger.error(error_message)
             _send_text_msg(to, error_message)
     else:
         try:
@@ -27,8 +29,8 @@ def people_daily_command_handler(to: SendTo, message: str = "") -> None:
             if url:
                 _send_file_url_msg(to, url)
         except Exception as e:
-            error_message = "输入的日期版本号不符合要求，请重新输入。\n若要获取2021年1月2日03版的人民日报的PDF，请输入：\n/people 2021010203"
-            print(error_message, e)
+            error_message = f"输入的日期版本号不符合要求，请重新输入，错误信息：{e}\n若要获取2021年1月2日03版的人民日报的PDF，请输入：\n/people 2021010203"
+            logger.error(error_message)
             _send_text_msg(to, error_message)
 
 
@@ -46,16 +48,16 @@ def people_daily_url_command_handler(to: SendTo, message: str = "") -> None:
             url = get_today_people_daliy_url()
             _send_text_msg(to, url)
         except Exception as e:
-            error_message = "获取今天的人民日报失败，请稍后再试。"
-            print(error_message, e)
+            error_message = f"获取今天的人民日报失败，错误信息：{e}"
+            logger.error(error_message)
             _send_text_msg(to, error_message)
     # 获取指定日期
     else:
         try:
             url = get_people_daily_url(message)
         except Exception as e:
-            error_message = "输入的日期版本号不符合要求，请重新输入。\n若要获取2021年1月2日03版的人民日报的URL，请输入：\n/people-url 2021010203"
-            print(error_message, e)
+            error_message = f"输入的日期版本号不符合要求，请重新输入，错误信息：{e}\n若要获取2021年1月2日03版的人民日报的URL，请输入：\n/people-url 2021010203"
+            logger.error(error_message)
             _send_text_msg(to, error_message)
         if url:
             _send_text_msg(to, url)
@@ -64,7 +66,8 @@ def people_daily_url_command_handler(to: SendTo, message: str = "") -> None:
 def get_people_daily_url(date_version: str) -> str:
     """获取特定日期特定版本的人民日报PDF到本地并返回url"""
     if not date_version.isdigit() or len(date_version) != 10:
-        raise Exception("输入的日期版本号不符合要求，请重新输入。")
+        logger.error("输入的日期版本号不符合要求，请重新输入。")
+        raise ValueError("输入的日期版本号不符合要求，请重新输入。")
 
     # 判断字符串是否为数字并且长度为10
     yearmonthday = date_version[:8]  # 20240109

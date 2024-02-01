@@ -4,6 +4,8 @@ import re
 from enum import Enum
 from typing import Union
 
+from loguru import logger
+
 import wechatter.config as config
 from wechatter.models.message.group_info import GroupInfo
 from wechatter.models.message.person_info import PersonInfo
@@ -33,19 +35,18 @@ class MessageSource:
 
     def __init__(
         self,
-        p_info: PersonInfo = PersonInfo("None", "None"),
+        p_info: PersonInfo,
         g_info: Union[GroupInfo, None] = None,
     ):
         self.p_info = p_info
         self.g_info = g_info
 
     def __str__(self) -> str:
+        result = ""
         if self.g_info is not None:
-            return str(self.p_info)
-        elif self.p_info is not None:
-            return str(self.g_info)
-        else:
-            return "None"
+            result += str(self.g_info)
+        result += str(self.p_info)
+        return result
 
 
 class Message:
@@ -119,26 +120,25 @@ class Message:
         try:
             source_json = json.loads(source_json_str)
         except json.JSONDecodeError as e:
-            print("消息来源解析失败")
+            logger.error("消息来源解析失败")
             raise e
 
-        message_source = MessageSource()
         # from为发送者信息，无论是个人消息还是群消息，都有from
-        if source_json["from"] != "":
-            payload = source_json.get("from").get("payload", {})
-            if payload == {}:
-                self.__source = MessageSource()
-                return
-            id = payload.get("id", "")
-            name = payload.get("name", "")
-            alias = payload.get("alias", "")
-            gender = int(payload.get("gender", -1))
-            signature = payload.get("signature", "")
-            province = payload.get("province", "")
-            city = payload.get("city", "")
-            phone_list = payload.get("phone", [])
-            is_star = payload.get("star", "")
-            message_source.p_info = PersonInfo(
+        payload = source_json.get("from").get("payload", {})
+        if payload == {}:
+            self.__source = MessageSource()
+            return
+        id = payload.get("id", "")
+        name = payload.get("name", "")
+        alias = payload.get("alias", "")
+        gender = int(payload.get("gender", -1))
+        signature = payload.get("signature", "")
+        province = payload.get("province", "")
+        city = payload.get("city", "")
+        phone_list = payload.get("phone", [])
+        is_star = payload.get("star", "")
+        message_source = MessageSource(
+            p_info=PersonInfo(
                 id=id,
                 name=name,
                 alias=alias,
@@ -149,6 +149,8 @@ class Message:
                 phone_list=phone_list,
                 is_star=is_star,
             )
+        )
+
         # room为群信息，只有群消息才有room
         if source_json["room"] != "":
             g_data = source_json["room"]

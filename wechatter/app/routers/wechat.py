@@ -2,6 +2,7 @@ import json
 from typing import Union
 
 from fastapi import APIRouter, Form, UploadFile
+from loguru import logger
 
 import wechatter.config as config
 from wechatter.bot.bot_info import BotInfo
@@ -24,27 +25,19 @@ async def recv_wechat_msg(
     isSystemEvent: str = Form(),
 ):
     """接收Docker转发过来的消息的接口"""
-    # DEBUG
-    # print("==" * 20)
-    # print(type)
-    # print(content)
-    # print(source)
-    # print(isMentioned)
-    # print(isSystemEvent)
-    # print("==" * 20)
 
     # 更新机器人信息（id和name）
     BotInfo.update_from_source(source)
 
     # 判断是否是系统事件
     if isSystemEvent == "1":
-        print("收到系统事件")
+        logger.info(f"收到系统事件：{content}")
         handle_system_event(content)
         return
 
     # 不是系统消息，则是用户发来的消息
     if type == "file":
-        print(f"收到文件：{content.filename}")
+        logger.info(f"收到文件：{content.filename}")
         return
 
     # 解析命令

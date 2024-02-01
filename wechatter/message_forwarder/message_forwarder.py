@@ -1,5 +1,7 @@
 from typing import List
 
+from loguru import logger
+
 from wechatter.models.message import Message, SendMessage, SendMessageType
 from wechatter.sender import Sender
 
@@ -29,8 +31,10 @@ class MessageForwarder:
                 # 构造转发消息
                 msg = self.__construct_forwarding_message(message)
                 for p_name in rule["to_persons"]:
+                    logger.info(f"转发消息：{from_name} -> {p_name}")
                     Sender.send_msg_p(p_name, SendMessage(SendMessageType.TEXT, msg))
                 for g_name in rule["to_groups"]:
+                    logger.info(f"转发消息：{from_name} -> {g_name}")
                     Sender.send_msg_g(g_name, SendMessage(SendMessageType.TEXT, msg))
 
     def __construct_forwarding_message(self, message: Message) -> str:

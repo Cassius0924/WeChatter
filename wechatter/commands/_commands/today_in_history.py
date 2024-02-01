@@ -1,10 +1,9 @@
-from typing import List
-
-import requests
+from loguru import logger
 
 from wechatter.commands.handlers import command
 from wechatter.models.message import SendMessage, SendMessageType, SendTo
 from wechatter.sender import Sender
+from wechatter.utils import get_request_json
 
 
 @command(
@@ -20,19 +19,19 @@ def today_in_history_command_handler(to: SendTo, message: str = "") -> None:
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, response))
     except Exception as e:
         error_message = f"获取历史上的今天失败，错误信息：{e}"
-        print(error_message)
+        logger.error(error_message)
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
 
 
 def get_today_in_history_str() -> str:
+    tih_response = get_request_json(url="https://60s-view.deno.dev/history")
     try:
-        tih_response = get_today_in_history_response_json()
         tih_list = tih_response.get("data")
-    except Exception as e:
-        raise Exception(f"解析历史上的今天列表失败，错误信息：{e}")
+    except ValueError:
+        raise ValueError("获取的历史上的今天数据格式错误")
 
     if not tih_list:
-        raise Exception("历史上的今天列表为空")
+        return []
 
     today_in_history_str = "✨=====历史上的今天=====✨\n"
     for i, today_in_history in enumerate(tih_list):
@@ -43,17 +42,3 @@ def get_today_in_history_str() -> str:
         )
 
     return today_in_history_str
-
-
-def get_today_in_history_response_json() -> List:
-    response: requests.Response
-    try:
-        url = "https://60s-view.deno.dev/history"
-        response = requests.get(url, timeout=10)
-    except Exception as e:
-        raise Exception(f"请求历史上的今天API失败，错误信息：{e}")
-
-    if response.status_code != 200:
-        raise Exception(f"历史上的今天API返回非200状态码：{response.status_code}")
-
-    return response.json()

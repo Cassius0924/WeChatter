@@ -1,3 +1,4 @@
+import json
 import time
 from collections.abc import Callable
 from typing import List
@@ -30,6 +31,15 @@ def _check(response: requests.Response) -> bool:
         if task["successCount"] > 0 and task["successCount"] < task["totalCount"]:
             logger.warning(f"发送消息部分成功，成功数：{task['successCount']}")
             return True
+
+    data = json.loads(response.request.body.decode("utf-8"))
+    if isinstance(data, list):
+        for item in data:
+            logger.info(
+                f"发送消息成功，发送给：{item['to']}，发送的内容：{item['data']}"
+            )
+    elif isinstance(data, dict):
+        logger.info(f"发送消息成功，发送给：{data['to']}，发送的内容：{data['data']}")
     return True
 
 
