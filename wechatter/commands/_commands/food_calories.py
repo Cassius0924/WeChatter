@@ -115,10 +115,8 @@ def get_URL_encoding(message: str) -> str:
 
 
 def get_food_href_list(message: str) -> List[Dict[str, str]]:
-
-    key = get_URL_encoding(message)
     try:
-        url = f"https://www.boohee.com/food/search?keyword={key}"
+        url = f"https://www.boohee.com/food/search?keyword={message}"
         response = requests.get(url, timeout=10)
     except Exception as e:
         raise Exception(f"获取食物链接失败，错误信息：{e}")
@@ -139,7 +137,7 @@ def get_food_href_list(message: str) -> List[Dict[str, str]]:
         if href_list_item:
             href_list.append(href_list_item)
 
-    if not href_list:
-        raise Exception("解析食物链接失败")
+    # if not href_list:
+    #     raise Exception("解析食物链接失败")
 
     return href_list
