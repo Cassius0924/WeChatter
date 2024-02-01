@@ -44,6 +44,8 @@ def get_food_list_html(name: str, href: str) -> str:
 
     keyword = get_URL_encoding(name)  # 获取URL编码
     href = get_food_href_list(href)  # 获取食物链接
+    if not href:
+        raise Exception("damn")
 
     try:
         url = f"https://www.boohee.com{href}"
