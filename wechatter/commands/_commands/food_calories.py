@@ -59,7 +59,7 @@ def get_food_list_html(name: str, href: str) -> str:
     if not get_food_det:
         raise Exception("获取食物列表失败")
 
-    food_detail = ""
+    food_detail = "nig"
     # # name
     # energy = food_all_deatil[2]["name"]
     # carbohydrate = food_all_deatil[3]["name"]
@@ -81,10 +81,11 @@ def get_food_list_html(name: str, href: str) -> str:
     # Zinc = food_all_deatil[18]["value"]
     #
     # food_detail += f"✅{energy:<10}{Energy}\n✅{carbohydrate:<10}{Carbohydrate}\n✅{fat:<10}{Fat}\n✅{protein:<10}{Protein}\n✅{dietary_fiber:<10}{Dietary_fiber}\n✅{calcium:<10}{Calcium}\n✅{iron:<10}{Iron}\n✅{zinc:<10}{Zinc}\n"
-    for nutrient in get_food_det:
-        nutrient_name = nutrient.get("name")
-    nutrient_value = nutrient.get("value")
-    food_detail += f"✅{nutrient_name:<10}{nutrient_value}\n"
+
+    # for nutrient in get_food_det:
+    #     nutrient_name = nutrient.get("name")
+    # nutrient_value = nutrient.get("value")
+    # food_detail += f"✅{nutrient_name:<10}{nutrient_value}\n"
     return food_detail
 
 
