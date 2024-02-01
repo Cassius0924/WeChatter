@@ -7,6 +7,8 @@ from bs4 import BeautifulSoup
 from wechatter.commands.handlers import command
 from wechatter.models.message import SendMessage, SendMessageType, SendTo
 from wechatter.sender import Sender
+from wechatter.utils import get_request
+from wechatter.exceptions import Bs4ParsingError
 
 
 @command(
@@ -17,115 +19,78 @@ from wechatter.sender import Sender
 )
 def food_calories_command_handler(to: SendTo, message: str = "") -> None:
     try:
-        response = get_food_str(message)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, response))
+        response = get_request(
+            url=f"https://www.boohee.com/food/search?keyword={message}"
+        )
+        food_href_list = parse_food_href_list_response(response)
+        food_detail_list = get_food_detail_list(food_href_list)
+        result = generate_food_message(food_detail_list)
+        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
     except Exception as e:
         error_message = f"获取食物热量失败，错误信息：{e}"
         print(error_message)
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
 
 
-def get_food_str(message: str) -> str:
-    food_list = get_food_href_list(message)
-    if not food_list:
-        return "获取食物列表失败"
-
-    food_str = "✨=====食物列表=====✨\n🔵====含量(100克)====🔵\n"
-    for i, food in enumerate(food_list[:5]):
+def get_food_detail_list(food_href_list: List) -> List:
+    food_detail_list = []
+    for i, food in enumerate(food_href_list[:5]):
         food_name = food.get("name")
         food_all_name = food.get("all_name")
         food_href = food.get("href")
-        food_detail = get_food_list_html(food_name, food_href)
+        keyword = get_url_encoding(food_name)  # 获取URL编码
+        headers = {
+            "referer": f"https://www.boohee.com/food/search?keyword={keyword}",
+        }
+        food_response = get_request(
+            url=f"https://www.boohee.com{food_href}", headers=headers
+        )
+        food_detail = parse_food_detail_response(food_response, food_all_name)
+        food_detail_list.append(food_detail)
+    return food_detail_list
 
-        food_str += f"{i + 1}. {food_all_name}\n{food_detail}\n"
+
+def generate_food_message(food_detail_list: List) -> str:
+    food_str = "✨=====食物列表=====✨\n"
+
+    for i, food_detail in enumerate(food_detail_list):
+        energy = food_detail["热量(大卡)"]
+        carbohydrate = food_detail["碳水化合物(克)"]
+        fat = food_detail["脂肪(克)"]
+        protein = food_detail["蛋白质(克)"]
+        dietary_fiber = food_detail["纤维素(克)"]
+        food_all_name = food_detail["food_all_name"]
+        food_str += (
+            f"{i + 1}. {food_all_name}\n"
+            f"    🍲热量(大卡):    {energy}\n"
+            f"    🍞碳水(克):        {carbohydrate}\n"
+            f"    🥓脂肪(克):        {fat}\n"
+            f"    🍗蛋白质(克):    {protein}\n"
+            f"    🥦纤维素(克):    {dietary_fiber}\n"
+        )
+    food_str += "🔵====含量(100克)====🔵"
 
     return food_str
 
 
-def get_food_list_html(name: str, href: str) -> str:
-    response: requests.Response
-
-    keyword = get_URL_encoding(name)  # 获取URL编码
-
-    try:
-        url = f"https://www.boohee.com{href}"
-        headers = {
-            'referer': f'https://www.boohee.com/food/search?keyword={keyword}',
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
-        }
-
-        response = requests.get(url, headers=headers)
-    except Exception as e:
-        raise Exception(f"获取食物列表失败，错误信息：{e}")
-
-    get_food_det = get_food_detail(response.text)
-    if not get_food_det:
-        raise Exception("获取食物列表失败")
-
-    food_detail = ""
-    # # name
-    energy = get_food_det[2]["name"]
-    carbohydrate = get_food_det[3]["name"]
-    fat = get_food_det[4]["name"]
-    protein = get_food_det[5]["name"]
-    dietary_fiber = get_food_det[6]["name"]
-    # calcium = get_food_det[16]["name"]
-    # iron = get_food_det[17]["name"]
-    # zinc = get_food_det[18]["name"]
-    #
-    # # value
-    Energy = get_food_det[2]["value"]
-    Carbohydrate = get_food_det[3]["value"]
-    Fat = get_food_det[4]["value"]
-    Protein = get_food_det[5]["value"]
-    Dietary_fiber = get_food_det[6]["value"]
-    # Calcium = get_food_det[16]["value"]
-    # Iron = get_food_det[17]["value"]
-    # Zinc = get_food_det[18]["value"]
-    #
-    food_detail += f"✅{energy:<10}{Energy}\n✅{carbohydrate:<10}{Carbohydrate}\n✅{fat:<10}{Fat}\n✅{protein:<10}{Protein}\n✅{dietary_fiber:<10}{Dietary_fiber}\n"
-
-    return food_detail
-
-
-def get_food_detail(response: str) -> list:
-    soup = BeautifulSoup(response, "html.parser")
-    food_detail = []
+# 这里也是 parse部分
+def parse_food_detail_response(response: requests.Response, food_all_name: str) -> Dict:
+    soup = BeautifulSoup(response.text, "html.parser")
+    food_detail = {}
     articles = soup.find_all("dd")
     for article in articles:
-        food_detail_item = {}
-
         name = article.select_one("span.dt").text.strip()
-        if name:
-            food_detail_item["name"] = name
         value = article.select_one("span.dd").text.strip()
-        if value:
-            food_detail_item["value"] = value
-
-        if food_detail_item:
-            food_detail.append(food_detail_item)
-
+        if name and value:
+            food_detail[name] = value
     if not food_detail:
-        raise Exception("解析食物列表失败")
+        raise Bs4ParsingError("解析食物列表失败")
 
+    food_detail["food_all_name"] = food_all_name
     return food_detail
 
 
-def get_URL_encoding(message: str) -> str:
-    url_encoding = quote(message)
-    return url_encoding
-
-
-def get_food_href_list(message: str) -> List[Dict[str, str]]:
-    try:
-        url = f"https://www.boohee.com/food/search?keyword={message}"
-        headers = {
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
-        }
-        response = requests.get(url, timeout=10, headers=headers)
-    except Exception as e:
-        raise Exception(f"获取食物链接失败，错误信息：{e}")
-
+def parse_food_href_list_response(response: requests.Response) -> List:
     soup = BeautifulSoup(response.text, "html.parser")
     href_list = []
     articles = soup.select("div.text-box")
@@ -144,6 +109,11 @@ def get_food_href_list(message: str) -> List[Dict[str, str]]:
             href_list.append(href_list_item)
 
     if not href_list:
-        raise Exception("解析食物链接失败")
+        raise Bs4ParsingError("解析食物详情链接失败")
 
     return href_list
+
+
+def get_url_encoding(message: str) -> str:
+    url_encoding = quote(message)
+    return url_encoding
