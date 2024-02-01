@@ -115,6 +115,7 @@ def get_URL_encoding(message: str) -> str:
 
 
 def get_food_href_list(message: str) -> List[Dict[str, str]]:
+    print(message)
     try:
         url = f"https://www.boohee.com/food/search?keyword={message}"
         headers = {
