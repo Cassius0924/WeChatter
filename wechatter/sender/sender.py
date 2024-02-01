@@ -32,8 +32,14 @@ def _check(response: requests.Response) -> bool:
             logger.warning(f"发送消息部分成功，成功数：{task['successCount']}")
             return True
 
-    body = json.loads(response.request.body.decode("utf-8"))
-    logger.info(f"发送消息成功，发送给：{body['to']}，发送的内容：{body['data']}")
+    data = json.loads(response.request.body.decode("utf-8"))
+    if isinstance(data, list):
+        for item in data:
+            logger.info(
+                f"发送消息成功，发送给：{item['to']}，发送的内容：{item['data']}"
+            )
+    elif isinstance(data, dict):
+        logger.info(f"发送消息成功，发送给：{data['to']}，发送的内容：{data['data']}")
     return True
 
 
