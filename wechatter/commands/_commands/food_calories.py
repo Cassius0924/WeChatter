@@ -30,7 +30,7 @@ def get_food_str(message: str) -> str:
     if not food_list:
         return "获取食物列表失败"
 
-    food_str = "✨===食物列表===✨\n  每100克含量\n"
+    food_str = "✨=====食物列表=====✨\n🔵=====含量(100克)=====🔵\n"
     for i, food in enumerate(food_list[:5]):
         food_name = food.get("name")
         food_all_name = food.get("all_name")
