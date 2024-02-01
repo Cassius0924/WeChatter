@@ -7,7 +7,7 @@ from loguru import logger
 
 import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
-from wechatter.exceptions import ParsingError
+from wechatter.exceptions import Bs4ParsingError
 from wechatter.models.message import SendMessage, SendMessageType, SendTo
 from wechatter.sender import Sender
 from wechatter.utils import get_request, load_json
@@ -115,7 +115,7 @@ def _parse_hourly_weather_response(response: requests.Response) -> Dict:
         dls = helper_div.find("div", class_="lv").find_all("dl")
         if not script or not helper_div or not dls:
             logger.error("中国天气网API返回数据不正确")
-            raise ParsingError("中国天气网API返回数据不正确")
+            raise Bs4ParsingError("中国天气网API返回数据不正确")
     except AttributeError:
         logger.error("中国天气网API返回数据不正确")
         raise AttributeError("中国天气网API返回数据不正确")

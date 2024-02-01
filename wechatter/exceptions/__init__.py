@@ -1,3 +1,3 @@
-from .beautiful_soup import ParsingError
+from .beautiful_soup import Bs4ParsingError
 
-__all__ = ["ParsingError"]
+__all__ = ["Bs4ParsingError"]

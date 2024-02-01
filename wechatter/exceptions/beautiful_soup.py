@@ -1,2 +1,2 @@
-class ParsingError(Exception):
+class Bs4ParsingError(Exception):
     pass
