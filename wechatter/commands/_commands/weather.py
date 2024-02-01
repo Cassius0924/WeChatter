@@ -153,7 +153,7 @@ def _get_current_weather_response_json(city_id: int) -> Dict:
     )
 
     try:
-        return json.loads(response.text.split("=")[0])
+        return json.loads(response.text.split("=")[1])
     except json.JSONDecodeError:
         logger.error("中国天气网当前天气API返回数据不正确")
         raise json.JSONDecodeError("中国天气网当前天气API返回数据不正确", "", 0)
