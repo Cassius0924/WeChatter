@@ -1,7 +1,9 @@
-from typing import List
+from typing import List, Dict, Any
 
 import requests
-import json
+from urllib.parse import quote
+
+from bs4 import BeautifulSoup
 
 from wechatter.commands.handlers import command
 from wechatter.models.message import SendMessage, SendMessageType, SendTo
@@ -25,62 +27,118 @@ def food_calories_command_handler(to: SendTo, message: str = "") -> None:
 
 
 def get_food_str(message: str) -> str:
-    food_list = get_food_namelist(message)
+    food_list = get_food_href_list(message)
     if not food_list:
         return "获取食物列表失败"
 
     food_str = "✨=====食物列表=====✨\n"
-    for i, food in enumerate(food_list[:5]):
+    for i, food in enumerate(food_list)[:5]:
+        food_name = food.get("name")
+        food_href = food.get("href")
+        food_detail = get_food_list_html(food_name, food_href)
 
-        food_name = food_list[i][2]
-        Another_name = food_list[i][3]
-        English_name = food_list[i][4]
-        Edible = food_list[i][5]
-        Water = food_list[i][6]
+        food_str += f"{i + 1}. {food_name}\n{food_detail}\n\n"
 
-        # 处理 Energy 字段
-        Energy = food_list[i][7]
-        energy_kj = float(''.join(c for c in Energy if c.isdigit() or c == '.'))  # 提取数字部分并转换为浮点数
-        energy_kcal = energy_kj / 4.184  # 转换为大卡
-        energy_str = f"{energy_kcal:.2f}大卡"  # 格式化为字符串
 
-        Protein = food_list[i][8]
-        Fat = food_list[i][9]
-        Carbohydrate = food_list[i][12]
-        Dietary_fiber = food_list[i][13]
-        food_str += f"{i + 1}. {food_name}\n✅能量:{energy_str}\n✅俗名:{Another_name:<12}✅英文名:{English_name}\n✅可食部分:{Edible:<8}✅水分:{Water}\n✅蛋白质:{Protein:<10}✅脂肪:{Fat}\n✅碳水化合物:{Carbohydrate:<6}✅膳食纤维:{Dietary_fiber}\n\n"
-    return food_str
+def get_food_list_html(name: str, href: str) -> str:
+    response: requests.Response
 
-def get_food_namelist(message: str) -> List:
-    url = "https://nlc.chinanutri.cn/fq/FoodInfoQueryAction!queryFoodInfoList.do"
-
-    headers = {
-        'Accept': 'application/json, text/javascript, */*; q=0.01',
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36',
-    }
-    # categoryOne:一级分类，categoryTwo:二级分类，foodName:食物名称，pageNum:页码，field:排序字段，flag:排序方式
-
-    data = {
-        'categoryOne': '0',
-        'categoryTwo': '0',
-        'foodName': message,
-        'pageNum': '1',
-        'field': '0',
-        'flag': '0'
-    }
-
-    response = requests.post(url, headers=headers, data=data)
-
-    if response.status_code != 200:
-        print(f"请求食物列表失败，错误码：{response.status_code}")
-        return []
+    keyword = get_URL_encoding(name)  # 获取URL编码
+    href = get_food_href_list(href)  # 获取食物链接
 
     try:
-        text = response.text
-        data = json.loads(text)
-        food_list = data["list"]
-        return food_list
+        url = f"https://www.boohee.com{href}"
+        headers = {
+            'referer': f'https://www.boohee.com/food/search?keyword={keyword}',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0',
+        }
+
+        response = requests.get(url, headers=headers)
     except Exception as e:
-        print(f"解析食物列表失败, 错误信息: {str(e)}")
-        return []
+        raise Exception(f"获取食物列表失败，错误信息：{e}")
+
+    food_all_deatil = get_food_detail(response.text)
+    if not food_all_deatil:
+        raise Exception("获取食物列表失败")
+
+    food_detail = ""
+    #name
+    energy = food_all_deatil[2]["name"]
+    carbohydrate = food_all_deatil[3]["name"]
+    fat = food_all_deatil[4]["name"]
+    protein = food_all_deatil[5]["name"]
+    dietary_fiber = food_all_deatil[6]["name"]
+    calcium = food_all_deatil[16]["name"]
+    iron = food_all_deatil[17]["name"]
+    zinc = food_all_deatil[18]["name"]
+
+    #value
+    Energy = food_all_deatil[2]["value"]
+    Carbohydrate = food_all_deatil[3]["value"]
+    Fat = food_all_deatil[4]["value"]
+    Protein = food_all_deatil[5]["value"]
+    Dietary_fiber = food_all_deatil[6]["value"]
+    Calcium = food_all_deatil[16]["value"]
+    Iron = food_all_deatil[17]["value"]
+    Zinc = food_all_deatil[18]["value"]
+
+    food_detail += f"✅{energy:<10}{Energy}\n✅{carbohydrate:<10}{Carbohydrate}\n✅{fat:<10}{Fat}\n✅{protein:<10}{Protein}\n✅{dietary_fiber:<10}{Dietary_fiber}\n✅{calcium:<10}{Calcium}\n✅{iron:<10}{Iron}\n✅{zinc:<10}{Zinc}\n"
+
+    return food_detail
+
+def get_food_detail(response: str) -> list[dict[str, Any]]:
+
+    soup = BeautifulSoup(response, "html.parser")
+    food_detail = []
+    articles = soup.find_all("dd")
+    for article in articles:
+        food_detail_item = {}
+
+        name = article.select_one("span.dt").text.strip()
+        if name:
+            food_detail_item["name"] = name
+        value = article.select_one("span.dd").text.strip()
+        if value:
+            food_detail_item["value"] = value
+
+        if food_detail_item:
+            food_detail.append(food_detail_item)
+
+    if not food_detail:
+        raise Exception("解析食物列表失败")
+
+    return food_detail
+
+
+def get_URL_encoding(message: str) -> str:
+    url_encoding = quote(message)
+    return url_encoding
+
+def get_food_href_list(message: str) -> List[Dict[str, str]]:
+    try:
+        url = f"https://www.boohee.com/food/search?keyword={message}"
+        response = requests.get(url,timeout=10)
+    except Exception as e:
+        raise Exception(f"获取食物链接失败，错误信息：{e}")
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    href_list = []
+    articles = soup.select("div.text-box pull-left")
+    for article in articles:
+        href_list_item = {}
+
+        name = article.select_one("a").text.strip()
+        if name:
+            href_list_item["name"] = name.split("，")[0]
+        href = article.a["href"]
+        if href:
+            href_list_item["href"] = href
+
+
+        if href_list_item:
+            href_list.append(href_list_item)
+
+    if not href_list:
+        raise Exception("解析食物链接失败")
+
+    return href_list
