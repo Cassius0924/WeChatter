@@ -20,19 +20,19 @@ from wechatter.utils import get_request
 def trivia_command_handler(to: SendTo, message: str = "") -> None:
     #TODO：获取共有多少期
     random_number = random.randint(1, 917)
-    try:
-        response = get_request(
-            url=f"http://www.quzhishi.com/shiwangelengzhishi{random_number}.html"
-        )
-        trivia_list = parse_trivia_response(response)
-        result = generate_trivia_message(trivia_list, random_number)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
-    except Exception as e:
-        error_message = f"获取冷知识失败，错误信息：{e}"
-        print(error_message)
-        print(trivia_list)
-        print(result)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
+    # try:
+    response = get_request(
+        url=f"http://www.quzhishi.com/shiwangelengzhishi{random_number}.html"
+    )
+    trivia_list = parse_trivia_response(response)
+    result = generate_trivia_message(trivia_list, random_number)
+    print(trivia_list)
+    print(result)
+    Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
+    # except Exception as e:
+    #     error_message = f"获取冷知识失败，错误信息：{e}"
+    #     print(error_message)
+    #     Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
 
 
 def parse_trivia_response(response: requests.Response) -> List:
@@ -43,8 +43,8 @@ def parse_trivia_response(response: requests.Response) -> List:
         trivia = article.text.strip()
         if trivia:
             trivia_list.append(trivia)
-    if not trivia_list:
-        raise Bs4ParsingError("解析冷知识失败")
+    # if not trivia_list:
+    #     raise Bs4ParsingError("解析冷知识失败")
     print(trivia_list)
     print("nignignignignignignignignig")
     return trivia_list
