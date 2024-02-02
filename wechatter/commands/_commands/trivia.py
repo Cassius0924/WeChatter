@@ -3,6 +3,7 @@ import random
 
 import requests
 from bs4 import BeautifulSoup
+from loguru import logger
 
 from wechatter.commands.handlers import command
 from wechatter.exceptions import Bs4ParsingError
@@ -41,6 +42,7 @@ def _parse_trivia_response(response: requests.Response) -> List:
         if trivia:
             trivia_list.append(trivia)
     if not trivia_list:
+        logger.error("解析冷知识失败")
         raise Bs4ParsingError("解析冷知识失败")
     return trivia_list
 
