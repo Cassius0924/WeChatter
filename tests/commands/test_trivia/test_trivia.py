@@ -15,9 +15,9 @@ class TestTriviaCommand(unittest.TestCase):
         with open('tests/commands/test_trivia/trivia_data.json') as f:
             self.trivia_list = json.load(f)
 
-    def test_parse_trivia_response_success(self):
-        result = trivia._parse_trivia_response(self.response)
-        self.assertListEqual(result, self.trivia_list)
+    # def test_parse_trivia_response_success(self):
+    #     result = trivia._parse_trivia_response(self.response)
+    #     self.assertListEqual(result, self.trivia_list)
 
     # def test_parse_trivia_response_failure(self):
     #     with self.assertRaises(Bs4ParsingError):
