@@ -24,6 +24,7 @@ def trivia_command_handler(to: SendTo, message: str = "") -> None:
         response = get_request(
             url=f"http://www.quzhishi.com/shiwangelengzhishi{random_number}.html"
         )
+        response.encoding = response.apparent_encoding
         trivia_list = parse_trivia_response(response)
         result = generate_trivia_message(trivia_list, random_number)
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
