@@ -47,10 +47,13 @@ def parse_trivia_response(response: requests.Response) -> List:
 
 
 def generate_trivia_message(trivia_list: List, random_number) -> str:
+    random_numbers = random.sample(range(1, len(trivia_list)), 3)
     trivia_str = "✨=====冷知识=====✨\n"
-    for i, trivia in enumerate(trivia_list[:5]):
-        trivia_str += f"{i + 1}. {trivia}\n"
-    trivia_str += f"❇️==这是第{random_number}期冷知识==❇️\n"
+    trivia_str += f"1.{trivia_list[random_numbers[0]]}\n\n"
+    trivia_str += f"2.{trivia_list[random_numbers[1]]}\n\n"
+    trivia_str += f"3.{trivia_list[random_numbers[2]]}\n"
+    trivia_str += (f"❇️==这是第{random_number}期的"
+                   f"第{random_numbers[0],random_numbers[1],random_numbers[2]}条冷知识==❇️\n")
     return trivia_str
 
 #TODO：获取随机一期冷知识中的随机一条冷知识
