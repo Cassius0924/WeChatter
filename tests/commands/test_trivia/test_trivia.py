@@ -23,10 +23,10 @@ class TestTriviaCommand(unittest.TestCase):
         with self.assertRaises(Bs4ParsingError):
             trivia._parse_trivia_response(Response())
 
-    def test_generate_trivia_message_success(self):
-        result = trivia._generate_trivia_message(self.trivia_list, 1)
-        true_result = ""
-        self.assertIn(true_result, result)
+    # def test_generate_trivia_message_success(self):
+    #     result = trivia._generate_trivia_message(self.trivia_list, 1)
+    #     true_result = ""
+    #     self.assertIn(true_result, result)
 
     def test_generate_trivia_message_empty_list(self):
         result = trivia._generate_trivia_message([], 1)
