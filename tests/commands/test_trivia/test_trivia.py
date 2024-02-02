@@ -1,5 +1,4 @@
 import unittest
-import json
 from requests import Response
 from wechatter.commands._commands import trivia
 from wechatter.exceptions import Bs4ParsingError
@@ -12,8 +11,8 @@ class TestTriviaCommand(unittest.TestCase):
             r_html = f.read()
         self.response = Response()
         self.response._content = r_html.encode('utf-8')
-        with open('tests/commands/test_trivia/trivia_data.json') as f:
-            self.trivia_list = json.load(f)
+        with open('tests/commands/test_trivia/trivia_data.txt') as f:
+            self.trivia_list = f.read().split("\n")
 
     def test_parse_trivia_response_success(self):
         result = trivia._parse_trivia_response(self.response)
