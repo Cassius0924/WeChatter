@@ -26,9 +26,7 @@ def trivia_command_handler(to: SendTo, message: str = "") -> None:
         )
         response.encoding = response.apparent_encoding
         trivia_list = parse_trivia_response(response)
-        print(trivia_list)
         result = generate_trivia_message(trivia_list, random_number)
-        print(result)
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
     except Exception as e:
         error_message = f"获取冷知识失败，错误信息：{e}"
@@ -46,6 +44,7 @@ def parse_trivia_response(response: requests.Response) -> List:
             trivia_list.append(trivia)
     if not trivia_list:
         raise Bs4ParsingError("解析冷知识失败")
+    print(trivia_list)
     return trivia_list
 
 
@@ -54,6 +53,7 @@ def generate_trivia_message(trivia_list: List, random_number) -> str:
     trivia_str += f"这是第{random_number}期冷知识\n"
     for i, trivia in enumerate(trivia_list):
         trivia_str += f"{i + 1}. {trivia}\n"
+    print(trivia_str)
     return trivia_str
 
 #TODO：获取随机一期冷知识中的随机一条冷知识
