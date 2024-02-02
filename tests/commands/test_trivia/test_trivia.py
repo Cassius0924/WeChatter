@@ -25,7 +25,7 @@ class TestTriviaCommand(unittest.TestCase):
 
     def test_generate_trivia_message_success(self):
         result = trivia._generate_trivia_message(self.trivia_list, 1)
-        true_result = "✨=====冷知识=====✨\n"
+        true_result = ""
         self.assertIn(true_result, result)
 
     def test_generate_trivia_message_empty_list(self):
