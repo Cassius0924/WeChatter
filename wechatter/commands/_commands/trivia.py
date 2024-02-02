@@ -34,7 +34,6 @@ def trivia_command_handler(to: SendTo, message: str = "") -> None:
 
 
 def parse_trivia_response(response: requests.Response) -> List:
-    response.encoding = response.apparent_encoding
     soup = BeautifulSoup(response.text, "html.parser")
     trivia_list = []
     articles = soup.select_one("div.list").find_all("li")
@@ -45,6 +44,7 @@ def parse_trivia_response(response: requests.Response) -> List:
     if not trivia_list:
         raise Bs4ParsingError("解析冷知识失败")
     print(trivia_list)
+    print("nignignignignignignignignig")
     return trivia_list
 
 
