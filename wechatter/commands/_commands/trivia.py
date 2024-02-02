@@ -18,14 +18,13 @@ from wechatter.utils import get_request
     value=170,
 )
 def trivia_command_handler(to: SendTo, message: str = "") -> None:
-    #TODO：获取共有多少期
     random_number = random.randint(1, 917)
     try:
         response = get_request(
             url=f"http://www.quzhishi.com/shiwangelengzhishi/{random_number}.html"
         )
-        trivia_list = parse_trivia_response(response)
-        result = generate_trivia_message(trivia_list, random_number)
+        trivia_list = _parse_trivia_response(response)
+        result = _generate_trivia_message(trivia_list, random_number)
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
     except Exception as e:
         error_message = f"获取冷知识失败，错误信息：{e}"
@@ -33,7 +32,7 @@ def trivia_command_handler(to: SendTo, message: str = "") -> None:
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
 
 
-def parse_trivia_response(response: requests.Response) -> List:
+def _parse_trivia_response(response: requests.Response) -> List:
     soup = BeautifulSoup(response.text, "html.parser")
     trivia_list = []
     articles = soup.select_one("div.list").find_all("li")
@@ -46,7 +45,10 @@ def parse_trivia_response(response: requests.Response) -> List:
     return trivia_list
 
 
-def generate_trivia_message(trivia_list: List, random_number) -> str:
+def _generate_trivia_message(trivia_list: List, random_number) -> str:
+    if not trivia_list:
+        return "获取冷知识失败"
+
     random_numbers = random.sample(range(1, len(trivia_list)), 3)
     trivia_str = "✨=====冷知识=====✨\n"
     trivia_str += f"1.{trivia_list[random_numbers[0]]}\n\n"
