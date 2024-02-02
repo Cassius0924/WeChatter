@@ -24,7 +24,6 @@ def trivia_command_handler(to: SendTo, message: str = "") -> None:
         response = get_request(
             url=f"http://www.quzhishi.com/shiwangelengzhishi{random_number}.html"
         )
-        response.encoding = response.apparent_encoding
         trivia_list = parse_trivia_response(response)
         result = generate_trivia_message(trivia_list, random_number)
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
@@ -35,6 +34,7 @@ def trivia_command_handler(to: SendTo, message: str = "") -> None:
 
 
 def parse_trivia_response(response: requests.Response) -> List:
+    response.encoding = response.apparent_encoding
     soup = BeautifulSoup(response.text, "html.parser")
     trivia_list = []
     articles = soup.select_one("div.list").find_all("li")
