@@ -26,7 +26,9 @@ def trivia_command_handler(to: SendTo, message: str = "") -> None:
         )
         response.encoding = response.apparent_encoding
         trivia_list = parse_trivia_response(response)
+        print(trivia_list)
         result = generate_trivia_message(trivia_list, random_number)
+        print(result)
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
     except Exception as e:
         error_message = f"获取冷知识失败，错误信息：{e}"
