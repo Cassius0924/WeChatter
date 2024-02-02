@@ -30,6 +30,8 @@ def trivia_command_handler(to: SendTo, message: str = "") -> None:
     except Exception as e:
         error_message = f"获取冷知识失败，错误信息：{e}"
         print(error_message)
+        print(trivia_list)
+        print(result)
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
 
 
