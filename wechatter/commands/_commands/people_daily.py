@@ -18,20 +18,21 @@ def people_daily_command_handler(to: SendTo, message: str = "") -> None:
     if message == "":
         try:
             url = get_today_people_daliy_url()
-            _send_file_url_msg(to, url)
         except Exception as e:
             error_message = f"获取今日人民日报失败，错误信息：{e}"
             logger.error(error_message)
             _send_text_msg(to, error_message)
+        else:
+            _send_file_url_msg(to, url)
     else:
         try:
             url = get_people_daily_url(message)
-            if url:
-                _send_file_url_msg(to, url)
         except Exception as e:
             error_message = f"输入的日期版本号不符合要求，请重新输入，错误信息：{e}\n若要获取2021年1月2日03版的人民日报的PDF，请输入：\n/people 2021010203"
             logger.error(error_message)
             _send_text_msg(to, error_message)
+        else:
+            _send_file_url_msg(to, url)
 
 
 @command(
@@ -46,11 +47,12 @@ def people_daily_url_command_handler(to: SendTo, message: str = "") -> None:
     if message == "":
         try:
             url = get_today_people_daliy_url()
-            _send_text_msg(to, url)
         except Exception as e:
             error_message = f"获取今天的人民日报失败，错误信息：{e}"
             logger.error(error_message)
             _send_text_msg(to, error_message)
+        else:
+            _send_text_msg(to, url)
     # 获取指定日期
     else:
         try:
@@ -59,7 +61,7 @@ def people_daily_url_command_handler(to: SendTo, message: str = "") -> None:
             error_message = f"输入的日期版本号不符合要求，请重新输入，错误信息：{e}\n若要获取2021年1月2日03版的人民日报的URL，请输入：\n/people-url 2021010203"
             logger.error(error_message)
             _send_text_msg(to, error_message)
-        if url:
+        else:
             _send_text_msg(to, url)
 
 

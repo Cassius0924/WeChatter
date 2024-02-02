@@ -1,3 +1,5 @@
+from typing import Dict, List
+
 from loguru import logger
 
 from wechatter.commands.handlers import command
@@ -15,23 +17,33 @@ from wechatter.utils import get_request_json
 def today_in_history_command_handler(to: SendTo, message: str = "") -> None:
     # 获取历史上的今天
     try:
-        response = get_today_in_history_str()
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, response))
+        result = get_today_in_history_str()
     except Exception as e:
         error_message = f"获取历史上的今天失败，错误信息：{e}"
         logger.error(error_message)
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
+    else:
+        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
 
 
 def get_today_in_history_str() -> str:
-    tih_response = get_request_json(url="https://60s-view.deno.dev/history")
-    try:
-        tih_list = tih_response.get("data")
-    except ValueError:
-        raise ValueError("获取的历史上的今天数据格式错误")
+    response = get_request_json(url="https://60s-view.deno.dev/history")
+    tih_list = _extract_today_in_history_data(response)
+    return _generate_today_in_history_message(tih_list)
 
+
+def _extract_today_in_history_data(r_json: Dict) -> List:
+    try:
+        tih_list = r_json["data"]
+    except (KeyError, TypeError) as e:
+        logger.error("解析历史上的今天API返回的JSON失败")
+        raise RuntimeError("解析历史上的今天API返回的JSON失败") from e
+    return tih_list
+
+
+def _generate_today_in_history_message(tih_list: List) -> str:
     if not tih_list:
-        return []
+        return "暂无历史上的今天"
 
     today_in_history_str = "✨=====历史上的今天=====✨\n"
     for i, today_in_history in enumerate(tih_list):

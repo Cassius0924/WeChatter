@@ -1,0 +1,1 @@
+var dataSK={"nameen":"guangzhou","cityname":"广州","city":"101280101","temp":"26.4","tempf":"79.5","WD":"南风","wde":"S","WS":"1级","wse":"4km\/h","SD":"60%","sd":"60%","qy":"1010","njd":"25km","time":"16:10","rain":"0","rain24h":"0","aqi":"29","aqi_pm25":"29","weather":"多云","weathere":"Cloudy","weathercode":"d01","limitnumber":"单号限行","date":"02月02日(星期五)"}
