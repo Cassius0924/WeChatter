@@ -22,12 +22,13 @@ from wechatter.utils.time import get_current_hour, get_current_minute, get_curre
 )
 def weather_command_handler(to: SendTo, message: str = "") -> None:
     try:
-        response = get_weather_str(message)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, response))
+        result = get_weather_str(message)
     except Exception as e:
-        error_message = f"获取天气预报失败，错误信息：{e}"
+        error_message = f"获取天气预报失败，错误信息：{str(e)}"
         logger.error(error_message)
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
+    else:
+        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
 
 
 # class WeatherTip:
@@ -90,6 +91,25 @@ TIME_EMOJIS = {
 }
 # fmt: on
 
+CITY_IDS_PATH = pm.get_abs_path("assets/weather_china/city_ids.json")
+
+
+# 封装起来，方便定时任务调用
+def get_weather_str(city: str) -> str:
+    city_id = _get_city_id(city)
+    response = get_request(url=f"http://www.weather.com.cn/weather1dn/{city_id}.shtml")
+    hourly_data = _parse_hourly_weather_response(response)
+    headers = {"Referer": "http://www.weather.com.cn/"}
+    response2 = get_request(
+        url=f"http://d1.weather.com.cn/sk_2d/{city_id}.html", headers=headers
+    )
+    c_data = _parse_c_weather(response2.text)
+    h = int(c_data["time"].split(":")[0])
+    future_weather_list = _get_future_weather(
+        hourly_data["weather"], h, 5
+    )
+    return _generate_weather_message(c_data, hourly_data, future_weather_list)
+
 
 def _get_city_id(city_name: str) -> int:
     """
@@ -97,7 +117,7 @@ def _get_city_id(city_name: str) -> int:
     :param city: 城市名
     :return: 城市代码
     """
-    city_ids = load_json(pm.get_abs_path("assets/weather_china/city_ids.json"))
+    city_ids = load_json(CITY_IDS_PATH)
 
     if city_name not in city_ids.keys():
         logger.error(f"未找到城市 {city_name}。")
@@ -113,12 +133,9 @@ def _parse_hourly_weather_response(response: requests.Response) -> Dict:
         script = weather_chart_div.find("script")
         helper_div = soup.find("div", class_="weather_shzs")
         dls = helper_div.find("div", class_="lv").find_all("dl")
-        if not script or not helper_div or not dls:
-            logger.error("中国天气网API返回数据不正确")
-            raise Bs4ParsingError("中国天气网API返回数据不正确")
     except AttributeError:
         logger.error("中国天气网API返回数据不正确")
-        raise AttributeError("中国天气网API返回数据不正确")
+        raise Bs4ParsingError("中国天气网API返回数据不正确")
 
     data = script.string
     try:
@@ -130,6 +147,9 @@ def _parse_hourly_weather_response(response: requests.Response) -> Dict:
     except json.JSONDecodeError:
         logger.error("中国天气网API返回数据不正确")
         raise json.JSONDecodeError("中国天气网API返回数据不正确", "", 0)
+    except IndexError:
+        logger.error("中国天气网API返回数据不正确")
+        raise IndexError("中国天气网API返回数据不正确")
 
     return {
         "weather": hour3data,
@@ -139,25 +159,21 @@ def _parse_hourly_weather_response(response: requests.Response) -> Dict:
         "air": dls.pop().find("em").string,
     }
 
-
-def _get_current_weather_response_json(city_id: int) -> Dict:
-    # 获取当前天气
-    headers = {
-        "Accept": "*/*",
-        "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
-        "Referer": "http://www.weather.com.cn/",
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
-    }
-    response = get_request(
-        url=f"http://d1.weather.com.cn/sk_2d/{city_id}.html", headers=headers
-    )
-
+def _parse_c_weather(c_weather: str) -> Dict:
+    """
+    解析实时天气
+    :param c_weather: 实时天气
+    :return: 实时天气
+    """
     try:
-        return json.loads(response.text.split("=")[1])
+        c_data = json.loads(c_weather.split("=")[1])
     except json.JSONDecodeError:
-        logger.error("中国天气网当前天气API返回数据不正确")
-        raise json.JSONDecodeError("中国天气网当前天气API返回数据不正确", "", 0)
-
+        logger.error("中国天气网API返回数据不正确")
+        raise json.JSONDecodeError("中国天气网API返回数据不正确", "", 0)
+    except IndexError:
+        logger.error("中国天气网API返回数据不正确")
+        raise IndexError("中国天气网API返回数据不正确")
+    return c_data
 
 def _get_sun_time(sunset: List, sunrise: List) -> Dict:
     # 计算当前时间的总分钟数
@@ -200,7 +216,6 @@ def _get_future_weather(h_data: List, now_h: int, hours: int) -> List:
     :return: 未来几小时的天气
     """
     now_date = get_current_ymd()
-    now_datetime = ""
     # now_h 补前导零
     if now_h < 10:
         now_datetime = now_date + "0" + str(now_h)
@@ -218,24 +233,15 @@ def _get_future_weather(h_data: List, now_h: int, hours: int) -> List:
     return future_weather_list
 
 
-def get_weather_str(city_name: str) -> str:
-    city_id = _get_city_id(city_name)
-
-    response = get_request(url=f"http://www.weather.com.cn/weather1dn/{city_id}.shtml")
-    _h_data = _parse_hourly_weather_response(response)
-
-    c_data = _get_current_weather_response_json(city_id)
-
+def _generate_weather_message(c_data: Dict, hourly_data: Dict, future_weather_list: List) -> str:
     h = int(c_data["time"].split(":")[0])
-    h_data = _h_data["weather"]
-    temp = _h_data["temp"]
+    temp = hourly_data["temp"]
     date = c_data["date"].replace("(", " ")[:-1]
     sun_time = _get_sun_time(
-        _h_data["sun_time"]["sun_set"], _h_data["sun_time"]["sun_rise"]
+        hourly_data["sun_time"]["sun_set"], hourly_data["sun_time"]["sun_rise"]
     )
-    future_weather = _get_future_weather(h_data, h, 5)
     future_str = ""
-    for index, hour in enumerate(future_weather):
+    for index, hour in enumerate(future_weather_list):
         future_str += f"{WEATHER_CONDITIONS[int(hour['ja'])]}{hour['jb']}° "
     # TODO: TIP 设计
     message = (
@@ -244,7 +250,7 @@ def get_weather_str(city_name: str) -> str:
         f"🌤️ 天气: {c_data['weather']}（{TIME_EMOJIS[h]}当前{c_data['temp']}°C）\n"
         f"📈 逐时: {future_str}\n"
         f"☀️ {sun_time['sun_rise_name']}: {sun_time['sun_rise']} {sun_time['sun_set_name']}: {sun_time['sun_set']}\n"
-        f"💨 {c_data['WS']} 😷{_h_data['air']} 💧{c_data['SD']} 🌞{_h_data['uv']}\n"
+        f"💨 {c_data['WS']} 😷{hourly_data['air']} 💧{c_data['SD']} 🌞{hourly_data['uv']}\n"
         # f"💡 会下雨，记得带伞！💡\n"
     )
     return message

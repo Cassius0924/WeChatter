@@ -2,7 +2,7 @@ from typing import List
 
 from apscheduler.triggers.cron import CronTrigger
 
-from wechatter.commands._commands.weather import get_weather_str
+from wechatter.commands._commands.weather import _generate_weather_message
 from wechatter.models.message import SendMessage, SendMessageType
 from wechatter.models.scheduler import CronTask
 from wechatter.sender import Sender
@@ -39,7 +39,7 @@ def parse_weather_cron_rules(
                 to_persons = task["to_persons"]
                 to_groups = task["to_groups"]
                 send_message = SendMessage(
-                    type=SendMessageType.TEXT, content=get_weather_str(task["city"])
+                    type=SendMessageType.TEXT, content=_generate_weather_message(task["city"])
                 )
                 Sender.send_msg_ps(to_p_names=to_persons, message=send_message)
                 Sender.send_msg_gs(to_g_names=to_groups, message=send_message)

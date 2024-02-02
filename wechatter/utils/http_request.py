@@ -57,8 +57,8 @@ def get_request_json(url, params=None, headers=DEAULT_HEADERS, timeout=5) -> Dic
     response = get_request(url, params=params, headers=headers, timeout=timeout)
     try:
         return response.json()
-    except requests.exceptions.JSONDecodeError as e:
-        logger.error(f"解析 {url} 返回的JSON失败，错误信息：{str(e)}")
+    except requests.exceptions.JSONDecodeError:
+        logger.error("解析 {url} 返回的JSON失败")
         raise
 
 
