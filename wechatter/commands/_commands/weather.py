@@ -106,7 +106,10 @@ def get_weather_str(city: str) -> str:
     c_data = _parse_c_weather(response2.text)
     now_ymdh = get_current_ymdh()
     future_weather_list = _get_future_weather(hourly_data["weather"], now_ymdh, 5)
-    return _generate_weather_message(c_data, hourly_data, future_weather_list)
+    sun_time = _get_sun_time(
+        hourly_data["sun_time"]["sun_set"], hourly_data["sun_time"]["sun_rise"]
+    )
+    return _generate_weather_message(c_data, hourly_data, future_weather_list, sun_time)
 
 
 def _get_city_id(city_name: str) -> int:
@@ -228,14 +231,11 @@ def _get_future_weather(h_data: List, now_ymdh: str, hours: int) -> List:
 
 
 def _generate_weather_message(
-    c_data: Dict, hourly_data: Dict, future_weather_list: List
+    c_data: Dict, hourly_data: Dict, future_weather_list: List, sun_time: Dict
 ) -> str:
     h = int(c_data["time"].split(":")[0])
     temp = hourly_data["temp"]
     date = c_data["date"].replace("(", " ")[:-1]
-    sun_time = _get_sun_time(
-        hourly_data["sun_time"]["sun_set"], hourly_data["sun_time"]["sun_rise"]
-    )
     future_str = ""
     for index, hour in enumerate(future_weather_list):
         future_str += f"{WEATHER_CONDITIONS[int(hour['ja'])]}{hour['jb']}° "
