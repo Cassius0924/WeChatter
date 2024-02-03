@@ -1,14 +1,4 @@
-<div align="center" style="font-size:70px;">
-    <b> WeChatter </b>
-</div>
-
-<br>
-
-<div align="center">
-
-[![CI/CD](https://github.com/Cassius0924/WeChatter/actions/workflows/test.yml/badge.svg)](https://github.com/Cassius0924/WeChatter/actions/workflows/test.yml)
-[![GitHub Release](https://img.shields.io/github/v/release/Cassius0924/WeChatter)](https://github.com/Cassius0924/WeChatter/releases)
-[![GitHub License](https://img.shields.io/github/license/Cassius0924/WeChatter)](https://github.com/Cassius0924/WeChatter/blob/master/LICENSE)
+# WeChatter
 
 </div>
 
