@@ -61,7 +61,7 @@ weather_cron_rules = config_reader.getlist("weather-cron", "weather_cron_rules")
 gasoline_price_cron_enable = config_reader.getbool(
     "gasoline-price-cron", "gasoline_price_cron_enabled"
 )
-gasoline_price_cron_rules = config_reader.getlist("gasoline-price-cron", "cron_rules")
+gasoline_price_cron_rules = config_reader.getlist("gasoline-price-cron", "gasoline_price_cron_rules")
 
 
 logger.info(config_reader.config_dict)
