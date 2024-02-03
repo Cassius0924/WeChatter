@@ -4,23 +4,27 @@ import requests
 from bs4 import BeautifulSoup
 from loguru import logger
 
+import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
 from wechatter.exceptions import Bs4ParsingError
 from wechatter.models.message import SendMessage, SendMessageType, SendTo
 from wechatter.sender import Sender
-from wechatter.utils import get_request
+from wechatter.utils import get_request, load_json
 
 
 @command(
     command="gasoline_price",
-    keys=["汽油", "gasoline_price", "汽油价格"],
+    keys=["汽油", "gasoline_price", "汽油价格", "中石化"],
     desc="获取汽油价格。",
     value=180,
 )
+
 def gasoline_price_command_handler(to: SendTo, message: str = "") -> None:
+    #查询message中对应的城市id
+    city_id = _get_city_id(message)
     try:
         response = get_request(
-            url="https://www.icauto.com.cn/oil/price_440700_2_1.html"
+            url=f"https://www.icauto.com.cn/oil/price_{city_id}_2_1.html"
         )
         gasoline_price = _parse_gasoline_price_response(response)
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, gasoline_price))
@@ -50,3 +54,20 @@ def _parse_gasoline_price_response(response: requests.Response) -> str:
         logger.error("找不到class等于'articlebody'的div")
         raise Bs4ParsingError("找不到class等于'articlebody'的div")
     return desired_text
+
+
+CITY_IDS_PATH = pm.get_abs_path("assets/gasoline_price_china/city_ids.json")
+
+
+def _get_city_id(city_name: str) -> str:
+    """
+    获取城市代码
+    :param city: 城市名
+    :return: 城市代码
+    """
+    city_ids = load_json(CITY_IDS_PATH)
+
+    if city_name not in city_ids.keys():
+        logger.error(f"未找到城市 {city_name}。")
+        raise KeyError(f"未找到城市 {city_name}。")
+    return city_ids[city_name]
