@@ -27,10 +27,11 @@ def gasoline_price_command_handler(to: SendTo, message: str = "") -> None:
             url=f"https://www.icauto.com.cn/oil/price_{city_id}_2_1.html"
         )
         gasoline_price = _parse_gasoline_price_response(response)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, gasoline_price))
+        result = _generate_gasoline_price_message(gasoline_price)
+        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
     except Exception as e:
         error_message = f"获取汽油价格失败，错误信息：{e}"
-        print(error_message)
+        logger.error(error_message)
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
 
 
@@ -71,3 +72,6 @@ def _get_city_id(city_name: str) -> str:
         logger.error(f"未找到城市 {city_name}。")
         raise KeyError(f"未找到城市 {city_name}。")
     return city_ids[city_name]
+
+def _generate_gasoline_price_message(gasoline_price: str, message: str) -> str:
+    return f"✨{message}中国石化92号汽油指导价✨\n{gasoline_price}\n油价数据仅供参考,实际在售油价可能有小幅偏差。"
