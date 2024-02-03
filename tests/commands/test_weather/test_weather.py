@@ -77,9 +77,11 @@ class TestWeatherCommand(unittest.TestCase):
         result = weather._generate_weather_message(
             self.c_data, self.hourly_data, future_weather_list
         )
+        print(result)
         true_result1 = "🏙️ 广州 📅 02月02日 星期五\n🌡️ 温度: 19°C ~ 26°C\n🌤️ 天气: 多云（🕓当前26.4°C）\n📈 逐时: 阴25° 阴24° 阴23° 阴21° 阴20° \n☀️ 明日日出: 07:06 今日日落: 18:14\n💨 1级 😷较差 💧60% 🌞最弱\n"
         true_result2 = "🏙️ 广州 📅 02月02日 星期五\n🌡️ 温度: 19°C ~ 26°C\n🌤️ 天气: 多云（🕓当前26.4°C）\n📈 逐时: 阴25° 阴24° 阴23° 阴21° 阴20° \n☀️ 明日日出: 07:06 明日日落: 18:15\n💨 1级 😷较差 💧60% 🌞最弱\n"
-        self.assertTrue(result == true_result1 or result == true_result2)
+        self.assertEqual(result, true_result1)
+        self.assertEqual(result, true_result2)
 
     def test_get_future_weather_success(self):
         result = weather._get_future_weather(
