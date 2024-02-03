@@ -36,11 +36,24 @@ def trivia_command_handler(to: SendTo, message: str = "") -> None:
 def _parse_trivia_response(response: requests.Response) -> List:
     soup = BeautifulSoup(response.text, "html.parser")
     trivia_list = []
-    articles = soup.select_one("div.list").find_all("li")
-    for article in articles:
-        trivia = article.text.strip()
-        if trivia:
-            trivia_list.append(trivia)
+    list_div = soup.select_one("div.list")
+    if list_div:
+        articles = list_div.find_all("li")
+        if articles:
+            for article in articles:
+                trivia = article.text.strip()
+                if trivia:
+                    trivia_list.append(trivia)
+                else:
+                    logger.error("冷知识为空")
+                    raise Bs4ParsingError("冷知识为空")
+        else:
+            logger.error("未找到li标签")
+            raise Bs4ParsingError("未找到li标签")
+    else:
+        logger.error("未找到div.list标签")
+        raise Bs4ParsingError("未找到div.list标签")
+
     if not trivia_list:
         logger.error("解析冷知识失败")
         raise Bs4ParsingError("解析冷知识失败")
