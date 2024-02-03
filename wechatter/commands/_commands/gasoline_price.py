@@ -28,6 +28,7 @@ def gasoline_price_command_handler(to: SendTo, message: str = "") -> None:
 
 # TODO：查询其他类型的油价，如95，97柴油等，例子：查询95号汽油只需改成{city_id}_4_1.html
 # TODO: 现在查询的是中国石油化工,添加查询中国石油天然气，只需改成{city_id}_2_2.html
+# 封装起来，方便定时任务调用
 def get_gasoline_price_str(city_name: str) -> str:
     if city_name == "":
         return "请输入城市名，如：广州"
@@ -71,7 +72,7 @@ CITY_IDS_PATH = pm.get_abs_path("assets/gasoline_price_china/city_ids.json")
 def _get_city_id(city_name: str) -> str:
     """
     获取城市代码
-    :param city: 城市名
+    :param city_name: 城市名
     :return: 城市代码
     """
     city_ids = load_json(CITY_IDS_PATH)
