@@ -1,4 +1,5 @@
 from typing import Dict, List
+
 from loguru import logger
 
 from wechatter.commands.handlers import command
@@ -11,7 +12,6 @@ from wechatter.utils import get_request_json
     command="zhihu-hot",
     keys=["知乎热搜", "zhihu-hot"],
     desc="获取知乎热搜。",
-    value=140,
 )
 def zhihu_hot_command_handler(to: SendTo, message: str = "") -> None:
     try:

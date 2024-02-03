@@ -15,7 +15,6 @@ from wechatter.utils import get_request
     command="github-trending",
     keys=["GitHub趋势", "github-trending"],
     desc="获取GitHub趋势。",
-    value=60,
 )
 def github_trending_command_handler(to: SendTo, message: str = "") -> None:
     try:

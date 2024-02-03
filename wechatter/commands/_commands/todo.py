@@ -16,7 +16,6 @@ from wechatter.utils import load_json, save_json
     command="todo",
     keys=["待办事项", "待办", "todo"],
     desc="获取待办事项。",
-    value=110,
 )
 def todo_command_handler(to: SendTo, message: str = "") -> None:
     # 判断是查询还是添加
@@ -40,7 +39,6 @@ def todo_command_handler(to: SendTo, message: str = "") -> None:
     command="remove-todo",
     keys=["删除待办事项", "remove-todo", "rmtd"],
     desc="删除待办事项。",
-    value=111,
 )
 def remove_todo_command_handler(to: SendTo, message: str = "") -> None:
     indices = [

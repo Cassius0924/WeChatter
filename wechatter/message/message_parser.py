@@ -57,7 +57,6 @@ class MessageHandler:
         cmd_dict = {
             "command": "None",
             "desc": "",
-            "value": 0,
             "arg": "",
             "handler": None,
         }
@@ -75,7 +74,6 @@ class MessageHandler:
             if no_prefix.lower() in info["keys"]:
                 cmd_dict["command"] = command
                 cmd_dict["desc"] = info["desc"]
-                cmd_dict["value"] = info["value"]
                 cmd_dict["handler"] = info["handler"]
                 if len(cont_list) == 2:
                     cmd_dict["arg"] = cont_list[1]  # 消息内容

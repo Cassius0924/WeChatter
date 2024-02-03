@@ -15,7 +15,6 @@ from wechatter.utils import get_request
     command="pai-post",
     keys=["派早报", "pai-post"],
     desc="获取少数派早报。",
-    value=70,
 )
 def pai_post_command_handler(to: SendTo, message: str = "") -> None:
     try:

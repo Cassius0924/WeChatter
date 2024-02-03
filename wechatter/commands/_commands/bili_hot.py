@@ -9,7 +9,9 @@ from wechatter.utils import get_request_json
 
 
 @command(
-    command="bili-hot", keys=["b站热搜", "bili-hot"], desc="获取b站热搜。", value=20
+    command="bili-hot",
+    keys=["b站热搜", "bili-hot"],
+    desc="获取b站热搜。",
 )
 def bili_hot_command_handler(to: SendTo, message: str = "") -> None:
     try:
@@ -23,7 +25,9 @@ def bili_hot_command_handler(to: SendTo, message: str = "") -> None:
 
 
 def get_bili_hot_str() -> str:
-    response = get_request_json(url="https://app.bilibili.com/x/v2/search/trending/ranking")
+    response = get_request_json(
+        url="https://app.bilibili.com/x/v2/search/trending/ranking"
+    )
     hot_list = _extract_bili_hot_data(response)
     return _generate_bili_hot_message(hot_list)
 
