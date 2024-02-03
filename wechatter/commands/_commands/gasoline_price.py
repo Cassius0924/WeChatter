@@ -74,4 +74,4 @@ def _get_city_id(city_name: str) -> str:
     return city_ids[city_name]
 
 def _generate_gasoline_price_message(gasoline_price: str, message: str) -> str:
-    return f"✨{message}中国石化92号汽油指导价✨\n{gasoline_price}\n油价数据仅供参考,实际在售油价可能有小幅偏差。"
+    return f"✨{message}石化92汽油指导价✨\n\n{gasoline_price}\n\n油价数据仅供参考,实际在售油价可能有小幅偏差。"
