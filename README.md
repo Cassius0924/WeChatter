@@ -1,5 +1,13 @@
 # WeChatter
 
+<div align="center">
+
+[![CI/CD](https://github.com/Cassius0924/WeChatter/actions/workflows/test.yml/badge.svg)](https://github.com/Cassius0924/WeChatter/actions/workflows/test.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/Cassius0924/WeChatter)](https://github.com/Cassius0924/WeChatter/releases)
+[![GitHub License](https://img.shields.io/github/license/Cassius0924/WeChatter)](https://github.com/Cassius0924/WeChatter/blob/master/LICENSE)
+
+</div>
+
 ## 介绍
 
 基于 [wechatbot-webhook](https://github.com/danni-cool/wechatbot-webhook) 的微信机器人💬，支持 GPT 问答、热搜、天气预报、消息转发、Webhook提醒等功能。
@@ -111,7 +119,7 @@ python3 main.py
 
 | 配置项 | 解释 | 备注 |
 | --- | --- |  --- |
-| `wechatter_port` | WeChattter服务器的端口，接受消息的端口 | 默认为 `4000`，需和 `wxbotwebhook` Docker 的 `RECV_MSG_API` 参数的端口一致 |
+| `wechatter_port` | WeChatter服务器的端口，接受消息的端口 | 默认为 `4000`，需和 `wxbotwebhook` Docker 的 `RECV_MSG_API` 参数的端口一致 |
 
 ### ⚙️ WxBotWebhook 配置
 
