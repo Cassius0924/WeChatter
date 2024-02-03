@@ -1,5 +1,3 @@
-from typing import List
-
 import requests
 from bs4 import BeautifulSoup
 from loguru import logger
@@ -18,30 +16,31 @@ from wechatter.utils import get_request, load_json
     desc="获取汽油价格。",
     value=180,
 )
-#TODO：查询其他类型的油价，如95，97柴油等，例子：查询95号汽油只需改成{city_id}_4_1.html
-# 现在查询的是中国石油化工,添加查询中国石油天然气，只需改成{city_id}_2_2.html
 def gasoline_price_command_handler(to: SendTo, message: str = "") -> None:
-    if message == "":
-        warning = "请输入城市名，如：广州"
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, warning))
+    try:
+        result = get_gasoline_price_str(message)
+        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
+    except Exception as e:
+        error_message = f"获取汽油价格失败，错误信息：{e}"
+        logger.error(error_message)
+        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
+
+
+# TODO：查询其他类型的油价，如95，97柴油等，例子：查询95号汽油只需改成{city_id}_4_1.html
+# TODO: 现在查询的是中国石油化工,添加查询中国石油天然气，只需改成{city_id}_2_2.html
+def get_gasoline_price_str(city_name: str) -> str:
+    if city_name == "":
+        return "请输入城市名，如：广州"
     else:
-        #查询message中对应的城市id
-        city_id = _get_city_id(message)
+        city_id = _get_city_id(city_name)
         if not city_id:
-            error_message = f"未找到城市 {message}。"
-            logger.error(error_message)
-            Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
-        try:
-            response = get_request(
-                url=f"https://www.icauto.com.cn/oil/price_{city_id}_2_1.html"
-            )
-            gasoline_price = _parse_gasoline_price_response(response)
-            result = _generate_gasoline_price_message(gasoline_price, message)
-            Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
-        except Exception as e:
-            error_message = f"获取汽油价格失败，错误信息：{e}"
-            logger.error(error_message)
-            Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
+            raise KeyError(f"未找到城市 {city_name}。")
+
+        response = get_request(
+            url=f"https://www.icauto.com.cn/oil/price_{city_id}_2_1.html"
+        )
+        gasoline_price = _parse_gasoline_price_response(response)
+        return _generate_gasoline_price_message(gasoline_price, city_name)
 
 
 def _parse_gasoline_price_response(response: requests.Response) -> str:
@@ -81,6 +80,7 @@ def _get_city_id(city_name: str) -> str:
         logger.error(f"未找到城市 {city_name}。")
         raise KeyError(f"未找到城市 {city_name}。")
     return city_ids[city_name]
+
 
 def _generate_gasoline_price_message(gasoline_price: str, message: str) -> str:
     return f"✨{message}石化92汽油指导价✨\n\n{gasoline_price}\n\n油价数据仅供参考,实际在售油价可能有小幅偏差。"
