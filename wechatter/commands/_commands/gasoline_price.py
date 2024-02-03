@@ -24,23 +24,24 @@ def gasoline_price_command_handler(to: SendTo, message: str = "") -> None:
     if message == "":
         warning = "请输入城市名，如：广州"
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, warning))
-    #查询message中对应的城市id
-    city_id = _get_city_id(message)
-    if not city_id:
-        error_message = f"未找到城市 {message}。"
-        logger.error(error_message)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
-    try:
-        response = get_request(
-            url=f"https://www.icauto.com.cn/oil/price_{city_id}_2_1.html"
-        )
-        gasoline_price = _parse_gasoline_price_response(response)
-        result = _generate_gasoline_price_message(gasoline_price, message)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
-    except Exception as e:
-        error_message = f"获取汽油价格失败，错误信息：{e}"
-        logger.error(error_message)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
+    else:
+        #查询message中对应的城市id
+        city_id = _get_city_id(message)
+        if not city_id:
+            error_message = f"未找到城市 {message}。"
+            logger.error(error_message)
+            Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
+        try:
+            response = get_request(
+                url=f"https://www.icauto.com.cn/oil/price_{city_id}_2_1.html"
+            )
+            gasoline_price = _parse_gasoline_price_response(response)
+            result = _generate_gasoline_price_message(gasoline_price, message)
+            Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
+        except Exception as e:
+            error_message = f"获取汽油价格失败，错误信息：{e}"
+            logger.error(error_message)
+            Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
 
 
 def _parse_gasoline_price_response(response: requests.Response) -> str:
