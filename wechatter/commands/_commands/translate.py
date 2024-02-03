@@ -15,7 +15,6 @@ from wechatter.utils import get_request, get_request_json
     command="word",
     keys=["word", "单词"],
     desc="翻译单词或短语。",
-    value=120,
 )
 def word_command_handler(to: SendTo, message: str = "") -> None:
     from_lang = _detect_lang(message)
@@ -79,6 +78,7 @@ MODEL_DICT = {
 
 # fmt: on
 
+
 # 获取翻译字符串
 def get_reverso_context_tran_str(content: str, from_lang: str, to_lang: str) -> str:
     if not _check_lang_support(from_lang, to_lang):
@@ -110,7 +110,9 @@ def get_reverso_context_tran_str(content: str, from_lang: str, to_lang: str) -> 
     else:
         logger.info(f"不支持的语言音译：{from_lang}")
 
-    message = _generate_translate_message(content, from_lang, to_lang, word_list, transliteration)
+    message = _generate_translate_message(
+        content, from_lang, to_lang, word_list, transliteration
+    )
     return message
 
 
@@ -123,10 +125,11 @@ def _extract_transliteration_data(r_json: Dict) -> str:
     return transliteration
 
 
-def _generate_translate_message(content: str, from_lang: str, to_lang: str, word_list: List,
-                                transliteration: str) -> str:
+def _generate_translate_message(
+    content: str, from_lang: str, to_lang: str, word_list: List, transliteration: str
+) -> str:
     tran_direction_msg = (
-            LANG_EMOJI_DICT.get(from_lang, "") + "->" + LANG_EMOJI_DICT.get(to_lang, "")
+        LANG_EMOJI_DICT.get(from_lang, "") + "->" + LANG_EMOJI_DICT.get(to_lang, "")
     )
     msg = f'({tran_direction_msg}) "{content}" 翻译:\n'
     if transliteration != "":

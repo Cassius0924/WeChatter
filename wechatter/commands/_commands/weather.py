@@ -18,7 +18,6 @@ from wechatter.utils.time import get_current_hour, get_current_minute, get_curre
     command="weather",
     keys=["weather", "天气", "天气预报", "几度"],
     desc="获取天气预报",
-    value=160,
 )
 def weather_command_handler(to: SendTo, message: str = "") -> None:
     try:

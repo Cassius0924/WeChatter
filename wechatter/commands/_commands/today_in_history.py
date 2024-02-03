@@ -12,7 +12,6 @@ from wechatter.utils import get_request_json
     command="today-in-history",
     keys=["历史上的今天", "today-in-history", "t-i-h"],
     desc="获取历史上的今天。",
-    value=100,
 )
 def today_in_history_command_handler(to: SendTo, message: str = "") -> None:
     # 获取历史上的今天

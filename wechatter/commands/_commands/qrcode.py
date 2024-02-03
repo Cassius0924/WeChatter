@@ -14,7 +14,6 @@ from wechatter.utils.time import get_current_datetime
     command="qrcode",
     keys=["二维码", "qrcode"],
     desc="将文本或链接转换为二维码。",
-    value=90,
 )
 def qrcode_command_handler(to: SendTo, message: str = "") -> None:
     # 获取二维码

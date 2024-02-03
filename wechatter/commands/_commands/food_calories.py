@@ -1,21 +1,20 @@
-from typing import List, Dict
+from typing import Dict, List
 from urllib.parse import quote
 
 import requests
 from bs4 import BeautifulSoup
 
 from wechatter.commands.handlers import command
+from wechatter.exceptions import Bs4ParsingError
 from wechatter.models.message import SendMessage, SendMessageType, SendTo
 from wechatter.sender import Sender
 from wechatter.utils import get_request
-from wechatter.exceptions import Bs4ParsingError
 
 
 @command(
     command="food-calories",
     keys=["食物热量", "food-calories", "热量", "calories", "卡路里"],
     desc="获取食物热量。",
-    value=150,
 )
 def food_calories_command_handler(to: SendTo, message: str = "") -> None:
     try:
