@@ -57,6 +57,13 @@ message_forwarding_rules = config_reader.getlist(
 weather_cron_enabled = config_reader.getbool("weather-cron", "weather_cron_enabled")
 weather_cron_rules = config_reader.getlist("weather-cron", "weather_cron_rules")
 
+# gasoline-price-cron 配置
+gasoline_price_cron_enable = config_reader.getbool(
+    "gasoline-price-cron", "gasoline_price_cron_enable"
+)
+gasoline_price_cron_rules = config_reader.getlist("gasoline-price-cron", "cron_rules")
+
+
 logger.info(config_reader.config_dict)
 
 logger.info("配置文件读取完毕！")
