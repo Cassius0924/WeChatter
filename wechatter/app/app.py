@@ -35,13 +35,13 @@ if config.gasoline_price_cron_enable:
 
     Scheduler.add_cron_tasks(gasoline_price_cron_tasks)
 
-    scheduler = Scheduler()
+    gasoline_price_scheduler = Scheduler()
 
     # 定时任务
     @app.on_event("startup")
     async def startup_event():
-        scheduler.startup()
+        gasoline_price_scheduler.startup()
 
     @app.on_event("shutdown")
     async def shutdown_event():
-        scheduler.shutdown()
+        gasoline_price_scheduler.shutdown()
