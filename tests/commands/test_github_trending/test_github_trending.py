@@ -1,18 +1,21 @@
-import unittest
 import json
+import unittest
+
 from requests import Response
+
 from wechatter.commands._commands import github_trending as gt
 from wechatter.exceptions import Bs4ParsingError
 
 
 class TestGithubTrendingCommand(unittest.TestCase):
-
     def setUp(self):
-        with open('tests/commands/test_github_trending/github_trending_response.html') as f:
+        with open(
+            "tests/commands/test_github_trending/github_trending_response.html.test"
+        ) as f:
             r_html = f.read()
         self.response = Response()
-        self.response._content = r_html.encode('utf-8')
-        with open('tests/commands/test_github_trending/github_trending_data.json') as f:
+        self.response._content = r_html.encode("utf-8")
+        with open("tests/commands/test_github_trending/github_trending_data.json") as f:
             self.gt_list = json.load(f)
 
     def test_parse_github_trending_response_success(self):
@@ -30,4 +33,4 @@ class TestGithubTrendingCommand(unittest.TestCase):
 
     def test_generate_zhihu_hot_message_empty_list(self):
         result = gt._generate_github_trending_message([])
-        self.assertEqual(result, '暂无 GitHub 趋势')
+        self.assertEqual(result, "暂无 GitHub 趋势")
