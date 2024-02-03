@@ -32,7 +32,12 @@ def _check(response: requests.Response) -> bool:
             logger.warning(f"发送消息部分成功，成功数：{task['successCount']}")
             return True
 
-    data = json.loads(response.request.body.decode("utf-8"))
+    try:
+        data = json.loads(response.request.body.decode("utf-8"))
+    except UnicodeDecodeError:
+        # 本地文件发送无法解码
+        logger.info("发送图片成功")
+        return True
     if isinstance(data, list):
         for item in data:
             logger.info(
