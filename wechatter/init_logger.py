@@ -7,7 +7,8 @@ from loguru import logger
 from wechatter.utils.path_manager import get_abs_path
 
 # 使用环境变量中的 LOG_LEVEL
-LOG_LEVEL = logging.getLevelName(os.environ.get("LOG_LEVEL", "INFO"))
+LOG_LEVEL_NAME = os.environ.get("LOG_LEVEL", "INFO")
+LOG_LEVEL = logging.getLevelName(LOG_LEVEL_NAME)
 
 LOGURU_FORMAT = (
     "<green>{time:YYYY-MM-DD HH:mm:ss}</green> | "
@@ -54,6 +55,7 @@ def init_logger():
             {
                 "sink": sys.stdout,
                 "format": LOGURU_FORMAT,
+                "level": LOG_LEVEL_NAME,
             }
         ],
     )

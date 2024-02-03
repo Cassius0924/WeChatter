@@ -1,4 +1,4 @@
-# 项目启动文件
+# WeChatter 启动文件
 import uvicorn
 from loguru import logger
 
