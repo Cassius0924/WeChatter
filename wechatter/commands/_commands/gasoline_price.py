@@ -18,10 +18,15 @@ from wechatter.utils import get_request, load_json
     desc="获取汽油价格。",
     value=180,
 )
-
+#TODO：查询其他类型的油价，如95，97柴油等，例子：查询95号汽油只需改成{city_id}_4_1.html
+# 现在查询的是中国石油化工,添加查询中国石油天然气，只需改成{city_id}_2_2.html
 def gasoline_price_command_handler(to: SendTo, message: str = "") -> None:
     #查询message中对应的城市id
     city_id = _get_city_id(message)
+    if not city_id:
+        error_message = f"未找到城市 {message}。"
+        logger.error(error_message)
+        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
     try:
         response = get_request(
             url=f"https://www.icauto.com.cn/oil/price_{city_id}_2_1.html"
