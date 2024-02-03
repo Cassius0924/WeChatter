@@ -17,6 +17,7 @@ class TestTriviaCommand(unittest.TestCase):
 
     def test_parse_trivia_response_success(self):
         result = trivia._parse_trivia_response(self.response)
+        print(result)
         self.assertListEqual(result, self.trivia_list)
 
     # def test_parse_trivia_response_failure(self):
