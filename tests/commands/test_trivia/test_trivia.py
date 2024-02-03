@@ -13,7 +13,7 @@ class TestTriviaCommand(unittest.TestCase):
         self.response = Response()
         self.response._content = r_html.encode('utf-8')
         with open('tests/commands/test_trivia/trivia_data.json') as f:
-            self.trivia_list = json.load(f).encoding='utf-8'
+            self.trivia_list = json.load(f)
 
     def test_parse_trivia_response_success(self):
         result = trivia._parse_trivia_response(self.response)
