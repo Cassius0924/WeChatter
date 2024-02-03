@@ -31,7 +31,7 @@ if config.weather_cron_enabled:
 
 
 if config.gasoline_price_cron_enable:
-    gasoline_price_cron_tasks = parse_gasoline_price_cron_rules(config.gasoline_price.cron.rules)
+    gasoline_price_cron_tasks = parse_gasoline_price_cron_rules(config.gasoline_price_cron_rules)
 
     Scheduler.add_cron_tasks(gasoline_price_cron_tasks)
 
