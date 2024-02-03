@@ -6,13 +6,13 @@ import tenacity
 from loguru import logger
 
 import wechatter.config as config
+import wechatter.utils.http_request as http_request
 from wechatter.models.message import (
     SendMessage,
     SendMessageList,
     SendMessageType,
     SendTo,
 )
-from wechatter.utils import post_request
 
 
 # 对retry装饰器重新包装，增加日志输出
@@ -39,9 +39,9 @@ def _retry(
 
 @_retry()
 def _post_request(
-    url, data=None, json=None, files=None, headers=None, timeout=5
+    url, data=None, json=None, files=None, headers={}, timeout=5
 ) -> requests.Response:
-    return post_request(
+    return http_request.post_request(
         url, data=data, json=json, files=files, headers=headers, timeout=timeout
     )
 
@@ -69,6 +69,10 @@ def _log(response: requests.Response) -> bool:
         # 本地文件发送无法解码
         logger.info("发送图片成功")
         return True
+    except json.JSONDecodeError:
+        logger.error(f"发送消息失败，错误信息：{r_json['message']}")
+        return False
+
     if isinstance(data, list):
         for item in data:
             logger.info(
@@ -77,15 +81,6 @@ def _log(response: requests.Response) -> bool:
     elif isinstance(data, dict):
         logger.info(f"发送消息成功，发送给：{data['to']}，发送的内容：{data['data']}")
     return True
-
-
-# def _retry(times: int, func: Callable) -> bool:
-#     """重试函数"""
-#     for _ in range(times):
-#         time.sleep(0.5)
-#         if func():
-#             return True
-#     return False
 
 
 class Sender:
@@ -148,7 +143,7 @@ class Sender:
             "isRoom": True,
             "data": {"type": message.type, "content": message.content},
         }
-        _log(post_request(Sender.url, headers=headers, json=data))
+        _log(_post_request(Sender.url, headers=headers, json=data))
 
     # 给同一个对象发送多条消息
     """
@@ -184,7 +179,7 @@ class Sender:
         for message in messages.messages:
             msg = {"type": message.type, "content": message.content}
             data["data"].append(msg)
-        _log(post_request(Sender.url, headers=headers, json=data))
+        _log(_post_request(Sender.url, headers=headers, json=data))
 
     # 给同一个群组发送多条消息
     @staticmethod
@@ -194,7 +189,7 @@ class Sender:
         for message in messages.messages:
             msg = {"type": message.type, "content": message.content}
             data["data"].append(msg)
-        _log(post_request(Sender.url, headers=headers, json=data))
+        _log(_post_request(Sender.url, headers=headers, json=data))
 
     # 给多个人发送一条消息（群发）
     """
@@ -230,7 +225,7 @@ class Sender:
                 "data": {"type": message.type, "content": message.content},
             }
             data.append(msg)
-        _log(post_request(Sender.url, headers=headers, json=data))
+        _log(_post_request(Sender.url, headers=headers, json=data))
 
     @staticmethod
     def send_msg_gs(to_g_names: List[str], message: SendMessage) -> bool:
@@ -246,7 +241,7 @@ class Sender:
                 "data": {"type": message.type, "content": message.content},
             }
             data.append(msg)
-        _log(post_request(Sender.url, headers=headers, json=data))
+        _log(_post_request(Sender.url, headers=headers, json=data))
 
     # TODO: 给多个人发送多条消息
 
@@ -271,14 +266,14 @@ class Sender:
         """发送本地文件给个人"""
         data = {"to": to_p_name, "isRoom": 0}
         files = {"content": open(file_path, "rb")}
-        _log(post_request(Sender.v1_url, data=data, files=files))
+        _log(_post_request(Sender.v1_url, data=data, files=files))
 
     @staticmethod
     def send_localfile_msg_g(to_g_name: str, file_path: str) -> bool:
         """发送本地文件给群组"""
         data = {"to": to_g_name, "isRoom": 1}
         files = {"content": open(file_path, "rb")}
-        _log(post_request(Sender.v1_url, data=data, files=files))
+        _log(_post_request(Sender.v1_url, data=data, files=files))
 
     @staticmethod
     def send_msg_to_admins(message: str) -> None:
@@ -348,7 +343,7 @@ class Sender:
 #         url = "http://localhost:3001/webhook/msg"
 #         headers = {"Content-Type": "application/json"}
 #         data = {"to": to_p_name, "type": "text", "content": message}
-#         post_request(url, headers=headers, json=data)
+#         _post_request(url, headers=headers, json=data)
 
 #     @staticmethod
 #     def send_text_msg_g(to_g_name: str, message: str) -> None:
@@ -356,7 +351,7 @@ class Sender:
 #         url = "http://localhost:3001/webhook/msg"
 #         headers = {"Content-Type": "application/json"}
 #         data = {"to": to_g_name, "isRoom": True, "type": "text", "content": message}
-#         post_request(url, headers=headers, json=data)
+#         _post_request(url, headers=headers, json=data)
 
 #     # 通过文件URL发送文件
 #     """
@@ -384,7 +379,7 @@ class Sender:
 #         url = "http://localhost:3001/webhook/msg"
 #         headers = {"Content-Type": "application/json"}
 #         data = {"to": to_p_name, "type": "fileUrl", "content": file_url}
-#         post_request(url, headers=headers, json=data)
+#         _post_request(url, headers=headers, json=data)
 
 #     @staticmethod
 #     def send_urlfile_msg_g(to_g_name: str, file_url: str) -> None:
@@ -392,7 +387,7 @@ class Sender:
 #         url = "http://localhost:3001/webhook/msg"
 #         headers = {"Content-Type": "application/json"}
 #         data = {"to": to_g_name, "isRoom": True, "type": "fileUrl", "content": file_url}
-#         post_request(url, headers=headers, json=data)
+#         _post_request(url, headers=headers, json=data)
 
 #     # 本地文件发送
 #     """
@@ -416,7 +411,7 @@ class Sender:
 #         url = "http://localhost:3001/webhook/msg"
 #         data = {"to": to_p_name, "isRoom": 0}
 #         files = {"content": open(file_path, "rb")}
-#         post_request(url, data=data, files=files)
+#         _post_request(url, data=data, files=files)
 
 #     @staticmethod
 #     def send_localfile_msg_g(to_g_name: str, file_path: str) -> None:
@@ -424,4 +419,4 @@ class Sender:
 #         url = "http://localhost:3001/webhook/msg"
 #         data = {"to": to_g_name, "isRoom": 1}
 #         files = {"content": open(file_path, "rb")}
-#         post_request(url, data=data, files=files)
+#         _post_request(url, data=data, files=files)
