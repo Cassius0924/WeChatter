@@ -74,8 +74,14 @@ class TestWeatherCommand(unittest.TestCase):
         future_weather_list = weather._get_future_weather(
             self.hourly_data["weather"], "2024020216", 5
         )
+        sun_time = {
+            "sun_set_name": "今日日落",
+            "sun_set": "18:14",
+            "sun_rise_name": "明日日出",
+            "sun_rise": "07:06",
+        }
         result = weather._generate_weather_message(
-            self.c_data, self.hourly_data, future_weather_list
+            self.c_data, self.hourly_data, future_weather_list, sun_time
         )
         print(result)
         true_result1 = "🏙️ 广州 📅 02月02日 星期五\n🌡️ 温度: 19°C ~ 26°C\n🌤️ 天气: 多云（🕓当前26.4°C）\n📈 逐时: 阴25° 阴24° 阴23° 阴21° 阴20° \n☀️ 明日日出: 07:06 今日日落: 18:14\n💨 1级 😷较差 💧60% 🌞最弱\n"
