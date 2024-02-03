@@ -24,6 +24,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+    - name: Copy config file
+      run: |
+        cp config.ini.example config.ini
     - name: Test code
       run: |
+        export LOG_LEVEL="CRITICAL"
         python -m unittest discover -s tests
