@@ -1,12 +1,15 @@
 import unittest
-from wechatter.commands._commands import translate
+
 import requests
+
+from wechatter.commands._commands import translate
 
 
 class TestTranslateCommand(unittest.TestCase):
-
     def setUp(self):
-        with open('tests/commands/test_translate/reverso_context_response.html') as f:
+        with open(
+            "tests/commands/test_translate/reverso_context_response.html.test"
+        ) as f:
             self.r_html = f.read()
         self.transliteration_json = {"text": "你好", "transliteration": "nǐ hǎo"}
 
@@ -75,8 +78,23 @@ class TestTranslateCommand(unittest.TestCase):
         response = requests.Response()
         response._content = self.r_html.encode()
         result = translate._parse_reverso_context_response(response)
-        true_result = ['你好', '您好', '喂', '嗨', '哈罗', '哈啰', '好', '你们好', '嘿', '打个招呼', '哈喽', '有人',
-                       '有人吗', '晚上好', 'Hello']
+        true_result = [
+            "你好",
+            "您好",
+            "喂",
+            "嗨",
+            "哈罗",
+            "哈啰",
+            "好",
+            "你们好",
+            "嘿",
+            "打个招呼",
+            "哈喽",
+            "有人",
+            "有人吗",
+            "晚上好",
+            "Hello",
+        ]
         self.assertListEqual(result, true_result)
 
     def test_parse_reverso_context_response_value_error(self):
@@ -97,7 +115,12 @@ class TestTranslateCommand(unittest.TestCase):
 
     def test_generate_translate_message(self):
         word_list = ["你好", "您好"]
-        result = translate._generate_translate_message(content="hello", from_lang="english", to_lang="chinese",
-                                                       word_list=word_list, transliteration="nǐ hǎo", )
-        true_result = "(🇺🇸->🇨🇳) \"hello\" 翻译:\n(🔈 注音) <nǐ hǎo>\n你好\n您好\n"
+        result = translate._generate_translate_message(
+            content="hello",
+            from_lang="english",
+            to_lang="chinese",
+            word_list=word_list,
+            transliteration="nǐ hǎo",
+        )
+        true_result = '(🇺🇸->🇨🇳) "hello" 翻译:\n(🔈 注音) <nǐ hǎo>\n你好\n您好\n'
         self.assertEqual(result, true_result)

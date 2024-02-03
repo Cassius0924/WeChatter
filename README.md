@@ -71,12 +71,12 @@ python3 main.py
 
 ## 支持的命令
 
-- [x] GPT问答，基于 [Copilot-GPT4-Server](https://github.com/aaamoon/copilot-gpt4-service)，需[配置](#%EF%B8%8F-copilot-gpt4-配置)
-- [x] 获取B站热搜
+- [x] GPT 问答，基于 [Copilot-GPT4-Server](https://github.com/aaamoon/copilot-gpt4-service)
+- [x] 获取 Bilibili 热搜
 - [x] 获取知乎热搜
 - [x] 获取微博热搜
 - [x] 获取抖音热搜
-- [x] 获取GitHub趋势
+- [x] 获取 GitHub 趋势
 - [x] 单词/词语翻译
 - [x] 获取少数派早报
 - [x] 获取历史上的今天
@@ -84,6 +84,7 @@ python3 main.py
 - [x] 待办清单（TODO）
 - [x] 获取人民日报PDF
 - [x] 获取天气预报
+- [x] 获取食物热量/卡路里
 
 > [!TIP]
 > 更多命令使用 `/help` 命令查看。

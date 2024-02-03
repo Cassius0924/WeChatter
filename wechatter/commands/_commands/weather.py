@@ -11,7 +11,7 @@ from wechatter.exceptions import Bs4ParsingError
 from wechatter.models.message import SendMessage, SendMessageType, SendTo
 from wechatter.sender import Sender
 from wechatter.utils import get_request, load_json
-from wechatter.utils.time import get_current_hour, get_current_minute, get_current_ymd
+from wechatter.utils.time import get_current_hour, get_current_minute, get_current_ymdh
 
 
 @command(
@@ -104,10 +104,8 @@ def get_weather_str(city: str) -> str:
         url=f"http://d1.weather.com.cn/sk_2d/{city_id}.html", headers=headers
     )
     c_data = _parse_c_weather(response2.text)
-    h = int(c_data["time"].split(":")[0])
-    future_weather_list = _get_future_weather(
-        hourly_data["weather"], h, 5
-    )
+    now_ymdh = get_current_ymdh()
+    future_weather_list = _get_future_weather(hourly_data["weather"], now_ymdh, 5)
     return _generate_weather_message(c_data, hourly_data, future_weather_list)
 
 
@@ -159,6 +157,7 @@ def _parse_hourly_weather_response(response: requests.Response) -> Dict:
         "air": dls.pop().find("em").string,
     }
 
+
 def _parse_c_weather(c_weather: str) -> Dict:
     """
     解析实时天气
@@ -174,6 +173,7 @@ def _parse_c_weather(c_weather: str) -> Dict:
         logger.error("中国天气网API返回数据不正确")
         raise IndexError("中国天气网API返回数据不正确")
     return c_data
+
 
 def _get_sun_time(sunset: List, sunrise: List) -> Dict:
     # 计算当前时间的总分钟数
@@ -207,25 +207,19 @@ def _get_sun_time(sunset: List, sunrise: List) -> Dict:
         }
 
 
-def _get_future_weather(h_data: List, now_h: int, hours: int) -> List:
+def _get_future_weather(h_data: List, now_ymdh: str, hours: int) -> List:
     """
     获取未来几小时的天气
     :param h_data: 逐小时天气
-    :param now_h: 当前小时
+    :param now_ymdh: 当前年月日时
     :param hours: 未来几小时
     :return: 未来几小时的天气
     """
-    now_date = get_current_ymd()
-    # now_h 补前导零
-    if now_h < 10:
-        now_datetime = now_date + "0" + str(now_h)
-    else:
-        now_datetime = now_date + str(now_h)
     future_weather_list = []
     count = 0
     for hourly_data in h_data:
         for hour in hourly_data:
-            if hour["jf"] > now_datetime:
+            if int(hour["jf"]) > int(now_ymdh):
                 future_weather_list.append(hour)
                 count += 1
                 if count == hours:
@@ -233,7 +227,9 @@ def _get_future_weather(h_data: List, now_h: int, hours: int) -> List:
     return future_weather_list
 
 
-def _generate_weather_message(c_data: Dict, hourly_data: Dict, future_weather_list: List) -> str:
+def _generate_weather_message(
+    c_data: Dict, hourly_data: Dict, future_weather_list: List
+) -> str:
     h = int(c_data["time"].split(":")[0])
     temp = hourly_data["temp"]
     date = c_data["date"].replace("(", " ")[:-1]

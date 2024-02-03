@@ -1,18 +1,19 @@
-import unittest
 import json
+import unittest
+
 from requests import Response
+
 from wechatter.commands._commands import pai_post
 from wechatter.exceptions import Bs4ParsingError
 
 
 class TestPaiPostCommand(unittest.TestCase):
-
     def setUp(self):
-        with open('tests/commands/test_pai_post/pai_post_response.html') as f:
+        with open("tests/commands/test_pai_post/pai_post_response.html.test") as f:
             r_html = f.read()
         self.response = Response()
-        self.response._content = r_html.encode('utf-8')
-        with open('tests/commands/test_pai_post/pai_post_data.json') as f:
+        self.response._content = r_html.encode("utf-8")
+        with open("tests/commands/test_pai_post/pai_post_data.json") as f:
             self.pai_post_list = json.load(f)
 
     def test_parse_pai_post_response_success(self):
@@ -30,4 +31,4 @@ class TestPaiPostCommand(unittest.TestCase):
 
     def test_generate_zhihu_hot_message_empty_list(self):
         result = pai_post._generate_pai_post_message([])
-        self.assertEqual(result, '暂无少数派早报')
+        self.assertEqual(result, "暂无少数派早报")
