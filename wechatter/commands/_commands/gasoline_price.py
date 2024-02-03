@@ -27,7 +27,7 @@ def gasoline_price_command_handler(to: SendTo, message: str = "") -> None:
             url=f"https://www.icauto.com.cn/oil/price_{city_id}_2_1.html"
         )
         gasoline_price = _parse_gasoline_price_response(response)
-        result = _generate_gasoline_price_message(gasoline_price)
+        result = _generate_gasoline_price_message(gasoline_price, message)
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
     except Exception as e:
         error_message = f"获取汽油价格失败，错误信息：{e}"
