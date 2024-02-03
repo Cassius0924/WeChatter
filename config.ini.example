@@ -120,6 +120,6 @@ weather_cron_rule_list = [ {
 #   - 在线文档：https://github.com/Cassius0924/WeChatter/blob/master/docs/custom_command_key_config_detail.md
 custom_command_key_dict = {
           "gpt4": [">"],
-          "bili-hot": ["bh"]
-          "weather": ["w", "温度"],
+          "bili-hot": ["bh"],
+          "weather": ["w", "温度"]
         }

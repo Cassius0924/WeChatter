@@ -191,7 +191,7 @@ python3 main.py
 | --- | --- |  --- |
 | `custom_command_key_dict` | 自定义命令关键词字典，格式为 `command: [key1, key2, ...]`, 其中 `command` 为命令名称，`key1` 和 `key2` 为自定义命令关键词 |  |
 
-关于命令名称可选值详见[自定义命令关键词配置详细](docs/custom_command_key_detail.md)
+关于命令名称可选值详见[自定义命令关键词配置详细](docs/custom_command_key_config_detail.md)
 
 ## 插件化
 
