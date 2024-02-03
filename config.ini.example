@@ -64,7 +64,7 @@ message_forwarding_enabled = True
 # froms: 消息转发来源列表，即消息发送者（们）的微信名称（用户或群）
 # to_persons: 消息转发目标用户列表，即消息接收者（们）的微信名称（仅用户）
 # to_groups: 消息转发目标群列表，即（多个）消息接收群名称（仅群）
-message_forwarding_rules = [ {
+message_forwarding_rule_list = [ {
         "froms": ["SenderName", "SenderGroupName"],
         "to_persons": ["ReceiverName1", "ReceiverName2"],
         "to_groups": ["ReceiverGroupName"]
@@ -86,7 +86,7 @@ weather_cron_enabled = True
 # to_persons: 消息接收者（们）的微信名称（仅用户）
 # to_groups: 消息接收群名称（仅群）
 # city: 城市名称
-weather_cron_rules = [ {
+weather_cron_rule_list = [ {
         "cron": {
           "year": "*",
           "month": "*",
@@ -110,3 +110,16 @@ weather_cron_rules = [ {
           "to_groups": []
         } ]
     } ]
+
+
+[custom-command-key]
+# 自定义命令关键词字典
+# 格式：<命令名称>: [<关键字1>, <关键字2>, ...]
+# 命令名称列表查看：
+#   - 本地文档：docs/custom_command_key_config_detail.md
+#   - 在线文档：https://github.com/Cassius0924/WeChatter/blob/master/docs/custom_command_key_config_detail.md
+custom_command_key_dict = {
+          "gpt4": [">"],
+          "bili-hot": ["bh"]
+          "weather": ["w", "温度"],
+        }

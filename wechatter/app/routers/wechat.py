@@ -62,7 +62,7 @@ async def recv_wechat_msg(
     print("==" * 20)
 
     if config.message_forwarding_enabled:
-        MessageForwarder(config.message_forwarding_rules).forward_message(message)
+        MessageForwarder(config.message_forwarding_rule_list).forward_message(message)
 
     # 传入命令字典，构造消息处理器
     message_handler = MessageHandler(commands)

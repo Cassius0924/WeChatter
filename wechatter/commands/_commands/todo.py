@@ -36,8 +36,8 @@ def todo_command_handler(to: SendTo, message: str = "") -> None:
 
 
 @command(
-    command="remove-todo",
-    keys=["删除待办事项", "remove-todo", "rmtd"],
+    command="todo-remove",
+    keys=["删除待办事项", "todo-remove", "rmtd"],
     desc="删除待办事项。",
 )
 def remove_todo_command_handler(to: SendTo, message: str = "") -> None:

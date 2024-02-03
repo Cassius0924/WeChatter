@@ -1,5 +1,7 @@
 from typing import List
 
+import wechatter.config as config
+
 commands = {}
 """
 存储所有命令消息和其信息的及其处理函数的字典。
@@ -17,7 +19,12 @@ def command(command: str, keys: List[str], desc: str):
 
     def decorator(func):
         commands[command] = {}
+        # 自定义命令关键词
+        if config.custom_command_key_dict.get(command, None):
+            keys.extend(config.custom_command_key_dict[command])
+
         commands[command]["keys"] = keys
+
         commands[command]["desc"] = desc
         commands[command]["handler"] = func
 

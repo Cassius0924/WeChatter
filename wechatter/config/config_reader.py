@@ -59,6 +59,15 @@ class ConfigReader:
         """
         return json.loads(self.__cp.get(section, option))
 
+    def getdict(self, section: str, option: str) -> dict:
+        """
+        以 dict 的形式获取配置文件中的值
+        :param section: 配置文件中的section
+        :param option: 配置文件中的配置项
+        :return: 配置文件中的值（dict）
+        """
+        return json.loads(self.__cp.get(section, option))
+
     @property
     def config_dict(self) -> dict:
         """
