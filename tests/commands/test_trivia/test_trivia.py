@@ -26,10 +26,10 @@ class TestTriviaCommand(unittest.TestCase):
             trivia._parse_trivia_response(Response())
 
     def test_generate_trivia_message_success(self):
-        result = trivia._generate_trivia_message(self.trivia_list, 1)
+        result = trivia._generate_trivia_message(self.trivia_list, 666)
         true_result = "✨=====冷知识=====✨"
         self.assertIn(true_result, result)
 
     def test_generate_trivia_message_empty_list(self):
-        result = trivia._generate_trivia_message([], 1)
+        result = trivia._generate_trivia_message([], 666)
         self.assertEqual(result, "获取冷知识失败")
