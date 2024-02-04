@@ -1,5 +1,13 @@
 # WeChatter
 
+<div align="center">
+
+[![CI/CD](https://github.com/Cassius0924/WeChatter/actions/workflows/test.yml/badge.svg)](https://github.com/Cassius0924/WeChatter/actions/workflows/test.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/Cassius0924/WeChatter)](https://github.com/Cassius0924/WeChatter/releases)
+[![GitHub License](https://img.shields.io/github/license/Cassius0924/WeChatter)](https://github.com/Cassius0924/WeChatter/blob/master/LICENSE)
+
+</div>
+
 ## 介绍
 
 基于 [wechatbot-webhook](https://github.com/danni-cool/wechatbot-webhook) 的微信机器人💬，支持 GPT 问答、热搜、天气预报、消息转发、Webhook提醒等功能。
@@ -111,7 +119,7 @@ python3 main.py
 
 | 配置项 | 解释 | 备注 |
 | --- | --- |  --- |
-| `wechatter_port` | WeChattter服务器的端口，接受消息的端口 | 默认为 `4000`，需和 `wxbotwebhook` Docker 的 `RECV_MSG_API` 参数的端口一致 |
+| `wechatter_port` | WeChatter服务器的端口，接受消息的端口 | 默认为 `4000`，需和 `wxbotwebhook` Docker 的 `RECV_MSG_API` 参数的端口一致 |
 
 ### ⚙️ WxBotWebhook 配置
 
@@ -163,7 +171,7 @@ python3 main.py
 | 配置项 | 子项 | 解释 | 备注 |
 | --- | --- |  --- | --- |
 | `message_forwarding_enabled` | | 功能开关，是否开启消息转发 | 默认为 `False` |
-| `message_forwarding_rules` | | 消息规则列表，每个规则包含三个字段：`froms`, `to_persons` 和 `to_groups` | 规则是由字典组成的JSON列表，最后的 `]` 不能单独一行 |
+| `message_forwarding_rule_list` | | 消息规则列表，每个规则包含三个字段：`froms`, `to_persons` 和 `to_groups` | 规则是由字典组成的JSON列表，最后的 `]` 不能单独一行 |
 | ➤➤➤ | `froms` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称 |
 | ➤➤➤ | `to_persons` | 消息转发目标用户列表，即消息接收用户 | 可以填多个用户名称或为空列表 |
 | ➤➤➤ | `to_groups` | 消息转发目标群列表，即消息接收群 | 可以填多个群名称或为空列表 |
@@ -173,9 +181,17 @@ python3 main.py
 | 配置项 | 解释 | 备注 |
 | --- | --- |  --- |
 | `weather_cron_enabled` | 功能开关，是否开启定时天气推送 | 默认为 `False` |
-| `weather_cron_rules` | 推送规则列表，每个规则包含两个字段：`cron` 和 `tasks` | 规则是由字典组成的JSON列表 |
+| `weather_cron_rule_list` | 推送规则列表，每个规则包含两个字段：`cron` 和 `tasks` | |
 
-关于`cron`和`tasks`的配置见[Weather Cron 配置详细](docs/config_detail.md#weather-cron-配置详细)
+关于 `cron` 和 `tasks` 的配置见[天气预报定时任务配置详细](docs/weather_cron_config_detail.md)
+
+### ⚙️ Custom Command Key 配置
+
+| 配置项 | 解释 | 备注 |
+| --- | --- |  --- |
+| `custom_command_key_dict` | 自定义命令关键词字典，格式为 `command: [key1, key2, ...]`, 其中 `command` 为命令名称，`key1` 和 `key2` 为自定义命令关键词 |  |
+
+关于命令名称可选值详见[自定义命令关键词配置详细](docs/custom_command_key_config_detail.md)
 
 ## 插件化
 

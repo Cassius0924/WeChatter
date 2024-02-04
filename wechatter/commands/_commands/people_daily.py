@@ -7,10 +7,9 @@ from wechatter.utils.time import get_current_ymd
 
 
 @command(
-    command="people",
+    command="people-daily",
     keys=["人民日报", "people", "people-daily"],
     desc="获取人民日报。",
-    value=80,
 )
 def people_daily_command_handler(to: SendTo, message: str = "") -> None:
     """发送人民日报url"""
@@ -36,10 +35,9 @@ def people_daily_command_handler(to: SendTo, message: str = "") -> None:
 
 
 @command(
-    command="people-url",
+    command="people-daily-url",
     keys=["人民日报链接", "people-url", "people-daily-url"],
     desc="获取人民日报url。",
-    value=81,
 )
 def people_daily_url_command_handler(to: SendTo, message: str = "") -> None:
     """发送人民日报url"""

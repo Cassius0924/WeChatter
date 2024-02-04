@@ -12,7 +12,6 @@ from wechatter.utils import get_request_json
     command="douyin-hot",
     keys=["抖音热搜", "douyin-hot"],
     desc="获取抖音热搜。",
-    value=50,
 )
 def douyin_hot_command_handler(to: SendTo, message: str = "") -> None:
     try:
@@ -24,12 +23,14 @@ def douyin_hot_command_handler(to: SendTo, message: str = "") -> None:
     else:
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
 
+
 def get_douyin_hot_str() -> str:
     r_json = get_request_json(
         url="https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/"
     )
     hot_list = _extract_douyin_hot_data(r_json)
     return _generate_douyin_hot_message(hot_list)
+
 
 def _extract_douyin_hot_data(r_json: Dict) -> List:
     try:

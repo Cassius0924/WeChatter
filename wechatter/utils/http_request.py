@@ -24,7 +24,6 @@ def get_request(
         response = requests.get(url, params=params, headers=headers, timeout=timeout)
         response.encoding = "utf-8"
         response.raise_for_status()  # 如果响应状态码不是 200，就主动抛出异常
-        return response
     except requests.ConnectionError as e:
         logger.error(f"请求 {url} 失败，连接错误：{e}")
         raise
@@ -43,6 +42,8 @@ def get_request(
     except Exception as e:
         logger.error(f"请求 {url} 失败，未知错误：{e}")
         raise
+    else:
+        return response
 
 
 def get_request_json(url, params=None, headers=DEAULT_HEADERS, timeout=5) -> Dict:
@@ -63,13 +64,14 @@ def get_request_json(url, params=None, headers=DEAULT_HEADERS, timeout=5) -> Dic
 
 
 def post_request(
-    url, data=None, json=None, headers=DEAULT_HEADERS, timeout=5
+    url, data=None, json=None, files=None, headers=DEAULT_HEADERS, timeout=5
 ) -> requests.Response:
     """
     发送POST请求，并返回Response对象
     :param url: 请求的URL
     :param data: 请求体（默认为None）
     :param json: 请求体（默认为None）
+    :param files: 文件（默认为None）
     :param headers: 请求头（默认为带有User-Agent的请求头）
     :param timeout: 超时时间（默认为5秒）
     :return: Response对象
@@ -77,11 +79,9 @@ def post_request(
     headers = _check_headers(headers)
     try:
         response = requests.post(
-            url, data=data, json=json, headers=headers, timeout=timeout
+            url, data=data, json=json, files=files, headers=headers, timeout=timeout
         )
-        response.encoding = "utf-8"
         response.raise_for_status()
-        return response
     except requests.ConnectionError as e:
         logger.error(f"请求 {url} 失败，连接错误：{e}")
         raise
@@ -100,21 +100,27 @@ def post_request(
     except Exception as e:
         logger.error(f"请求 {url} 失败，未知错误：{e}")
         raise
+    else:
+        response.encoding = "utf-8"
+        return response
 
 
 def post_request_json(
-    url, data=None, json=None, headers=DEAULT_HEADERS, timeout=5
+    url, data=None, json=None, files=None, headers=DEAULT_HEADERS, timeout=5
 ) -> Dict:
     """
     发送POST请求，并解析返回的JSON
     :param url: 请求的URL
     :param data: 请求体（默认为None）
     :param json: 请求体（默认为None）
+    :param files: 文件（默认为None）
     :param headers: 请求头（默认为带有User-Agent的请求头）
     :param timeout: 超时时间（默认为5秒）
     :return: JSON对象
     """
-    response = post_request(url, data=data, json=json, headers=headers, timeout=timeout)
+    response = post_request(
+        url, data=data, json=json, files=None, headers=headers, timeout=timeout
+    )
     try:
         return response.json()
     except requests.exceptions.JSONDecodeError as e:

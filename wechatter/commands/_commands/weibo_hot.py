@@ -7,11 +7,11 @@ from wechatter.models.message import SendMessage, SendMessageType, SendTo
 from wechatter.sender import Sender
 from wechatter.utils import get_request_json
 
+
 @command(
     command="weibo-hot",
     keys=["微博热搜", "weibo-hot"],
     desc="获取微博热搜。",
-    value=130,
 )
 def weibo_hot_command_handler(to: SendTo, message: str = "") -> None:
     try:
@@ -23,12 +23,14 @@ def weibo_hot_command_handler(to: SendTo, message: str = "") -> None:
     else:
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
 
+
 def get_weibo_hot_str() -> str:
     r_json = get_request_json(
         url="https://m.weibo.cn/api/container/getIndex?containerid=106003%26filter_type%3Drealtimehot"
     )
     hot_list = _extract_weibo_hot_data(r_json)
     return _generate_weibo_hot_message(hot_list)
+
 
 def _extract_weibo_hot_data(r_json: Dict) -> List:
     try:

@@ -49,13 +49,18 @@ github_webhook_receive_group_list = config_reader.getlist(
 message_forwarding_enabled = config_reader.getbool(
     "message-forwarding", "message_forwarding_enabled"
 )
-message_forwarding_rules = config_reader.getlist(
-    "message-forwarding", "message_forwarding_rules"
+message_forwarding_rule_list = config_reader.getlist(
+    "message-forwarding", "message_forwarding_rule_list"
 )
 
 # weather-cron 配置
 weather_cron_enabled = config_reader.getbool("weather-cron", "weather_cron_enabled")
-weather_cron_rules = config_reader.getlist("weather-cron", "weather_cron_rules")
+weather_cron_rule_list = config_reader.getlist("weather-cron", "weather_cron_rule_list")
+
+# custom-command-key 配置
+custom_command_key_dict = config_reader.getdict(
+    "custom-command-key", "custom_command_key_dict"
+)
 
 # gasoline-price-cron 配置
 gasoline_price_cron_enable = config_reader.getbool(

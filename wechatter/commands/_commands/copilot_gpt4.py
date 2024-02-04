@@ -1,4 +1,3 @@
-# 使用 Copilot-GPT4-Server 回复
 from typing import List, Union
 
 from loguru import logger
@@ -17,7 +16,11 @@ DEFAULT_MODEL = "gpt-4"
 DEFAULT_CONVERSATIONS = [{"role": "system", "content": "你是一位乐于助人的助手"}]
 
 
-@command(command="gpt35", keys=["gpt"], desc="使用GPT3.5进行对话。", value=30)
+@command(
+    command="gpt35",
+    keys=["gpt"],
+    desc="使用GPT3.5进行对话。",
+)
 def gpt35_command_handler(to: SendTo, message: str = "") -> None:
     _gptx("gpt-3.5-turbo", to, message)
 
@@ -26,7 +29,6 @@ def gpt35_command_handler(to: SendTo, message: str = "") -> None:
     command="gpt35-chats",
     keys=["gpt-chats", "gpt对话记录"],
     desc="列出GPT3.5对话记录。",
-    value=31,
 )
 def gpt35_chats_command_handler(to: SendTo, message: str = "") -> None:
     _gptx_chats("gpt-3.5-turbo", to, message)
@@ -36,7 +38,6 @@ def gpt35_chats_command_handler(to: SendTo, message: str = "") -> None:
     command="gpt35-record",
     keys=["gpt-record", "gpt记录"],
     desc="获取GPT3.5对话记录。",
-    value=32,
 )
 def gpt35_record_command_handler(to: SendTo, message: str = "") -> None:
     _gptx_record("gpt-3.5-turbo", to, message)
@@ -46,13 +47,16 @@ def gpt35_record_command_handler(to: SendTo, message: str = "") -> None:
     command="gpt35-continue",
     keys=["gpt-continue", "gpt继续"],
     desc="继续GPT3.5对话。",
-    value=33,
 )
 def gpt35_continue_command_handler(to: SendTo, message: str = "") -> None:
     _gptx_continue("gpt-3.5-turbo", to, message)
 
 
-@command(command="gpt4", keys=["gpt4"], desc="使用GPT4进行对话。", value=40)
+@command(
+    command="gpt4",
+    keys=["gpt4"],
+    desc="使用GPT4进行对话。",
+)
 def gpt4_command_handler(to: SendTo, message: str = "") -> None:
     _gptx("gpt-4", to, message)
 
@@ -61,7 +65,6 @@ def gpt4_command_handler(to: SendTo, message: str = "") -> None:
     command="gpt4-chats",
     keys=["gpt4-chats", "gpt4对话记录"],
     desc="列出GPT4对话记录。",
-    value=41,
 )
 def gpt4_chats_command_handler(to: SendTo, message: str = "") -> None:
     _gptx_chats("gpt-4", to, message)
@@ -71,7 +74,6 @@ def gpt4_chats_command_handler(to: SendTo, message: str = "") -> None:
     command="gpt4-record",
     keys=["gpt4-record", "gpt4记录"],
     desc="获取GPT4对话记录。",
-    value=42,
 )
 def gpt4_record_command_handler(to: SendTo, message: str = "") -> None:
     _gptx_record("gpt-4", to, message)
@@ -81,7 +83,6 @@ def gpt4_record_command_handler(to: SendTo, message: str = "") -> None:
     command="gpt4-continue",
     keys=["gpt4-continue", "gpt4继续"],
     desc="继续GPT4对话。",
-    value=43,
 )
 def gpt4_continue_command_handler(to: SendTo, message: str = "") -> None:
     _gptx_continue("gpt-4", to, message)
@@ -104,6 +105,7 @@ def _gptx(model: str, to: SendTo, message: str = "") -> None:
     chat_info = CopilotGPT4.get_chating_chat_info(wx_id, model)
     if message == "":  # /gpt4
         # 判断对话是否有效
+        _send_text_msg(to, "正在创建新对话...")
         if chat_info is None or CopilotGPT4.is_chat_valid(chat_info):
             CopilotGPT4.create_chat(wx_id=wx_id, model=model)
             logger.info("创建新对话成功")
@@ -113,6 +115,7 @@ def _gptx(model: str, to: SendTo, message: str = "") -> None:
         _send_text_msg(to, "对话未开始，继续上一次对话")
     else:  # /gpt4 <message>
         # 如果没有对话记录，则创建新对话
+        _send_text_msg(to, f"正在调用 {model} 进行对话...")
         if chat_info is None:
             chat_info = CopilotGPT4.create_chat(wx_id=wx_id, model=model)
             logger.info("无历史对话记录，创建新对话成功")
@@ -157,6 +160,7 @@ def _gptx_continue(model: str, to: SendTo, message: str = "") -> None:
         logger.info("请输入对话记录编号")
         _send_text_msg(to, "请输入对话记录编号")
         return
+    _send_text_msg(to, f"正在切换到对话记录 {message}...")
     chat_info = CopilotGPT4.continue_chat(
         wx_id=wx_id, model=model, chat_index=int(message)
     )

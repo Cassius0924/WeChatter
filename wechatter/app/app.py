@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 import wechatter.app.routers as routers
 import wechatter.config as config
-from wechatter.config.parsers import parse_weather_cron_rules, parse_gasoline_price_cron_rules
+from wechatter.config.parsers import parse_weather_cron_rule_list
 from wechatter.scheduler import Scheduler
 
 app = FastAPI()
@@ -14,7 +14,7 @@ if config.github_webhook_enabled:
 
 
 if config.weather_cron_enabled:
-    cron_tasks = parse_weather_cron_rules(config.weather_cron_rules)
+    cron_tasks = parse_weather_cron_rule_list(config.weather_cron_rule_list)
 
     Scheduler.add_cron_tasks(cron_tasks)
 
@@ -28,20 +28,3 @@ if config.weather_cron_enabled:
     @app.on_event("shutdown")
     async def shutdown_event():
         scheduler.shutdown()
-
-
-if config.gasoline_price_cron_enable:
-    gasoline_price_cron_tasks = parse_gasoline_price_cron_rules(config.gasoline_price_cron_rules)
-
-    Scheduler.add_cron_tasks(gasoline_price_cron_tasks)
-
-    gasoline_price_scheduler = Scheduler()
-
-    # 定时任务
-    @app.on_event("startup")
-    async def startup_event():
-        gasoline_price_scheduler.startup()
-
-    @app.on_event("shutdown")
-    async def shutdown_event():
-        gasoline_price_scheduler.shutdown()
