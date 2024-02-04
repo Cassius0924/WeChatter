@@ -23,8 +23,8 @@ class TestFoodCaloriesCommand(unittest.TestCase):
             self.food_detail_list = json.load(f)
         with open("tests/commands/test_food_calories/one_food_detail.json") as f:
             self.one_food_detail = json.load(f)
-        with open("tests/commands/test_food_calories/result") as f:
-            self.result = f.read()
+        with open("tests/commands/test_food_calories/result.json") as f:
+            self.result = json.load(f)
 
     def test_parse_food_href_list_response_success(self):
         result = food_calories.parse_food_href_list_response(self.food_calories_response)
@@ -52,41 +52,7 @@ class TestFoodCaloriesCommand(unittest.TestCase):
 
     def test_generate_food_message_success(self):
         result = food_calories.generate_food_message(self.food_detail_list)
-        rs = """
-✨=====食物列表=====✨
-1. 牛肉(肥瘦)，又叫肥牛
-🍲热量(大卡):    125.00
-🍞碳水(克):        2.00
-🥓脂肪(克):        4.20
-🍗蛋白质(克):    19.90
-🥦纤维素(克):    一
-2. 牛肉(精瘦)，又叫牛肉，瘦牛肉
-🍲热量(大卡):    113.00
-🍞碳水(克):        1.30
-🥓脂肪(克):        2.50
-🍗蛋白质(克):    21.30
-🥦纤维素(克):    0.00
-3. 牛腩，又叫牛肉（牛腩）、牛腩
-🍲热量(大卡):    332.00
-🍞碳水(克):        0.00
-🥓脂肪(克):        29.30
-🍗蛋白质(克):    17.10
-🥦纤维素(克):    0.00
-4. 肥牛卷，又叫肥牛、火锅牛肉卷、牛肉卷
-🍲热量(大卡):    250.00
-🍞碳水(克):        0.02
-🥓脂肪(克):        18.73
-🍗蛋白质(克):    19.06
-🥦纤维素(克):    0.00
-5. 牛肉丸，又叫火锅牛肉丸子，火锅牛肉丸
-🍲热量(大卡):    115.00
-🍞碳水(克):        9.00
-🥓脂肪(克):        3.70
-🍗蛋白质(克):    11.20
-🥦纤维素(克):    0.00
-🔵====含量(100克)====🔵
-        """
-        self.assertEqual(result, rs)
+        self.assertEqual(result, )
 
     def test_generate_food_message_failure(self):
         with self.assertRaises(Exception):
