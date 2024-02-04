@@ -14,8 +14,8 @@ class TestGasolinePriceCommand(unittest.TestCase):
             r_html = f.read()
         self.response = Response()
         self.response._content = r_html.encode('utf-8')
-        with open("tests/commands/test_gasoline_price/gasoline_price_data.json") as f:
-            self.gasoline_price = json.load(f)
+        with open("tests/commands/test_gasoline_price/gasoline_price_data") as f:
+            self.gasoline_price = f.read()
 
     def test_get_gasoline_price_str_success(self):
         result = gasoline_price.get_gasoline_price_str('广州')
