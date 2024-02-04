@@ -1,4 +1,3 @@
-# 使用 Copilot-GPT4-Server 回复
 from typing import List, Union
 
 from loguru import logger
@@ -106,6 +105,7 @@ def _gptx(model: str, to: SendTo, message: str = "") -> None:
     chat_info = CopilotGPT4.get_chating_chat_info(wx_id, model)
     if message == "":  # /gpt4
         # 判断对话是否有效
+        _send_text_msg(to, "正在创建新对话...")
         if chat_info is None or CopilotGPT4.is_chat_valid(chat_info):
             CopilotGPT4.create_chat(wx_id=wx_id, model=model)
             logger.info("创建新对话成功")
@@ -115,6 +115,7 @@ def _gptx(model: str, to: SendTo, message: str = "") -> None:
         _send_text_msg(to, "对话未开始，继续上一次对话")
     else:  # /gpt4 <message>
         # 如果没有对话记录，则创建新对话
+        _send_text_msg(to, f"正在调用 {model} 进行对话...")
         if chat_info is None:
             chat_info = CopilotGPT4.create_chat(wx_id=wx_id, model=model)
             logger.info("无历史对话记录，创建新对话成功")
@@ -159,6 +160,7 @@ def _gptx_continue(model: str, to: SendTo, message: str = "") -> None:
         logger.info("请输入对话记录编号")
         _send_text_msg(to, "请输入对话记录编号")
         return
+    _send_text_msg(to, f"正在切换到对话记录 {message}...")
     chat_info = CopilotGPT4.continue_chat(
         wx_id=wx_id, model=model, chat_index=int(message)
     )
