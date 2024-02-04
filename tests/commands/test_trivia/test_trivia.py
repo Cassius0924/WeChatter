@@ -8,11 +8,11 @@ from wechatter.exceptions import Bs4ParsingError
 class TestTriviaCommand(unittest.TestCase):
 
     def setUp(self):
-        with open('tests/commands/test_trivia/trivia_response.html.test') as f:
+        with open("tests/commands/test_trivia/trivia_response.html.test") as f:
             r_html = f.read()
         self.response = Response()
         self.response._content = r_html.encode('utf-8')
-        with open('tests/commands/test_trivia/trivia_data.json') as f:
+        with open("tests/commands/test_trivia/trivia_data.json") as f:
             self.trivia_list = json.load(f)
 
     def test_parse_trivia_response_success(self):
