@@ -164,7 +164,7 @@
       <div class="border-box search">
         <div class="padding-box left field">
           <div>
-            <input style="margin-top: 7px;" id="search-ipt" type="text" placeholder="薄荷超全食物热量和营养库，吃前查一查饮食更健康" value="牛" />
+            <input style="margin-top: 7px;" id="search-ipt" type="text" placeholder="薄荷超全食物热量和营养库，吃前查一查饮食更健康" value="牛肉" />
           </div>
         </div>
         <a href="#" id="search" class="hide-text text-center clean-link left table btn-search">
@@ -180,123 +180,123 @@
   <div id="main">
 
   <div class="widget-group-content container">
-    <h2 class="crumb"><a href="/food/">薄荷食物库</a>搜索“<em>牛</em>”的结果</h2>
+    <h2 class="crumb"><a href="/food/">薄荷食物库</a>搜索“<em>牛肉</em>”的结果</h2>
       <div class="widget-food-list pull-left">
-  <h3>牛
+  <h3>牛肉
   </h3>
       <ul class="food-list">
     <li class="item clearfix">
     <div class="img-box pull-left">
-      <a href='/shiwu/fd47b96b' target='_blank'><img src="https://s.boohee.cn/images/can/no-s-illu.gif"/></a>
+      <a href='/shiwu/niurou_feishou' target='_blank'><img src='https://s.boohee.cn/house/upload_food/2020/6/5/small_photo_url_big_photo_url_86e99d8e107751210c3bfb2370c897a0.jpg' alt='牛肉(肥瘦)' /></a>
     </div>
     <div class="text-box pull-left">
       <h4>
-        <a href="/shiwu/fd47b96b" title="牛胰，又叫牛胰子、牛胰脏" target='_blank'>牛胰，又叫牛胰子、牛胰脏</a>
+        <a href="/shiwu/niurou_feishou" title="牛肉(肥瘦)，又叫肥牛" target='_blank'>牛肉(肥瘦)，又叫肥牛</a>
       </h4>
-      <p>热量：235 大卡(每100克)</p>
+      <p>热量：125 大卡(每100克)</p>
     </div>
   </li>
     <li class="item clearfix">
     <div class="img-box pull-left">
-      <a href='/shiwu/niudu' target='_blank'><img src='https://s.boohee.cn/house/upload_food/2020/6/20/small_photo_url_big_photo_url_e7947a2c7ffe51c44a89e0a6bd00e772.jpg' alt='牛肚' /></a>
+      <a href='/shiwu/fde79915' target='_blank'><img src='https://s.boohee.cn/house/upload_food/2020/6/5/small_photo_url_big_photo_url_7149f4e7393870bc099259bc977ceddd.jpg' alt='牛肉(精瘦)' /></a>
     </div>
     <div class="text-box pull-left">
       <h4>
-        <a href="/shiwu/niudu" title="牛肚，又叫百叶、肚尖、牛胃" target='_blank'>牛肚，又叫百叶、肚尖、牛胃</a>
+        <a href="/shiwu/fde79915" title="牛肉(精瘦)，又叫牛肉，瘦牛肉" target='_blank'>牛肉(精瘦)，又叫牛肉，瘦牛肉</a>
       </h4>
-      <p>热量：72 大卡(每100克)</p>
+      <p>热量：113 大卡(每100克)</p>
     </div>
   </li>
     <li class="item clearfix">
     <div class="img-box pull-left">
-      <a href='/shiwu/shedie' target='_blank'><img src='https://s.boohee.cn/house/new_food/small/d7c05599fe0e4cb2b081bc4422e738b2.jpg' alt='舌鳎' /></a>
+      <a href='/shiwu/fd37fbda' target='_blank'><img src='https://s.boohee.cn/house/upload_food/2020/6/5/small_photo_url_big_photo_url_86e99d8e107751210c3bfb2370c897a0.jpg' alt='牛腩' /></a>
     </div>
     <div class="text-box pull-left">
       <h4>
-        <a href="/shiwu/shedie" title="舌鳎，又叫舌鳎、舌鳎鱼、牛舌头鱼、花纹舌头" target='_blank'>舌鳎，又叫舌鳎、舌鳎鱼、牛舌头鱼、花纹舌头</a>
+        <a href="/shiwu/fd37fbda" title="牛腩，又叫牛肉（牛腩）、牛腩" target='_blank'>牛腩，又叫牛肉（牛腩）、牛腩</a>
       </h4>
-      <p>热量：83 大卡(每100克)</p>
+      <p>热量：332 大卡(每100克)</p>
     </div>
   </li>
     <li class="item clearfix">
     <div class="img-box pull-left">
-      <a href='/shiwu/fde0d6ea' target='_blank'><img src='https://s.boohee.cn/house/upload_food/2020/5/27/small_photo_url_big_photo_url_4ba46f70b0a6d0ea277106b6183d446d.jpg' alt='花牛' /></a>
+      <a href='/shiwu/fd6297be' target='_blank'><img src='https://s.boohee.cn/house/upload_food/2020/12/3/small_photo_url_a2e29929ab9ad09715bb3e90c70c261f.jpg' alt='肥牛卷' /></a>
     </div>
     <div class="text-box pull-left">
       <h4>
-        <a href="/shiwu/fde0d6ea" title="花牛" target='_blank'>花牛</a>
+        <a href="/shiwu/fd6297be" title="肥牛卷，又叫肥牛、火锅牛肉卷、牛肉卷" target='_blank'>肥牛卷，又叫肥牛、火锅牛肉卷、牛肉卷</a>
       </h4>
-      <p>热量：54 大卡(每100克)</p>
+      <p>热量：250 大卡(每100克)</p>
     </div>
   </li>
     <li class="item clearfix">
     <div class="img-box pull-left">
-      <a href='/shiwu/fd6dda9e' target='_blank'><img src='https://s.boohee.cn/house/new_food/small/365b6422113c4edfaa4e01da56213a59.jpg' alt='牛血' /></a>
+      <a href='/shiwu/fd2e44fd' target='_blank'><img src='https://s.boohee.cn/house/upload_food/2020/12/10/small_photo_url_5366ecbbbf0cc36fbb4a8e50dc3caef1.jpg' alt='牛肉丸' /></a>
     </div>
     <div class="text-box pull-left">
       <h4>
-        <a href="/shiwu/fd6dda9e" title="牛血" target='_blank'>牛血</a>
+        <a href="/shiwu/fd2e44fd" title="牛肉丸，又叫火锅牛肉丸子，火锅牛肉丸" target='_blank'>牛肉丸，又叫火锅牛肉丸子，火锅牛肉丸</a>
       </h4>
-      <p>热量：82 大卡(每100克)</p>
+      <p>热量：115 大卡(每100克)</p>
     </div>
   </li>
     <li class="item clearfix">
     <div class="img-box pull-left">
-      <a href='/shiwu/niugan' target='_blank'><img src='https://s.boohee.cn/house/upload_food/2021/8/4/small_photo_url_97481bb2b85cca7b6719bea56e8f9675.jpg' alt='牛肝' /></a>
+      <a href='/shiwu/niuroumian' target='_blank'><img src='https://s.boohee.cn/house/upload_food/2020/6/18/small_photo_url_big_photo_url_30f2e241748b1bb398eaa68384a8970d.jpg' alt='牛肉面' /></a>
     </div>
     <div class="text-box pull-left">
       <h4>
-        <a href="/shiwu/niugan" title="牛肝" target='_blank'>牛肝</a>
+        <a href="/shiwu/niuroumian" title="牛肉面，又叫兰州拉面、牛腩面、牛肉拌面" target='_blank'>牛肉面，又叫兰州拉面、牛腩面、牛肉拌面</a>
       </h4>
-      <p>热量：139 大卡(每100克)</p>
+      <p>热量：136 大卡(每100克)</p>
     </div>
   </li>
     <li class="item clearfix">
     <div class="img-box pull-left">
-      <a href='/shiwu/niufei' target='_blank'><img src='https://s.boohee.cn/house/upload_food/2021/8/4/small_photo_url_cfc826dab04df2b37b23d57f97249e8f.jpg' alt='牛肺' /></a>
+      <a href='/shiwu/fd097b8c' target='_blank'><img src='https://s.boohee.cn/house/upload_food/2021/2/24/small_photo_url_56cb348529b85dec85f90172681afca6.jpg' alt='牛肉汤' /></a>
     </div>
     <div class="text-box pull-left">
       <h4>
-        <a href="/shiwu/niufei" title="牛肺" target='_blank'>牛肺</a>
+        <a href="/shiwu/fd097b8c" title="牛肉汤，又叫煮牛肉汤，牛肉清汤、淮南牛肉汤" target='_blank'>牛肉汤，又叫煮牛肉汤，牛肉清汤、淮南牛肉汤</a>
       </h4>
-      <p>热量：95 大卡(每100克)</p>
+      <p>热量：77 大卡(每100克)</p>
     </div>
   </li>
     <li class="item clearfix">
     <div class="img-box pull-left">
-      <a href='/shiwu/niuxin' target='_blank'><img src='https://s.boohee.cn/house/new_food/small/e61b3136c3254e38af463274926e34e1.jpg' alt='牛心' /></a>
+      <a href='/shiwu/fd211247' target='_blank'><img src='https://s.boohee.cn/house/upload_food/2023/9/7/small_photo_url_1cebb866e4fe4b6594b1356c102f042d.jpg' alt='蔡长青 ' /></a>
     </div>
     <div class="text-box pull-left">
       <h4>
-        <a href="/shiwu/niuxin" title="牛心" target='_blank'>牛心</a>
+        <a href="/shiwu/fd211247" title="蔡长青 ，又叫日式牛肉拌饭料 日式牛肉拌饭料牛肉【咸甜口】" target='_blank'>蔡长青 ，又叫日式牛肉拌饭料 日式牛肉拌饭...</a>
       </h4>
-      <p>热量：106 大卡(每100克)</p>
+      <p>热量：153 大卡(每100克)</p>
     </div>
   </li>
     <li class="item clearfix">
     <div class="img-box pull-left">
-      <a href='/shiwu/niushen' target='_blank'><img src='https://s.boohee.cn/house/new_food/small/ab2a973d064848eaabd60ce8fe868acb.jpg' alt='牛肾' /></a>
+      <a href='/shiwu/yuenanfen' target='_blank'><img src='https://s.boohee.cn/house/upload_food/2021/3/1/small_photo_url_f3ce2b276e608674f1ddc7d556329311.jpg' alt='越南粉' /></a>
     </div>
     <div class="text-box pull-left">
       <h4>
-        <a href="/shiwu/niushen" title="牛肾，又叫牛腰" target='_blank'>牛肾，又叫牛腰</a>
+        <a href="/shiwu/yuenanfen" title="越南粉，又叫越南牛肉粉，Pho，beef noodle soup" target='_blank'>越南粉，又叫越南牛肉粉，Pho，beef ...</a>
       </h4>
-      <p>热量：94 大卡(每100克)</p>
+      <p>热量：146 大卡(每100克)</p>
     </div>
   </li>
     <li class="item clearfix">
     <div class="img-box pull-left">
-      <a href='/shiwu/niunao' target='_blank'><img src='https://s.boohee.cn/house/food_small/s_niunaonn1.gif' alt='牛脑' /></a>
+      <a href='/shiwu/luniurou' target='_blank'><img src='https://s.boohee.cn/house/upload_food/2020/5/14/small_photo_url_d81a26e48a68f7dcf434c61ef60fe554.jpg' alt='卤牛肉' /></a>
     </div>
     <div class="text-box pull-left">
       <h4>
-        <a href="/shiwu/niunao" title="牛脑" target='_blank'>牛脑</a>
+        <a href="/shiwu/luniurou" title="卤牛肉" target='_blank'>卤牛肉</a>
       </h4>
-      <p>热量：149 大卡(每100克)</p>
+      <p>热量：116 大卡(每100克)</p>
     </div>
   </li>
 </ul>
-<div class="widget-pagination"><span class='pagination-sum'>前&nbsp;100&nbsp;条记录</span>&nbsp;&nbsp;<div role="navigation" aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.container_aria_label&quot;&gt;Container Aria Label&lt;/span&gt;" class="pagination" unit="条" name="记录" limit_page="10"><span class="previous_page disabled" aria-disabled="true">&laquo; 上一页</span> <em class="current" aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.page_aria_label&quot;&gt;Page Aria Label&lt;/span&gt;" aria-current="page">1</em> <a rel="next" aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.page_aria_label&quot;&gt;Page Aria Label&lt;/span&gt;" href="/food/search?keyword=%E7%89%9B&amp;page=2">2</a> <a aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.page_aria_label&quot;&gt;Page Aria Label&lt;/span&gt;" href="/food/search?keyword=%E7%89%9B&amp;page=3">3</a> <a aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.page_aria_label&quot;&gt;Page Aria Label&lt;/span&gt;" href="/food/search?keyword=%E7%89%9B&amp;page=4">4</a> <a aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.page_aria_label&quot;&gt;Page Aria Label&lt;/span&gt;" href="/food/search?keyword=%E7%89%9B&amp;page=5">5</a> <span class="gap"><span class="translation_missing" title="translation missing: zh-CN.will_paginate.page_gap">Page Gap</span></span> <a aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.page_aria_label&quot;&gt;Page Aria Label&lt;/span&gt;" href="/food/search?keyword=%E7%89%9B&amp;page=9">9</a> <a aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.page_aria_label&quot;&gt;Page Aria Label&lt;/span&gt;" href="/food/search?keyword=%E7%89%9B&amp;page=10">10</a> <a class="next_page" rel="next" href="/food/search?keyword=%E7%89%9B&amp;page=2">下一页 &raquo;</a></div></div>
+<div class="widget-pagination"><span class='pagination-sum'>前&nbsp;100&nbsp;条记录</span>&nbsp;&nbsp;<div role="navigation" aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.container_aria_label&quot;&gt;Container Aria Label&lt;/span&gt;" class="pagination" unit="条" name="记录" limit_page="10"><span class="previous_page disabled" aria-disabled="true">&laquo; 上一页</span> <em class="current" aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.page_aria_label&quot;&gt;Page Aria Label&lt;/span&gt;" aria-current="page">1</em> <a rel="next" aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.page_aria_label&quot;&gt;Page Aria Label&lt;/span&gt;" href="/food/search?keyword=%E7%89%9B%E8%82%89&amp;page=2">2</a> <a aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.page_aria_label&quot;&gt;Page Aria Label&lt;/span&gt;" href="/food/search?keyword=%E7%89%9B%E8%82%89&amp;page=3">3</a> <a aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.page_aria_label&quot;&gt;Page Aria Label&lt;/span&gt;" href="/food/search?keyword=%E7%89%9B%E8%82%89&amp;page=4">4</a> <a aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.page_aria_label&quot;&gt;Page Aria Label&lt;/span&gt;" href="/food/search?keyword=%E7%89%9B%E8%82%89&amp;page=5">5</a> <span class="gap"><span class="translation_missing" title="translation missing: zh-CN.will_paginate.page_gap">Page Gap</span></span> <a aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.page_aria_label&quot;&gt;Page Aria Label&lt;/span&gt;" href="/food/search?keyword=%E7%89%9B%E8%82%89&amp;page=9">9</a> <a aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.page_aria_label&quot;&gt;Page Aria Label&lt;/span&gt;" href="/food/search?keyword=%E7%89%9B%E8%82%89&amp;page=10">10</a> <a class="next_page" rel="next" href="/food/search?keyword=%E7%89%9B%E8%82%89&amp;page=2">下一页 &raquo;</a></div></div>
 
 
 </div>
