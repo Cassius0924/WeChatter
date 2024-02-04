@@ -8,16 +8,16 @@ from wechatter.models.scheduler import CronTask
 from wechatter.sender import Sender
 
 
-def parse_weather_cron_rules(
-    weather_cron_rules: List,
+def parse_weather_cron_rule_list(
+    weather_cron_rule_list: List,
 ) -> List[CronTask]:
     """
     解析天气定时任务规则
-    :param weather_cron_rules: 天气定时任务规则
+    :param weather_cron_rule_list: 天气定时任务规则
     :return cron_tasks: 天气定时任务列表
     """
     cron_tasks = []
-    for rule in weather_cron_rules:
+    for rule in weather_cron_rule_list:
         cron = rule["cron"]
         tasks = rule["tasks"]
         trigger = CronTrigger(

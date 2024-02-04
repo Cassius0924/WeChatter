@@ -1,11 +1,11 @@
-# ⚙️ 配置说明
+# ⚙️ 天气预报定时任务配置详细
 
-本篇文档仅包含配置文件中部分复杂配置的详细说明，更多配置请查看项目[自述文件](../README.md#配置文件)
+本篇文档仅包含配置文件中天气预报定时任务配置的详细说明，更多配置请查看项目[自述文件](../README.md#配置文件)
 
-## Weather Cron 配置详细
+## 天气预报定时任务配置详细
 
 - `weather_cron_enabled`: 功能开关，是否开启定时天气推送
-- `weather_cron_rules`: 推送规则列表，每个规则包含两个字段：`cron` 和 `tasks`
+- `weather_cron_rule_list`: 推送规则列表，每个规则包含两个字段：`cron` 和 `tasks`
   - `cron`: 定时任务的时间设置，包含以下字段：
     - `year`: 4位数年份，可以是任何值或者特定的年份
     - `month`: 月份，可以是1-12的任何值，或者特定的月份（支持英文月份缩写 jan - dec）
@@ -31,12 +31,12 @@
 | `*/a` | 任何字段 | 从最小值开始，每隔a个值触发 |
 | `a-b` | 任何字段 | 在a-b范围内的任何值上触发（a必须小于b） |
 | `a-b/c` | 任何字段 | 在a-b范围内，每隔c个值触发 |
-| `xth y` | `day`字段 | 在月份中第x次出现的工作日y上触发 |
-| `last x` | `day`字段 | 在月份中最后一次出现的工作日x上触发 |
-| `last` | `day`字段 | 在月份的最后一天触发 |
+| `xth y` | `day` 字段 | 在月份中第x次出现的工作日y上触发 |
+| `last x` | `day` 字段 | 在月份中最后一次出现的工作日x上触发 |
+| `last` | `day` 字段 | 在月份的最后一天触发 |
 | `x,y,z` | 任何字段 | 在任何匹配的表达式上触发；可以组合上述表达式中的任何数量 |
 
-### 配置示例
+## 天气预报定时任务配置示例
 
 <details>
 <summary>
@@ -44,7 +44,7 @@
 </summary>
 
 ```ini
-weather_cron_rules = [ {
+weather_cron_rule_list = [ {
     "cron": {
       "year": "*",
       "month": "*",
@@ -78,7 +78,7 @@ weather_cron_rules = [ {
 </summary>
 
 ```ini
-weather_cron_rules = [ {
+weather_cron_rule_list = [ {
     "cron": {
       "year": "*",
       "month": "*",
@@ -127,7 +127,7 @@ weather_cron_rules = [ {
 </summary>
 
 ```ini
-weather_cron_rules = [ {
+weather_cron_rule_list = [ {
     "cron": {
       "year": "*",
       "month": "1",

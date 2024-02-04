@@ -9,8 +9,8 @@ from wechatter.sender import Sender
 class MessageForwarder:
     """消息转发器类"""
 
-    def __init__(self, rules: List):
-        self.rules = rules
+    def __init__(self, rule_list: List):
+        self.rule_list = rule_list
 
     def forward_message(self, message: Message):
         """消息转发"""
@@ -25,7 +25,7 @@ class MessageForwarder:
         # TODO: 转发文件
 
         # 判断消息是否符合转发规则
-        for rule in self.rules:
+        for rule in self.rule_list:
             # 判断消息来源是否符合转发规则
             if from_name in rule["froms"]:
                 # 构造转发消息
