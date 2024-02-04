@@ -68,5 +68,5 @@ def _generate_trivia_message(trivia_list: List, random_number) -> str:
     trivia_str += f"1.{trivia_list[random_numbers[0]]}\n\n"
     trivia_str += f"2.{trivia_list[random_numbers[1]]}\n\n"
     trivia_str += f"3.{trivia_list[random_numbers[2]]}\n"
-    trivia_str += f"❇️第{random_number}期的第{random_numbers}条冷知识❇️\n"
+    trivia_str += f"❇️第{random_number}期的第{random_numbers}条冷知识❇️"
     return trivia_str

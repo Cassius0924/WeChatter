@@ -29,6 +29,11 @@ def gasoline_price_command_handler(to: SendTo, message: str = "") -> None:
 # TODO: 现在查询的是中国石油化工,添加查询中国石油天然气，只需改成{city_id}_2_2.html
 # 封装起来，方便定时任务调用
 def get_gasoline_price_str(city_name: str) -> str:
+    """
+    获取城市的汽油价格
+    :param city_name: 城市名
+    :return: 汽油价格
+    """
     if city_name == "":
         return "请输入城市名，如：广州"
     else:
@@ -44,6 +49,11 @@ def get_gasoline_price_str(city_name: str) -> str:
 
 
 def _parse_gasoline_price_response(response: requests.Response) -> str:
+    """
+    解析汽油价格响应
+    :param response: 响应
+    :return: 汽油价格
+    """
     soup = BeautifulSoup(response.text, 'html.parser')
     article_body_div = soup.select_one("div.articlebody")
 
