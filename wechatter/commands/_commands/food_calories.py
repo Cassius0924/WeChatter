@@ -22,8 +22,8 @@ def food_calories_command_handler(to: SendTo, message: str = "") -> None:
             url=f"https://www.boohee.com/food/search?keyword={message}"
         )
         food_href_list = parse_food_href_list_response(response)
-        print(food_href_list)
         food_detail_list = get_food_detail_list(food_href_list)
+        print(food_detail_list)
         result = generate_food_message(food_detail_list)
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
     except Exception as e:
