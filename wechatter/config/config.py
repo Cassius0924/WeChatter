@@ -66,7 +66,7 @@ custom_command_key_dict = config_reader.getdict(
 gasoline_price_cron_enable = config_reader.getbool(
     "gasoline-price-cron", "gasoline_price_cron_enabled"
 )
-gasoline_price_cron_rule_list = config_reader.getlist("gasoline-price-cron", "gasoline_price_cron_rules")
+gasoline_price_cron_rule_list = config_reader.getlist("gasoline-price-cron", "gasoline_price_cron_rule_list")
 
 
 logger.info(config_reader.config_dict)
