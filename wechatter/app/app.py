@@ -12,12 +12,15 @@ app.include_router(routers.wechat_router)
 if config.github_webhook_enabled:
     app.include_router(routers.github_router)
 
-
 if config.weather_cron_enabled:
     cron_tasks = parse_weather_cron_rule_list(config.weather_cron_rule_list)
-
     Scheduler.add_cron_tasks(cron_tasks)
 
+if config.gasoline_price_cron_enable:
+    cron_tasks = parse_gasoline_price_cron_rule_list(config.gasoline_price_cron_rule_list)
+    Scheduler.add_cron_tasks(cron_tasks)
+
+if not Scheduler.is_cron_tasks_empty():
     scheduler = Scheduler()
 
     # 定时任务
@@ -25,21 +28,7 @@ if config.weather_cron_enabled:
     async def startup_event():
         scheduler.startup()
 
+
     @app.on_event("shutdown")
     async def shutdown_event():
         scheduler.shutdown()
-
-
-if config.gasoline_price_cron_enable:
-    gasoline_price_cron_tasks = parse_gasoline_price_cron_rule_list(config.gasoline_price_cron_rule_list)
-
-    Scheduler.add_cron_tasks(gasoline_price_cron_tasks)
-
-    gasoline_price_scheduler = Scheduler()
-
-    # 定时任务
-    async def startup_event():
-        gasoline_price_scheduler.startup()
-
-    async def shutdown_event():
-        gasoline_price_scheduler.shutdown()
