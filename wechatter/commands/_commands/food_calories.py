@@ -50,8 +50,12 @@ def get_food_detail_list(food_href_list: List) -> List:
         food_response = get_request(
             url=f"https://www.boohee.com{food_href}", headers=headers
         )
+        if not food_response:
+            raise Exception(f"获取食物详情失败，食物名称：{food_name}")
         food_detail = parse_food_detail_response(food_response, food_all_name)
         food_detail_list.append(food_detail)
+        if not food_detail_list:
+            raise Exception("获取食物详情失败,为空列表")
     return food_detail_list
 
 
