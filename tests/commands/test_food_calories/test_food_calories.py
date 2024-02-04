@@ -6,7 +6,7 @@ from requests import Response
 from wechatter.commands._commands import food_calories
 from wechatter.exceptions import Bs4ParsingError
 
-rs = """
+rs = r"""
 ✨=====食物列表=====✨
 1. 牛肉(肥瘦)，又叫肥牛
 🍲热量(大卡):    125.00
