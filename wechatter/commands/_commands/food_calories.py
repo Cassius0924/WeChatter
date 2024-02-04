@@ -21,7 +21,7 @@ def food_calories_command_handler(to: SendTo, message: str = "") -> None:
         response = get_request(
             url=f"https://www.boohee.com/food/search?keyword={message}"
         )
-        print(response.text)
+        print(response)
         food_href_list = parse_food_href_list_response(response)
         food_detail_list = get_food_detail_list(food_href_list)
         result = generate_food_message(food_detail_list)
