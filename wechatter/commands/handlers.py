@@ -24,7 +24,6 @@ def command(command: str, keys: List[str], desc: str):
             keys.extend(config.custom_command_key_dict[command])
 
         commands[command]["keys"] = keys
-
         commands[command]["desc"] = desc
         commands[command]["handler"] = func
 

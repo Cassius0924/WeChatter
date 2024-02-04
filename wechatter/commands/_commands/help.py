@@ -1,4 +1,5 @@
 # 获取命令帮助消息
+import wechatter.config as config
 from wechatter.commands import commands
 from wechatter.commands.handlers import command
 from wechatter.models.message import SendTo
@@ -27,6 +28,6 @@ def get_help_msg() -> str:
             continue
         cmd_msg = ""
         for key in value["keys"]:
-            cmd_msg += "/" + key + "\n"
+            cmd_msg += config.command_prefix + key + "\n"
         help_msg += cmd_msg + "-->「" + value["desc"] + "」\n\n"
     return help_msg
