@@ -93,6 +93,8 @@ python3 main.py
 - [x] 获取人民日报PDF
 - [x] 获取天气预报
 - [x] 获取食物热量/卡路里
+- [x] 随机获取冷知识
+- [x] 获取中石化92号汽油指导价
 
 > [!TIP]
 > 更多命令使用 `/help` 命令查看。
@@ -101,6 +103,7 @@ python3 main.py
 
 - [x] 消息转发，需[配置](#%EF%B8%8F-message-forwarding-配置)
 - [x] 天气预报定时推送，需[配置](#%EF%B8%8F-weather-cron-配置)
+- [x] 中石化92号汽油指导价定时推送，需[配置](#%EF%B8%8F-gasoline_price-cron-配置)
 
 ## 支持的 Webhook
 
@@ -192,6 +195,15 @@ python3 main.py
 | `custom_command_key_dict` | 自定义命令关键词字典，格式为 `command: [key1, key2, ...]`, 其中 `command` 为命令名称，`key1` 和 `key2` 为自定义命令关键词 |  |
 
 关于命令名称可选值详见[自定义命令关键词配置详细](docs/custom_command_key_config_detail.md)
+
+### ⚙️ Gasoline Price Cron 配置
+
+| 配置项 | 解释 | 备注 |
+| --- | --- |  --- |
+| `gasoline_price_cron_enabled` | 功能开关，是否开启定时推送92号汽油指导价 | 默认为 `False` |
+| `gasoline_price_cron_rule_list` | 推送规则列表，每个规则包含两个字段：`cron` 和 `tasks` | |
+
+关于 `cron` 和 `tasks` 的配置见[中石化92号汽油指导价定时任务配置详细](docs/gasoline_price_cron_config_detail.md)
 
 ## 插件化
 
