@@ -16,7 +16,6 @@ from wechatter.utils import get_request
     command="trivia",
     keys=["冷知识", "trivia"],
     desc="获取冷知识。",
-    value=170,
 )
 def trivia_command_handler(to: SendTo, message: str = "") -> None:
     random_number = random.randint(1, 917)
