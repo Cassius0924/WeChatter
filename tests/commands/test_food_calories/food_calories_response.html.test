@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>食物热量查询，食物卡路里大全 - 薄荷网</title>
+  <meta name="description" content="食物热量查询，食物卡路里大全，您的减肥必备工具。薄荷食物库为您提供5000+种食物素材，营养热量全面分析；12000+套风格食谱，原料做法尽在掌握。" /><meta name="keywords"  content="食物热量查询，食物卡路里大全" />
+  <meta name="verify-v1" content="WPvgwdf4aqsujE8987ZHPpBNvtHguD/yT9AaQdi784c=" />
+  <meta name="apple-itunes-app" content="app-id=457856023"/>
+  <meta name="mobile-agent" content="format=xhtml;url=http://m.boohee.com" >
+
+  <link rel="stylesheet" media="screen" href="/assets/core_v2-3db3946ed96f84b7f1a769a23e1b76c8.css" enablehash="true" />
+  <link href="//up.boohee.cn/house/u/site/pc/main-v4.css" rel="stylesheet"/>
+
+  <link rel="stylesheet" media="screen" href="/assets/food/food_v2-fbd8ca47006b37cac23030d36562cda0.css" enablehash="true" />
+    <style>
+      footer {
+        margin-top: 200px !important;
+      }
+
+
+      @media (min-width: 1px) {
+        .container {
+          width: 990px
+        }
+      }
+
+      @media (min-width: 1px) {
+        .container {
+          width: 990px
+        }
+      }
+
+      @media (min-width: 1330px) {
+        .container {
+          width: 1200px
+        }
+      }
+
+
+    </style>
+
+  <!--[if lt IE 9]>
+  <script src="//s.boohee.cn/javascripts/v1/ext/html5shiv.min.js"></script>
+  <script src="//s.boohee.cn/javascripts/v1/ext/respond.min.js"></script>
+  <link href="//s.boohee.cn/javascripts/v1/ext/respond-proxy.html" id="respond-proxy" rel="respond-proxy" />
+  <link href="//s.boohee.cn/javascripts/v1/ext/respond.proxy.gif" id="respond-redirect" rel="respond-redirect" />
+  <script src="//s.boohee.cn/javascripts/v1/ext/respond.proxy.js"></script>
+  <![endif]-->
+    <script>
+  var _hmt = _hmt || [];
+  _hmt.push(['_setCustomVar', 1, 'login', '0', 2]);
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?7263598dfd4db0dc29539a51f116b23a";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script>
+
+  <style>
+    html,body {
+      font: normal normal 100%/normal -apple-system, 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, 'Nimbus Sans L', Arial, 'Liberation Sans', 'Hiragino Sans GB', 'Source Han Sans CN', 'Source Han Sans SC', 'Wenquanyi Micro Hei', 'WenQuanYi Zen Hei', 'ST Heiti', SimHei, 'WenQuanYi Zen Hei Sharp', sans-serif;
+    }
+    footer {
+      margin-top: 200px !important;
+    }
+  </style>
+</head>
+<body  >
+<div id="wrapper">
+  <div id="top">
+
+  </div>
+  <div id="header">
+
+<div class="page-food-category">
+  <hr class="hide" data-page="food-category"/>
+
+  <header>
+    <div class="clearfix row" style='width: 1200px;'>
+      <div class="nav-menu">
+        <a href="/" class="no-pl">
+          <i class="logo"></i>
+        </a>
+      </div>
+
+      <nav class="right clearfix nav">
+        <div class="nav-menu ">
+          <a href="/" class="clean-link">
+            首页
+            <i class="separator"></i>
+          </a>
+        </div>
+
+        <div class="nav-menu ">
+          <a href="/apps/boohee" class="clean-link">
+            App
+            <i class="separator"></i>
+          </a>
+        </div>
+
+        <div class="nav-menu ">
+          <a href="/boohee/members" class="clean-link">
+            薄荷会员
+            <i class="separator"></i>
+          </a>
+        </div>
+
+        <div class="nav-menu ">
+          <a href="/boohee/food" class="clean-link">
+            薄荷食品
+            <i class="separator"></i>
+          </a>
+        </div>
+
+        <div class="nav-menu ">
+          <a href="/boohee/channel" class="clean-link">
+            薄荷频道
+            <i class="separator"></i>
+          </a>
+        </div>
+
+        <div class="nav-menu ">
+          <a href="/boohee/cooperation" class="clean-link">
+            商务合作
+            <i class="separator"></i>
+          </a>
+        </div>
+
+
+        <div class="nav-menu ">
+          <a href="/food" class="clean-link">
+            热量查询
+            <i class="separator"></i>
+          </a>
+        </div>
+
+        <div class="nav-menu search">
+          <a href="/food" class="clean-link">
+            <i class="icon-btn"></i>
+          </a>
+        </div>
+
+
+      </nav>
+    </div>
+  </header>
+
+
+  <div class="relative x-adjustable-img text-center food-database-section">
+    <img alt="薄荷" src="//up.boohee.cn/house/u/site/pc/index/food-database-bg.png" class="xy-center" />
+
+    <div class="xy-center">
+      <h2>超过 100 万种食物数据</h2>
+
+      <div class="y-gutter-15"></div>
+
+      <p>食物营养查询，吃适合的食物</p>
+
+      <div class="y-gutter-120"></div>
+
+      <div class="border-box search">
+        <div class="padding-box left field">
+          <div>
+            <input style="margin-top: 7px;" id="search-ipt" type="text" placeholder="薄荷超全食物热量和营养库，吃前查一查饮食更健康" value="牛" />
+          </div>
+        </div>
+        <a href="#" id="search" class="hide-text text-center clean-link left table btn-search">
+          <span class="cell middle">搜索薄荷</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+
+  </div>
+  <div id="main">
+
+  <div class="widget-group-content container">
+    <h2 class="crumb"><a href="/food/">薄荷食物库</a>搜索“<em>牛</em>”的结果</h2>
+      <div class="widget-food-list pull-left">
+  <h3>牛
+  </h3>
+      <ul class="food-list">
+    <li class="item clearfix">
+    <div class="img-box pull-left">
+      <a href='/shiwu/fd47b96b' target='_blank'><img src="https://s.boohee.cn/images/can/no-s-illu.gif"/></a>
+    </div>
+    <div class="text-box pull-left">
+      <h4>
+        <a href="/shiwu/fd47b96b" title="牛胰，又叫牛胰子、牛胰脏" target='_blank'>牛胰，又叫牛胰子、牛胰脏</a>
+      </h4>
+      <p>热量：235 大卡(每100克)</p>
+    </div>
+  </li>
+    <li class="item clearfix">
+    <div class="img-box pull-left">
+      <a href='/shiwu/niudu' target='_blank'><img src='https://s.boohee.cn/house/upload_food/2020/6/20/small_photo_url_big_photo_url_e7947a2c7ffe51c44a89e0a6bd00e772.jpg' alt='牛肚' /></a>
+    </div>
+    <div class="text-box pull-left">
+      <h4>
+        <a href="/shiwu/niudu" title="牛肚，又叫百叶、肚尖、牛胃" target='_blank'>牛肚，又叫百叶、肚尖、牛胃</a>
+      </h4>
+      <p>热量：72 大卡(每100克)</p>
+    </div>
+  </li>
+    <li class="item clearfix">
+    <div class="img-box pull-left">
+      <a href='/shiwu/shedie' target='_blank'><img src='https://s.boohee.cn/house/new_food/small/d7c05599fe0e4cb2b081bc4422e738b2.jpg' alt='舌鳎' /></a>
+    </div>
+    <div class="text-box pull-left">
+      <h4>
+        <a href="/shiwu/shedie" title="舌鳎，又叫舌鳎、舌鳎鱼、牛舌头鱼、花纹舌头" target='_blank'>舌鳎，又叫舌鳎、舌鳎鱼、牛舌头鱼、花纹舌头</a>
+      </h4>
+      <p>热量：83 大卡(每100克)</p>
+    </div>
+  </li>
+    <li class="item clearfix">
+    <div class="img-box pull-left">
+      <a href='/shiwu/fde0d6ea' target='_blank'><img src='https://s.boohee.cn/house/upload_food/2020/5/27/small_photo_url_big_photo_url_4ba46f70b0a6d0ea277106b6183d446d.jpg' alt='花牛' /></a>
+    </div>
+    <div class="text-box pull-left">
+      <h4>
+        <a href="/shiwu/fde0d6ea" title="花牛" target='_blank'>花牛</a>
+      </h4>
+      <p>热量：54 大卡(每100克)</p>
+    </div>
+  </li>
+    <li class="item clearfix">
+    <div class="img-box pull-left">
+      <a href='/shiwu/fd6dda9e' target='_blank'><img src='https://s.boohee.cn/house/new_food/small/365b6422113c4edfaa4e01da56213a59.jpg' alt='牛血' /></a>
+    </div>
+    <div class="text-box pull-left">
+      <h4>
+        <a href="/shiwu/fd6dda9e" title="牛血" target='_blank'>牛血</a>
+      </h4>
+      <p>热量：82 大卡(每100克)</p>
+    </div>
+  </li>
+    <li class="item clearfix">
+    <div class="img-box pull-left">
+      <a href='/shiwu/niugan' target='_blank'><img src='https://s.boohee.cn/house/upload_food/2021/8/4/small_photo_url_97481bb2b85cca7b6719bea56e8f9675.jpg' alt='牛肝' /></a>
+    </div>
+    <div class="text-box pull-left">
+      <h4>
+        <a href="/shiwu/niugan" title="牛肝" target='_blank'>牛肝</a>
+      </h4>
+      <p>热量：139 大卡(每100克)</p>
+    </div>
+  </li>
+    <li class="item clearfix">
+    <div class="img-box pull-left">
+      <a href='/shiwu/niufei' target='_blank'><img src='https://s.boohee.cn/house/upload_food/2021/8/4/small_photo_url_cfc826dab04df2b37b23d57f97249e8f.jpg' alt='牛肺' /></a>
+    </div>
+    <div class="text-box pull-left">
+      <h4>
+        <a href="/shiwu/niufei" title="牛肺" target='_blank'>牛肺</a>
+      </h4>
+      <p>热量：95 大卡(每100克)</p>
+    </div>
+  </li>
+    <li class="item clearfix">
+    <div class="img-box pull-left">
+      <a href='/shiwu/niuxin' target='_blank'><img src='https://s.boohee.cn/house/new_food/small/e61b3136c3254e38af463274926e34e1.jpg' alt='牛心' /></a>
+    </div>
+    <div class="text-box pull-left">
+      <h4>
+        <a href="/shiwu/niuxin" title="牛心" target='_blank'>牛心</a>
+      </h4>
+      <p>热量：106 大卡(每100克)</p>
+    </div>
+  </li>
+    <li class="item clearfix">
+    <div class="img-box pull-left">
+      <a href='/shiwu/niushen' target='_blank'><img src='https://s.boohee.cn/house/new_food/small/ab2a973d064848eaabd60ce8fe868acb.jpg' alt='牛肾' /></a>
+    </div>
+    <div class="text-box pull-left">
+      <h4>
+        <a href="/shiwu/niushen" title="牛肾，又叫牛腰" target='_blank'>牛肾，又叫牛腰</a>
+      </h4>
+      <p>热量：94 大卡(每100克)</p>
+    </div>
+  </li>
+    <li class="item clearfix">
+    <div class="img-box pull-left">
+      <a href='/shiwu/niunao' target='_blank'><img src='https://s.boohee.cn/house/food_small/s_niunaonn1.gif' alt='牛脑' /></a>
+    </div>
+    <div class="text-box pull-left">
+      <h4>
+        <a href="/shiwu/niunao" title="牛脑" target='_blank'>牛脑</a>
+      </h4>
+      <p>热量：149 大卡(每100克)</p>
+    </div>
+  </li>
+</ul>
+<div class="widget-pagination"><span class='pagination-sum'>前&nbsp;100&nbsp;条记录</span>&nbsp;&nbsp;<div role="navigation" aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.container_aria_label&quot;&gt;Container Aria Label&lt;/span&gt;" class="pagination" unit="条" name="记录" limit_page="10"><span class="previous_page disabled" aria-disabled="true">&laquo; 上一页</span> <em class="current" aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.page_aria_label&quot;&gt;Page Aria Label&lt;/span&gt;" aria-current="page">1</em> <a rel="next" aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.page_aria_label&quot;&gt;Page Aria Label&lt;/span&gt;" href="/food/search?keyword=%E7%89%9B&amp;page=2">2</a> <a aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.page_aria_label&quot;&gt;Page Aria Label&lt;/span&gt;" href="/food/search?keyword=%E7%89%9B&amp;page=3">3</a> <a aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.page_aria_label&quot;&gt;Page Aria Label&lt;/span&gt;" href="/food/search?keyword=%E7%89%9B&amp;page=4">4</a> <a aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.page_aria_label&quot;&gt;Page Aria Label&lt;/span&gt;" href="/food/search?keyword=%E7%89%9B&amp;page=5">5</a> <span class="gap"><span class="translation_missing" title="translation missing: zh-CN.will_paginate.page_gap">Page Gap</span></span> <a aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.page_aria_label&quot;&gt;Page Aria Label&lt;/span&gt;" href="/food/search?keyword=%E7%89%9B&amp;page=9">9</a> <a aria-label="&lt;span class=&quot;translation_missing&quot; title=&quot;translation missing: zh-CN.will_paginate.page_aria_label&quot;&gt;Page Aria Label&lt;/span&gt;" href="/food/search?keyword=%E7%89%9B&amp;page=10">10</a> <a class="next_page" rel="next" href="/food/search?keyword=%E7%89%9B&amp;page=2">下一页 &raquo;</a></div></div>
+
+
+</div>
+
+    <div class="widget-tools-bar widget-links-group pull-right">
+  <div class="calorie-counter item">
+    <h3>卡路里计算器</h3>
+    <div class="content">
+      <p>饮食减肥的推荐工具</p>
+      <p>算出每天摄入和消耗的热量</p>
+      <ul class="links">
+        <li>
+          <a href="/assessment/calory" target="_blank" >&gt;&gt; 马上体验这个工具</a>
+        </li>
+        <li>
+          <a href='/food/rank/use' target='_blank' >&gt;&gt; 食物排行</a>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+  <div class="calorie-counter item">
+    <h3>瘦身工具推荐</h3>
+    <div class="content">
+      <ul class="side-nav">
+        <li><a href="/food/">食物热量查询</a></li>
+        <li><a href="/assessment/batchcalc.htm">一分钟了解自己</a></li>
+        <li><a href="/assessment/standard_weight">标准体重计算</a></li>
+        <li><a href="/assessment/health_weight">健康体重范围</a></li>
+        <li><a href="/assessment/heart_rate">燃脂运动计算</a></li>
+        <li><a href="/assessment/bmr">基础代谢计算</a></li>
+        <li><a href="/assessment/calory?pre_url=activity">运动卡路里计算器</a></li>
+        <li><a href="/assessment/bmi.htm">身体质量指数(BMI)</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+  </div>
+
+  </div>
+</div>
+<div id="footer">
+</div>
+<div id="ext">
+
+
+</div>
+
+<script src="https://cdn.staticfile.org/jquery/3.7.0/jquery.min.js"></script>
+
+
+  <script type="text/javascript">
+    ;(function ($) {
+      $('#search').click(function() {
+        window.location.href="/food/search?keyword=" + encodeURI($('#search-ipt').val());
+      })
+
+      $('.btn-search').click(function() {
+        console.log('123321');
+        var data = $('#search-ipt').val();
+        window.location.href = "/food/search?keyword=" + data;
+      })
+
+      $('#search-ipt').keyup(function(event) {
+        // 检查按下的键是否是回车键（键码 13）
+        if (event.keyCode === 13) {
+          // 在这里执行特定的动作
+          var data = $(this).val();
+          window.location.href = "/food/search?keyword=" + encodeURI(data);
+        }
+      });
+
+    })(jQuery)
+  </script>
+
+
+<footer class="row">
+  <div class="padding-box footer">
+    <div>
+
+      <div class="flex">
+        <div class="part-left flex socail-medias">
+
+          <a href="#" class="wechat">
+            <div class='arrow-box popper border arrow-top'>
+              <div class="xy-center">
+                <img src="//up.boohee.cn/house/u/site/pc/weixin_qrcode2.png" class="xy-center"/>
+              </div>
+            </div>
+          </a>
+          <a href="https://weibo.com/1822042062/profile?topnav=1&wvr=6&is_all=1" class="weibo">
+            <div class='arrow-box popper border arrow-top'>
+              <div class="xy-center">
+                <img src="//up.boohee.cn/house/u/site/pc/boohee-qrcode-weibo.png" class="xy-center"/>
+              </div>
+            </div>
+          </a>
+
+          <a href="https://www.xiaohongshu.com/user/profile/59e9963382ec397c771ccfd1?xhsshare=CopyLink&appuid=59e9963382ec397c771ccfd1&apptime=1574732748" class="red">
+            <div class='arrow-box popper border arrow-top'>
+              <div class="xy-center">
+                <img src="//up.boohee.cn/house/u/site/pc/boohee-qrcode-red.png" class="xy-center"/>
+              </div>
+            </div>
+          </a>
+
+          <a href="#" class="douyin">
+            <div class='arrow-box popper border arrow-top'>
+              <div class="xy-center">
+                <img src="//up.boohee.cn/house/u/site/pc/douyin_qrcode2.png" class="xy-center"/>
+              </div>
+            </div>
+          </a>
+
+          <a href="https://space.bilibili.com/19729246" class="bilibili">
+            <div class='arrow-box popper border arrow-top'>
+              <div class="xy-center">
+                <img src="//up.boohee.cn/house/u/site/pc/boohee-qrcode-bilibili.png" class="xy-center"/>
+              </div>
+            </div>
+          </a>
+
+        </div>
+
+        <div class="text-center part-right flex other-interlinks">
+          <a href="/boohee/cooperation" class="clean-link">商务合作</a>
+          <a href="/boohee/join" class="clean-link">加入薄荷</a>
+          <a href="/boohee/about" class="clean-link">关于薄荷</a>
+          <a href="/boohee/declare" class="clean-link">法律声明</a>
+          <a href="/common/ethics" class="clean-link">廉正举报</a>
+        </div>
+      </div>
+
+      <div class="certificates">
+        <a href="http://scjgj.sh.gov.cn" class="text-center table clean-link right"><span class="cell middle">上海工商</span></a>
+        <a href="http://www.zx110.org/" class="clean-link right">网络社会<br/>征信网</a>
+        <a href="http://www.cyberpolice.cn/wfjb/" class="clean-link right">上海网警<br/>网络 110</a>
+        <a href="http://beian.miit.gov.cn/" class="clean-link right">沪ICP备<br/>06060176号</a>
+      </div>
+
+      <i></i>
+
+      <p class="text-center">媒体报道：pr@boohee.com<a href="/common/ethics"  style="margin-left: 20px" class="clean-link">廉正举报：ethics@boohee.com</a></p>
+      <p class="text-center">
+        版权所有 &#169 2006~2024 薄荷网 boohee.com <a href="http://beian.miit.gov.cn/" class="clean-link">沪ICP备06060176号</a>  |
+        <a href="/common/licenses" class="clean-link">证照信息</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<div class="y-gutter-120"></div>
+</div>
+<script>
+  (function(w, d, n, a, j) {
+    w[n] = w[n] || function() {
+      (w[n].a = w[n].a || []).push(arguments);
+    };
+    j = d.createElement('script');
+    j.async = true;
+    j.src = 'https://qiyukf.com/script/03b3cf8338d9eab1f52c068c92e38606.js';
+    d.body.appendChild(j);
+  })(window, document, 'ysf');
+</script>
+<script>
+	(function (w, d, n, a, j) {
+		w[n] = w[n] || function () {
+			(w[n].a = w[n].a || []).push(arguments);
+		};
+		j = d.createElement('script');
+		j.async = true;
+		j.src ='https://qiyukf.com/script/03b3cf8338d9eab1f52c068c92e38606.js';
+		d.body.appendChild(j);
+	})(window, document, 'ysf');
+</script>
+
+<script src="//up.boohee.cn/house/u/site/pc/main.js"></script>
+</body>
+</html>
