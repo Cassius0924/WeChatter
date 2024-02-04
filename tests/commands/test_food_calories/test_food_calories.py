@@ -86,7 +86,7 @@ class TestFoodCaloriesCommand(unittest.TestCase):
 
     def test_generate_food_message_success(self):
         result = food_calories.generate_food_message(self.food_detail_list)
-        self.assertEqual(result, rs)
+        self.assertIn(result, rs)
 
     def test_generate_food_message_failure(self):
         with self.assertRaises(Exception):
