@@ -64,6 +64,8 @@ def generate_food_message(food_detail_list: List) -> str:
     :param food_detail_list: 食物详情列表
     :return: 食物信息
     """
+    if not food_detail_list:
+        raise Exception("食物详情列表为空")
     food_str = "✨=====食物列表=====✨\n"
 
     for i, food_detail in enumerate(food_detail_list):
@@ -82,9 +84,6 @@ def generate_food_message(food_detail_list: List) -> str:
             f"    🥦纤维素(克):    {dietary_fiber}\n"
         )
     food_str += "🔵====含量(100克)====🔵"
-
-    if not food_str:
-        raise Exception("生成食物信息失败")
 
     return food_str
 
