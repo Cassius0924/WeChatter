@@ -34,6 +34,14 @@ class TestFoodCaloriesCommand(unittest.TestCase):
             with self.assertRaises(Exception):
                 food_calories.get_food_detail_list([])
 
+        def test_parse_food_detail_response_success(self):
+            result = food_calories.parse_food_detail_response(food_response, "牛肉")
+            self.assertEqual(result, self.food_detail_list[0])
+
+        def test_parse_food_detail_response_failure(self):
+            with self.assertRaises(Bs4ParsingError):
+                food_calories.parse_food_detail_response(Response(), "牛肉")
+
         # def test_generate_food_message_success(self):
         #     result = food_calories.generate_food_message(self.food_calories)
         #     self.assertEqual(result, self.food_calories)

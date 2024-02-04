@@ -21,10 +21,8 @@ def food_calories_command_handler(to: SendTo, message: str = "") -> None:
         response = get_request(
             url=f"https://www.boohee.com/food/search?keyword={message}"
         )
-        print(response.text)
         food_href_list = parse_food_href_list_response(response)
         food_detail_list = get_food_detail_list(food_href_list)
-        print(food_detail_list)
         result = generate_food_message(food_detail_list)
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
     except Exception as e:
@@ -51,6 +49,8 @@ def get_food_detail_list(food_href_list: List) -> List:
         food_response = get_request(
             url=f"https://www.boohee.com{food_href}", headers=headers
         )
+        print(food_response.text)
+        print(food_all_name)
         if not food_response:
             raise Exception(f"获取食物详情失败，食物名称：{food_name}")
         food_detail = parse_food_detail_response(food_response, food_all_name)
