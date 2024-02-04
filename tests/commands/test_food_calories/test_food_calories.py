@@ -17,6 +17,10 @@ class TestFoodCaloriesCommand(unittest.TestCase):
             food_r_html = f.read()
         self.food_response = Response()
         self.food_response._content = food_r_html.encode('utf-8')
+        with open("tests/commands/test_food_calories/one_food_response.html.test") as f:
+            one_food_r_html = f.read()
+        self.one_food_response = Response()
+        self.one_food_response._content = one_food_r_html.encode('utf-8')
         with open('tests/commands/test_food_calories/food_href_list.json') as f:
             self.food_href_list = json.load(f)
         with open("tests/commands/test_food_calories/food_detail_list.json") as f:
@@ -43,7 +47,7 @@ class TestFoodCaloriesCommand(unittest.TestCase):
             food_calories.get_food_detail_list([])
 
     def test_parse_food_detail_response_success(self):
-        result = food_calories.parse_food_detail_response(self.food_response, "牛肉丸，又叫火锅牛肉丸子，火锅牛肉丸")
+        result = food_calories.parse_food_detail_response(self.one_food_response, "牛肉丸，又叫火锅牛肉丸子，火锅牛肉丸")
         self.assertEqual(result, self.one_food_detail)
 
     def test_parse_food_detail_response_failure(self):

@@ -24,7 +24,6 @@ def food_calories_command_handler(to: SendTo, message: str = "") -> None:
         food_href_list = parse_food_href_list_response(response)
         food_detail_list = get_food_detail_list(food_href_list)
         result = generate_food_message(food_detail_list)
-        print(result)
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
     except Exception as e:
         error_message = f"获取食物热量失败，错误信息：{e}"
@@ -95,6 +94,7 @@ def parse_food_detail_response(response: requests.Response, food_all_name: str) 
     :param food_all_name: 食物全名
     :return: 食物详情
     """
+    print(response.text)
     soup = BeautifulSoup(response.text, "html.parser")
     food_detail = {}
     articles = soup.find_all("dd")
