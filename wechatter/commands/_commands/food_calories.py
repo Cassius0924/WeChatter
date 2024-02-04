@@ -120,6 +120,8 @@ def parse_food_href_list_response(response: requests.Response) -> List:
     soup = BeautifulSoup(response.text, "html.parser")
     href_list = []
     articles = soup.select("div.text-box")
+    if not articles:
+        raise Bs4ParsingError("解析食物详情链接失败")
     for article in articles:
         href_list_item = {}
 
