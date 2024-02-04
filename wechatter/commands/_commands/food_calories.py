@@ -54,8 +54,8 @@ def get_food_detail_list(food_href_list: List) -> List:
             raise Exception(f"获取食物详情失败，食物名称：{food_name}")
         food_detail = parse_food_detail_response(food_response, food_all_name)
         food_detail_list.append(food_detail)
-        if not food_detail_list:
-            raise Exception("获取食物详情失败,为空列表")
+    if not food_detail_list:
+        raise Exception("获取食物详情失败,为空列表")
     return food_detail_list
 
 

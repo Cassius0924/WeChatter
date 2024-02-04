@@ -21,8 +21,6 @@ class TestFoodCaloriesCommand(unittest.TestCase):
         def test_parse_food_href_list_response_success(self):
             result = food_calories.parse_food_href_list_response(self.response)
             self.assertEqual(result, self.food_href_list)
-            print(result)
-            print(self.food_href_list)
 
         def test_parse_food_href_list_response_failure(self):
             with self.assertRaises(Bs4ParsingError):
