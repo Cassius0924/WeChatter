@@ -103,7 +103,7 @@ python3 main.py
 
 - [x] 消息转发，需[配置](#%EF%B8%8F-message-forwarding-配置)
 - [x] 天气预报定时推送，需[配置](#%EF%B8%8F-weather-cron-配置)
-- [x] 中石化92号汽油指导价定时推送，需[配置](#%EF%B8%8F-gasoline_price-cron-配置)
+- [x] 中石化92号汽油指导价定时推送，需[配置](#%EF%B8%8F-gasoline-price-cron-配置)
 
 ## 支持的 Webhook
 
