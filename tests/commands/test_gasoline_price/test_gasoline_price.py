@@ -10,11 +10,11 @@ from wechatter.exceptions import Bs4ParsingError
 class TestGasolinePriceCommand(unittest.TestCase):
 
     def setUp(self):
-        with open('tests/commands/test_gasline_price/gasoline_price_response.html.test') as f:
+        with open('tests/commands/test_gasoline_price/gasoline_price_response.html.test') as f:
             r_html = f.read()
         self.response = Response()
         self.response._content = r_html.encode('utf-8')
-        with open('tests/commands/test_gasline_price/gasoline_price_data.json') as f:
+        with open('tests/commands/test_gasoline_price/gasoline_price_data.json') as f:
             self.gasoline_price = json.load(f)
 
     def test_get_gasoline_price_str_success(self):
