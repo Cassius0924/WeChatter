@@ -25,8 +25,6 @@ class TestFoodCaloriesCommand(unittest.TestCase):
             self.one_food_detail = json.load(f)
         with open("tests/commands/test_food_calories/result") as f:
             self.result = f.read()
-        with open("tests/commands/test_food_calories/result") as f:
-            self.result = f.read()
 
     def test_parse_food_href_list_response_success(self):
         result = food_calories.parse_food_href_list_response(self.food_calories_response)
@@ -54,7 +52,7 @@ class TestFoodCaloriesCommand(unittest.TestCase):
 
     def test_generate_food_message_success(self):
         result = food_calories.generate_food_message(self.food_detail_list)
-        self.assertEqual(result, self.food_detail_list)
+        self.assertEqual(result, self.result)
 
     def test_generate_food_message_failure(self):
         with self.assertRaises(Exception):
