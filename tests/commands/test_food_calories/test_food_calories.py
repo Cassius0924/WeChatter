@@ -13,10 +13,6 @@ class TestFoodCaloriesCommand(unittest.TestCase):
             r_html = f.read()
         self.food_calories_response = Response()
         self.food_calories_response._content = r_html.encode('utf-8')
-        with open("tests/commands/test_food_calories/food_response.html.test") as f:
-            food_r_html = f.read()
-        self.food_response = Response()
-        self.food_response._content = food_r_html.encode('utf-8')
         with open("tests/commands/test_food_calories/one_food_response.html.test") as f:
             one_food_r_html = f.read()
         self.one_food_response = Response()
@@ -54,10 +50,14 @@ class TestFoodCaloriesCommand(unittest.TestCase):
         with self.assertRaises(Bs4ParsingError):
             food_calories.parse_food_detail_response(Response(), "牛肉丸，又叫火锅牛肉丸子，火锅牛肉丸")
 
-    # def test_generate_food_message_success(self):
-    #     result = food_calories.generate_food_message(self.food_calories)
-    #     self.assertEqual(result, self.food_calories)
-    #
-    # def test_generate_food_message_failure(self):
-    #     with self.assertRaises(Exception):
-    #         food_calories.generate_food_message([])
+    def test_generate_food_message_success(self):
+        result = food_calories.generate_food_message(self.food_detail_list)
+        self.assertEqual(result, self.food_detail_list)
+
+    def test_generate_food_message_failure(self):
+        with self.assertRaises(Exception):
+            food_calories.generate_food_message([])
+
+    def test_get_url_encoding_success(self):
+        result = food_calories.get_url_encoding("牛肉丸")
+        self.assertEqual(result, "%E7%89%9B%E8%82%89%E4%B8%B8")

@@ -83,6 +83,9 @@ def generate_food_message(food_detail_list: List) -> str:
         )
     food_str += "🔵====含量(100克)====🔵"
 
+    if not food_str:
+        raise Exception("生成食物信息失败")
+
     return food_str
 
 
@@ -94,7 +97,6 @@ def parse_food_detail_response(response: requests.Response, food_all_name: str) 
     :param food_all_name: 食物全名
     :return: 食物详情
     """
-    print(response.text)
     soup = BeautifulSoup(response.text, "html.parser")
     food_detail = {}
     articles = soup.find_all("dd")
