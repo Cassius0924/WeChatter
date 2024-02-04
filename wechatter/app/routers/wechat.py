@@ -10,7 +10,7 @@ from wechatter.commands import commands
 from wechatter.message import MessageHandler
 from wechatter.message_forwarder import MessageForwarder
 from wechatter.models.message import Message
-from wechatter.notifier import Notifier
+from wechatter.sender import notify_logged_in, notify_logged_out
 from wechatter.sqlite.sqlite_manager import SqliteManager
 
 router = APIRouter()
@@ -79,10 +79,10 @@ def handle_system_event(content: str) -> None:
     # 判断是否为机器人登录消息
     if content_dict["event"] == "login":
         print("机器人登录成功")
-        Notifier.notify_logged_in()
+        notify_logged_in()
     elif content_dict["event"] == "logout":
         print("机器人已退出登录")
-        Notifier.notify_logged_out()
+        notify_logged_out()
     elif content_dict["event"] == "error":
         pass
     else:

@@ -6,7 +6,6 @@ from loguru import logger
 import wechatter.config as config
 from wechatter.bot.bot_info import BotInfo
 from wechatter.models.message import Message, SendTo
-from wechatter.notifier import Notifier
 
 
 class MessageHandler:
@@ -41,8 +40,6 @@ class MessageHandler:
         to = SendTo(message.source)
 
         # 是命令消息
-        # 回复消息已收到
-        Notifier.notify_received(to)
 
         # 开始处理命令
         cmd_handler = cmd_dict["handler"]
