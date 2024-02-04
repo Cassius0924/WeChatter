@@ -29,13 +29,13 @@ docker run -d \
 --name wxBotWebhook \
 -p 3001:3001 \
 -e LOGIN_API_TOKEN="<Token>" \
--e RECVD_MSG_API="http://<内网IP>:<接收消息端口>/receive_msg" \
+-e RECVD_MSG_API="http(s)://<宿主机IP>:<接收消息端口>/receive_msg" \
 dannicool/docker-wechatbot-webhook
 ```
 
-- `<Token>`：登录令牌（不是密码），自己设置一个好记的。
-- `<内网IP>`：填入服务器的**内网IP**。如果是在自己电脑，则填入 `127.0.0.1`。
-- `<接收消息端口>`：设置一个接收消息的端口，此项目中默认为 `4000`。
+- `<Token>`：登录令牌（可选）
+- `<宿主机IP>`：填入 Docker 的宿主机地址。
+- `<接收消息端口>`：设置一个接收消息的端口，默认为 `4000`。
 
 3. 登录微信
 
@@ -45,7 +45,7 @@ dannicool/docker-wechatbot-webhook
 docker logs -f wxBotWebhook
 ```
 
-### 启动服务器
+### 启动 WeChatter
 
 1. 下载源代码
 
