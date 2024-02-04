@@ -136,7 +136,7 @@ gasoline_price_cron_enabled = True
 # to_persons: 消息接收者（们）的微信名称（仅用户）
 # to_groups: 消息接收群名称（仅群）
 # city: 城市名称
-gasoline_price_cron_rules = [ {
+gasoline_price_cron_rule_list = [ {
         "cron": {
           "year": "*",
           "month": "*",

@@ -31,17 +31,15 @@ if config.weather_cron_enabled:
 
 
 if config.gasoline_price_cron_enable:
-    gasoline_price_cron_tasks = parse_gasoline_price_cron_rule_list(config.gasoline_price_cron_rules)
+    gasoline_price_cron_tasks = parse_gasoline_price_cron_rule_list(config.gasoline_price_cron_rule_list)
 
     Scheduler.add_cron_tasks(gasoline_price_cron_tasks)
 
     gasoline_price_scheduler = Scheduler()
 
     # 定时任务
-    @app.on_event("startup")
     async def startup_event():
         gasoline_price_scheduler.startup()
 
-    @app.on_event("shutdown")
     async def shutdown_event():
         gasoline_price_scheduler.shutdown()
