@@ -9,7 +9,7 @@ from wechatter.sender import Sender
 
 
 def parse_weather_cron_rule_list(
-    weather_cron_rule_list: List,
+        weather_cron_rule_list: List,
 ) -> List[CronTask]:
     """
     解析天气定时任务规则
