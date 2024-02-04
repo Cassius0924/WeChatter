@@ -22,6 +22,11 @@ class Scheduler:
         """添加定时任务"""
         CRON_TASKS.extend(cron_tasks)
 
+    @staticmethod
+    def is_cron_tasks_empty():
+        """判断定时任务是否为空"""
+        return len(CRON_TASKS) == 0
+
     def startup(self):
         """启动定时任务"""
         for ct in CRON_TASKS:
