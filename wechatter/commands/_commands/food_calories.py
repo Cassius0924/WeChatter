@@ -24,6 +24,7 @@ def food_calories_command_handler(to: SendTo, message: str = "") -> None:
         food_href_list = parse_food_href_list_response(response)
         food_detail_list = get_food_detail_list(food_href_list)
         result = generate_food_message(food_detail_list)
+        print(result)
         Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
     except Exception as e:
         error_message = f"获取食物热量失败，错误信息：{e}"
@@ -52,7 +53,6 @@ def get_food_detail_list(food_href_list: List) -> List:
         if not food_response:
             raise Exception(f"获取食物详情失败，食物名称：{food_name}")
         food_detail = parse_food_detail_response(food_response, food_all_name)
-        print(food_detail)
         food_detail_list.append(food_detail)
     if not food_detail_list:
         raise Exception("获取食物详情失败,为空列表")
