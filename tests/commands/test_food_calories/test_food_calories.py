@@ -21,6 +21,10 @@ class TestFoodCaloriesCommand(unittest.TestCase):
             self.food_href_list = json.load(f)
         with open("tests/commands/test_food_calories/food_detail_list.json") as f:
             self.food_detail_list = json.load(f)
+        with open("tests/commands/test_food_calories/one_food_detail.json") as f:
+            self.one_food_detail = json.load(f)
+        with open("tests/commands/test_food_calories/result") as f:
+            self.result = f.read()
 
     def test_parse_food_href_list_response_success(self):
         result = food_calories.parse_food_href_list_response(self.food_calories_response)
@@ -40,7 +44,7 @@ class TestFoodCaloriesCommand(unittest.TestCase):
 
     def test_parse_food_detail_response_success(self):
         result = food_calories.parse_food_detail_response(self.food_response, "牛肉丸，又叫火锅牛肉丸子，火锅牛肉丸")
-        self.assertEqual(result, self.food_detail_list[4])
+        self.assertEqual(result, self.one_food_detail)
 
     def test_parse_food_detail_response_failure(self):
         with self.assertRaises(Bs4ParsingError):
