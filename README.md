@@ -171,13 +171,18 @@ python3 main.py
 
 ### ⚙️ Message Forwarding 配置
 
-| 配置项 | 子项 | 解释 | 备注 |
-| --- | --- |  --- | --- |
-| `message_forwarding_enabled` | | 功能开关，是否开启消息转发 | 默认为 `False` |
-| `message_forwarding_rule_list` | | 消息规则列表，每个规则包含三个字段：`froms`, `to_persons` 和 `to_groups` | 规则是由字典组成的JSON列表，最后的 `]` 不能单独一行 |
-| ➤➤➤ | `froms` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称 |
-| ➤➤➤ | `to_persons` | 消息转发目标用户列表，即消息接收用户 | 可以填多个用户名称或为空列表 |
-| ➤➤➤ | `to_groups` | 消息转发目标群列表，即消息接收群 | 可以填多个群名称或为空列表 |
+| 配置项 | 子项 | 解释                                                       | 备注 |
+| --- | --- |----------------------------------------------------------| --- |
+| `message_forwarding_enabled` | | 功能总开关，是否开启消息转发                                           | 默认为 `False` |
+| `message_forwarding_from_all_enabled` | | 是否是接收所有消息转发给指定人或群                                        | 默认为 `False` |
+| `message_forwarding_from_all_list` | | 接收所有消息规则列表，每个规则包含两个字段：`to_persons` 和 `to_groups`         | 规则是由字典组成的JSON列表，最后的 `]` 不能单独一行 |
+| ➤➤➤ | `to_persons` | 消息转发目标用户列表，即消息接收用户                                       | 可以填多个用户名称或为空列表 |
+| ➤➤➤ | `to_groups` | 消息转发目标群列表，即消息接收群                                         | 可以填多个群名称或为空列表 |
+| `message_forwarding_rule_enabled` | | 是否是自定义接收指定消息转发给指定人或群                                     | 默认为 `False`
+| `message_forwarding_rule_list` | | 自定义消息规则列表，每个规则包含三个字段：`froms`, `to_persons` 和 `to_groups` | 规则是由字典组成的JSON列表，最后的 `]` 不能单独一行 |
+| ➤➤➤ | `froms` | 消息转发来源列表，即消息发送者                                          | 可以填多个用户名称或群名称 |
+| ➤➤➤ | `to_persons` | 消息转发目标用户列表，即消息接收用户                                       | 可以填多个用户名称或为空列表 |
+| ➤➤➤ | `to_groups` | 消息转发目标群列表，即消息接收群                                         | 可以填多个群名称或为空列表 |
 
 ### ⚙️ Weather Cron 配置
 
