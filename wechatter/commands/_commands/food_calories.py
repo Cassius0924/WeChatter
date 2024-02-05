@@ -32,6 +32,11 @@ def food_calories_command_handler(to: SendTo, message: str = "") -> None:
 
 
 def get_food_detail_list(food_href_list: List) -> List:
+    """
+    获取食物详情列表
+    :param food_href_list: 食物详情链接列表
+    :return: 食物详情列表
+    """
     food_detail_list = []
     for i, food in enumerate(food_href_list[:5]):
         food_name = food.get("name")
@@ -44,12 +49,23 @@ def get_food_detail_list(food_href_list: List) -> List:
         food_response = get_request(
             url=f"https://www.boohee.com{food_href}", headers=headers
         )
+        if not food_response:
+            raise Exception(f"获取食物详情失败，食物名称：{food_name}")
         food_detail = parse_food_detail_response(food_response, food_all_name)
         food_detail_list.append(food_detail)
+    if not food_detail_list:
+        raise Exception("获取食物详情失败,为空列表")
     return food_detail_list
 
 
 def generate_food_message(food_detail_list: List) -> str:
+    """
+    生成食物信息
+    :param food_detail_list: 食物详情列表
+    :return: 食物信息
+    """
+    if not food_detail_list:
+        raise Exception("食物详情列表为空")
     food_str = "✨=====食物列表=====✨\n"
 
     for i, food_detail in enumerate(food_detail_list):
@@ -74,6 +90,12 @@ def generate_food_message(food_detail_list: List) -> str:
 
 # 这里也是 parse部分
 def parse_food_detail_response(response: requests.Response, food_all_name: str) -> Dict:
+    """
+    解析食物详情
+    :param response: 请求响应
+    :param food_all_name: 食物全名
+    :return: 食物详情
+    """
     soup = BeautifulSoup(response.text, "html.parser")
     food_detail = {}
     articles = soup.find_all("dd")
@@ -90,9 +112,16 @@ def parse_food_detail_response(response: requests.Response, food_all_name: str) 
 
 
 def parse_food_href_list_response(response: requests.Response) -> List:
+    """
+    解析食物详情链接列表
+    :param response: 请求响应
+    :return: 食物详情链接列表
+    """
     soup = BeautifulSoup(response.text, "html.parser")
     href_list = []
     articles = soup.select("div.text-box")
+    if not articles:
+        raise Bs4ParsingError("解析食物详情链接失败")
     for article in articles:
         href_list_item = {}
 
@@ -114,5 +143,10 @@ def parse_food_href_list_response(response: requests.Response) -> List:
 
 
 def get_url_encoding(message: str) -> str:
+    """
+    获取URL编码
+    :param message: 消息
+    :return: URL编码
+    """
     url_encoding = quote(message)
     return url_encoding
