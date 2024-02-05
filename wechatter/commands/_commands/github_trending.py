@@ -6,15 +6,15 @@ from loguru import logger
 
 from wechatter.commands.handlers import command
 from wechatter.exceptions import Bs4ParsingError
-from wechatter.models.message import SendMessage, SendMessageType, SendTo
-from wechatter.sender import Sender
+from wechatter.models.message import SendTo
+from wechatter.sender import sender
 from wechatter.utils import get_request
 
 
 @command(
     command="github-trending",
-    keys=["GitHub趋势", "github-trending"],
-    desc="获取GitHub趋势。",
+    keys=["github趋势", "github-trending"],
+    desc="获取 GitHub 趋势。",
 )
 def github_trending_command_handler(to: SendTo, message: str = "") -> None:
     try:
@@ -22,9 +22,9 @@ def github_trending_command_handler(to: SendTo, message: str = "") -> None:
     except Exception as e:
         error_message = f"获取GitHub趋势失败，错误信息: {str(e)}"
         logger.error(error_message)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
+        sender.send_msg(to, error_message)
     else:
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
+        sender.send_msg(to, result)
 
 
 def get_github_trending_str() -> str:

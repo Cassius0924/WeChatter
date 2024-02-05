@@ -25,22 +25,22 @@ def get_request(
         response.encoding = "utf-8"
         response.raise_for_status()  # 如果响应状态码不是 200，就主动抛出异常
     except requests.ConnectionError as e:
-        logger.error(f"请求 {url} 失败，连接错误：{e}")
+        logger.error(f"请求 {url} 失败，连接错误：{str(e)}")
         raise
     except requests.HTTPError as e:
-        logger.error(f"请求 {url} 失败，HTTP错误：{e}")
+        logger.error(f"请求 {url} 失败，HTTP错误：{str(e)}")
         raise
     except requests.Timeout as e:
-        logger.error(f"请求 {url} 失败，请求超时：{e}")
+        logger.error(f"请求 {url} 失败，请求超时：{str(e)}")
         raise
     except requests.URLRequired as e:
-        logger.error(f"请求 {url} 失败，无效的URL：{e}")
+        logger.error(f"请求 {url} 失败，无效的URL：{str(e)}")
         raise
     except requests.TooManyRedirects as e:
-        logger.error(f"请求 {url} 失败，重定向次数过多：{e}")
+        logger.error(f"请求 {url} 失败，重定向次数过多：{str(e)}")
         raise
     except Exception as e:
-        logger.error(f"请求 {url} 失败，未知错误：{e}")
+        logger.error(f"请求 {url} 失败，未知错误：{str(e)}")
         raise
     else:
         return response
@@ -83,22 +83,22 @@ def post_request(
         )
         response.raise_for_status()
     except requests.ConnectionError as e:
-        logger.error(f"请求 {url} 失败，连接错误：{e}")
+        logger.error(f"请求 {url} 失败，连接错误：{str(e)}")
         raise
     except requests.HTTPError as e:
-        logger.error(f"请求 {url} 失败，HTTP错误：{e}")
+        logger.error(f"请求 {url} 失败，HTTP错误：{str(e)}")
         raise
     except requests.Timeout as e:
-        logger.error(f"请求 {url} 失败，请求超时：{e}")
+        logger.error(f"请求 {url} 失败，请求超时：{str(e)}")
         raise
     except requests.URLRequired as e:
-        logger.error(f"请求 {url} 失败，无效的URL：{e}")
+        logger.error(f"请求 {url} 失败，无效的URL：{str(e)}")
         raise
     except requests.TooManyRedirects as e:
-        logger.error(f"请求 {url} 失败，重定向次数过多：{e}")
+        logger.error(f"请求 {url} 失败，重定向次数过多：{str(e)}")
         raise
     except Exception as e:
-        logger.error(f"请求 {url} 失败，未知错误：{e}")
+        logger.error(f"请求 {url} 失败，未知错误：{str(e)}")
         raise
     else:
         response.encoding = "utf-8"

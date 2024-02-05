@@ -1,7 +1,7 @@
 from loguru import logger
 
 from wechatter.models.github import GithubIssueWebhook
-from wechatter.sender.sender import Sender
+from wechatter.sender import sender
 from wechatter.webhook_handlers.hanlders import github_webhook_handler
 
 
@@ -19,4 +19,4 @@ def handle_issue(data: dict):
         f"🧑‍💻 创建者：{payload.issue.user.login}\n"
         f"🔗 查看详情：{payload.issue.html_url}"
     )
-    Sender.send_msg_to_github_webhook_receivers(message)
+    sender.send_msg_to_github_webhook_receivers(message)

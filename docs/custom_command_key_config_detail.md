@@ -4,24 +4,9 @@
 
 ## 所有命令名称
 
-- `help`: 查看命令帮助
-- `weather`: 查询天气预报
-- `weibo-hot`: 获取微博热搜
-- `zhihu-hot`: 获取知乎热搜
 - `bili-hot`: 获取 Bilibili 热搜
+- `calories`: 获取食物热量
 - `douyin-hot`: 获取抖音热搜
-- `word`: 单词/词语翻译
-- People Daily
-  - `people-daily`: 获取人民日报 PDF
-  - `people-daily-url`: 获取人民日报 URL
-- TODO
-  - `todo`: 添加待办事项
-  - `todo-remove`: 删除待办事项
-- `food-calories`: 获取食物热量
-- `today-in-history`: 获取历史上的今天
-- `github-trending`: 获取 GitHub 趋势
-- `qrcode`: 生成二维码
-- `pai-post`: 获取少数派早报
 - GPT3.5
   - `gpt`: 继续 GPT3.5 问答
   - `gpt-chats`: 查看 GPT3.5 对话
@@ -32,6 +17,27 @@
   - `gpt4-chats`: 查看 GPT4 对话记录
   - `gpt4-record`: 查看 GPT4 聊天记录
   - `gpt4-continue`: 继续 GPT4 对话
+- `gasoline-price`: 获取汽油价格
+- `github-trending`: 获取 GitHub 趋势
+- `help`: 查看命令帮助
+- `pai-post`: 获取少数派早报
+- PEOPLE DAILY
+  - `people`: 获取人民日报新闻
+  - `people-daily`: 获取人民日报新闻
+- PEOPLE DAILY URL
+  - `people-url`: 获取人民日报新闻链接
+  - `people-daily-url`: 获取人民日报新闻链接
+- `qrcode`: 生成二维码
+- TODO
+  - `todo`: 添加待办事项
+  - `todo-remove`: 删除待办事项
+- `today-in-history`: 获取历史上的今天
+- `trivia`: 获取笑话
+- `weather`: 查询天气预报
+- `weibo-hot`: 获取微博热搜
+- `word`: 单词/词语翻译
+- `zhihu-hot`: 获取知乎热搜
+
 
 ## 自定义命令关键词配置
 

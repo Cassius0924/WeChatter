@@ -3,8 +3,8 @@ from typing import Dict, List
 from loguru import logger
 
 from wechatter.commands.handlers import command
-from wechatter.models.message import SendMessage, SendMessageType, SendTo
-from wechatter.sender import Sender
+from wechatter.models.message import SendTo
+from wechatter.sender import sender
 from wechatter.utils import get_request_json
 
 
@@ -19,9 +19,9 @@ def douyin_hot_command_handler(to: SendTo, message: str = "") -> None:
     except Exception as e:
         error_message = f"获取抖音热搜失败，错误信息: {str(e)}"
         logger.error(error_message)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
+        sender.send_msg(to, error_message)
     else:
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
+        sender.send_msg(to, result)
 
 
 def get_douyin_hot_str() -> str:

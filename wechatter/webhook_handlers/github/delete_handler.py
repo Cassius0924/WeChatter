@@ -1,7 +1,7 @@
 from loguru import logger
 
 from wechatter.models.github import GithubDeleteWebhook
-from wechatter.sender import Sender
+from wechatter.sender import sender
 from wechatter.webhook_handlers.hanlders import github_webhook_handler
 
 
@@ -18,7 +18,7 @@ def handle_delete(data: dict):
             f"🧑‍💻 创建者：{payload.sender.login}\n"
             f"🔗 查看详情：{payload.repository.html_url}"
         )
-        Sender.send_msg_to_github_webhook_receivers(message)
+        sender.send_msg_to_github_webhook_receivers(message)
     elif payload.ref_type == "tag":
         logger.info(f"Tag {payload.ref} was deleted by {payload.sender.login}")
         message = (
@@ -29,4 +29,4 @@ def handle_delete(data: dict):
             f"🧑‍💻 创建者：{payload.sender.login}\n"
             f"🔗 查看详情：{payload.repository.html_url}"
         )
-        Sender.send_msg_to_github_webhook_receivers(message)
+        sender.send_msg_to_github_webhook_receivers(message)

@@ -5,8 +5,8 @@ from loguru import logger
 import wechatter.config as config
 import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
-from wechatter.models.message import SendMessage, SendMessageType, SendTo
-from wechatter.sender import Sender
+from wechatter.models.message import SendTo
+from wechatter.sender import sender
 from wechatter.sqlite.sqlite_manager import SqliteManager
 from wechatter.utils import post_request_json
 from wechatter.utils.time import get_current_timestamp
@@ -94,45 +94,40 @@ def gpt4_remove_command_handler(to: SendTo, message: str = "") -> None:
     pass
 
 
-def _send_text_msg(to: SendTo, message: str = "") -> None:
-    """封装发送文本消息"""
-    Sender.send_msg(to, SendMessage(SendMessageType.TEXT, message))
-
-
 def _gptx(model: str, to: SendTo, message: str = "") -> None:
     wx_id = to.p_id
     # 获取文件夹下最新的对话记录
     chat_info = CopilotGPT4.get_chating_chat_info(wx_id, model)
     if message == "":  # /gpt4
         # 判断对话是否有效
-        _send_text_msg(to, "正在创建新对话...")
+        sender.send_msg(to, "正在创建新对话...")
         if chat_info is None or CopilotGPT4.is_chat_valid(chat_info):
             CopilotGPT4.create_chat(wx_id=wx_id, model=model)
             logger.info("创建新对话成功")
-            _send_text_msg(to, "创建新对话成功")
+            sender.send_msg(to, "创建新对话成功")
             return
         logger.info("对话未开始，继续上一次对话")
-        _send_text_msg(to, "对话未开始，继续上一次对话")
+        sender.send_msg(to, "对话未开始，继续上一次对话")
     else:  # /gpt4 <message>
         # 如果没有对话记录，则创建新对话
-        _send_text_msg(to, f"正在调用 {model} 进行对话...")
+        sender.send_msg(to, f"正在调用 {model} 进行对话...")
         if chat_info is None:
             chat_info = CopilotGPT4.create_chat(wx_id=wx_id, model=model)
             logger.info("无历史对话记录，创建新对话成功")
-            _send_text_msg(to, "无历史对话记录，创建新对话成功")
+            sender.send_msg(to, "无历史对话记录，创建新对话成功")
         try:
             response = CopilotGPT4.chat(chat_info, message)
             logger.info(response)
-            _send_text_msg(to, response)
+            sender.send_msg(to, response)
         except Exception as e:
-            error_message = f"调用Copilot-GPT4-Server失败，错误信息：{e}"
+            error_message = f"调用Copilot-GPT4-Server失败，错误信息：{str(e)}"
             logger.error(error_message)
-            _send_text_msg(to, error_message)
+            sender.send_msg(to, error_message)
 
 
 def _gptx_chats(model: str, to: SendTo, message: str = "") -> None:
     response = CopilotGPT4.get_chat_list_str(to.p_id, model)
-    _send_text_msg(to, response)
+    sender.send_msg(to, response)
 
 
 def _gptx_record(model: str, to: SendTo, message: str = "") -> None:
@@ -146,11 +141,11 @@ def _gptx_record(model: str, to: SendTo, message: str = "") -> None:
         chat_info = CopilotGPT4.get_chat_info(wx_id, model, int(message))
     if chat_info is None:
         logger.waring("对话不存在")
-        _send_text_msg(to, "对话不存在")
+        sender.send_msg(to, "对话不存在")
         return
     response = CopilotGPT4.get_brief_conversation_str(chat_info)
     logger.info(response)
-    _send_text_msg(to, response)
+    sender.send_msg(to, response)
 
 
 def _gptx_continue(model: str, to: SendTo, message: str = "") -> None:
@@ -158,22 +153,22 @@ def _gptx_continue(model: str, to: SendTo, message: str = "") -> None:
     # 判断message是否为数字
     if not message.isdigit():
         logger.info("请输入对话记录编号")
-        _send_text_msg(to, "请输入对话记录编号")
+        sender.send_msg(to, "请输入对话记录编号")
         return
-    _send_text_msg(to, f"正在切换到对话记录 {message}...")
+    sender.send_msg(to, f"正在切换到对话记录 {message}...")
     chat_info = CopilotGPT4.continue_chat(
         wx_id=wx_id, model=model, chat_index=int(message)
     )
     if chat_info is None:
         waring_message = "选择历史对话失败，对话不存在"
         logger.waring(waring_message)
-        _send_text_msg(to, waring_message)
+        sender.send_msg(to, waring_message)
         return
     response = CopilotGPT4.get_brief_conversation_str(chat_info)
     response += "====================\n"
     response += "对话已选中，输入命令继续对话"
     logger.info(response)
-    _send_text_msg(to, response)
+    sender.send_msg(to, response)
 
 
 class ChatInfo:

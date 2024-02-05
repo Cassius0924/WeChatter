@@ -1,4 +1,5 @@
 import json
+from functools import singledispatch
 from typing import List
 
 import requests
@@ -7,12 +8,7 @@ from loguru import logger
 
 import wechatter.config as config
 import wechatter.utils.http_request as http_request
-from wechatter.models.message import (
-    SendMessage,
-    SendMessageList,
-    SendMessageType,
-    SendTo,
-)
+from wechatter.models.message import SendTo
 
 
 # 对retry装饰器重新包装，增加日志输出
@@ -48,29 +44,30 @@ def _post_request(
 
 def _log(response: requests.Response) -> bool:
     """检查发送状态"""
-    # if response.status_code != 200:
-    #     logger.error(f"发送消息失败，状态码：{response.status_code}")
-    #     return False
     r_json = response.json()
-    # 即使code为200，也需要检查success字段
-    task = r_json.get("task", None)
-    if task is not None:
-        if not r_json["success"] or not task["successCount"] == task["totalCount"]:
-            logger.error(f"发送消息失败，错误信息：{r_json['message']}")
-            return False
-        # 部分成功
-        if task["successCount"] > 0 and task["successCount"] < task["totalCount"]:
-            logger.warning(f"发送消息部分成功，成功数：{task['successCount']}")
-            return True
+    # https://github.com/danni-cool/wechatbot-webhook?tab=readme-ov-file#%E8%BF%94%E5%9B%9E%E5%80%BC-response-%E7%BB%93%E6%9E%84
+    if r_json["message"].startswith("Message"):
+        logger.info("发送消息成功")
+    elif r_json["message"].startswith("Some"):
+        logger.error("发送消息失败，参数校验不通过")
+    elif r_json["message"].startswith("All"):
+        logger.error("发送消息失败，所有消息均发送失败")
+        return False
+    elif r_json["message"].startswith("Part"):
+        logger.warning("发送消息失败，部分消息发送成功")
+        return False
+
+    if "task" not in r_json:
+        return False
 
     try:
         data = json.loads(response.request.body.decode("utf-8"))
     except UnicodeDecodeError:
         # 本地文件发送无法解码
-        logger.info("发送图片成功")
+        # logger.info("发送图片成功")
         return True
-    except json.JSONDecodeError:
-        logger.error(f"发送消息失败，错误信息：{r_json['message']}")
+    except json.JSONDecodeError as e:
+        logger.error(f"发送消息失败，错误信息：{str(e)}")
         return False
 
     if isinstance(data, list):
@@ -83,340 +80,233 @@ def _log(response: requests.Response) -> bool:
     return True
 
 
-class Sender:
-    """v2 版本 api 消息发送类"""
+URL = f"{config.wx_webhook_host}:{config.wx_webhook_port}/webhook/msg/v2"
+V1_URL = f"{config.wx_webhook_host}:{config.wx_webhook_port}/webhook/msg"
 
-    url = f"{config.wx_webhook_host}:{config.wx_webhook_port}/webhook/msg/v2"
-    v1_url = f"{config.wx_webhook_host}:{config.wx_webhook_port}/webhook/msg"
 
-    # 发送文本消息或链接文件
+def _validate(fn):
     """
-    curl --location 'http://localhost:3001/webhook/msg/v2' \
-    --header 'Content-Type: application/json' \
-    --data '{
-        "to": "testUser",
-        "ioRoom": false,
-        "data": { 
-            "type": "text",
-            "content": "你好👋"
-        }
-    }'
-    curl --location --request POST 'http://localhost:3001/webhook/msg/v2' \
-    --header 'Content-Type: application/json' \
-    --data-raw '{
-        "to": "testGroup",
-        "type": "fileUrl",
-        "content": "https://samplelib.com/lib/preview/mp3/sample-3s.mp3",
-        "isRoom": true
-    }'
+    验证接收者和消息内容是否为空
     """
 
-    @staticmethod
-    def send_msg(to: SendTo, message: SendMessage) -> bool:
-        """发送消息（文本或链接文件）"""
-        # 群消息
-        if to.g_name != "":
-            if message.type == SendMessageType.TEXT.value:
-                message.content = f"@{to.p_name}\n{message.content}"
-            return Sender.send_msg_g(to.g_name, message)
-        # 个人消息
-        else:
-            return Sender.send_msg_p(to.p_name, message)
+    def wrapper(n, m, *args, **kwargs):
+        if not n:
+            logger.error("发送消息失败，接收者为空")
+            return
+        if not m:
+            logger.error("发送消息失败，消息内容为空")
+            return
 
-    @staticmethod
-    def send_msg_p(to_p_name: str, message: SendMessage) -> bool:
-        """发送给个人"""
-        headers = {"Content-Type": "application/json"}
-        data = {
-            "to": to_p_name,
-            "isRoom": False,
-            "data": {"type": message.type, "content": message.content},
-        }
-        _log(_post_request(Sender.url, headers=headers, json=data))
+        return fn(n, m, *args, **kwargs)
 
-    @staticmethod
-    def send_msg_g(to_g_name: str, message: SendMessage) -> bool:
-        """发送给群组"""
-        headers = {"Content-Type": "application/json"}
-        data = {
-            "to": to_g_name,
-            "isRoom": True,
-            "data": {"type": message.type, "content": message.content},
-        }
-        _log(_post_request(Sender.url, headers=headers, json=data))
+    return wrapper
 
-    # 给同一个对象发送多条消息
+
+@singledispatch
+def send_msg():
     """
-    curl --location 'http://localhost:3001/webhook/msg' \
-    --header 'Content-Type: application/json' \
-    --data '{
-        "to": "testUser",
-        "data": [
+    发送消息
+
+    当传入的第一个参数是字符串时，is_group 默认为 False。
+    当传入的第一个参数是 SendTo 对象时，is_group 默认为 True。
+
+    :param to: 接收对象的名字或SendTo对象
+    :param message: 消息内容
+    :param is_group: 是否为群组（默认值根据 to 的类型而定）
+    :param type: 消息类型，可选 text、fileUrl（默认值为 text）
+    """
+    pass
+
+
+@send_msg.register(str)
+@_validate
+def _send_msg1(
+    name: str, message: str, is_group: bool = False, type: str = "text"
+) -> None:
+    """
+    发送消息
+    :param name: 接收者
+    :param message: 消息内容
+    :param is_group: 是否为群组（默认为个人，False）
+    :param type: 消息类型（text、fileUrl）
+    """
+    data = {
+        "to": name,
+        "isRoom": is_group,
+        "data": {"type": type, "content": message},
+    }
+    _log(_post_request(URL, json=data))
+
+
+@send_msg.register(SendTo)
+def _send_msg2(to: SendTo, message: str, is_group: bool = True, type: str = "text"):
+    """
+    发送消息
+    :param to: SendTo 对象
+    :param message: 消息内容
+    :param is_group: 是否为群组（默认为群组，True）
+    :param type: 消息类型（text、fileUrl）
+    """
+    if not is_group:
+        return _send_msg1(to.p_name, message, is_group=False, type=type)
+
+    if to.g_name != "":
+        return _send_msg1(to.g_name, message, is_group=True, type=type)
+    elif to.p_name != "":
+        return _send_msg1(to.p_name, message, is_group=False, type=type)
+    else:
+        logger.error("发送消息失败，接收者为空")
+
+
+@singledispatch
+def send_msg_list():
+    """
+    发送多条消息，消息类型相同
+    :param name: 接收者
+    :param message_list: 消息内容列表
+    :param is_group: 是否为群组
+    :param type: 消息类型（text、fileUrl）
+    """
+    pass
+
+
+@send_msg_list.register(str)
+@_validate
+def _send_msg_list1(
+    name: str, message_list: List[str], is_group: bool = False, type: str = "text"
+):
+    """
+    发送多条消息，消息类型相同
+    :param name: 接收者
+    :param message_list: 消息内容列表
+    :param is_group: 是否为群组
+    :param type: 消息类型（text、fileUrl）
+    """
+    data = {"to": name, "isRoom": is_group, "data": []}
+    for message in message_list:
+        data["data"].append({"type": type, "content": message})
+    _log(_post_request(URL, json=data))
+
+
+@send_msg_list.register(SendTo)
+def _send_msg_list2(
+    to: SendTo, message_list: List[str], is_group: bool = True, type: str = "text"
+):
+    """
+    发送多条消息，消息类型相同
+    :param to: SendTo 对象
+    :param message_list: 消息内容列表
+    :param is_group: 是否为群组
+    :param type: 消息类型（text、fileUrl）
+    """
+    if not is_group:
+        return _send_msg_list1(to.p_name, message_list, is_group=False, type=type)
+
+    if to.g_name != "":
+        return _send_msg_list1(to.g_name, message_list, is_group=True, type=type)
+    elif to.p_name != "":
+        return _send_msg_list1(to.p_name, message_list, is_group=False, type=type)
+    else:
+        logger.error("发送消息失败，接收者为空")
+
+
+@_validate
+def mass_send_msg(
+    name_list: List[str], message: str, is_group: bool = False, type: str = "text"
+):
+    """
+    群发消息，给多个人发送一条消息
+    :param name_list: 接收者列表
+    :param message: 消息内容
+    :param is_group: 是否为群组
+    :param type: 消息类型（text、fileUrl）
+    """
+    data = []
+    for name in name_list:
+        data.append(
             {
-                "type": "text",
-                "content": "你好👋"
-            },
-            {
-                "type": "fileUrl",
-                "content": "https://samplelib.com/lib/preview/mp3/sample-3s.mp3"
+                "to": name,
+                "isRoom": is_group,
+                "data": {"type": type, "content": message},
             }
-        ]
-    }'
+        )
+    _log(_post_request(URL, json=data))
+
+
+@singledispatch
+def send_localfile_msg():
     """
-
-    @staticmethod
-    def send_msgs(to: SendTo, messages: SendMessageList) -> bool:
-        if to.g_name != "":
-            return Sender.send_msgs_g(to.g_name, messages)
-        else:
-            return Sender.send_msgs_p(to.p_name, messages)
-
-    # 给同一个人发送多条消息
-    @staticmethod
-    def send_msgs_p(to_p_name: str, messages: SendMessageList) -> bool:
-        headers = {"Content-Type": "application/json"}
-        data = {"to": to_p_name, "isRoom": False, "data": []}
-        for message in messages.messages:
-            msg = {"type": message.type, "content": message.content}
-            data["data"].append(msg)
-        _log(_post_request(Sender.url, headers=headers, json=data))
-
-    # 给同一个群组发送多条消息
-    @staticmethod
-    def send_msgs_g(to_g_name: str, messages: SendMessageList) -> bool:
-        headers = {"Content-Type": "application/json"}
-        data = {"to": to_g_name, "isRoom": True, "data": []}
-        for message in messages.messages:
-            msg = {"type": message.type, "content": message.content}
-            data["data"].append(msg)
-        _log(_post_request(Sender.url, headers=headers, json=data))
-
-    # 给多个人发送一条消息（群发）
+    发送本地文件
+    :param name: 接收者
+    :param file_path: 文件路径
+    :param is_group: 是否为群组
     """
-    curl --location 'http://localhost:3001/webhook/msg/v2' \
-    --header 'Content-Type: application/json' \
-    --data '[
-        {
-            "to": "testUser1",
-            "data": {
-                "content": "你好👋"
-            }
-        },
-        {
-            "to": "testUser2",
-            "data": {
-                "content": "你好👋"
-              },
-        }
-    ]'
+    pass
+
+
+@send_localfile_msg.register(str)
+@_validate
+def _send_localfile_msg1(name: str, file_path: str, is_group: bool = False):
     """
-
-    @staticmethod
-    def send_msg_ps(to_p_names: List[str], message: SendMessage) -> bool:
-        """给多个人发送一条消息"""
-        if to_p_names == []:
-            return False
-        headers = {"Content-Type": "application/json"}
-        data = []
-        for to_p_name in to_p_names:
-            msg = {
-                "to": to_p_name,
-                "isRoom": False,
-                "data": {"type": message.type, "content": message.content},
-            }
-            data.append(msg)
-        _log(_post_request(Sender.url, headers=headers, json=data))
-
-    @staticmethod
-    def send_msg_gs(to_g_names: List[str], message: SendMessage) -> bool:
-        """给多个群组发送一条消息"""
-        if to_g_names == []:
-            return False
-        headers = {"Content-Type": "application/json"}
-        data = []
-        for to_g_name in to_g_names:
-            msg = {
-                "to": to_g_name,
-                "isRoom": True,
-                "data": {"type": message.type, "content": message.content},
-            }
-            data.append(msg)
-        _log(_post_request(Sender.url, headers=headers, json=data))
-
-    # TODO: 给多个人发送多条消息
-
-    # 本地文件发送
+    发送本地文件
+    :param name: 接收者
+    :param file_path: 文件路径
+    :param is_group: 是否为群组
     """
-    curl --location --request POST 'http://localhost:3001/webhook/msg' \
-    --form 'to=testGroup' \
-    --form content=@"$HOME/demo.jpg" \
-    --form 'isRoom=1'
+    data = {"to": name, "isRoom": int(is_group)}
+    files = {"content": open(file_path, "rb")}
+    _log(_post_request(V1_URL, data=data, files=files))
+
+
+@send_localfile_msg.register(SendTo)
+def _send_localfile_msg2(to: SendTo, file_path: str, is_group: bool = True):
     """
+    发送本地文件
+    :param to: SendTo 对象
+    :param file_path: 文件路径
+    :param is_group: 是否为群组
+    """
+    if not is_group:
+        return _send_localfile_msg1(to.p_name, file_path, is_group=False)
 
-    @staticmethod
-    def send_localfile_msg(to: SendTo, file_path: str) -> bool:
-        """发送本地文件"""
-        if to.g_name != "":
-            return Sender.send_localfile_msg_g(to.g_name, file_path)
-        else:
-            return Sender.send_localfile_msg_p(to.p_name, file_path)
-
-    @staticmethod
-    def send_localfile_msg_p(to_p_name: str, file_path: str) -> bool:
-        """发送本地文件给个人"""
-        data = {"to": to_p_name, "isRoom": 0}
-        files = {"content": open(file_path, "rb")}
-        _log(_post_request(Sender.v1_url, data=data, files=files))
-
-    @staticmethod
-    def send_localfile_msg_g(to_g_name: str, file_path: str) -> bool:
-        """发送本地文件给群组"""
-        data = {"to": to_g_name, "isRoom": 1}
-        files = {"content": open(file_path, "rb")}
-        _log(_post_request(Sender.v1_url, data=data, files=files))
-
-    @staticmethod
-    def send_msg_to_admins(message: str) -> None:
-        """发送消息给所有管理员"""
-        if len(config.admin_list) == 0:
-            logger.warning("管理员列表为空")
-        else:
-            Sender.send_msg_ps(
-                config.admin_list, SendMessage(SendMessageType.TEXT, message)
-            )
-        if len(config.admin_group_list) == 0:
-            logger.warning("管理员群列表为空")
-        else:
-            Sender.send_msg_gs(
-                config.admin_group_list, SendMessage(SendMessageType.TEXT, message)
-            )
-
-    @staticmethod
-    def send_msg_to_github_webhook_receivers(message: str) -> None:
-        """发送消息给所有 GitHub Webhook 接收者"""
-        if len(config.github_webhook_receiver_list) == 0:
-            logger.warning("GitHub Webhook 接收者列表为空")
-        else:
-            Sender.send_msg_ps(
-                config.github_webhook_receiver_list,
-                SendMessage(SendMessageType.TEXT, message),
-            )
-        if len(config.github_webhook_receive_group_list) == 0:
-            logger.warning("GitHub Webhook 接收群列表为空")
-        else:
-            Sender.send_msg_gs(
-                config.github_webhook_receive_group_list,
-                SendMessage(SendMessageType.TEXT, message),
-            )
+    if to.g_name != "":
+        return _send_localfile_msg1(to.g_name, file_path, is_group=True)
+    elif to.p_name != "":
+        return _send_localfile_msg1(to.p_name, file_path, is_group=False)
+    else:
+        logger.error("发送消息失败，接收者为空")
 
 
-# class SenderV1:
-#     """v1 版本 api 消息发送类"""
+def mass_send_msg_to_admins(message: str, type: str = "text"):
+    """
+    群发消息给所有管理员
+    :param message: 消息内容
+    """
+    if len(config.admin_list) == 0:
+        logger.warning("管理员列表为空")
+    else:
+        mass_send_msg(config.admin_list, message, type=type)
+    if len(config.admin_group_list) == 0:
+        logger.warning("管理员群列表为空")
+    else:
+        mass_send_msg(config.admin_group_list, message, is_group=True, type=type)
 
-#     # url = f"{config.wx_webhook_host}:{config.wx_webhook_port}/webhook/msg"
 
-#     # 发送文本消息
-#     """
-#     curl --location --request POST 'http://localhost:3001/webhook/msg' \
-#     --header 'Content-Type: application/json' \
-#     --data-raw '{
-#         "to": "testUser",
-#         "type": "text",
-#         "content": "Hello World!"
-#     }'
-#     """
-
-#     @staticmethod
-#     def send_text_msg(to: SendTo, message: str) -> None:
-#         """发送文本消息"""
-#         # 群消息
-#         if to.g_name != "":
-#             message = f"@{to.p_name}\n{message}"
-#             SenderV1.send_text_msg_g(to.g_name, message)
-#         # 个人消息
-#         else:
-#             SenderV1.send_text_msg_p(to.p_name, message)
-
-#     @staticmethod
-#     def send_text_msg_p(to_p_name: str, message: str) -> None:
-#         """发送文本消息给个人"""
-#         url = "http://localhost:3001/webhook/msg"
-#         headers = {"Content-Type": "application/json"}
-#         data = {"to": to_p_name, "type": "text", "content": message}
-#         _post_request(url, headers=headers, json=data)
-
-#     @staticmethod
-#     def send_text_msg_g(to_g_name: str, message: str) -> None:
-#         """发送文本消息给群组"""
-#         url = "http://localhost:3001/webhook/msg"
-#         headers = {"Content-Type": "application/json"}
-#         data = {"to": to_g_name, "isRoom": True, "type": "text", "content": message}
-#         _post_request(url, headers=headers, json=data)
-
-#     # 通过文件URL发送文件
-#     """
-#     curl --location --request POST 'http://localhost:3001/webhook/msg' \
-#     --header 'Content-Type: application/json' \
-#     --data-raw '{
-#         "to": "testGroup",
-#         "type": "fileUrl",
-#         "content": "https://samplelib.com/lib/preview/mp3/sample-3s.mp3",
-#         "isRoom": true
-#     }'
-#     """
-
-#     @staticmethod
-#     def send_urlfile_msg(to: SendTo, file_path: str) -> None:
-#         """通过文件URL发送文件"""
-#         if to.g_name != "":
-#             SenderV1.send_urlfile_msg_g(to.g_name, file_path)
-#         else:
-#             SenderV1.send_urlfile_msg_p(to.p_name, file_path)
-
-#     @staticmethod
-#     def send_urlfile_msg_p(to_p_name: str, file_url: str) -> None:
-#         """通过文件URL发送文件给个人"""
-#         url = "http://localhost:3001/webhook/msg"
-#         headers = {"Content-Type": "application/json"}
-#         data = {"to": to_p_name, "type": "fileUrl", "content": file_url}
-#         _post_request(url, headers=headers, json=data)
-
-#     @staticmethod
-#     def send_urlfile_msg_g(to_g_name: str, file_url: str) -> None:
-#         """通过文件URL发送文件给群组"""
-#         url = "http://localhost:3001/webhook/msg"
-#         headers = {"Content-Type": "application/json"}
-#         data = {"to": to_g_name, "isRoom": True, "type": "fileUrl", "content": file_url}
-#         _post_request(url, headers=headers, json=data)
-
-#     # 本地文件发送
-#     """
-#     curl --location --request POST 'http://localhost:3001/webhook/msg' \
-#     --form 'to=testGroup' \
-#     --form content=@"$HOME/demo.jpg" \
-#     --form 'isRoom=1'
-#     """
-
-#     @staticmethod
-#     def send_localfile_msg(to: SendTo, file_path: str) -> None:
-#         """发送本地文件"""
-#         if to.g_name != "":
-#             SenderV1.send_localfile_msg_g(to.g_name, file_path)
-#         else:
-#             SenderV1.send_localfile_msg_p(to.p_name, file_path)
-
-#     @staticmethod
-#     def send_localfile_msg_p(to_p_name: str, file_path: str) -> None:
-#         """发送本地文件给个人"""
-#         url = "http://localhost:3001/webhook/msg"
-#         data = {"to": to_p_name, "isRoom": 0}
-#         files = {"content": open(file_path, "rb")}
-#         _post_request(url, data=data, files=files)
-
-#     @staticmethod
-#     def send_localfile_msg_g(to_g_name: str, file_path: str) -> None:
-#         """发送本地文件给群组"""
-#         url = "http://localhost:3001/webhook/msg"
-#         data = {"to": to_g_name, "isRoom": 1}
-#         files = {"content": open(file_path, "rb")}
-#         _post_request(url, data=data, files=files)
+def mass_send_msg_to_github_webhook_receivers(message: str):
+    """
+    群发消息给所有 GitHub Webhook 接收者
+    :param message: 消息内容
+    """
+    if len(config.github_webhook_receiver_list) == 0:
+        logger.warning("GitHub Webhook 接收者列表为空")
+    else:
+        mass_send_msg(config.github_webhook_receiver_list, message, type="text")
+    if len(config.github_webhook_receive_group_list) == 0:
+        logger.warning("GitHub Webhook 接收群列表为空")
+    else:
+        mass_send_msg(
+            config.github_webhook_receive_group_list,
+            message,
+            is_group=True,
+            type="text",
+        )

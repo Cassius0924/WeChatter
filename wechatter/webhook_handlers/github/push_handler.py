@@ -1,7 +1,7 @@
 from loguru import logger
 
 from wechatter.models.github import GithubPushWebhook
-from wechatter.sender import Sender
+from wechatter.sender import sender
 from wechatter.webhook_handlers.hanlders import github_webhook_handler
 
 
@@ -26,4 +26,4 @@ def handle_push(data: dict):
         message += f"📃 提交信息：{payload.commits.pop().message}\n"
     message += f"🔗 查看详情：{branch_url}"
 
-    Sender.send_msg_to_github_webhook_receivers(message)
+    sender.send_msg_to_github_webhook_receivers(message)

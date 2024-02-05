@@ -2,8 +2,8 @@ from typing import List
 
 from loguru import logger
 
-from wechatter.models.message import Message, SendMessage, SendMessageType
-from wechatter.sender import Sender
+from wechatter.models.message import Message
+from wechatter.sender import sender
 
 
 class MessageForwarder:
@@ -30,12 +30,12 @@ class MessageForwarder:
             if from_name in rule["froms"]:
                 # 构造转发消息
                 msg = self.__construct_forwarding_message(message)
-                for p_name in rule["to_persons"]:
-                    logger.info(f"转发消息：{from_name} -> {p_name}")
-                    Sender.send_msg_p(p_name, SendMessage(SendMessageType.TEXT, msg))
-                for g_name in rule["to_groups"]:
-                    logger.info(f"转发消息：{from_name} -> {g_name}")
-                    Sender.send_msg_g(g_name, SendMessage(SendMessageType.TEXT, msg))
+                logger.info(
+                    f"转发消息：{from_name} -> {rule['to_persons']}\n"
+                    f"转发消息：{from_name} -> {rule['to_groups']}"
+                )
+                sender.mass_send_msg(rule["to_persons"], msg)
+                sender.mass_send_msg(rule["to_groups"], msg, is_group=True)
 
     def __construct_forwarding_message(self, message: Message) -> str:
         """构造转发消息"""
