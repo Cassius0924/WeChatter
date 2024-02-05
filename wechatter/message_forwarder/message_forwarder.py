@@ -28,6 +28,9 @@ class MessageForwarder:
         for rule in self.rule_list:
             # 判断是否有["froms"]字段,即是否是接收所有消息转发给指定人或群
             if "froms" not in rule:
+                # 除去接收者自己的消息
+                if from_name in rule["to_persons"]:
+                    continue
                 # 构造转发消息
                 msg = self.__construct_forwarding_message(message)
                 logger.info(
