@@ -10,3 +10,5 @@ config.ini
 data/
 
 logs/
+
+.sqllsrc.json

@@ -15,8 +15,8 @@ def save_json(file_path, data):
         logger.error(f"写入文件 {file_path} 时权限被拒绝。")
         raise PermissionError(f"写入文件 {file_path} 时权限被拒绝。")
     except Exception as e:
-        logger.error(f"保存 JSON 数据时发生未知错误: {e}")
-        raise Exception(f"保存 JSON 数据时发生未知错误: {e}")
+        logger.error(f"保存 JSON 数据时发生未知错误: {str(e)}")
+        raise Exception(f"保存 JSON 数据时发生未知错误: {str(e)}")
 
 
 def load_json(file_path) -> Dict:
@@ -33,5 +33,5 @@ def load_json(file_path) -> Dict:
         logger.error(f"文件 {file_path} 中的 JSON 数据无效。")
         raise json.JSONDecodeError(f"文件 {file_path} 中的 JSON 数据无效。")
     except Exception as e:
-        logger.error(f"加载 JSON 数据时发生未知错误: {e}")
-        raise Exception(f"加载 JSON 数据时发生未知错误: {e}")
+        logger.error(f"加载 JSON 数据时发生未知错误: {str(e)}")
+        raise Exception(f"加载 JSON 数据时发生未知错误: {str(e)}")

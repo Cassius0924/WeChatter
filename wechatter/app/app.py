@@ -13,11 +13,12 @@ if config.github_webhook_enabled:
     app.include_router(routers.github_router)
 
 
+# 定时任务
 if config.weather_cron_enabled:
     cron_tasks = parse_weather_cron_rule_list(config.weather_cron_rule_list)
-
     Scheduler.add_cron_tasks(cron_tasks)
 
+if not Scheduler.is_cron_tasks_empty():
     scheduler = Scheduler()
 
     # 定时任务

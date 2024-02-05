@@ -31,7 +31,7 @@ def main():
     sqlite_manager = SqliteManager("data/wechatter.sqlite")
     sqlite_manager.excute_folder("wechatter/sqlite/sqls")
 
-    logger.info("Wechatter 启动成功！")
+    logger.info("WeChatter 启动成功！")
     # 启动uvicorn
     uvicorn.run(app, host="0.0.0.0", port=config.wechatter_port)
 
