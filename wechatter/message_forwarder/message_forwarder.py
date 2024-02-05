@@ -32,7 +32,7 @@ class MessageForwarder:
                 if from_name in rule["to_persons"]:
                     continue
                 # 除去在群里接收者发送的消息
-                if message.is_group and from_name in rule["to_persons"]:
+                if message.is_group and message.source.p_info.name in rule["to_persons"]:
                     continue
                 # 构造转发消息
                 msg = self.__construct_forwarding_message(message)
