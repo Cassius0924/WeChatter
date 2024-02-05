@@ -37,7 +37,7 @@ class MessageForwarder:
                 sender.mass_send_msg(rule["to_persons"], msg)
                 sender.mass_send_msg(rule["to_groups"], msg, is_group=True)
             # 自定义转发规则
-            if from_name in rule["froms"]:
+            if "froms" in rule and from_name in rule["froms"]:
                 # 构造转发消息
                 msg = self.__construct_forwarding_message(message)
                 logger.info(
