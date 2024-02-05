@@ -6,8 +6,8 @@ from bs4 import BeautifulSoup
 
 from wechatter.commands.handlers import command
 from wechatter.exceptions import Bs4ParsingError
-from wechatter.models.message import SendMessage, SendMessageType, SendTo
-from wechatter.sender import Sender
+from wechatter.models.message import SendTo
+from wechatter.sender import sender
 from wechatter.utils import get_request
 
 
@@ -24,11 +24,11 @@ def food_calories_command_handler(to: SendTo, message: str = "") -> None:
         food_href_list = parse_food_href_list_response(response)
         food_detail_list = get_food_detail_list(food_href_list)
         result = generate_food_message(food_detail_list)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
+        sender.send_msg(to, result)
     except Exception as e:
-        error_message = f"获取食物热量失败，错误信息：{e}"
+        error_message = f"获取食物热量失败，错误信息：{str(e)}"
         print(error_message)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
+        sender.send_msg(to, error_message)
 
 
 def get_food_detail_list(food_href_list: List) -> List:

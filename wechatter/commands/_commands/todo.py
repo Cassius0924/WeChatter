@@ -6,8 +6,8 @@ from loguru import logger
 
 import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
-from wechatter.models.message import SendMessage, SendMessageType, SendTo
-from wechatter.sender import Sender
+from wechatter.models.message import SendTo
+from wechatter.sender import sender
 from wechatter.utils import load_json, save_json
 
 
@@ -22,17 +22,17 @@ def todo_command_handler(to: SendTo, message: str = "") -> None:
     if message == "":
         # 获取待办事项
         result = view_todos(to.p_id, to.p_name)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
+        sender.send_msg(to, result)
     else:
         # 添加待办事项
         try:
             add_todo_task(to.p_id, message)
             result = view_todos(to.p_id, to.p_name)
-            Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
+            sender.send_msg(to, result)
         except Exception as e:
-            error_message = f"添加待办事项失败，错误信息：{e}"
+            error_message = f"添加待办事项失败，错误信息：{str(e)}"
             logger.error(error_message)
-            Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
+            sender.send_msg(to, error_message)
 
 
 @command(
@@ -47,21 +47,19 @@ def remove_todo_command_handler(to: SendTo, message: str = "") -> None:
         if idx.strip().isdigit()
     ]
     if not indices:
-        Sender.send_msg(
-            to, SendMessage(SendMessageType.TEXT, "请输入有效数字来删除待办事项")
-        )
+        sender.send_msg(to, "输入有效数字来删除待办事项")
         return
 
     try:
         remove_result = remove_todo_task(to.p_id, indices)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, remove_result))
+        sender.send_msg(to, remove_result)
     except Exception as e:
-        error_message = f"删除待办事项失败，错误信息：{e}"
+        error_message = f"删除待办事项失败，错误信息：{str(e)}"
         logger.error(error_message)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
+        sender.send_msg(to, error_message)
     else:
         result = view_todos(to.p_id, to.p_name)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
+        sender.send_msg(to, result)
 
 
 def _load_todos(person_id: str) -> List[str]:

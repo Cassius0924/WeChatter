@@ -3,7 +3,7 @@ import wechatter.config as config
 from wechatter.commands import commands
 from wechatter.commands.handlers import command
 from wechatter.models.message import SendTo
-from wechatter.sender import Sender
+from wechatter.sender import sender
 from wechatter.utils.text_to_image import text_to_image
 
 
@@ -18,7 +18,7 @@ def help_command_handler(to: SendTo, message: str = "") -> None:
     help_msg = get_help_msg()
     response = text_to_image(help_msg)
     if response:
-        Sender.send_localfile_msg(to, response)
+        sender.send_localfile_msg(to, response)
 
 
 def get_help_msg() -> str:

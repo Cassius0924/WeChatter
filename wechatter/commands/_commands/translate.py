@@ -6,8 +6,8 @@ from bs4 import BeautifulSoup, Tag
 from loguru import logger
 
 from wechatter.commands.handlers import command
-from wechatter.models.message import SendMessage, SendMessageType, SendTo
-from wechatter.sender import Sender
+from wechatter.models.message import SendTo
+from wechatter.sender import sender
 from wechatter.utils import get_request, get_request_json
 
 
@@ -24,7 +24,7 @@ def word_command_handler(to: SendTo, message: str = "") -> None:
     if from_lang == "":
         error_message = "翻译失败，无法检测文本语言"
         logger.error(error_message)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
+        sender.send_msg(to, error_message)
         return
 
     from_lang, to_lang = _auto_translate(from_lang, to_lang)
@@ -35,9 +35,9 @@ def word_command_handler(to: SendTo, message: str = "") -> None:
     except Exception as e:
         error_message = f"翻译失败，错误信息: {str(e)}"
         logger.error(error_message)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
+        sender.send_msg(to, error_message)
     else:
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
+        sender.send_msg(to, result)
 
 
 # 翻译语言字典（何种语言对应何种语言）

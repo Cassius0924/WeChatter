@@ -1,7 +1,7 @@
 from loguru import logger
 
 from wechatter.models.github import GithubPrWebhook
-from wechatter.sender import Sender
+from wechatter.sender import sender
 from wechatter.webhook_handlers.hanlders import github_webhook_handler
 
 
@@ -22,7 +22,7 @@ def handle_pr(data: dict):
             f"🔀 '{payload.pull_request.base.ref}' ⬅ '{payload.pull_request.head.ref}'\n"
             f"🔗 查看详情：{payload.pull_request.html_url}"
         )
-        Sender.send_msg_to_github_webhook_receivers(message)
+        sender.send_msg_to_github_webhook_receivers(message)
         return
     message = (
         "==== GitHub Pull Request 事件 ====\n"
@@ -33,4 +33,4 @@ def handle_pr(data: dict):
         f"🧑‍💻 创建者：{payload.pull_request.user.login}\n"
         f"🔗 查看详情：{payload.pull_request.html_url}"
     )
-    Sender.send_msg_to_github_webhook_receivers(message)
+    sender.send_msg_to_github_webhook_receivers(message)

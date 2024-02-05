@@ -1,7 +1,7 @@
 from loguru import logger
 
 from wechatter.models.github import GithubForkWebhook
-from wechatter.sender import Sender
+from wechatter.sender import sender
 from wechatter.webhook_handlers.hanlders import github_webhook_handler
 
 
@@ -15,4 +15,4 @@ def handle_fork(data: dict):
         "==== GitHub Fork 事件 ====\n"
         f"🍴 {payload.repository.full_name} 有新的 Fork！🆙\n"
     )
-    Sender.send_msg_to_github_webhook_receivers(message)
+    sender.send_msg_to_github_webhook_receivers(message)

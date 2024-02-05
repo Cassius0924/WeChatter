@@ -1,11 +1,8 @@
 from .message import Message, MessageSource
-from .send_message import SendMessage, SendMessageList, SendMessageType, SendTo
+from .send_message import SendTo
 
 __all__ = [
     "Message",
     "MessageSource",
-    "SendMessage",
-    "SendMessageList",
-    "SendMessageType",
     "SendTo",
 ]

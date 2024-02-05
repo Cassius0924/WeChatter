@@ -8,8 +8,8 @@ from loguru import logger
 import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
 from wechatter.exceptions import Bs4ParsingError
-from wechatter.models.message import SendMessage, SendMessageType, SendTo
-from wechatter.sender import Sender
+from wechatter.models.message import SendTo
+from wechatter.sender import sender
 from wechatter.utils import get_request, load_json
 from wechatter.utils.time import get_current_hour, get_current_minute, get_current_ymdh
 
@@ -25,9 +25,9 @@ def weather_command_handler(to: SendTo, message: str = "") -> None:
     except Exception as e:
         error_message = f"获取天气预报失败，错误信息：{str(e)}"
         logger.error(error_message)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
+        sender.send_msg(to, error_message)
     else:
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
+        sender.send_msg(to, result)
 
 
 # class WeatherTip:
@@ -120,8 +120,8 @@ def _get_city_id(city_name: str) -> int:
     city_ids = load_json(CITY_IDS_PATH)
 
     if city_name not in city_ids.keys():
-        logger.error(f"未找到城市 {city_name}。")
-        raise KeyError(f"未找到城市 {city_name}。")
+        logger.error(f"未找到城市 {city_name}")
+        raise KeyError(f"未找到城市 {city_name}")
     return city_ids[city_name]
 
 
