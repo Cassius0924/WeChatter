@@ -62,6 +62,13 @@ custom_command_key_dict = config_reader.getdict(
     "custom-command-key", "custom_command_key_dict"
 )
 
+# gasoline-price-cron 配置
+gasoline_price_cron_enable = config_reader.getbool(
+    "gasoline-price-cron", "gasoline_price_cron_enabled"
+)
+gasoline_price_cron_rule_list = config_reader.getlist("gasoline-price-cron", "gasoline_price_cron_rule_list")
+
+
 logger.info(config_reader.config_dict)
 
 logger.info("配置文件读取完毕！")

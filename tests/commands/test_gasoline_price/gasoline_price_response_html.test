@@ -1,0 +1,679 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+<head>
+<meta http-equiv='Cache-Control' content='no-transform' />
+<meta http-equiv='Cache-Control' content='no-siteapp' />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>广州中国石化今日油价92号汽油-广州中石化92号实时汽油价格查询-车主指南</title>
+<link rel="shortcut icon" type="image/x-icon" href="https://www.icauto.com.cn/images/favicon.ico">
+<meta name="author" content="车主指南" />
+<meta name="Copyright" content="版权所有" />
+<meta name="mobile-agent" content="format=xhtml; url=https://m.icauto.com.cn/oil/price_440100_2_1.html" class="dpcur" >
+<link href="https://imgs.icauto.com.cn/source/css/index.css" type="text/css" rel="stylesheet" rev="stylesheet" media="screen" />
+<link href="https://imgs.icauto.com.cn/source/css/newcss.css" type="text/css" rel="stylesheet" rev="stylesheet" media="screen" />
+<meta name="location" content="province=广东;city=广州">
+<style>
+.carlistB a.dpcur,.dpcity a.dpcur {color: red; font-weight: 900; font-size: 14px; }
+.dpcity span { text-indent: 1em;display: block;margin-bottom: 10px;}
+.cxbjA li { width: 80px; padding: 2px;}
+.wzcxleftA.dpcity { margin: 0; padding: 0;}
+.FWQleft h1{padding-top: 0px!important;}
+#shenglist{ display: none;}
+tr.titletd { background-color: antiquewhite; }
+tr.trborder { height:10px; }
+#city span{color: rgb(41, 121, 255)!important;}
+#city span a{color: rgb(41, 121, 255)!important;}
+body { /*  width: 650px; */ /*   margin: 40px auto; */ font-family: 'trebuchet MS', 'Lucida sans', Arial; font-size: 14px; color: #444; }
+table { *border-collapse: collapse; /* IE7 and lower */ border-spacing: 0; width: 100%;}
+.bordered { border: solid #ccc 1px; -moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px; -webkit-box-shadow: 0 1px 1px #ccc;  -moz-box-shadow: 0 1px 1px #ccc;  box-shadow: 0 1px 1px #ccc;}
+.bordered tr:hover { background: #fbf8e9; -o-transition: all 0.1s ease-in-out; -webkit-transition: all 0.1s ease-in-out; -moz-transition: all 0.1s ease-in-out; -ms-transition: all 0.1s ease-in-out; transition: all 0.1s ease-in-out; }
+.bordered th { border-left: 1px solid #ccc; border-top: 1px solid #ccc; padding: 10px; text-align: center;}
+.bordered td{ border-left: 1px solid #ccc; border-top: 1px solid #ccc; padding: 10px;}
+.bordered th { background-color: #dce9f9; background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#dce9f9)); background-image: -webkit-linear-gradient(top, #ebf3fc, #dce9f9); background-image:-moz-linear-gradient(top, #ebf3fc, #dce9f9);background-image:-ms-linear-gradient(top, #ebf3fc, #dce9f9); background-image: -o-linear-gradient(top, #ebf3fc, #dce9f9); background-image:linear-gradient(top, #ebf3fc, #dce9f9); -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;  -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;border-top: none; text-shadow: 0 1px 0 rgba(255,255,255,.5);}
+.bordered td:first-child, .bordered th:first-child { border-left: none; }
+.bordered th:first-child { -moz-border-radius: 6px 0 0 0; -webkit-border-radius: 6px 0 0 0; border-radius: 6px 0 0 0; }
+.bordered th:last-child { -moz-border-radius: 0 6px 0 0; -webkit-border-radius: 0 6px 0 0; border-radius: 0 6px 0 0; }
+.bordered th:only-child{ -moz-border-radius: 6px 6px 0 0; -webkit-border-radius: 6px 6px 0 0; border-radius: 6px 6px 0 0; }
+.bordered tr:last-child td:first-child { -moz-border-radius: 0 0 0 6px; -webkit-border-radius: 0 0 0 6px; border-radius: 0 0 0 6px; }
+.bordered tr:last-child td:last-child { -moz-border-radius: 0 0 6px 0; -webkit-border-radius: 0 0 6px 0; border-radius: 0 0 6px 0; }
+.red{color:red;}.green{color:green;}
+.oildesc { clear: both; height: 183px; float: left; }
+p.oilprice { background: url(https://www.icauto.com.cn/images/oilpricebg.png) no-repeat; display: inline-block; width: 50%; font-size: 18px; color: white; margin-left: 2em; }
+.jumbo { font-size: 28px; font-weight: 900; }
+input#jisuan { width: 30%; float: right; height: 140px; font-size: 48px; }
+input#price { width: 50px; }
+input#maile, input#price, input#full { text-align: center; }
+.articletime{padding-top:0px;}
+td a {color: black;text-decoration: none;}
+/** 曲线图**/
+body {padding:0px; margin:0px; margin-top:10px; text-align: left; font-family:'微软雅黑',Trebuchet MS,Verdana,Helvetica,Arial,sans-serif; }
+.ichartjs_btn{ padding:2px 5px; line-height:25px; color:#0b2946; cursor: pointer; text-align:center; font-size:12px; border:1px solid #98adc1; -webkit-box-shadow:0px 0px 2px #375073; -moz-box-shadow:0px 0px 2px #375073; box-shadow:0px 0px 2px #375073; -moz-border-radius:5px; -webkit-border-radius:5px; -khtml-border-radius:5px; border-radius:5px } .ichartjs_author{ position: absolute; font-size:12px; right: 20px; top: 0px; }
+.ichartjs_author a{ color:#113659; }
+.ichartjs_info{ position:relative; margin:10px; padding:5px; color:#1b4267; }
+.ichartjs_sm{ margin:10px 0px; font-size: 13px; font-weight: 600; }
+.ichartjs_details{ padding:0px; text-indent:2em; font-size: 12px; line-height:20px; }
+#ichartjs_code{ display:none; }
+#ichartjs_result{ position: absolute; left: 20px; bottom: 20px; padding:8px; color:#fefefe; font-size:20px; font-weight:600; background-color:#6d869f; cursor: pointer; text-align:center; border:1px solid #6a869d; -webkit-box-shadow:0px 0px 2px #375073; -moz-box-shadow:0px 0px 2px #375073; box-shadow:0px 0px 2px #375073; -moz-border-radius:10px; -webkit-border-radius:10px; -khtml-border-radius:10px; border-radius:10px }
+.channelMove{position:fixed;top:10px;_position:absolute;_top:expression(documentElement.scrollTop);z-index:9999; overflow:hidden;}
+.article-body-main h1{font-size:20px;}
+</style>
+	<script type="text/javascript" src="https://imgs.icauto.com.cn/source/js/ichart.latest.min.js"></script>
+	<script src="https://imgs.icauto.com.cn/source/js/countUp.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				var flow=[8.1,8.14,8.45,8.38,8.32,8.21,7.94,7.9,7.56,7.72,7.68,7.84];
+				var data = [
+				         	{
+				         		name : '油价',
+				         		value:flow,
+				         		color:'#0d8ecf',
+				         		line_width:2
+				         	}
+				         ];
+
+				var labels = ["2023-08-10","","2023-09-21","","2023-10-25","","2023-11-22","","2023-12-20","","2024-01-18",""];
+
+				var line = new iChart.LineBasic2D({
+					render : 'canvasDiv',
+					data: data,
+					align:'center',
+					title : '最近油价走势',
+					subtitle : '(单位：元/升)',
+					footnote : '',
+					width : 650,
+					height : 400,
+					sub_option:{
+						smooth : true,//平滑曲线
+						point_size:10
+					},
+					tip:{
+						enable:true,
+						shadow:true
+					},
+					legend : {
+						enable : false
+					},
+					crosshair:{
+						enable:true,
+						line_color:'#62bce9'
+					},
+					coordinate:{
+						width:580,
+						valid_width:500,
+						height:260,
+						axis:{
+							color:'#9f9f9f',
+							width:[0,0,2,2]
+						},
+						grids:{
+							vertical:{
+								way:'share_alike',
+						 		value:12
+							}
+						},
+						scale:[{
+							 position:'left',
+							 start_scale:7.1,
+							// end_scale:9,
+							 end_scale:12,
+							 scale_space:0.2,
+							 scale_size:2,
+							 scale_color:'#9f9f9f'
+						},{
+							 position:'bottom',
+							 labels:labels
+						}]
+					}
+				});
+			//开始画图
+			line.draw();
+		});
+
+</script>
+<script type="text/javascript">
+var a=window.location.href;if(navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)){a=a.toLowerCase();str=a.replace("https://www.icauto.com.cn/","https://m.icauto.com.cn/");window.location.href=str}
+</script>
+<script>
+(function(){
+$$ = function(id){return document.getElementById(id)}
+function addClass(o,cn){var re = new RegExp("(\\s*|^)"+cn+"\\b","g");o.className +=o.className?(re.test(o.className)?"":" "+ cn):cn}
+function removeClass(o,cn){var re = new RegExp("(\\s*|^)"+cn+"\\b","g");var sName = o.className;o.className = sName.replace(re,"")}
+window.onscroll=window.onresize=function(){
+var scrTop = document.documentElement.scrollTop+document.body.scrollTop,offTop = $$("dMark").getBoundingClientRect().top+scrTop-document.documentElement.clientTop;
+scrTop>offTop?addClass($$("channelHtml"),"channelMove"):removeClass($$("channelHtml"),"channelMove");
+}
+})();
+</script>
+<!--跟随侧边end -->
+</head>
+<body>
+<!-- 通用头部begin -->
+<div class="ssi_2_new_header">
+<script type="text/javascript" src="https://www.icauto.com.cn/analysis/gsMember.php" ></script>
+<script type="text/javascript" src="https://imgs.icauto.com.cn/source/item/toolsitem.js" ></script>
+<div class="block">
+<div class="logo">
+  <a href="https://www.icauto.com.cn/">
+  <img src="https://www.icauto.com.cn/images/logo.gif" alt="车主指南" />
+  </a>
+</div>
+<div class="logoright">
+<div id="bdcs">
+<div class="bdcs-container">
+<div class="bdcs-main bdcs-clearfix" id="default-searchbox">
+<div class="bdcs-search bdcs-clearfix" id="bdcs-search-inline">
+<form action="https://www.icauto.com.cn/tools/searcher.php" method="get" target="_blank" class="bdcs-search-form" autocomplete="off" id="bdcs-search-form">
+<input type="hidden" name="s" value="18121893432741574017">
+<input type="hidden" name="entry" value="1">
+<input type="hidden" name="ie" value="utf-8">
+<input type="text" name="q" class="bdcs-search-form-input" id="bdcs-search-form-input" placeholder="请输入关键词" style="height: 38px; line-height: 38px;">
+<input type="submit" class="bdcs-search-form-submit " id="bdcs-search-form-submit" value="搜索">
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="blank0"></div>
+</div>
+
+</div>
+<!-- 通用头部end -->
+
+<!-- nav-wrap-begin-->
+<div class="nav-wrap">
+<!-- 通用导航begin -->
+<div class="ssi_2_new_nav">
+<div class="menu">
+  <ul class="nav_menu">
+	<li class="nav_menu-item"><a href="https://www.icauto.com.cn/news/">汽车资讯</a></li>
+	<li class="nav_menu-item"><a href="https://www.icauto.com.cn/car/">车型库</a></li>
+	<li class="nav_menu-item"><a href="https://www.icauto.com.cn/gzcz/">广州车展</a><em>new</em></li>
+	<li class="nav_menu-item"><a href="https://www.icauto.com.cn/gongju/">车主工具</a>
+	  <ul class="nav_submenu">
+		<li class="nav_submenu-item"> <a href="https://www.icauto.com.cn/gonglu/" target="_blank">高速路况查询</a></li>
+		<li class="nav_submenu-item"> <a href="https://www.icauto.com.cn/weizhang/" target="_blank">交通违章查询</a></li>
+		<li class="nav_submenu-item"> <a href="https://www.icauto.com.cn/jsz/" target="_blank">驾驶证扣分查询</a></li>
+		<li class="nav_submenu-item"> <a href="https://www.icauto.com.cn/weizhang/daima/" target="_blank">违章代码查询</a></li>
+		<li class="nav_submenu-item"> <a href="https://www.icauto.com.cn/chexian/jisuanqi/" target="_blank">车险计算器</a></li>
+		<li class="nav_submenu-item"> <a href="https://www.icauto.com.cn/oil/" target="_blank">今日油价查询</a></li>
+		<li class="nav_submenu-item"> <a href="https://www.icauto.com.cn/usedcar/" title="二手车估价计算器" target="_blank">二手车估价计算</a></li>
+		<li class="nav_submenu-item"> <a href="https://www.icauto.com.cn/usedcar/vpr/" title="汽车保值率排行榜" target="_blank">汽车保值率排行</a></li>
+		<li class="nav_submenu-item"> <a href="https://www.icauto.com.cn/route/" target="_blank">出行线路查询</a></li>
+		<li class="nav_submenu-item"> <a href="https://www.icauto.com.cn/weizhang/vin/" target="_blank">车架号查询</a></li>
+	  </ul>
+	</li>
+	<li class="nav_menu-item"><a href="https://www.icauto.com.cn/baike/">用车养车</a></li>
+	<li class="nav_menu-item"><a href="https://www.icauto.com.cn/weizhang/">违章查询</a></li>
+	<li class="nav_menu-item"><a href="https://www.icauto.com.cn/qcjr/">车险车贷</a>
+		  <ul class="nav_submenu">
+		<li class="nav_submenu-item"> <a href="https://www.icauto.com.cn/chexian/" target="_blank">车险专栏</a></li>
+		<li class="nav_submenu-item"> <a href="https://www.icauto.com.cn/chedai/" target="_blank">车贷专栏</a></li>
+	  </ul>
+	  </li>
+	<li class="nav_menu-item"><a href="https://www.icauto.com.cn/zdm/">汽车用品</a></li>
+	<div class="clr"></div>
+  </ul>
+</div>
+<style>
+/* 导航下拉框 */
+.menu {margin: 0 auto;}
+.menu a {display: block;padding: 0 16px;line-height: inherit;cursor: pointer;}
+.nav_menu {line-height: 45px;text-transform: uppercase;width: 1120px;height: auto;margin: 0 auto;padding: 0;}
+.nav_menu-item {float:left;display: inline-block;position: relative; z-index: 99;}
+.nav_menu-item em {float: left;margin-left: 84px;margin-top: -52px;color: #FF3D3E;}
+.nav_menu-item a{padding: 0 30px;display: block;position: relative;color: #fff;text-align: center;font: 16px/40px Microsoft Yahei;text-decoration: none;font-weight: bold;}
+.nav_menu-item:hover .nav_submenu {display: block;}
+.nav_submenu {display: none;position: absolute;padding:0;}
+.nav_submenu-item {width:144px;list-style: none;float: left;word-wrap: break-word; background-color: #fff;border-bottom: 1px solid #E4E4E4;border-left: 1px solid #E4E4E4;border-right: 1px solid #E4E4E4;}
+.nav_submenu-item a{font-size: 12px; font-family: 微软雅黑; line-height: 40px;color: #225599;text-decoration: none;text-align: center;}
+.nav_submenu-item a:hover {color:#f00; }
+.logo { padding: 14px 0; height: 42px; display: flex; align-items: center; } .logoright { float: right; padding: 14px 0; height: 42px; display: flex; align-items: center; }  .bdcs-container .bdcs-search-form-submit { background-color: #225599; font-weight: bolder; } input#bdcs-search-form-submit:hover { background-color: #f56f00; }
+</style>
+
+</div>
+<!-- 通用导航end -->
+
+<div class="position">
+  <span><a href="https://www.icauto.com.cn/">首页</a>&gt;<a href="https://www.icauto.com.cn/oil/">油价</a>&gt;广州中国石化油价</span>
+</div>
+<!-- begin -->
+<div class="articlemain">
+  <!-- article-body-l-begin -->
+  <div class="article-body-l">
+     <div class="article-body-main">
+
+	 <!--youjia-begin -->
+	 <div class="wzcxleftA dpcity" id="city">
+	   <span><a href="https://www.icauto.com.cn/oil/">油价</a>-广州中国石化</span>
+	   <div class="wzcxleftB">
+ 	     <ul class="cxbjA"><li class='preLi' ><a href='https://www.icauto.com.cn/oil/price_440000_2.html'>返回省级</a></li></ul> 	     <ul class="cxbjA"  id="shilist">
+ 	       <li><a href="https://www.icauto.com.cn/oil/price_440100_2.html">广州市</a></li><li><a href="https://www.icauto.com.cn/oil/price_440200_2.html">韶关市</a></li><li><a href="https://www.icauto.com.cn/oil/price_440300_2.html">深圳市</a></li><li><a href="https://www.icauto.com.cn/oil/price_440400_2.html">珠海市</a></li><li><a href="https://www.icauto.com.cn/oil/price_440500_2.html">汕头市</a></li><li><a href="https://www.icauto.com.cn/oil/price_440600_2.html">佛山市</a></li><li><a href="https://www.icauto.com.cn/oil/price_440700_2.html">江门市</a></li><li><a href="https://www.icauto.com.cn/oil/price_440800_2.html">湛江市</a></li><li><a href="https://www.icauto.com.cn/oil/price_440900_2.html">茂名市</a></li><li><a href="https://www.icauto.com.cn/oil/price_441200_2.html">肇庆市</a></li><li><a href="https://www.icauto.com.cn/oil/price_441300_2.html">惠州市</a></li><li><a href="https://www.icauto.com.cn/oil/price_441400_2.html">梅州市</a></li><li><a href="https://www.icauto.com.cn/oil/price_441500_2.html">汕尾市</a></li><li><a href="https://www.icauto.com.cn/oil/price_441600_2.html">河源市</a></li><li><a href="https://www.icauto.com.cn/oil/price_441700_2.html">阳江市</a></li><li><a href="https://www.icauto.com.cn/oil/price_441800_2.html">清远市</a></li><li><a href="https://www.icauto.com.cn/oil/price_441900_2.html">东莞市</a></li><li><a href="https://www.icauto.com.cn/oil/price_442000_2.html">中山市</a></li><li><a href="https://www.icauto.com.cn/oil/price_445100_2.html">潮州市</a></li><li><a href="https://www.icauto.com.cn/oil/price_445200_2.html">揭阳市</a></li><li><a href="https://www.icauto.com.cn/oil/price_445300_2.html">云浮市</a></li> 	     </ul>
+		<div class="clear"></div>
+		 <ul class="cxbjA" ><li><strong>油站：</strong></li><li><a href="https://www.icauto.com.cn/oil/price_440100_2_1.html" class="dpcur">中石化</a></li>
+		 <li><a href="https://www.icauto.com.cn/oil/price_440100_2_2.html">中石油</a></li><li><a href="https://www.icauto.com.cn/oil/price_440100_2.html">全部</a></li></ul>
+	   <div class="clear"></div>
+	   </div>
+	 </div>
+
+	 <h1>广州中国石化92号汽油最新指导价格，广州中石化92号汽油油价查询</h1>
+	 <div class="articletime">数据整理：车主指南</div>
+	   <div class="FWQleftA">
+	    <div class="FWQleftB">
+	      <div class="articlebody">
+	        <h2>广州中国石化92号汽油最新指导价格(今日油价)</h2>
+	        <p class="oildesc"><img src="https://www.icauto.com.cn/images/oilcontents.png" /></p>
+	        <p>2024年02月04日，广州中国石化92号汽油最新指导价格为：7.84元每升，调整时间为2024-02-01，相对上次调整时间2024-01-18的油价涨了0.16元，涨幅达2.08%，若需要计算在广州开车使用92号汽油的油耗，<a href="#oilcounterh2">请点击这里</a>。
+	        </p>
+			<p style="font-size: 14px;font-weight: bolder;margin-top:-10px;text-indent: inherit;">注：在【<span style="color:red">&#x6296;&#x97F3;</span>】搜索【<span style="color:red">车主指南工具</span>】，进入小程序&#x56DE;&#x590D;【<span style="color:red">广州油价</span>】，实时数据，更快更准</p>
+			<!--
+						<p style="font-size: 14px;font-weight: bolder;margin-top:-10px;text-indent: inherit;">注：&#x5173;&#x6CE8;&#x516C;&#x4F17;&#x53F7;“<span style="color:red">车主指南</span>”，回复“<span style="color:red">广州油价</span>”，实时数据，更快更准</p>
+			-->
+
+	        <p class="oilprice" >今日油价：￥&nbsp;<span class="jumbo" id="myTargetElement">7.84</span>&nbsp;元/升</p>
+	        <div style="clear:both"></div>
+	        <script>
+	          var options = {
+	            useEasing : true,
+	            useGrouping : true,
+	            separator : ',',
+	            decimal : '.',
+	          };
+	          var demo = new CountUp("myTargetElement", 0, 7.84, 2, 3, options);
+	          demo.start();
+	        </script>
+			<div class="ltips"><p>小知识：国内的油站价格以国际市场原油价格为准，加上国内税赋、加工成本、合理流通费用和适当利润定价。每当国际原油价格市场最近一个月均价曲线波动超过4%时，中国石化可以对国内柴油、汽油价格。</p><p>其中归属中国石化的油站的成品油售价，会按照指导价进行调整，若需要咨询具体某家油站的最新油价，可以查看本页面一些推荐中国石化油站信息，通过电话咨询。</p></div>
+		  <div class="ssi_2_pc_article_under_title">
+
+</div>
+	        <h2>广州各地区中国石化92号汽油最新油价表</h2>
+	        <table class='bordered'>
+	          <thead>
+	            <tr>
+	              <th>地区</th>
+	              <th>油价</th>
+	              <th>地区</th>
+	              <th>油价</th>
+	            </tr>
+	          </thead>
+	          <tr><td>市辖区</td><td>7.84</td><td>荔湾区</td><td>7.84</td></tr><tr><td>越秀区</td><td>7.84</td><td>海珠区</td><td>7.84</td></tr><tr><td>天河区</td><td>7.84</td><td>白云区</td><td>7.84</td></tr><tr><td>黄埔区</td><td>7.84</td><td>番禺区</td><td>7.84</td></tr><tr><td>花都区</td><td>7.84</td><td>南沙区</td><td>7.84</td></tr><tr><td>从化区</td><td>7.84</td><td>增城区</td><td>7.84</td></tr>	        </table>
+
+	        <h2>广州中国石化92号汽油油价走势图</h2>
+			<div id='canvasDiv'></div>
+			<div class='ichartjs_info'>
+	          <span class='ichartjs_author'>更新日期：2024年02月04日</span>
+	          <div class='ichartjs_sm'>说明</div>
+	          <div class='ichartjs_details'>
+	            图例为广州中国石化92号汽油油价最近12次调价的油价走势，本网站油价数据仅供参考，请以您所在地区的加油站报价为准。
+	          </div>
+			</div>
+
+	        <h2>广州中国石化92号汽油历史油价表</h2>
+	        <table class='bordered'>
+	          <thead>
+	            <tr>
+	              <th>调整时间</th>
+	              <th>调整后价格</th>
+	              <th>调整额度</th>
+	              <th>调整幅度</th>
+	            </tr>
+	          </thead>
+	          <tr>
+				    <td>2024-02-01</td>
+				    <td>7.84</td>
+				    <td class='red' >&#8593;0.16</td>
+				    <td class='red' >&#8593;2.08%</td>
+				    </tr><tr>
+				    <td>2024-01-18</td>
+				    <td>7.68</td>
+				    <td class='green' >&#8595;0.04</td>
+				    <td class='green' >&#8595;0.52%</td>
+				    </tr><tr>
+				    <td>2024-01-04</td>
+				    <td>7.72</td>
+				    <td class='red' >&#8593;0.16</td>
+				    <td class='red' >&#8593;2.12%</td>
+				    </tr><tr>
+				    <td>2023-12-20</td>
+				    <td>7.56</td>
+				    <td class='green' >&#8595;0.34</td>
+				    <td class='green' >&#8595;4.3%</td>
+				    </tr><tr>
+				    <td>2023-12-06</td>
+				    <td>7.9</td>
+				    <td class='green' >&#8595;0.04</td>
+				    <td class='green' >&#8595;0.5%</td>
+				    </tr><tr>
+				    <td>2023-11-22</td>
+				    <td>7.94</td>
+				    <td class='green' >&#8595;0.27</td>
+				    <td class='green' >&#8595;3.29%</td>
+				    </tr><tr>
+				    <td>2023-11-08</td>
+				    <td>8.21</td>
+				    <td class='green' >&#8595;0.11</td>
+				    <td class='green' >&#8595;1.32%</td>
+				    </tr><tr>
+				    <td>2023-10-25</td>
+				    <td>8.32</td>
+				    <td class='green' >&#8595;0.06</td>
+				    <td class='green' >&#8595;0.72%</td>
+				    </tr><tr>
+				    <td>2023-10-11</td>
+				    <td>8.38</td>
+				    <td class='green' >&#8595;0.07</td>
+				    <td class='green' >&#8595;0.83%</td>
+				    </tr><tr>
+				    <td>2023-09-21</td>
+				    <td>8.45</td>
+				    <td class='red' >&#8593;0.31</td>
+				    <td class='red' >&#8593;3.81%</td>
+				    </tr><tr>
+				    <td>2023-08-24</td>
+				    <td>8.14</td>
+				    <td class='red' >&#8593;0.04</td>
+				    <td class='red' >&#8593;0.49%</td>
+				    </tr><tr>
+				    <td>2023-08-10</td>
+				    <td>8.1</td>
+				    <td class='green' >&#8595;0</td>
+				    <td class='green' >&#8595;0%</td>
+				    </tr>	        </table>
+
+	        <h2>广州中国石化加油站推荐</h2>
+	          <table class='bordered'>
+	            <thead>
+	              <tr>
+	                <th>油站名称</th>
+	                <th>联系方式</th>
+	                <th>所属企业</th>
+	              </tr>
+	            </thead>
+	            <tr><td>中国石化加油站(横沥站)</td><td>广州市南沙区广珠东线洪奇沥段17号((020)84961566)</td><td>中国石化</td></tr><tr><td>中国石化加油站(维达站)</td><td>广东省广州市番禺区南村镇市新路北段1038((020)84762777)</td><td>中国石化</td></tr><tr><td>中国石化加油站(粤兴站)</td><td>广州市白云区庆槎路美景大酒店南侧((020)36370780)</td><td>中国石化</td></tr><tr><td>中国石化加油站(顺风站)</td><td>广州市从化区棋杆镇S355岭南小学西侧((020)87861260)</td><td>中国石化</td></tr><tr><td>中国石化加油站(官桥站)</td><td>广州市番禺区石化路51号((020)84864879)</td><td>中国石化</td></tr><tr><td>中国石化加油站(吉山站)</td><td>广州市天河区珠吉路53号((020)82370288)</td><td>中国石化</td></tr><tr><td>中国石化加油站(狮头围站)</td><td>西槎路1号((020)36489630)</td><td>中国石化</td></tr><tr><td>中国石化加油站(石运站)</td><td>市莲路76号((020)84852922)</td><td>中国石化</td></tr><tr><td>中国石化(畅原加油站)</td><td>广州市增城区中西村1组((020)82812426)</td><td>中国石化</td></tr><tr><td>中国石化加油站(黄阁站)</td><td>广州市南沙区黄阁镇市南大道南丰快速货运有限公司旁((020)34974005)</td><td>中国石化</td></tr><tr><td>中国石化加油站(花地湾站)</td><td>花地大道北190号((020)81802498)</td><td>中国石化</td></tr><tr><td>中国石化加油站(万里通站)</td><td>广东省广州市花都区狮岭大道东16号((020)86919188)</td><td>中国石化</td></tr><tr><td>中国石化加油站(飞鹅站)</td><td>太平镇118省道与沙溪大道交叉口((020)87801054)</td><td>中国石化</td></tr><tr><td>中国石化加油站(礼岗站)</td><td>礼岗路5号((020)84448327)</td><td>中国石化</td></tr><tr><td>中国石化加油站(珠村站)</td><td>广州市天河区中山大道中1206号((020)32238131)</td><td>中国石化</td></tr><tr><td>中国石化加油站(沙埔服务区南站)</td><td>广州市济广高速沙埔服务区内((020)82956616)</td><td>中国石化</td></tr><tr><td>中国石化加油站(龙美东站)</td><td>广州市番禺区番禺大道北539号天安科技园旁边((020)84890475)</td><td>中国石化</td></tr><tr><td>中国石化加油站(万里通三站)</td><td>花都大道东124号((020)86855583)</td><td>中国石化</td></tr><tr><td>中国石化加油站(夏茅站)</td><td>广州市白云区114省道夏茅汽车站北侧60米((020)86073013)</td><td>中国石化</td></tr><tr><td>中国石化加油站(番乐站)</td><td>番禺区东环路321号((020)84629713)</td><td>中国石化</td></tr>	          </table>
+
+	        <h2 id="oilcounterh2">油耗计算器</h2>
+	        <p><input type="button" value="计算" id="jisuan" onclick="jisuan()" /></p>
+	        <p>上次满油总行程数：<input type="text" id="maile" value="351" />&nbsp;公里</p>
+	        <p>油箱加满几公升：<input type="text" id="full" value="52"  />&nbsp;升</p>
+	        <p>油价(元/升)：<input type="text" id="price" value="7.84" />&nbsp;(<span style="color:red">今天广州92号汽油汽油油价为7.84元/升</span>)</p>
+	        <p>计算结果：您的爱车在广州行驶，使用92号汽油每公升可以行使：<span id="purmaile">6.8</span>公里，每跑100公里需用<span id="pur">14.8</span>升油，每公里的油费是<span id="purmonry">1.16</span>元。</p>
+
+	        <script type="text/javascript">
+	          function jisuan() {
+	            var purmaile = parseInt(document.getElementById("maile").value, 10) / parseInt(document.getElementById("full").value, 10); //每公升可以行使
+	            var pur = parseInt(document.getElementById("full").value, 10) / parseInt(document.getElementById("maile").value, 10) * 100; //每跑100公里需用
+	            var purmonry = parseInt(document.getElementById("full").value, 10) * document.getElementById("price").value / parseInt(document.getElementById("maile").value, 10) ;  //每公里的油钱
+	            document.getElementById("purmaile").innerHTML = "<span style='color:red'>" + purmaile.toFixed(1) + "</span>";
+	            document.getElementById("pur").innerHTML = "<span style='color:red'>" + pur.toFixed(1) + "</span>";
+	            document.getElementById("purmonry").innerHTML = "<span style='color:red'>" + purmonry.toFixed(2) + "</span>";
+	          }
+	        </script>
+
+	      </div>
+	      <div class="clear"></div>
+	     </div>
+		<div class="blank10"></div>
+	 </div>
+	 <!--youjia-end -->
+
+	 </div>
+
+	   <div class="ssi_2_pc_article_tonglan">
+	<!-- relate-begin -->
+  <div class="lookmore">
+    <span class="mark">猜你感兴趣</span>
+  </div>
+  <div class="lookmore-ads-tonglan">
+    <!-- n5371558 -->
+    <script>setp_uqx(10)</script>
+
+  </div>
+<!-- relate-end -->
+
+
+</div>
+    <!-- relate-begin -->
+      <div class="lookmore">
+        <span class="mark">全国违章查询</span>
+      </div>
+      <div class="fwqrelate">
+		<ul>
+		  <li><a href="https://www.icauto.com.cn/weizhang/110000/">北京违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/310000/">上海违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/120000/">天津违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/500000/">重庆违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/440000/">广东违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/320000/">江苏违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/330000/">浙江违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/370000/">山东违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/410000/">河南违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/130000/">河北违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/430000/">湖南违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/420000/">湖北违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/140000/">山西违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/210000/">辽宁违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/220000/">吉林违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/230000/">黑龙江违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/340000/">安徽违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/350000/">福建违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/360000/">江西违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/450000/">广西违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/510000/">四川违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/520000/">贵州违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/530000/">云南违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/610000/">陕西违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/620000/">甘肃违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/640000/">宁夏违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/460000/">海南违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/150000/">内蒙古违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/630000/">青海违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/650000/">新疆违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/540000/">西藏违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/710000/">台湾违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/810000/">香港违章查询</a></li>
+		  <li><a href="https://www.icauto.com.cn/weizhang/820000/">澳门违章查询</a></li>
+		</ul>
+      </div>
+    <!-- relate-end -->
+    <div class="ssi_2_pc_dibu">
+
+	<!-- relate-begin -->
+      <div class="lookmore">
+        <span class="mark">最新发布</span>
+      </div>
+      <div class="wzrelate">
+	   <ul>
+	    <li><a target="_blank" href="https://www.icauto.com.cn/baike/85/855987.html">6年免检机动车逾期未检验怎么办</a></li><li><a target="_blank" href="https://www.icauto.com.cn/zhishi/85/855903.html">车祸事故一人一半责任是怎么处理</a></li><li><a target="_blank" href="https://www.icauto.com.cn/baike/85/855988.html">车子突然像拖拉机一样响,还能继续开吗</a></li><li><a target="_blank" href="https://www.icauto.com.cn/baike/85/855788.html">摩托车已经没有了,怎么报废注销</a></li><li><a target="_blank" href="https://www.icauto.com.cn/baike/85/855881.html">车辆开起来感觉变沉了是怎么回事</a></li><li><a target="_blank" href="https://www.icauto.com.cn/zhishi/85/855890.html">7座车超员1个人怎么处理的</a></li><li><a target="_blank" href="https://www.icauto.com.cn/baike/85/855820.html">新车多少年检验一次</a></li><li><a target="_blank" href="https://www.icauto.com.cn/baike/85/855932.html">货车方向机沉重怎么解决</a></li><li><a target="_blank" href="https://www.icauto.com.cn/baike/85/855935.html">新车建议镀晶吗</a></li><li><a target="_blank" href="https://www.icauto.com.cn/baike/85/855750.html">自动挡汽车的驾驶方法</a></li>
+		<li><a href='/wenda/19348.html'>喝一口啤酒一个小时能吹出酒驾么</a></li><li><a href='/wenda/25542.html'>etc扣费记录在哪里查询</a></li><li><a href='/wenda/37931.html'>etc装在车上哪个位置最佳</a></li><li><a href='/wenda/41311.html'>学手动挡车学费多少钱</a></li><li><a href='/wenda/57484.html'>c1驾驶证10年到期换证需要体检吗</a></li><li><a href='/wenda/62971.html'>车龄12年车还能跑高速吗?你好</a></li><li><a href='/wenda/79313.html'>几万块钱买什么二手车好</a></li><li><a href='/wenda/83444.html'>仪表红色三角形一个感叹号</a></li>
+	   </ul>
+	 </div>
+    <!-- relate-end -->
+    	<!-- newcars-begin -->
+      <div class="lookmore">
+        <span class="mark">新车发布</span>
+      </div>
+      <div class="new-cars">
+	   <ul>
+
+	   <li><a target="_blank" href='https://www.icauto.com.cn/car/s3534.html'>领克07</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3533.html'>红旗E-HS7</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3532.html'>长安启源E07</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3531.html'>深蓝G318</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3530.html'>钇为爱跑</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3529.html'>电动屋悦01</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3528.html'>蔚来ET9</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3527.html'>铂智4X</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3526.html'>极氪007</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3525.html'>L380</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3524.html'>元UP</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3523.html'>哪吒L</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3522.html'>风云T6</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3521.html'>菱势黄金仓</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3520.html'>起亚EV5</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3519.html'>悍途新能源</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3518.html'>雪佛兰Traverse</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3517.html'>捷途X70 C-DM</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3516.html'>红旗HQ9新能源</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3515.html'>高合HiPhi A</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3514.html'>北京BJ60新能源</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3513.html'>捷途山海T-L</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3512.html'>长安猎手</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3511.html'>海狮07 EV</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3510.html'>智界S7</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3509.html'>启辰大V 氢境</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3508.html'>新途EV70</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3507.html'>龙耀6S</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3506.html'>大力牛魔王D05</a></li><li><a target="_blank" href='https://www.icauto.com.cn/car/s3505.html'>星越L 智擎</a></li>
+	   </ul>
+	 </div>
+	 <style type="text/css">
+	 	.new-cars {width: 100%;overflow: hidden;float: left;border: 1px solid #e5e5e5;margin-bottom: 30px;}
+	 	.new-cars li {float: left;width: 16%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;line-height: 36px;}
+	 	.new-cars li a {font-size: 14px;font-family: 微软雅黑;color: rgb(0, 0, 0);text-decoration: none;}
+	 	.new-cars li a:hover {color: red;}
+	 </style>
+    <!-- newcars-end -->
+</div>
+
+  </div>
+  <!-- article-body-l-end -->
+  <div class="article-body-r">
+
+	 <div class="ssi_2_pc_wx">
+
+</div>
+
+	 <div class="ad_right_first">
+	 <div class="article-right">
+	    <div class="article-right-a">
+	    <!-- n3527756 -->
+       <script>setp_uqx(12)</script>
+	    </div>
+	 </div>
+</div>
+
+	 <div class="article-right">
+	  <span>广州中国石化各种油号最新指导价格</span>
+	    <div class="article-right-a">
+		  <ul>
+		    <li><a href="https://www.icauto.com.cn/oil/price_440100_1_1.html">90号汽油</a></li><li><a href="https://www.icauto.com.cn/oil/price_440100_2_1.html" class="dpcur">92号汽油</a></li><li><a href="https://www.icauto.com.cn/oil/price_440100_3_1.html">93号汽油</a></li><li><a href="https://www.icauto.com.cn/oil/price_440100_4_1.html">95号汽油</a></li><li><a href="https://www.icauto.com.cn/oil/price_440100_5_1.html">97号汽油</a></li><li><a href="https://www.icauto.com.cn/oil/price_440100_7_1.html">0号柴油</a></li><li><a href="https://www.icauto.com.cn/oil/price_440100_0_1.html">汇总</a></li>		  </ul>
+	    </div>
+	 </div>
+
+	 <div class="ad_right_middle">
+	 <div class="article-right">
+	    <div class="article-right-a">
+	    <!-- n3527756 -->
+       <script>setp_uqx(12)</script>
+	    </div>
+	 </div>
+</div>
+
+	 <div class="article-right">
+	  <span>广州车主工具</span>
+	    <div class="article-right-a article-right-c">
+		  <ul>
+		    <li><a href="/gonglu/gaosu_c_1/" title="广州高速路况" >广州高速路况</a></li>
+<li><a href="/trip/hot_58.html" title="广州景点" >广州景点</a></li>
+<li><a href="/chuxing/gaotie_440100.html" title="广州高铁" >广州高铁</a></li>
+<li><a href="/chuxing/ditie_440100.html" title="广州地铁" >广州地铁</a></li>
+<li><a href="/tcw/440100/" title="广州停车位" >广州停车位</a></li>
+<li><a href="/weizhang/wzd/440100/" title="广州违章点" >广州违章点</a></li>
+<li><a href="/usedcar/c440100/" title="广州二手车" >广州二手车</a></li>
+<li><a href="/cdz/440100/" title="广州充电桩" >广州充电桩</a></li>
+<li><a href="/weizhang/54/541886.html" title="广州违章停车" >广州违章停车</a></li>
+<li><a href="/weizhang/54/540075.html" title="广州电子眼" >广州电子眼</a></li>
+<li><a href="/weizhang/35/350154.html" title="广州闯红灯" >广州闯红灯</a></li>
+<li><a href="/oil/price_440100_0.html" title="广州油价" >广州油价</a></li>
+<li><a href="/chechuanshui/440100/" title="广州车船税" >广州车船税</a></li>
+<li><a href="/dealerprice/list_440100_0_0_0.html" title="广州汽车团购优惠" >广州汽车团购优惠</a></li>
+<li><a href="/chezhan/440100/" title="广州车展" >广州车展</a></li>
+<li><a href="/jsz/440100/" title="广州驾驶证扣分查询" >广州驾驶证扣分查询</a></li>
+<li><a href="/weizhang/440100/" title="广州违章查询" >广州违章查询</a></li>
+<li><a href="/weizhang/cgs/440100/" title="广州车管所" >广州车管所</a></li>
+<li><a href="/chexian/440100/" title="广州车险" >广州车险</a></li>
+
+		  </ul>
+	    </div>
+	 </div>
+
+	 <div class="ad_right_first">
+	 <div class="article-right">
+	    <div class="article-right-a">
+	    <!-- n3527756 -->
+       <script>setp_uqx(12)</script>
+	    </div>
+	 </div>
+</div>
+
+	 <div class="article-right">
+	  <span>广州92号汽油相关百科</span>
+	    <div class="article-right-b">
+		 <ul>
+		   <li><a  href="https://www.icauto.com.cn/baike/77/777102.html" title="70公里92号油多少油钱">70公里92号油多少油钱</a></li><li><a  href="https://www.icauto.com.cn/baike/70/705567.html" title="到加油站千万不要说把油加满，每次加油只加200元吗">到加油站千万不要说把油加满，每次加油只加200元吗</a></li><li><a  href="https://www.icauto.com.cn/baike/64/641039.html" title="新车磨合期加92还是95，新车加92还是95好">新车磨合期加92还是95，新车加92还是95好</a></li><li><a  href="https://www.icauto.com.cn/baike/64/641019.html" title="汽车加92的加了95的有影响吗？92的车加95的汽油好吗">汽车加92的加了95的有影响吗？92的车加95的汽油好吗</a></li><li><a  href="https://www.icauto.com.cn/baike/64/641010.html" title="加了95号还能加回92吗？92和95汽油哪个对发动机好">加了95号还能加回92吗？92和95汽油哪个对发动机好</a></li><li><a  href="https://www.icauto.com.cn/baike/59/595229.html" title="起亚k4加多少号汽油，起亚k4可以加92号汽油吗">起亚k4加多少号汽油，起亚k4可以加92号汽油吗</a></li><li><a  href="https://www.icauto.com.cn/baike/59/595118.html" title="日产蓝鸟加多少号汽油，蓝鸟可以加92号汽油吗">日产蓝鸟加多少号汽油，蓝鸟可以加92号汽油吗</a></li><li><a  href="https://www.icauto.com.cn/baike/59/594981.html" title="标致5008加多少号汽油，标致5008可以加92号汽油吗">标致5008加多少号汽油，标致5008可以加92号汽油吗</a></li><li><a  href="https://www.icauto.com.cn/baike/59/594516.html" title="本田哥瑞加多少号汽油，哥瑞可以加92号汽油吗">本田哥瑞加多少号汽油，哥瑞可以加92号汽油吗</a></li><li><a  href="https://www.icauto.com.cn/baike/59/593927.html" title="柯迪亚克加多少号汽油，柯迪亚克可以加92号汽油吗	">柯迪亚克加多少号汽油，柯迪亚克可以加92号汽油吗	</a></li>		 </ul>
+	    </div>
+	 </div>
+
+	 <div class="ad_right_last">
+	 <div style="visibility:hidden;margin-top:-1px" class="clear" id="dMark"></div>
+	 <div id="channelHtml" class="">
+	 <div class="article-right">
+	  <span style="margin-top:15px;">大家都在看</span>
+	  <div class="article-right-a">
+	    <!-- n3527756 -->
+       <script>setp_uqx(12)</script>
+	  </div>
+	 </div>
+	 <div class="clear-both"></div>
+	 </div>
+
+</div>
+
+  </div>
+
+</div>
+<!-- end -->
+
+<!-- 通用底部begin -->
+<div class="ssi_2_new_footer">
+
+<script>
+	(function(){
+	var el = document.createElement("script");
+	el.src = "https://lf1-cdn-tos.bytegoofy.com/goofy/ttzz/push.js?32fb199a808abd2057615ecb0494254b318ecafe40bf145fc64ee6be65e3972c65e0a2ada1d5e86b11e7de7c1a83287d04743a02fd1ee8dd8558a8cad50e91cb354f8c6f3f78e5fd97613c481f678e6d";
+	el.id = "ttzz";
+	var s = document.getElementsByTagName("script")[0];
+	s.parentNode.insertBefore(el, s);
+	})(window)
+</script>
+<div class="blank10"></div>
+<!-- footer -->
+<div class="u">
+	<div class="foot clr"> <a rel="nofollow" href="https://www.icauto.com.cn/about/us.html" target="_blank">关于我们</a><span style="color:white;"> ┊ </span><a rel="nofollow"  href="https://www.icauto.com.cn/about/contact.html" target="_blank">联系我们</a><span style="color:white;"> ┊ </span><a rel="nofollow"  href="https://www.icauto.com.cn/about/sitemap.html" target="_blank">网站地图</a> <span style="color:white;"> ┊ </span><a href="https://www.icauto.com.cn/about/wechat.html" target="_blank">官方微信</a><span style="color:white;"> ┊  </span><a rel="nofollow"  href="https://m.icauto.com.cn/" target="_blank">移动版</a> <br />
+	<div class="weixin"><img src="https://www.icauto.com.cn/images/qrcode_czzn_2.gif" />    </div>
+	<div class="beian">
+	<p>版权所有：&copy; 2013-2023 车主指南 车主的贴心帮手</p>
+	<p>广州途畅信息科技有限公司</p>
+	<p>网站备案：<a rel="nofollow" href="https://beian.miit.gov.cn">粤ICP备15054683号</a></p>
+	<p>联系我们：<img width="277" height="18" src="https://www.icauto.com.cn/images/contactus.png" style="vertical-align:middle;" /></p>
+	</div>
+</div>
+	<div id="analysis">
+		<!-- baidu analytics start -->
+		<script>
+		var _hmt = _hmt || [];
+		(function() {
+		  var hm = document.createElement("script");
+		  hm.src = "//hm.baidu.com/hm.js?4ef0a63cc655fa6cf2c879bcba57cddc";
+		  var s = document.getElementsByTagName("script")[0];
+		  s.parentNode.insertBefore(hm, s);
+		})();
+		</script>
+		<!-- baidu analytics end -->
+		<script type="text/javascript" src="//www.icauto.com.cn/analysis/article.php"></script>
+	</div>
+</div>
+
+<!-- bjTongJI -->
+<script>
+	if( typeof(myYhId) != 'undefined' && myYhId == 15 && myArtId >= 736417 && ( window.location.href.indexOf('/wiki/') < 0 ) ){
+
+		var _hmt = _hmt || [];
+		(function() {
+		  var hm9 = document.createElement("script");
+		  hm9.src = "https://hm.baidu.com/hm.js?939068f7bf4669091cef7a79b466fca8";
+		  var s9 = document.getElementsByTagName("script")[0];
+		  s9.parentNode.insertBefore(hm9, s9);
+		})();
+		console.log("bd:bigbkjz");
+	}
+</script>
+<!-- bjTongJI -->
+
+<!-- end footer -->
+
+</div>
+<!-- 通用底部end -->
+</div>
+<!-- nav-wrap-end-->
+<script>
+function changeSel(){
+	document.getElementById("shenglist").style.display="block";
+	document.getElementById("shilist").style.display="none";
+}
+</script>
+</body>
+</html>
