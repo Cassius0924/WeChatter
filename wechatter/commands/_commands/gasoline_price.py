@@ -11,8 +11,8 @@ from wechatter.utils import get_request, load_json
 
 
 @command(
-    command="gasoline_price",
-    keys=["汽油", "gasoline_price", "汽油价格", "中石化"],
+    command="gasoline-price",
+    keys=["汽油", "gasoline-price", "汽油价格", "中石化"],
     desc="获取汽油价格。",
 )
 def gasoline_price_command_handler(to: SendTo, message: str = "") -> None:
