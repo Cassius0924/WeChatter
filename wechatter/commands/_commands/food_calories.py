@@ -3,6 +3,7 @@ from urllib.parse import quote
 
 import requests
 from bs4 import BeautifulSoup
+from loguru import logger
 
 from wechatter.commands.handlers import command
 from wechatter.exceptions import Bs4ParsingError
@@ -18,20 +19,26 @@ from wechatter.utils import get_request
 )
 def food_calories_command_handler(to: SendTo, message: str = "") -> None:
     try:
-        response = get_request(
-            url=f"https://www.boohee.com/food/search?keyword={message}"
-        )
-        food_href_list = parse_food_href_list_response(response)
-        food_detail_list = get_food_detail_list(food_href_list)
-        result = generate_food_message(food_detail_list)
-        sender.send_msg(to, result)
+        result = get_food_calories_str(message)
     except Exception as e:
         error_message = f"获取食物热量失败，错误信息：{str(e)}"
-        print(error_message)
+        logger.error(error_message)
         sender.send_msg(to, error_message)
+    else:
+        sender.send_msg(to, result)
 
 
-def get_food_detail_list(food_href_list: List) -> List:
+def get_food_calories_str(message: str) -> str:
+    if not message:
+        return "查询失败，请输入食物名称"
+    response = get_request(url=f"https://www.boohee.com/food/search?keyword={message}")
+    food_href_list = _parse_food_href_list_response(response)
+    food_detail_list = _get_food_detail_list(food_href_list)
+    result = _generate_food_message(food_detail_list)
+    return result
+
+
+def _get_food_detail_list(food_href_list: List) -> List:
     """
     获取食物详情列表
     :param food_href_list: 食物详情链接列表
@@ -42,7 +49,7 @@ def get_food_detail_list(food_href_list: List) -> List:
         food_name = food.get("name")
         food_all_name = food.get("all_name")
         food_href = food.get("href")
-        keyword = get_url_encoding(food_name)  # 获取URL编码
+        keyword = _get_url_encoding(food_name)  # 获取URL编码
         headers = {
             "referer": f"https://www.boohee.com/food/search?keyword={keyword}",
         }
@@ -50,22 +57,25 @@ def get_food_detail_list(food_href_list: List) -> List:
             url=f"https://www.boohee.com{food_href}", headers=headers
         )
         if not food_response:
-            raise Exception(f"获取食物详情失败，食物名称：{food_name}")
-        food_detail = parse_food_detail_response(food_response, food_all_name)
+            logger.error(f"获取食物详情失败，食物名称：{food_name}")
+            raise ValueError(f"获取食物详情失败，食物名称：{food_name}")
+        food_detail = _parse_food_detail_response(food_response, food_all_name)
         food_detail_list.append(food_detail)
     if not food_detail_list:
-        raise Exception("获取食物详情失败,为空列表")
+        logger.error("获取食物详情失败,为空列表")
+        raise ValueError("获取食物详情失败,为空列表")
     return food_detail_list
 
 
-def generate_food_message(food_detail_list: List) -> str:
+def _generate_food_message(food_detail_list: List) -> str:
     """
     生成食物信息
     :param food_detail_list: 食物详情列表
     :return: 食物信息
     """
     if not food_detail_list:
-        raise Exception("食物详情列表为空")
+        logger.error("食物详情列表为空")
+        raise ValueError("食物详情列表为空")
     food_str = "✨=====食物列表=====✨\n"
 
     for i, food_detail in enumerate(food_detail_list):
@@ -89,7 +99,9 @@ def generate_food_message(food_detail_list: List) -> str:
 
 
 # 这里也是 parse部分
-def parse_food_detail_response(response: requests.Response, food_all_name: str) -> Dict:
+def _parse_food_detail_response(
+    response: requests.Response, food_all_name: str
+) -> Dict:
     """
     解析食物详情
     :param response: 请求响应
@@ -105,13 +117,14 @@ def parse_food_detail_response(response: requests.Response, food_all_name: str) 
         if name and value:
             food_detail[name] = value
     if not food_detail:
+        logger.error("解析食物列表失败")
         raise Bs4ParsingError("解析食物列表失败")
 
     food_detail["food_all_name"] = food_all_name
     return food_detail
 
 
-def parse_food_href_list_response(response: requests.Response) -> List:
+def _parse_food_href_list_response(response: requests.Response) -> List:
     """
     解析食物详情链接列表
     :param response: 请求响应
@@ -121,6 +134,7 @@ def parse_food_href_list_response(response: requests.Response) -> List:
     href_list = []
     articles = soup.select("div.text-box")
     if not articles:
+        logger.error("解析食物详情链接失败")
         raise Bs4ParsingError("解析食物详情链接失败")
     for article in articles:
         href_list_item = {}
@@ -137,12 +151,13 @@ def parse_food_href_list_response(response: requests.Response) -> List:
             href_list.append(href_list_item)
 
     if not href_list:
+        logger.error("解析食物详情链接失败")
         raise Bs4ParsingError("解析食物详情链接失败")
 
     return href_list
 
 
-def get_url_encoding(message: str) -> str:
+def _get_url_encoding(message: str) -> str:
     """
     获取URL编码
     :param message: 消息

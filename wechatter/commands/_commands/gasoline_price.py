@@ -18,11 +18,12 @@ from wechatter.utils import get_request, load_json
 def gasoline_price_command_handler(to: SendTo, message: str = "") -> None:
     try:
         result = get_gasoline_price_str(message)
-        sender.send_msg(to, result)
     except Exception as e:
         error_message = f"获取汽油价格失败，错误信息：{str(e)}"
         logger.error(error_message)
         sender.send_msg(to, error_message)
+    else:
+        sender.send_msg(to, result)
 
 
 # TODO：查询其他类型的油价，如95，97柴油等，例子：查询95号汽油只需改成{city_id}_4_1.html
@@ -93,4 +94,4 @@ def _get_city_id(city_name: str) -> str:
 
 
 def _generate_gasoline_price_message(gasoline_price: str, message: str) -> str:
-    return f"✨{message}石化92汽油指导价✨\n\n{gasoline_price}\n\n油价数据仅供参考,实际在售油价可能有小幅偏差。"
+    return f"✨{message}石化92汽油指导价✨\n{gasoline_price}\n\n油价数据仅供参考,实际在售油价可能有小幅偏差。"
