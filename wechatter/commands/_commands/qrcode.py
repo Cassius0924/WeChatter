@@ -5,8 +5,8 @@ from loguru import logger
 
 import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
-from wechatter.models.message import SendMessage, SendMessageType, SendTo
-from wechatter.sender import Sender
+from wechatter.models.message import SendTo
+from wechatter.sender import sender
 from wechatter.utils.time import get_current_datetime
 
 
@@ -18,16 +18,27 @@ from wechatter.utils.time import get_current_datetime
 def qrcode_command_handler(to: SendTo, message: str = "") -> None:
     # 获取二维码
     try:
-        datetime_str = get_current_datetime()
-        path = pm.get_abs_path(f"data/qrcodes/{datetime_str}.png")
-        img = generate_qrcode(message)
-        save_qrcode(img, path)
+        path = get_qrcode_saved_path(message)
     except Exception as e:
         error_message = f"生成二维码失败，错误信息：{str(e)}"
         logger.error(error_message)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
+        sender.send_msg(to, error_message)
     else:
-        Sender.send_localfile_msg(to, path)
+        sender.send_localfile_msg(to, path)
+
+
+# TODO: 发送后删除二维码
+
+
+def get_qrcode_saved_path(data: str) -> str:
+    if not data:
+        raise ValueError("请输入文本或链接")
+    """获取二维码保存路径"""
+    datetime_str = get_current_datetime()
+    path = pm.get_abs_path(f"data/qrcodes/{datetime_str}.png")
+    img = generate_qrcode(data)
+    save_qrcode(img, path)
+    return path
 
 
 def generate_qrcode(data: str):

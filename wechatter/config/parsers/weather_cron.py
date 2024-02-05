@@ -3,13 +3,12 @@ from typing import List
 from apscheduler.triggers.cron import CronTrigger
 
 from wechatter.commands._commands.weather import get_weather_str
-from wechatter.models.message import SendMessage, SendMessageType
 from wechatter.models.scheduler import CronTask
-from wechatter.sender import Sender
+from wechatter.sender import sender
 
 
 def parse_weather_cron_rule_list(
-        weather_cron_rule_list: List,
+    weather_cron_rule_list: List,
 ) -> List[CronTask]:
     """
     解析天气定时任务规则
@@ -36,14 +35,11 @@ def parse_weather_cron_rule_list(
 
         def func():
             for task in tasks:
-                to_persons = task["to_persons"]
-                to_groups = task["to_groups"]
-                send_message = SendMessage(
-                    type=SendMessageType.TEXT,
-                    content=get_weather_str(task["city"]),
-                )
-                Sender.send_msg_ps(to_p_names=to_persons, message=send_message)
-                Sender.send_msg_gs(to_g_names=to_groups, message=send_message)
+                message = get_weather_str(task["city"])
+                if task["to_persons"]:
+                    sender.mass_send_msg(task["to_persons"], message)
+                if task["to_groups"]:
+                    sender.mass_send_msg(task["to_groups"], message, is_group=True)
 
         cron_tasks.append(
             CronTask(

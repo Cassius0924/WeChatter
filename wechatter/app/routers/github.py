@@ -22,7 +22,7 @@ async def recv_github_webhook(request: Request):
     try:
         handler(data)
     except ValueError as e:
-        logger.error(f"GitHub Webhook 处理失败: {e}")
+        logger.error(f"GitHub Webhook 处理失败: {str(e)}")
         return JSONResponse(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content={"detail": str(e)}
         )

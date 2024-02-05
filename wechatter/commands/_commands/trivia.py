@@ -1,5 +1,5 @@
-from typing import List
 import random
+from typing import List
 
 import requests
 from bs4 import BeautifulSoup
@@ -7,8 +7,8 @@ from loguru import logger
 
 from wechatter.commands.handlers import command
 from wechatter.exceptions import Bs4ParsingError
-from wechatter.models.message import SendMessage, SendMessageType, SendTo
-from wechatter.sender import Sender
+from wechatter.models.message import SendTo
+from wechatter.sender import sender
 from wechatter.utils import get_request
 
 
@@ -25,11 +25,11 @@ def trivia_command_handler(to: SendTo, message: str = "") -> None:
         )
         trivia_list = _parse_trivia_response(response)
         result = _generate_trivia_message(trivia_list, random_number)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, result))
+        sender.send_msg(to, result)
     except Exception as e:
-        error_message = f"获取冷知识失败，错误信息：{e}"
-        print(error_message)
-        Sender.send_msg(to, SendMessage(SendMessageType.TEXT, error_message))
+        error_message = f"获取冷知识失败，错误信息：{str(e)}"
+        logger.error(error_message)
+        sender.send_msg(to, error_message)
 
 
 def _parse_trivia_response(response: requests.Response) -> List:

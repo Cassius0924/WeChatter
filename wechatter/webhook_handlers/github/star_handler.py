@@ -1,7 +1,7 @@
 from loguru import logger
 
 from wechatter.models.github import GithubStarWebhook
-from wechatter.sender import Sender
+from wechatter.sender import sender
 from wechatter.webhook_handlers.hanlders import github_webhook_handler
 
 
@@ -14,10 +14,10 @@ def handle_star(data: dict):
             "==== GitHub Star 事件 ====\n"
             f"⭐️ {payload.repository.full_name} 的 Star 数量 +1 🆙！\n"
         )
-        Sender.send_msg_to_github_webhook_receivers(message)
+        sender.send_msg_to_github_webhook_receivers(message)
     else:
         message = (
             "==== GitHub Star 事件 ====\n"
             f"⭐️ {payload.repository.full_name} 的 Star 数量 -1 🔽！\n"
         )
-        Sender.send_msg_to_github_webhook_receivers(message)
+        sender.send_msg_to_github_webhook_receivers(message)
