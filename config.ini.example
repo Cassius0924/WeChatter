@@ -60,7 +60,7 @@ github_webhook_receive_group_list = []
 # 是否开启消息转发（True/<<False>>）
 message_forwarding_enabled = True
 # 是否开启转发所有消息给指定微信用户和(或)群（True/<<False>>）
-message_forwarding_from_all = True
+message_forwarding_from_all_enabled = True
 # 指定转发所有消息的微信用户列表（JSON格式）
 # 每个规则是一个字典，包含两个字段：to_persons, to_groups
 # to_persons: 消息接收者（们）的微信名称（仅用户）
