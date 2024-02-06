@@ -40,6 +40,7 @@ class MessageForwarder:
             #     continue
             # 自定义转发规则
             if from_name in rule["froms"]:
+                print("成功")
                 # 构造转发消息
                 msg = self.__construct_forwarding_message(message)
                 logger.info(
