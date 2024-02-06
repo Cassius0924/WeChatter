@@ -26,6 +26,7 @@ class MessageForwarder:
 
         # 判断消息是否符合转发规则
         for rule in self.rule_list:
+            print(rule)
             # 如果发送者列表为*，则代表发送者为所有人
             if "*" in rule["froms"]:
                 rule["froms"] = rule["froms"].append(from_name)
