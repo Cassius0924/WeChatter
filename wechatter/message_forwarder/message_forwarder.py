@@ -23,22 +23,19 @@ class MessageForwarder:
             from_name = message.source.p_info.name
 
         name = f"{from_name}"
-
-        print(from_name)
         # TODO: 转发文件
+
         # 判断消息是否符合转发规则
         for rule in self.rule_list:
-            print(rule)
             # 如果发送列表里有*，就代表发送者为所有人，如果发送者名字没有在列表，就加上
             if "*" in rule["froms"] and name not in rule["froms"]:
                 rule["froms"] += [name]
-            print(rule)
-            # # 除去在接收者列表中发送的消息
-            # if from_name in rule["to_persons"]:
-            #     continue
-            # # 除去在群里接收者发送的消息
-            # if message.is_group and message.source.p_info.name in rule["to_persons"]:
-            #     continue
+            # 除去在接收者列表中发送的消息
+            if from_name in rule["to_persons"]:
+                continue
+            # 除去在群里接收者发送的消息
+            if message.is_group and message.source.p_info.name in rule["to_persons"]:
+                continue
             # 自定义转发规则
             if from_name in rule["froms"]:
                 # 构造转发消息
