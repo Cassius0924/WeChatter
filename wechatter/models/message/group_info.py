@@ -1,5 +1,6 @@
-from dataclasses import dataclass, field
 from typing import List
+
+from pydantic.dataclasses import dataclass
 
 
 @dataclass
@@ -8,7 +9,7 @@ class GroupMemberInfo:
 
     id: str
     name: str
-    alias: str = ""
+    alias: str
 
 
 @dataclass
@@ -17,8 +18,8 @@ class GroupInfo:
 
     id: str
     name: str
-    admin_id_list: List[str] = field(default_factory=list)
-    member_list: List[GroupMemberInfo] = field(default_factory=list)
+    admin_id_list: List[str]
+    member_list: List[GroupMemberInfo]
 
 
 # class GroupMemberInfo:

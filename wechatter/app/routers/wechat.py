@@ -78,10 +78,10 @@ def handle_system_event(content: str) -> None:
     content_dict: dict = json.loads(content)
     # 判断是否为机器人登录消息
     if content_dict["event"] == "login":
-        print("机器人登录成功")
+        logger.info("机器人登录成功")
         notifier.notify_logged_in()
     elif content_dict["event"] == "logout":
-        print("机器人已退出登录")
+        logger.info("机器人已退出登录")
         notifier.notify_logged_out()
     elif content_dict["event"] == "error":
         pass

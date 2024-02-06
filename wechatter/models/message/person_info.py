@@ -1,5 +1,6 @@
-from dataclasses import dataclass, field
 from typing import List
+
+from pydantic.dataclasses import dataclass
 
 
 @dataclass
@@ -8,10 +9,10 @@ class PersonInfo:
 
     id: str
     name: str
-    alias: str = ""
-    gender: int = -1
-    signature: str = ""
-    province: str = ""
-    city: str = ""
-    phone_list: List[str] = field(default_factory=list)
-    is_star: bool = False
+    alias: str
+    gender: int
+    signature: str
+    province: str
+    city: str
+    phone_list: List[str]
+    is_star: bool
