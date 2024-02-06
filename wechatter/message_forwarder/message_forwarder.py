@@ -19,14 +19,15 @@ class MessageForwarder:
         from_name = ""
         if message.is_group:
             from_name = message.source.g_info.name
+            name = f"{from_name}"
         else:
             from_name = message.source.p_info.name
+            name = f"{from_name}"
 
+        print(from_name)
         # TODO: 转发文件
-
         # 判断消息是否符合转发规则
         for rule in self.rule_list:
-            name = f"{from_name}"
             print(rule)
             # 如果发送者列表为*，则代表发送者为所有人
             if "*" in rule["froms"]:
