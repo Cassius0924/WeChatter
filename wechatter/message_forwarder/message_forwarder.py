@@ -28,7 +28,7 @@ class MessageForwarder:
         for rule in self.rule_list:
             # 如果发送者列表为*，则代表发送者为所有人
             if "*" in rule["froms"]:
-                rule["froms"] = [from_name]
+                rule["froms"] = rule["froms"].append(from_name)
             # # 除去在接收者列表中发送的消息
             # if from_name in rule["to_persons"]:
             #     continue
