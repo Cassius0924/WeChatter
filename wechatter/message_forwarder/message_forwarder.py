@@ -25,13 +25,13 @@ class MessageForwarder:
             name = f"{from_name}"
 
         print(from_name)
-        print(name)
         # TODO: 转发文件
         # 判断消息是否符合转发规则
         for rule in self.rule_list:
             print(rule)
             # 如果发送者列表为*，则代表发送者为所有人
             if "*" in rule["froms"]:
+                print("成功")
                 rule["froms"] = [name]
             print(rule)
             # # 除去在接收者列表中发送的消息
@@ -42,7 +42,6 @@ class MessageForwarder:
             #     continue
             # 自定义转发规则
             if from_name in rule["froms"]:
-                print("成功")
                 # 构造转发消息
                 msg = self.__construct_forwarding_message(message)
                 logger.info(
