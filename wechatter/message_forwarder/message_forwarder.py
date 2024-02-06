@@ -26,7 +26,10 @@ class MessageForwarder:
 
         # 判断消息是否符合转发规则
         for rule in self.rule_list:
-            # 判断是否有["froms"]字段,即是否是接收所有消息转发给指定人或群
+            # 如果发送者列表为*，则代表发送者为所有人
+            if rule["froms"] is ["*"]:
+                rule["froms"] = [from_name]
+            # 除去在接收者列表中发送的消息
             if from_name in rule["to_persons"]:
                 continue
             # 除去在群里接收者发送的消息
