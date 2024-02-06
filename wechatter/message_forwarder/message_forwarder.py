@@ -28,14 +28,15 @@ class MessageForwarder:
         for rule in self.rule_list:
             print(rule)
             # 如果发送者列表为*，则代表发送者为所有人
-            # if "*" in rule["froms"]:
-            #     rule["froms"] = rule["froms"].append(from_name)
+            if "*" in rule["froms"]:
+                rule["froms"] = rule["froms"].append(from_name)
             # # 除去在接收者列表中发送的消息
             # if from_name in rule["to_persons"]:
             #     continue
             # # 除去在群里接收者发送的消息
             # if message.is_group and message.source.p_info.name in rule["to_persons"]:
             #     continue
+            print(rule)
             # 自定义转发规则
             if from_name in rule["froms"]:
                 # 构造转发消息
