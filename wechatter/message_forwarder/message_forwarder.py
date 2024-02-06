@@ -25,6 +25,7 @@ class MessageForwarder:
             name = f"{from_name}"
 
         print(from_name)
+        print(name)
         # TODO: 转发文件
         # 判断消息是否符合转发规则
         for rule in self.rule_list:
