@@ -62,11 +62,6 @@ async def recv_wechat_msg(
     print("==" * 20)
 
     if config.message_forwarding_enabled:
-        if config.message_forwarding_from_all_enabled:
-            # 接收所有消息转发给指定人或群
-            MessageForwarder(config.message_forwarding_from_all_list).forward_message(message)
-        if config.message_forwarding_rule_enabled:
-            # 自定义转发规则
             MessageForwarder(config.message_forwarding_rule_list).forward_message(message)
 
     # 传入命令字典，构造消息处理器

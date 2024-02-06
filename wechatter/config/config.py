@@ -49,15 +49,6 @@ github_webhook_receive_group_list = config_reader.getlist(
 message_forwarding_enabled = config_reader.getbool(
     "message-forwarding", "message_forwarding_enabled"
 )
-message_forwarding_from_all_enabled = config_reader.getbool(
-    "message-forwarding", "message_forwarding_from_all_enabled"
-)
-message_forwarding_from_all_list = config_reader.getlist(
-    "message-forwarding", "message_forwarding_from_all_list"
-)
-message_forwarding_rule_enabled = config_reader.getbool(
-    "message-forwarding", "message_forwarding_rule_enabled"
-)
 message_forwarding_rule_list = config_reader.getlist(
     "message-forwarding", "message_forwarding_rule_list"
 )

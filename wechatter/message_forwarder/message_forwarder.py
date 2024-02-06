@@ -27,23 +27,13 @@ class MessageForwarder:
         # 判断消息是否符合转发规则
         for rule in self.rule_list:
             # 判断是否有["froms"]字段,即是否是接收所有消息转发给指定人或群
-            if "froms" not in rule:
-                # 除去接收者自己发送的消息
-                if from_name in rule["to_persons"]:
-                    continue
-                # 除去在群里接收者发送的消息
-                if message.is_group and message.source.p_info.name in rule["to_persons"]:
-                    continue
-                # 构造转发消息
-                msg = self.__construct_forwarding_message(message)
-                logger.info(
-                    f"转发消息：{from_name} -> {rule['to_persons']}\n"
-                    f"转发消息：{from_name} -> {rule['to_groups']}"
-                )
-                sender.mass_send_msg(rule["to_persons"], msg)
-                sender.mass_send_msg(rule["to_groups"], msg, is_group=True)
+            if from_name in rule["to_persons"]:
+                continue
+            # 除去在群里接收者发送的消息
+            if message.is_group and message.source.p_info.name in rule["to_persons"]:
+                continue
             # 自定义转发规则
-            if "froms" in rule and from_name in rule["froms"]:
+            if from_name in rule["froms"]:
                 # 构造转发消息
                 msg = self.__construct_forwarding_message(message)
                 logger.info(
