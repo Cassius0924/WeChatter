@@ -2,7 +2,6 @@
 import React from 'react';
 import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
-import axios from "axios";
 
 function Admin() {
     const [config, setConfig, isLoading, error] = useFetchData('admin');
@@ -22,14 +21,6 @@ function Admin() {
             </div>
         );
     }
-    //直接获取http://127.0.0.1:8000/admin的返回值
-    //然后展示在页面上
-    axios.get('http://127.0.0.1:8000/admin').then(res => {
-        console.log(res.data);
-    }, err => {
-        console.error(err);
-    }
-    );
 
     return (
         <div className="border-4 border-dashed border-gray-200 rounded-lg mb-6">
