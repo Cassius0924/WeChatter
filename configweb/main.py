@@ -9,11 +9,11 @@ logging.basicConfig(level=logging.DEBUG)
 app = FastAPI()
 
 origins = [
-    "http://localhost:8000",
-    "http://localhost:3000",
+#    "http://localhost:8000",
+#    "http://localhost:3000",
     "http://47.92.99.199:3000",
-    "http://47.92.99.199:30",
-    "http://47.92.99.199:8080"
+#    "http://47.92.99.199:30",
+#    "http://47.92.99.199:8080"
 ]
 
 app.add_middleware(
