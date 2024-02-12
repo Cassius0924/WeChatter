@@ -5,8 +5,6 @@ from fastapi import Body
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-import wechatter.utils.path_manager as pm
-
 logging.basicConfig(level=logging.DEBUG)
 app = FastAPI()
 
@@ -28,7 +26,7 @@ app.add_middleware(
 def get_config_section(section_name):
     try:
         config = configparser.ConfigParser()
-        config.read(pm.get_abs_path('../config.ini'), encoding='utf-8')
+        config.read('../config.ini', encoding='utf-8')
         section_config = dict(config[section_name])
         return section_config
     except Exception as e:
@@ -38,7 +36,7 @@ def get_config_section(section_name):
 def update_config_section(section_name, updated_config):
     try:
         config = configparser.ConfigParser()
-        config.read(pm.get_abs_path('../config.ini'), encoding='utf-8')
+        config.read('../config.ini', encoding='utf-8')
         changes = {}
         for key, value in updated_config.items():
             old_value = config.get(section_name, key) if config.has_option(section_name, key) else None
