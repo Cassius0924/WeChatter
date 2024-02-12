@@ -12,13 +12,12 @@ from wechatter.models.message.person_info import PersonInfo
 
 
 class MessageType(Enum):
-    """消息类型枚举"""
+    """消息类型枚举类"""
 
-    TEXT = 0
-    FILE = 1
-    LINK = 2
-    # TODO: 图片识别
-    # IMAGE = 3
+    text = "text"
+    file = "file"
+    urlLink = "urlLink"
+    friendship = "friendship"
 
 
 class MessageSenderType(Enum):
@@ -54,7 +53,7 @@ class Message:
     :property content: 消息内容
     :property source: 消息来源
     :property is_mentioned: 是否@机器人
-    :property is_quote: 是否引用机器人消息
+    :property is_quoted: 是否引用机器人消息
     :property is_group: 是否是群消息
     """
 
@@ -71,7 +70,7 @@ class Message:
         self.source: MessageSource = source
         self.is_mentioned = is_mentioned
         self.is_group = bool(self.source.g_info)
-        self.is_quote = content
+        self.is_quoted = content
         self.command = command
 
     # 获取消息类型
@@ -82,11 +81,11 @@ class Message:
     @type.setter
     def type(self, type: str):
         if type == "text":
-            self.__type = MessageType.TEXT
+            self.__type = MessageType.text
         elif type == "file":
-            self.__type = MessageType.FILE
+            self.__type = MessageType.file
         elif type == "urlLink":
-            self.__type = MessageType.LINK
+            self.__type = MessageType.urlLink
         else:
             raise ValueError("消息类型错误")
 
@@ -137,17 +136,26 @@ class Message:
         city = payload.get("city", "")
         phone_list = payload.get("phone", [])
         is_star = payload.get("star", "")
+        is_friend = payload.get("friend", "")
+
+        if gender == 1:
+            g = "male"
+        elif gender == 0:
+            g = "female"
+        else:
+            g = "unknown"
         message_source = MessageSource(
             p_info=PersonInfo(
                 id=id,
                 name=name,
                 alias=alias,
-                gender=gender,
+                gender=g,
                 signature=signature,
                 province=province,
                 city=city,
                 phone_list=phone_list,
                 is_star=is_star,
+                is_friend=is_friend,
             )
         )
 
@@ -189,13 +197,13 @@ class Message:
         self.__is_group = is_group
 
     @property
-    def is_quote(self) -> bool:
+    def is_quoted(self) -> bool:
         """是否引用机器人消息"""
-        return self.__is_quote
+        return self.__is_quoted
 
-    @is_quote.setter
-    def is_quote(self, content: str):
-        self.__is_quote = False
+    @is_quoted.setter
+    def is_quoted(self, content: str):
+        self.__is_quoted = False
         # 判断是否为引用消息
         quote_pattern = (
             r"(?s)「(.*?)」\n- - - - - - - - - - - - - - -"  # 引用消息的正则
@@ -203,7 +211,7 @@ class Message:
         match_result = re.match(quote_pattern, content)
         # 判断是否为引用机器人消息
         if bool(match_result) and content.startswith(f"「{config.bot_name}"):
-            self.__is_quote = True
+            self.__is_quoted = True
 
     def __str__(self) -> str:
-        return f"消息内容：{self.content}\n消息来源：\n{self.source}\n是否@：{self.is_mentioned}\n是否引用：{self.is_quote}"
+        return f"消息内容：{self.content}\n消息来源：\n{self.source}\n是否@：{self.is_mentioned}\n是否引用：{self.is_quoted}"

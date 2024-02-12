@@ -1,5 +1,6 @@
 # 获取时间工具类
 import time
+from datetime import datetime
 
 
 def get_current_hour() -> int:
@@ -32,6 +33,14 @@ def get_current_timestamp() -> int:
     :return: 返回当前时间戳
     """
     return int(time.time())
+
+
+def get_current_datetime_object() -> datetime:
+    """
+    获取当前时间对象
+    :return: 返回当前时间对象
+    """
+    return datetime.now()
 
 
 def get_current_datetime() -> str:

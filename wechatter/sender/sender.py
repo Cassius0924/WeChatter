@@ -42,12 +42,13 @@ def _post_request(
     )
 
 
+# TODO: 改成装饰器
 def _log(response: requests.Response) -> bool:
     """检查发送状态"""
     r_json = response.json()
     # https://github.com/danni-cool/wechatbot-webhook?tab=readme-ov-file#%E8%BF%94%E5%9B%9E%E5%80%BC-response-%E7%BB%93%E6%9E%84
     if r_json["message"].startswith("Message"):
-        logger.info("发送消息成功")
+        pass
     elif r_json["message"].startswith("Some"):
         logger.error("发送消息失败，参数校验不通过")
     elif r_json["message"].startswith("All"):
@@ -110,10 +111,14 @@ def send_msg():
     当传入的第一个参数是字符串时，is_group 默认为 False。
     当传入的第一个参数是 SendTo 对象时，is_group 默认为 True。
 
+    当 quotable 为 Ture 时，该消息为可引用消息。表示该消息被
+    引用回复后，会触发进一步的消息互动。
+
     :param to: 接收对象的名字或SendTo对象
     :param message: 消息内容
     :param is_group: 是否为群组（默认值根据 to 的类型而定）
     :param type: 消息类型，可选 text、fileUrl（默认值为 text）
+    :param quotable: 是否可引用（默认值为 False）
     """
     pass
 
@@ -121,7 +126,11 @@ def send_msg():
 @send_msg.register(str)
 @_validate
 def _send_msg1(
-    name: str, message: str, is_group: bool = False, type: str = "text"
+    name: str,
+    message: str,
+    is_group: bool = False,
+    type: str = "text",
+    quotable: bool = False,
 ) -> None:
     """
     发送消息
@@ -129,7 +138,10 @@ def _send_msg1(
     :param message: 消息内容
     :param is_group: 是否为群组（默认为个人，False）
     :param type: 消息类型（text、fileUrl）
+    :param quotable: 是否可引用（默认为不可引用，False）
     """
+    if quotable:
+        message = f"@{name} {message}"
     data = {
         "to": name,
         "isRoom": is_group,

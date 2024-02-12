@@ -7,11 +7,13 @@ from loguru import logger
 import wechatter.config as config
 from wechatter.bot.bot_info import BotInfo
 from wechatter.commands import commands
+from wechatter.database import WechatGroup, WechatMessage, WechatUser, make_db_session
 from wechatter.message import MessageHandler
 from wechatter.message_forwarder import MessageForwarder
 from wechatter.models.message import Message
+from wechatter.models.message.group_info import GroupInfo
+from wechatter.models.message.person_info import PersonInfo
 from wechatter.sender import notifier
-from wechatter.sqlite.sqlite_manager import SqliteManager
 
 router = APIRouter()
 
@@ -48,13 +50,13 @@ async def recv_wechat_msg(
         source=source,
         is_mentioned=isMentioned,
     )
+    # 向群组表中添加该群组
+    add_group(message.source.g_info)
     # 向用户表中添加该用户
-    check_and_add_user(
-        user_id=message.source.p_info.id,
-        user_name=message.source.p_info.name,
-        user_alias=message.source.p_info.alias,
-        user_gender=message.source.p_info.gender,
-    )
+    add_user(message.source.p_info)
+    # 向消息表中添加该消息
+    add_message(message)
+    # TODO: 添加自己发送的消息，等待 wechatbot-webhook 支持
 
     # DEBUG
     print("==" * 20)
@@ -74,7 +76,9 @@ async def recv_wechat_msg(
 
 
 def handle_system_event(content: str) -> None:
-    """判断系统事件类型，并调用相应的函数"""
+    """
+    判断系统事件类型，并调用相应的函数
+    """
     content_dict: dict = json.loads(content)
     # 判断是否为机器人登录消息
     if content_dict["event"] == "login":
@@ -89,29 +93,68 @@ def handle_system_event(content: str) -> None:
         pass
 
 
-# TODO: 判断传入的参数和数据库中的数据是否一致，若不一致，则更新数据库中的数据
-def check_and_add_user(
-    user_id: str, user_name: str = "", user_alias: str = "", user_gender: int = -1
-) -> None:
-    """判断用户表中是否有该用户，若没有，则添加该用户"""
-    sqlite_manager = SqliteManager()
-    sql = "SELECT * FROM wx_users WHERE wx_id = ?"
-    result = sqlite_manager.fetch_one(sql, (user_id,))
-    if result is not None:
+def add_group(group_info: GroupInfo) -> None:
+    """
+    判断群组表中是否有该群组，若没有，则添加该群组
+    """
+    if group_info is None:
         return
-    # 该用户不存在，添加该用户
-    gender = "unknown"
-    if user_gender == 1:
-        gender = "male"
-    elif user_gender == 0:
-        gender = "female"
-    sql = "INSERT INTO wx_users(wx_id, wx_name, wx_alias, wx_gender) VALUES(?, ?, ?, ?)"
-    sqlite_manager.insert(
-        "wx_users",
-        {
-            "wx_id": user_id,
-            "wx_name": user_name,
-            "wx_alias": user_alias,
-            "wx_gender": gender,
-        },
-    )
+    with make_db_session() as session:
+        g = session.query(WechatGroup).filter(WechatGroup.id == group_info.id).first()
+        if g is None:
+            g = WechatGroup.from_group_info(group_info)
+            session.add(g)
+            # 逐个添加群组成员，若存在则更新
+            for member in group_info.member_list:
+                u = session.query(WechatUser).filter(WechatUser.id == member.id).first()
+                if u is None:
+                    u = WechatUser.from_member_info(member)
+                    session.add(u)
+                    session.commit()
+                    logger.info(f"用户 {member.name} 已添加到数据库")
+                else:
+                    # 更新用户信息
+                    u.name = member.name
+                    u.alias = member.alias
+                    session.commit()
+
+            session.commit()
+            logger.info(f"群组 {group_info.name} 已添加到数据库")
+        else:
+            # 更新群组信息
+            g.name = group_info.name
+            session.commit()
+
+
+def add_user(user_info: PersonInfo) -> None:
+    """
+    判断用户表中是否有该用户，若没有，则添加该用户
+    """
+    with make_db_session() as session:
+        u = session.query(WechatUser).filter(WechatUser.id == user_info.id).first()
+        if u is None:
+            u = WechatUser.from_person_info(user_info)
+            session.add(u)
+            session.commit()
+            logger.info(f"用户 {user_info.name} 已添加到数据库")
+        else:
+            # 更新用户信息
+            u.name = user_info.name
+            u.alias = user_info.alias
+            u.gender = user_info.gender.value
+            u.province = user_info.province
+            u.city = user_info.city
+            u.is_star = user_info.is_star
+            u.is_friend = user_info.is_friend
+            session.commit()
+
+
+def add_message(message: Message) -> None:
+    """
+    添加消息到消息表
+    """
+    with make_db_session() as session:
+        m = WechatMessage.from_message(message)
+        session.add(m)
+        session.commit()
+        logger.info(f"消息 {m.id} 已添加到数据库")
