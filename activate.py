@@ -14,7 +14,8 @@ def run_command(command, working_directory):
 
 
 if __name__ == '__main__':
-    backend_command = "uvicorn main:app --reload"
+    # backend_command = "uvicorn main:app --reload"
+    backend_command = "uvicorn main:app --host 0.0.0.1 --reload"
     frontend_command = "npm start"
     # main_command = "python main.py"  # 添加这一行
     backend_directory = "configweb"
