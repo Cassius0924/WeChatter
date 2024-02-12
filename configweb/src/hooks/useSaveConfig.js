@@ -4,7 +4,8 @@ import axios from 'axios';
 function useSaveConfig(configName, config) {
     return useCallback(() => {
         // axios.post(`http://127.0.0.1:8000/${configName}`, config)
-        axios.post(`http://47.92.99.199:3000/${configName}`, config)
+        // axios.post(`http://47.92.99.199:30/api/${configName}`, config)
+        axios.post(`http://172.24.191.12:3000/${configName}`, config)
             .then(res => {
                 console.log(res.data);
                 // 可以在这里添加一些处理，例如显示一个通知告诉用户配置已经保存成功
