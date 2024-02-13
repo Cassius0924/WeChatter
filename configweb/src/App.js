@@ -1,5 +1,5 @@
 import React from "react";
-import {BrowserRouter as Router, Link, Routes, Route} from "react-router-dom";
+import {BrowserRouter as Router, Link, Route, Routes} from "react-router-dom";
 import WxBotWebhook from "./ui/WxBotWebhook";
 import WeChatter from "./ui/WeChatter";
 import Admin from "./ui/Admin";
@@ -108,7 +108,6 @@ function App() {
                                 </div>
                                 {/*启动main.py*/}
                                 <div className="hidden md:ml-4 md:flex-shrink-0 md:flex md:items-center">
-                                    {/*//debug启动*/}
                                     <button
                                         className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-100 transition"
                                         onClick={async () => {
@@ -132,10 +131,9 @@ function App() {
                                 </div>
 
                                 {/*//停止main.py*/}
-                                <div className=
-                                         "hidden md:ml-4 md:flex-shrink-0 md:flex md:items-center">
+                                <div className="hidden md:ml-4 md:flex-shrink-0 md:flex md:items-center">
                                     <button
-                                        className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-100 transition">
+                                        className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-100 transition"
                                         onClick={async () => {
                                             try {
                                                 await axios.post(`http://${BASE_URL}:${PORT}/stop-main`);
@@ -144,8 +142,8 @@ function App() {
                                                 console.error(error);
                                                 alert('Failed to stop main.py');
                                             }
-                                        }
-                                    }
+                                        }}
+                                    >
                                         <span className="sr-only">View notifications</span>
                                         <svg t="1707823376802" className="icon" viewBox="0 0 1024 1024" version="1.1"
                                              xmlns="http://www.w3.org/2000/svg" p-id="6126" width="32" height="32">
@@ -181,7 +179,7 @@ function App() {
                     <Route path="/message-forwarding" element={<MessageForwarding/>}/>
                     <Route path="/weather-cron" element={<WeatherCron/>}/>
                     <Route path="/custom-command-key" element={<CustomCommandKey/>}/>
-                    <Route path="/gasoline-price-cron" element={<GasolinePriceCron />} />
+                    <Route path="/gasoline-price-cron" element={<GasolinePriceCron/>}/>
                 </Routes>
                 <main>
 
