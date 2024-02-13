@@ -213,3 +213,18 @@ def run_main():
         return {"message": "Main started"}
     except Exception as e:
         return {"error": str(e)}
+
+
+@app.post("/stop-main")
+def stop_main():
+    try:
+        stop_main_command = "kill -9 $(lsof -t -i:400)"
+        stop_main_directory = "../"
+
+        stop_main_thread = threading.Thread(target=run_command, args=(stop_main_command, stop_main_directory))
+        stop_main_thread.start()
+        stop_main_thread.join()
+
+        return {"message": "Main stopped"}
+    except Exception as e:
+        return {"error": str(e)}

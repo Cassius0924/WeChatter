@@ -108,27 +108,16 @@ function App() {
                                 </div>
                                 {/*启动main.py*/}
                                 <div className="hidden md:ml-4 md:flex-shrink-0 md:flex md:items-center">
-                                    <button
-                                        className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-100 transition">
-                                        <span className="sr-only">View notifications</span>
-                                        <svg t="1707823319943" className="icon" viewBox="0 0 1024 1024" version="1.1"
-                                             xmlns="http://www.w3.org/2000/svg" p-id="2482" width="32" height="32">
-                                            <path
-                                                d="M0 512C0 229.218462 229.179077 0 512 0c282.781538 0 512 229.179077 512 512 0 282.781538-229.179077 512-512 512-282.781538 0-512-229.179077-512-512z m707.032615-34.264615c-36.903385-27.569231-87.906462-60.258462-142.020923-91.057231-54.626462-31.113846-108.307692-57.895385-150.055384-74.830769-20.125538-8.152615-36.864-13.784615-48.955077-16.46277-16.147692 54.075077-14.729846 373.76 0.472615 433.23077a382.582154 382.582154 0 0 0 46.08-16.187077c41.905231-17.171692 95.940923-44.110769 150.685539-74.870154 54.862769-30.877538 106.259692-63.330462 143.36-90.663385 18.156308-13.390769 32.374154-25.127385 41.708307-34.461538a381.243077 381.243077 0 0 0-41.275077-34.658462z"
-                                                fill="#1afa29" p-id="2483"></path>
-                                        </svg>
-                                    </button>
                                     {/*//debug启动*/}
-
                                     <button
                                         className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-100 transition"
                                         onClick={async () => {
                                             try {
                                                 await axios.post(`http://${BASE_URL}:${PORT}/run-main`);
-                                                alert('Command executed successfully');
+                                                alert('main.py run successfully');
                                             } catch (error) {
                                                 console.error(error);
-                                                alert('Failed to execute command');
+                                                alert('Failed to run main.py');
                                             }
                                         }}
                                     >
@@ -147,6 +136,16 @@ function App() {
                                          "hidden md:ml-4 md:flex-shrink-0 md:flex md:items-center">
                                     <button
                                         className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-100 transition">
+                                        onClick={async () => {
+                                            try {
+                                                await axios.post(`http://${BASE_URL}:${PORT}/stop-main`);
+                                                alert('stop main.py successfully');
+                                            } catch (error) {
+                                                console.error(error);
+                                                alert('Failed to stop main.py');
+                                            }
+                                        }
+                                    }
                                         <span className="sr-only">View notifications</span>
                                         <svg t="1707823376802" className="icon" viewBox="0 0 1024 1024" version="1.1"
                                              xmlns="http://www.w3.org/2000/svg" p-id="6126" width="32" height="32">
