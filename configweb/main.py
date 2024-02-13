@@ -203,7 +203,7 @@ def update_gasoline_price_cron_config(updated_config: dict = Body(...)):
 @app.post("/run-main")
 def run_main():
     try:
-        run_main_command = "python main.py"
+        run_main_command = "python3 main.py"
         run_main_directory = "../"
 
         run_main_thread = threading.Thread(target=run_command, args=(run_main_command, run_main_directory))
