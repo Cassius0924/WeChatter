@@ -1,24 +1,40 @@
 import configparser
 import logging
+import subprocess
+import threading
 
 from fastapi import Body
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+# #配置url和端口
+# config = configparser.ConfigParser()
+# config.read('../config.ini', encoding='utf-8')
+#
+# front_url = config.get('server', 'front_url')
+# front_port = config.get('server', 'front_port')
+#
+# BASE_URL = f"http://{front_url}:"
+# PORT = front_port
+
 logging.basicConfig(level=logging.DEBUG)
 app = FastAPI()
 
+#本地测试
+BASE_URL = "http://localhost:"
+PORT = "3000"
+#服务器
 BASE_URL = "http://47.92.99.199:"
 PORT = "3000"
 
 # 其他代码...
 
 origins = [
-#    "http://localhost:8000",
-#    "http://localhost:3000",
-#    "http://47.92.99.199:30",
-#    "http://47.92.99.199:8080"
-        BASE_URL + PORT,
+    #    "http://localhost:8000",
+    #    "http://localhost:3000",
+    #    "http://47.92.99.199:30",
+    #    "http://47.92.99.199:8080"
+    BASE_URL + PORT,
 ]
 
 app.add_middleware(
@@ -56,6 +72,18 @@ def update_config_section(section_name, updated_config):
         return {"message": "Config updated successfully", "changes": changes}
     except Exception as e:
         return {"error": str(e)}
+
+
+def run_command(command, working_directory):
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, cwd=working_directory)
+    while True:
+        output = process.stdout.readline()
+        if output == '' and process.poll() is not None:
+            break
+        if output:
+            print(output.strip())
+    return process.poll()
+
 
 @app.get("/")
 def read_root():
@@ -170,3 +198,18 @@ def get_gasoline_price_cron_config():
 @app.post("/gasoline-price-cron")
 def update_gasoline_price_cron_config(updated_config: dict = Body(...)):
     return update_config_section('gasoline-price-cron', updated_config)
+
+
+@app.post("/run-main")
+def run_main():
+    try:
+        run_main_command = "python main.py"
+        run_main_directory = "../"
+
+        run_main_thread = threading.Thread(target=run_command, args=(run_main_command, run_main_directory))
+        run_main_thread.start()
+        run_main_thread.join()
+
+        return {"message": "Main started"}
+    except Exception as e:
+        return {"error": str(e)}

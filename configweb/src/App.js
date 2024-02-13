@@ -12,7 +12,14 @@ import WeatherCron from "./ui/Weather-Cron";
 import CustomCommandKey from "./ui/Custom-Command-Key";
 import GasolinePriceCron from "./ui/Gasoline-Price-Cron";
 import ConfigWeb from "./ui/ConfigWeb";
+import axios from "axios";
 
+//本地
+// export const BASE_URL = "localhost";
+// export const PORT = "8000";
+//服务器
+export const BASE_URL = "47.92.99.199";
+export const PORT = "8000";
 
 function App() {
 
@@ -99,15 +106,55 @@ function App() {
                                         <span>Search</span>
                                     </button>
                                 </div>
-                                <div className="ml-3 relative">
-                                    <div>
-                                        <svg t="1707717876986" className="icon" viewBox="0 0 1024 1024" version="1.1"
-                                             xmlns="http://www.w3.org/2000/svg" p-id="8632" width="32" height="32">
+                                {/*启动main.py*/}
+                                <div className="hidden md:ml-4 md:flex-shrink-0 md:flex md:items-center">
+                                    <button
+                                        className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-100 transition">
+                                        <span className="sr-only">View notifications</span>
+                                        <svg t="1707823319943" className="icon" viewBox="0 0 1024 1024" version="1.1"
+                                             xmlns="http://www.w3.org/2000/svg" p-id="2482" width="32" height="32">
                                             <path
-                                                d="M512 0C229.376 0 0 229.376 0 512s229.376 512 512 512 512-229.376 512-512S794.624 0 512 0z m62.464 774.144c0 27.648-22.528 50.176-50.176 50.176h-25.088c-27.648 0-50.176-22.528-50.176-50.176V474.624c0-27.648 22.528-50.176 50.176-50.176h25.088c27.648 0 50.176 22.528 50.176 50.176v299.52zM512 349.696c-34.304 0-62.464-28.16-62.464-62.464 0-34.304 28.16-62.464 62.464-62.464s62.464 28.16 62.464 62.464c0 34.304-28.16 62.464-62.464 62.464z"
-                                                fill="#040000" p-id="8633"></path>
+                                                d="M0 512C0 229.218462 229.179077 0 512 0c282.781538 0 512 229.179077 512 512 0 282.781538-229.179077 512-512 512-282.781538 0-512-229.179077-512-512z m707.032615-34.264615c-36.903385-27.569231-87.906462-60.258462-142.020923-91.057231-54.626462-31.113846-108.307692-57.895385-150.055384-74.830769-20.125538-8.152615-36.864-13.784615-48.955077-16.46277-16.147692 54.075077-14.729846 373.76 0.472615 433.23077a382.582154 382.582154 0 0 0 46.08-16.187077c41.905231-17.171692 95.940923-44.110769 150.685539-74.870154 54.862769-30.877538 106.259692-63.330462 143.36-90.663385 18.156308-13.390769 32.374154-25.127385 41.708307-34.461538a381.243077 381.243077 0 0 0-41.275077-34.658462z"
+                                                fill="#1afa29" p-id="2483"></path>
                                         </svg>
-                                    </div>
+                                    </button>
+                                    {/*//debug启动*/}
+
+                                    <button
+                                        className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-100 transition"
+                                        onClick={async () => {
+                                            try {
+                                                await axios.post(`http://${BASE_URL}:${PORT}/run-main`);
+                                                alert('Command executed successfully');
+                                            } catch (error) {
+                                                console.error(error);
+                                                alert('Failed to execute command');
+                                            }
+                                        }}
+                                    >
+                                        <span className="sr-only">View notifications</span>
+                                        <svg t="1707823319943" className="icon" viewBox="0 0 1024 1024" version="1.1"
+                                             xmlns="http://www.w3.org/2000/svg" p-id="2482" width="32" height="32">
+                                            <path
+                                                d="M0 512C0 229.218462 229.179077 0 512 0c282.781538 0 512 229.179077 512 512 0 282.781538-229.179077 512-512 512-282.781538 0-512-229.179077-512-512z m707.032615-34.264615c-36.903385-27.569231-87.906462-60.258462-142.020923-91.057231-54.626462-31.113846-108.307692-57.895385-150.055384-74.830769-20.125538-8.152615-36.864-13.784615-48.955077-16.46277-16.147692 54.075077-14.729846 373.76 0.472615 433.23077a382.582154 382.582154 0 0 0 46.08-16.187077c41.905231-17.171692 95.940923-44.110769 150.685539-74.870154 54.862769-30.877538 106.259692-63.330462 143.36-90.663385 18.156308-13.390769 32.374154-25.127385 41.708307-34.461538a381.243077 381.243077 0 0 0-41.275077-34.658462z"
+                                                fill="#1afa29" p-id="2483"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                {/*//停止main.py*/}
+                                <div className=
+                                         "hidden md:ml-4 md:flex-shrink-0 md:flex md:items-center">
+                                    <button
+                                        className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-100 transition">
+                                        <span className="sr-only">View notifications</span>
+                                        <svg t="1707823376802" className="icon" viewBox="0 0 1024 1024" version="1.1"
+                                             xmlns="http://www.w3.org/2000/svg" p-id="6126" width="32" height="32">
+                                            <path
+                                                d="M501.940706 0c277.082353 0 502.000941 224.858353 502.000941 501.940706s-224.918588 502.000941-502.000941 502.000941A502.121412 502.121412 0 0 1 0 501.940706C0 224.858353 224.858353 0 501.940706 0zM298.224941 451.764706a47.224471 47.224471 0 0 0-47.22447 47.22447v5.963295c0 26.081882 21.082353 47.224471 47.22447 47.22447h407.491765a47.224471 47.224471 0 0 0 47.22447-47.22447v-5.963295a47.224471 47.224471 0 0 0-47.22447-47.22447H298.224941z"
+                                                fill="#E6394E" p-id="6127"></path>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -120,20 +167,21 @@ function App() {
                             WeChat Robot 配置
                         </h1>
                     </div>
+
                 </header>
                 <Routes>
-                    <Route path="*" element={window.location.pathname.startsWith('/api') ? null : <ConfigWeb />} />
-                    <Route path="/ConfigWeb" element={<ConfigWeb />} />
-                    <Route path="/wechatter" element={<WeChatter />} />
-                    <Route path="/wx-bot-webhook" element={<WxBotWebhook />} />
-                    <Route path="/admin" element={<Admin />} />
-                    <Route path="/bot" element={<Bot />} />
-                    <Route path="/chat" element={<Chat />} />
-                    <Route path="/copilot-gpt4" element={<CopilotGPT4 />} />
-                    <Route path="/github-webhook" element={<GitHubWebhook />} />
-                    <Route path="/message-forwarding" element={<MessageForwarding />} />
-                    <Route path="/weather-cron" element={<WeatherCron />} />
-                    <Route path="/custom-command-key" element={<CustomCommandKey />} />
+                    <Route path="*" element={window.location.pathname.startsWith('/api') ? null : <ConfigWeb/>}/>
+                    <Route path="/ConfigWeb" element={<ConfigWeb/>}/>
+                    <Route path="/wechatter" element={<WeChatter/>}/>
+                    <Route path="/wx-bot-webhook" element={<WxBotWebhook/>}/>
+                    <Route path="/admin" element={<Admin/>}/>
+                    <Route path="/bot" element={<Bot/>}/>
+                    <Route path="/chat" element={<Chat/>}/>
+                    <Route path="/copilot-gpt4" element={<CopilotGPT4/>}/>
+                    <Route path="/github-webhook" element={<GitHubWebhook/>}/>
+                    <Route path="/message-forwarding" element={<MessageForwarding/>}/>
+                    <Route path="/weather-cron" element={<WeatherCron/>}/>
+                    <Route path="/custom-command-key" element={<CustomCommandKey/>}/>
                     <Route path="/gasoline-price-cron" element={<GasolinePriceCron />} />
                 </Routes>
                 <main>
