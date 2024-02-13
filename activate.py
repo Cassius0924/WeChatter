@@ -19,7 +19,7 @@ if __name__ == '__main__':
     frontend_command = "npm start"
     # main_command = "python main.py"  # 添加这一行
     backend_directory = "/myproject/WeChatter/configweb"
-    frontend_directory = "configweb"
+    frontend_directory = "/myproject/WeChatter/configweb"
     # main_directory = "."  # 添加这一行，假设 main.py 在当前目录下
 
     backend_thread = threading.Thread(target=run_command, args=(backend_command, backend_directory))
