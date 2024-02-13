@@ -18,7 +18,7 @@ if __name__ == '__main__':
     backend_command = "uvicorn main:app --host 0.0.0.0 --reload"
     frontend_command = "npm start"
     # main_command = "python main.py"  # 添加这一行
-    backend_directory = "../..configweb"
+    backend_directory = "../configweb"
     frontend_directory = "configweb"
     # main_directory = "."  # 添加这一行，假设 main.py 在当前目录下
 
