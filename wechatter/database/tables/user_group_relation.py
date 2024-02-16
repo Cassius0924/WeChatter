@@ -12,8 +12,8 @@ class UserGroupRelation(Base):
     __tablename__ = "user_group_relations"
 
     user_id: Mapped[str] = mapped_column(
-        String, ForeignKey("wechat_users.id"), primary_key=True
+        String, ForeignKey("users.id"), primary_key=True
     )
     group_id: Mapped[str] = mapped_column(
-        String, ForeignKey("wechat_groups.id"), primary_key=True
+        String, ForeignKey("groups.id"), primary_key=True
     )

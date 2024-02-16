@@ -7,7 +7,10 @@ from loguru import logger
 import wechatter.config as config
 from wechatter.bot.bot_info import BotInfo
 from wechatter.commands import commands
-from wechatter.database import WechatGroup, WechatMessage, WechatUser, make_db_session
+from wechatter.database import Group as DbGroup
+from wechatter.database import Message as DbMessage
+from wechatter.database import User as DbUser
+from wechatter.database import make_db_session
 from wechatter.message import MessageHandler
 from wechatter.message_forwarder import MessageForwarder
 from wechatter.models.message import Message
@@ -100,15 +103,15 @@ def add_group(group_info: GroupInfo) -> None:
     if group_info is None:
         return
     with make_db_session() as session:
-        g = session.query(WechatGroup).filter(WechatGroup.id == group_info.id).first()
+        g = session.query(DbGroup).filter(DbGroup.id == group_info.id).first()
         if g is None:
-            g = WechatGroup.from_group_info(group_info)
+            g = DbGroup.from_group_info(group_info)
             session.add(g)
             # 逐个添加群组成员，若存在则更新
             for member in group_info.member_list:
-                u = session.query(WechatUser).filter(WechatUser.id == member.id).first()
+                u = session.query(DbUser).filter(DbUser.id == member.id).first()
                 if u is None:
-                    u = WechatUser.from_member_info(member)
+                    u = DbUser.from_member_info(member)
                     session.add(u)
                     session.commit()
                     logger.info(f"用户 {member.name} 已添加到数据库")
@@ -131,9 +134,9 @@ def add_user(user_info: PersonInfo) -> None:
     判断用户表中是否有该用户，若没有，则添加该用户
     """
     with make_db_session() as session:
-        u = session.query(WechatUser).filter(WechatUser.id == user_info.id).first()
+        u = session.query(DbUser).filter(DbUser.id == user_info.id).first()
         if u is None:
-            u = WechatUser.from_person_info(user_info)
+            u = DbUser.from_person_info(user_info)
             session.add(u)
             session.commit()
             logger.info(f"用户 {user_info.name} 已添加到数据库")
@@ -154,7 +157,7 @@ def add_message(message: Message) -> None:
     添加消息到消息表
     """
     with make_db_session() as session:
-        m = WechatMessage.from_message(message)
+        m = DbMessage.from_message(message)
         session.add(m)
         session.commit()
         logger.info(f"消息 {m.id} 已添加到数据库")

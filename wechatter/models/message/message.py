@@ -1,7 +1,7 @@
 # 消息类
+import enum
 import json
 import re
-from enum import Enum
 from typing import Union
 
 from loguru import logger
@@ -11,8 +11,10 @@ from wechatter.models.message.group_info import GroupInfo
 from wechatter.models.message.person_info import PersonInfo
 
 
-class MessageType(Enum):
-    """消息类型枚举类"""
+class MessageType(enum.Enum):
+    """
+    消息类型枚举类
+    """
 
     text = "text"
     file = "file"
@@ -20,17 +22,21 @@ class MessageType(Enum):
     friendship = "friendship"
 
 
-class MessageSenderType(Enum):
-    """消息来源枚举"""
+class MessageSenderType(enum.Enum):
+    """
+    消息来源枚举
+    """
 
     PERSON = 0
     GROUP = 1
     # TODO: 公众号文章
-    # ARTICLE = 3
+    # ARTICLE = 2
 
 
 class MessageSource:
-    """消息来源类"""
+    """
+    消息来源类
+    """
 
     def __init__(
         self,
@@ -49,7 +55,8 @@ class MessageSource:
 
 
 class Message:
-    """消息类
+    """
+    消息类
     :property content: 消息内容
     :property source: 消息来源
     :property is_mentioned: 是否@机器人
@@ -91,7 +98,6 @@ class Message:
 
     @property
     def content(self) -> str:
-        """获取消息内容"""
         return self.__content
 
     @content.setter
@@ -101,12 +107,10 @@ class Message:
 
     @property
     def msg(self) -> str:
-        """获取消息内容"""
         return self.__msg
 
     @property
     def source(self) -> MessageSource:
-        """获取消息来源"""
         return self.__source
 
     @source.setter

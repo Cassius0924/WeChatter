@@ -9,13 +9,17 @@ from wechatter.models.message import Message, SendTo
 
 
 class MessageHandler:
-    """消息处理器，用于处理用户发来的消息"""
+    """
+    消息处理器，用于处理用户发来的消息
+    """
 
     def __init__(self, commands: dict):
         self.__commands = commands
 
     def handle_message(self, message: Message) -> None:
-        """处理消息"""
+        """
+        处理消息
+        """
         # 解析命令
         content = message.content  # 消息内容
         # 消息内容格式: /<cmd> <arg>
@@ -49,7 +53,9 @@ class MessageHandler:
         return
 
     def parse_command(self, content: str, is_mentioned: bool, is_group: bool) -> dict:
-        """解析命令"""
+        """
+        解析命令
+        """
         cmd_dict = {
             "command": "None",
             "desc": "",

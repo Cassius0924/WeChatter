@@ -6,10 +6,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from wechatter.database.tables import Base
 from wechatter.database.tables.gpt_chat_message import GptChatMessage
-from wechatter.database.tables.wechat_message import WechatMessage
+from wechatter.database.tables.message import Message
 
 if TYPE_CHECKING:
-    from wechatter.database.tables.wechat_user import WechatUser
+    from wechatter.database.tables.user import User
 
 
 class GptChatInfo(Base):
@@ -20,20 +20,19 @@ class GptChatInfo(Base):
     __tablename__ = "gpt_chat_infos"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    user_id: Mapped[str] = mapped_column(String, ForeignKey("wechat_users.id"))
+    user_id: Mapped[str] = mapped_column(String, ForeignKey("users.id"))
     topic: Mapped[str]
     created_time: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
+    # 改名为 updated_time
     talk_time: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), onupdate=func.now()
     )
     model: Mapped[str]
     is_chatting: Mapped[bool] = mapped_column(Boolean, default=True)
 
-    user: Mapped["WechatUser"] = relationship(
-        "WechatUser", back_populates="gpt_chat_infos"
-    )
+    user: Mapped["User"] = relationship("User", back_populates="gpt_chat_infos")
     gpt_chat_messages: Mapped[List["GptChatMessage"]] = relationship(
         "GptChatMessage", back_populates="gpt_chat_info"
     )
@@ -46,7 +45,7 @@ class GptChatInfo(Base):
             GptChatMessage(
                 gpt_chat_id=self.id,
                 role=conversation["role"],
-                message=WechatMessage(type="text", content=conversation["content"]),
+                message=Message(type="text", content=conversation["content"]),
                 gpt_chat_info=self,
             )
             for conversation in conversations

@@ -9,8 +9,8 @@ from wechatter.models.message.person_info import PersonInfo
 
 if TYPE_CHECKING:
     from wechatter.database.tables.gpt_chat_info import GptChatInfo
-    from wechatter.database.tables.wechat_group import WechatGroup
-    from wechatter.database.tables.wechat_message import WechatMessage
+    from wechatter.database.tables.group import Group
+    from wechatter.database.tables.message import Message
 
 
 class Gender(enum.Enum):
@@ -24,12 +24,12 @@ class Gender(enum.Enum):
     unknown = "unknown"
 
 
-class WechatUser(Base):
+class User(Base):
     """
     微信用户表
     """
 
-    __tablename__ = "wechat_users"
+    __tablename__ = "users"
 
     id: Mapped[str] = mapped_column(String(100), primary_key=True)
     name: Mapped[str]
@@ -41,14 +41,12 @@ class WechatUser(Base):
     is_star: Mapped[bool] = mapped_column(Boolean, default=False)
     is_friend: Mapped[bool] = mapped_column(Boolean, default=False)
 
-    groups: Mapped[List["WechatGroup"]] = relationship(
-        "WechatGroup",
+    groups: Mapped[List["Group"]] = relationship(
+        "Group",
         secondary="user_group_relations",
         back_populates="members",
     )
-    messages: Mapped[List["WechatMessage"]] = relationship(
-        "WechatMessage", back_populates="user"
-    )
+    messages: Mapped[List["Message"]] = relationship("Message", back_populates="user")
     gpt_chat_infos: Mapped[List["GptChatInfo"]] = relationship(
         "GptChatInfo", back_populates="user"
     )

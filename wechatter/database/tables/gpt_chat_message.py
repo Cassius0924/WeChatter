@@ -8,7 +8,7 @@ from wechatter.database.tables import Base
 
 if TYPE_CHECKING:
     from wechatter.database.tables.gpt_chat_info import GptChatInfo
-    from wechatter.database.tables.wechat_message import WechatMessage
+    from wechatter.database.tables.message import Message
 
 
 class GptChatRole(enum.Enum):
@@ -30,13 +30,13 @@ class GptChatMessage(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     message_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("wechat_messages.id"), unique=True
+        Integer, ForeignKey("messages.id"), unique=True
     )
     gpt_chat_id: Mapped[int] = mapped_column(Integer, ForeignKey("gpt_chat_infos.id"))
     role: Mapped[GptChatRole]
 
-    message: Mapped["WechatMessage"] = relationship(
-        "WechatMessage", back_populates="gpt_chat_message"
+    message: Mapped["Message"] = relationship(
+        "Message", back_populates="gpt_chat_message"
     )
     gpt_chat_info: Mapped["GptChatInfo"] = relationship(
         "GptChatInfo", back_populates="gpt_chat_messages"

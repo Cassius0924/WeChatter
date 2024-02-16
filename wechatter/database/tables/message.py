@@ -10,8 +10,8 @@ from wechatter.database.tables.gpt_chat_message import GptChatMessage
 from wechatter.models.message import Message
 
 if TYPE_CHECKING:
-    from wechatter.database.tables.wechat_group import WechatGroup
-    from wechatter.database.tables.wechat_user import WechatUser
+    from wechatter.database.tables.group import Group
+    from wechatter.database.tables.user import User
 
 
 class MessageType(enum.Enum):
@@ -25,17 +25,17 @@ class MessageType(enum.Enum):
     friendship = "friendship"
 
 
-class WechatMessage(Base):
+class Message(Base):
     """
     消息表
     """
 
-    __tablename__ = "wechat_messages"
+    __tablename__ = "messages"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    user_id: Mapped[str] = mapped_column(String, ForeignKey("wechat_users.id"))
+    user_id: Mapped[str] = mapped_column(String, ForeignKey("users.id"))
     group_id: Mapped[Union[str, None]] = mapped_column(
-        String, ForeignKey("wechat_groups.id"), nullable=True
+        String, ForeignKey("groups.id"), nullable=True
     )
     type: Mapped[MessageType]
     content: Mapped[str]
@@ -45,9 +45,9 @@ class WechatMessage(Base):
     is_mentioned: Mapped[bool] = mapped_column(Boolean, default=False)
     is_quoted: Mapped[bool] = mapped_column(Boolean, default=False)
 
-    user: Mapped["WechatUser"] = relationship("WechatUser", back_populates="messages")
-    group: Mapped[Union["WechatGroup", None]] = relationship(
-        "WechatGroup", back_populates="messages"
+    user: Mapped["User"] = relationship("User", back_populates="messages")
+    group: Mapped[Union["Group", None]] = relationship(
+        "Group", back_populates="messages"
     )
     gpt_chat_message: Mapped[Union["GptChatMessage", None]] = relationship(
         "GptChatMessage", back_populates="message", uselist=False

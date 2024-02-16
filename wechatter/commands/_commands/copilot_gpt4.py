@@ -6,12 +6,9 @@ from loguru import logger
 import wechatter.config as config
 import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
-from wechatter.database import (
-    GptChatInfo,
-    GptChatMessage,
-    WechatMessage,
-    make_db_session,
-)
+from wechatter.database import GptChatInfo, GptChatMessage
+from wechatter.database import Message as DbMessage
+from wechatter.database import make_db_session
 from wechatter.models.message import SendTo
 from wechatter.sender import sender
 from wechatter.utils import post_request_json
@@ -340,7 +337,7 @@ class CopilotGPT4:
             chat_info.talk_time = datetime.now()
             # session.commit()
             for conv in newconv:
-                wx_message = WechatMessage(
+                wx_message = DbMessage(
                     user_id=chat_info.user_id,
                     type="text",
                     content=conv["content"],
@@ -393,7 +390,7 @@ class CopilotGPT4:
         )
 
     @staticmethod
-    def _chat(chat_info_id: int, message: str, is_save: bool = True) -> str:
+    def _chat(chat_info_id: int, message: str, is_save: bool) -> str:
         """使用 Copilot-GPT4-Server 持续对话
         :param message: 用户消息
         :param is_save: 是否保存此轮对话记录
@@ -424,29 +421,54 @@ class CopilotGPT4:
 
             msg = r_json["choices"][0]["message"]
             msg_content = msg.get("content", "调用Copilot-GPT4-Server失败")
-
             # 将返回的 assistant 回复添加到对话记录中
             if is_save is True:
                 newconv.append({"role": "assistant", "content": msg_content})
                 chat_info.extend_conversations(newconv)
+                wx_message = DbMessage(
+                    user_id="123",
+                    type="text",
+                    content="abc",
+                )
+                chat_message = GptChatMessage(
+                    gpt_chat_id="123",
+                    role="assistant",
+                    message=wx_message,
+                )
+                session.add(chat_message)
+                session.commit()
+                print("OKOKO1")
 
                 # CopilotGPT4._update_chat(chat_info, newconv)
                 chat_info.talk_time = datetime.now()
-                with make_db_session() as session:
-                    # TODO: ^^^^
-                    for conv in newconv:
-                        wx_message = WechatMessage(
-                            user_id=chat_info.user_id,
-                            type="text",
-                            content=conv["content"],
-                        )
-                        chat_message = GptChatMessage(
-                            gpt_chat_id=chat_info.id,
-                            role=conv["role"],
-                            message=wx_message,
-                        )
-                        session.add(chat_message)
-                    session.commit()
+                # with make_db_session() as session:
+                # TODO: ^^^^
+                wx_message = DbMessage(
+                    user_id="123",
+                    type="text",
+                    content="abc",
+                )
+                chat_message = GptChatMessage(
+                    gpt_chat_id="123",
+                    role="assistant",
+                    message=wx_message,
+                )
+                session.add(chat_message)
+                session.commit()
+                print("OKOKO")
+                for conv in newconv:
+                    wx_message = DbMessage(
+                        user_id=chat_info.user_id,
+                        type="text",
+                        content=conv["content"],
+                    )
+                    chat_message = GptChatMessage(
+                        gpt_chat_id=chat_info.id,
+                        role=conv["role"],
+                        message=wx_message,
+                    )
+                    session.add(chat_message)
+                session.commit()
             return msg_content
 
     @staticmethod
