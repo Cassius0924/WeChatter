@@ -49,9 +49,9 @@ async def recv_wechat_msg(
     # 构造消息对象
     message = Message(
         type=type,
-        content=content,
-        source=source,
-        is_mentioned=isMentioned,
+        content_=content,
+        source_=source,
+        is_mentioned_=isMentioned,
     )
     # 向群组表中添加该群组
     add_group(message.source.g_info)
