@@ -26,13 +26,13 @@ class GptChatMessage(Base):
     GPT对话消息表
     """
 
-    __tablename__ = "gpt_chat_messages"
+    __tablename__ = "gpt_chat_message"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     message_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("messages.id"), unique=True
+        Integer, ForeignKey("message.id"), unique=True
     )
-    gpt_chat_id: Mapped[int] = mapped_column(Integer, ForeignKey("gpt_chat_infos.id"))
+    gpt_chat_id: Mapped[int] = mapped_column(Integer, ForeignKey("gpt_chat_info.id"))
     role: Mapped[GptChatRole]
 
     message: Mapped["Message"] = relationship(

@@ -9,7 +9,7 @@ from wechatter.database.tables.gpt_chat_message import GptChatMessage
 from wechatter.database.tables.message import Message
 
 if TYPE_CHECKING:
-    from wechatter.database.tables.user import User
+    from wechatter.database.tables.person import Person
 
 
 class GptChatInfo(Base):
@@ -17,10 +17,10 @@ class GptChatInfo(Base):
     GPT聊天表
     """
 
-    __tablename__ = "gpt_chat_infos"
+    __tablename__ = "gpt_chat_info"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    user_id: Mapped[str] = mapped_column(String, ForeignKey("users.id"))
+    person_id: Mapped[str] = mapped_column(String, ForeignKey("person.id"))
     topic: Mapped[str]
     created_time: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=datetime.now()
@@ -32,7 +32,7 @@ class GptChatInfo(Base):
     model: Mapped[str]
     is_chatting: Mapped[bool] = mapped_column(Boolean, default=True)
 
-    user: Mapped["User"] = relationship("User", back_populates="gpt_chat_infos")
+    person: Mapped["Person"] = relationship("Person", back_populates="gpt_chat_infos")
     gpt_chat_messages: Mapped[List["GptChatMessage"]] = relationship(
         "GptChatMessage", back_populates="gpt_chat_info"
     )

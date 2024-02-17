@@ -7,15 +7,17 @@ from loguru import logger
 import wechatter.config as config
 from wechatter.bot.bot_info import BotInfo
 from wechatter.commands import commands
-from wechatter.database import Group as DbGroup
-from wechatter.database import Message as DbMessage
-from wechatter.database import User as DbUser
-from wechatter.database import make_db_session
+from wechatter.database import (
+    Group as DbGroup,
+    Message as DbMessage,
+    Person as DbPerson,
+    make_db_session,
+)
 from wechatter.message import MessageHandler
 from wechatter.message_forwarder import MessageForwarder
 from wechatter.models.wechat import Message
-from wechatter.models.wechat.group_info import GroupInfo
-from wechatter.models.wechat.person_info import PersonInfo
+from wechatter.models.wechat.group import Group
+from wechatter.models.wechat.person import Person
 from wechatter.sender import notifier
 
 router = APIRouter()
@@ -26,16 +28,18 @@ async def recv_wechat_msg(
     type: str = Form(),
     content: Union[UploadFile, str] = Form(),
     source: str = Form(),
-    isMentioned: str = Form(),
-    isSystemEvent: str = Form(),
+    is_mentioned: str = Form(alias="isMentioned"),
+    is_system_event: str = Form(alias="isSystemEvent"),
 ):
-    """接收Docker转发过来的消息的接口"""
+    """
+    接收Docker转发过来的消息的接口
+    """
 
     # 更新机器人信息（id和name）
     BotInfo.update_from_source(source)
 
     # 判断是否是系统事件
-    if isSystemEvent == "1":
+    if is_system_event == "1":
         logger.info(f"收到系统事件：{content}")
         handle_system_event(content)
         return
@@ -51,12 +55,12 @@ async def recv_wechat_msg(
         type=type,
         content_=content,
         source_=source,
-        is_mentioned_=isMentioned,
+        is_mentioned_=is_mentioned,
     )
     # 向群组表中添加该群组
     add_group(message.source.g_info)
     # 向用户表中添加该用户
-    add_user(message.source.p_info)
+    add_person(message.source.p_info)
     # 向消息表中添加该消息
     add_message(message)
     # TODO: 添加自己发送的消息，等待 wechatbot-webhook 支持
@@ -96,59 +100,55 @@ def handle_system_event(content: str) -> None:
         pass
 
 
-def add_group(group_info: GroupInfo) -> None:
+def add_group(group: Group) -> None:
     """
     判断群组表中是否有该群组，若没有，则添加该群组
     """
-    if group_info is None:
+    if group is None:
         return
     with make_db_session() as session:
-        g = session.query(DbGroup).filter(DbGroup.id == group_info.id).first()
-        if g is None:
-            g = DbGroup.from_group_info(group_info)
-            session.add(g)
+        _group = session.query(DbGroup).filter(DbGroup.id == group.id).first()
+        if _group is None:
+            _group = DbGroup.from_group_model(group)
+            session.add(_group)
             # 逐个添加群组成员，若存在则更新
-            for member in group_info.member_list:
-                u = session.query(DbUser).filter(DbUser.id == member.id).first()
-                if u is None:
-                    u = DbUser.from_member_info(member)
-                    session.add(u)
+            for member in group.member_list:
+                _person = (
+                    session.query(DbPerson).filter(DbPerson.id == member.id).first()
+                )
+                if _person is None:
+                    _person = DbPerson.from_member_model(member)
+                    session.add(_person)
                     session.commit()
                     logger.info(f"用户 {member.name} 已添加到数据库")
                 else:
                     # 更新用户信息
-                    u.name = member.name
-                    u.alias = member.alias
+                    _person.name = member.name
+                    _person.alias = member.alias
                     session.commit()
 
             session.commit()
-            logger.info(f"群组 {group_info.name} 已添加到数据库")
+            logger.info(f"群组 {group.name} 已添加到数据库")
         else:
             # 更新群组信息
-            g.name = group_info.name
+            _group.update(group)
             session.commit()
 
 
-def add_user(user_info: PersonInfo) -> None:
+def add_person(person: Person) -> None:
     """
     判断用户表中是否有该用户，若没有，则添加该用户
     """
     with make_db_session() as session:
-        u = session.query(DbUser).filter(DbUser.id == user_info.id).first()
-        if u is None:
-            u = DbUser.from_person_info(user_info)
-            session.add(u)
+        _person = session.query(DbPerson).filter(DbPerson.id == person.id).first()
+        if _person is None:
+            _person = DbPerson.from_person_model(person)
+            session.add(_person)
             session.commit()
-            logger.info(f"用户 {user_info.name} 已添加到数据库")
+            logger.info(f"用户 {person.name} 已添加到数据库")
         else:
             # 更新用户信息
-            u.name = user_info.name
-            u.alias = user_info.alias
-            u.gender = user_info.gender.value
-            u.province = user_info.province
-            u.city = user_info.city
-            u.is_star = user_info.is_star
-            u.is_friend = user_info.is_friend
+            _person.update(person)
             session.commit()
 
 
@@ -157,7 +157,7 @@ def add_message(message: Message) -> None:
     添加消息到消息表
     """
     with make_db_session() as session:
-        m = DbMessage.from_message(message)
-        session.add(m)
+        _message = DbMessage.from_message_model(message)
+        session.add(_message)
         session.commit()
-        logger.info(f"消息 {m.id} 已添加到数据库")
+        logger.info(f"消息 {_message.id} 已添加到数据库")

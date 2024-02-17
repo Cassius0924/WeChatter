@@ -5,12 +5,12 @@ from sqlalchemy import Boolean, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from wechatter.database.tables import Base
-from wechatter.models.wechat.person_info import PersonInfo
 
 if TYPE_CHECKING:
     from wechatter.database.tables.gpt_chat_info import GptChatInfo
     from wechatter.database.tables.group import Group
     from wechatter.database.tables.message import Message
+    from wechatter.models.wechat import GroupMember, Person as PersonModel
 
 
 class Gender(enum.Enum):
@@ -24,12 +24,12 @@ class Gender(enum.Enum):
     unknown = "unknown"
 
 
-class User(Base):
+class Person(Base):
     """
     微信用户表
     """
 
-    __tablename__ = "users"
+    __tablename__ = "person"
 
     id: Mapped[str] = mapped_column(String(100), primary_key=True)
     name: Mapped[str]
@@ -43,31 +43,40 @@ class User(Base):
 
     groups: Mapped[List["Group"]] = relationship(
         "Group",
-        secondary="user_group_relations",
+        secondary="person_group_relation",
         back_populates="members",
     )
-    messages: Mapped[List["Message"]] = relationship("Message", back_populates="user")
+    messages: Mapped[List["Message"]] = relationship("Message", back_populates="person")
     gpt_chat_infos: Mapped[List["GptChatInfo"]] = relationship(
-        "GptChatInfo", back_populates="user"
+        "GptChatInfo", back_populates="person"
     )
 
     @classmethod
-    def from_person_info(cls, person_info: PersonInfo):
+    def from_person_model(cls, person_model: "PersonModel"):
         return cls(
-            id=person_info.id,
-            name=person_info.name,
-            alias=person_info.alias,
-            gender=person_info.gender.value,
-            province=person_info.province,
-            city=person_info.city,
-            is_star=person_info.is_star,
-            is_friend=person_info.is_friend,
+            id=person_model.id,
+            name=person_model.name,
+            alias=person_model.alias,
+            gender=person_model.gender.value,
+            province=person_model.province,
+            city=person_model.city,
+            is_star=person_model.is_star,
+            is_friend=person_model.is_friend,
         )
 
     @classmethod
-    def from_member_info(cls, member_info: PersonInfo):
+    def from_member_model(cls, member_model: "GroupMember"):
         return cls(
-            id=member_info.id,
-            name=member_info.name,
-            alias=member_info.alias,
+            id=member_model.id,
+            name=member_model.name,
+            alias=member_model.alias,
         )
+
+    def update(self, person_model: "PersonModel"):
+        self.name = person_model.name
+        self.alias = person_model.alias
+        self.gender = person_model.gender.value
+        self.province = person_model.province
+        self.city = person_model.city
+        self.is_star = person_model.is_star
+        self.is_friend = person_model.is_friend

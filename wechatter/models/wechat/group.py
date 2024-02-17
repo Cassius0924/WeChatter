@@ -3,7 +3,7 @@ from typing import List
 from pydantic import BaseModel
 
 
-class GroupMemberInfo(BaseModel):
+class GroupMember(BaseModel):
     """
     群成员类
     """
@@ -13,7 +13,7 @@ class GroupMemberInfo(BaseModel):
     alias: str
 
 
-class GroupInfo(BaseModel):
+class Group(BaseModel):
     """
     群消息类
     """
@@ -21,4 +21,4 @@ class GroupInfo(BaseModel):
     id: str
     name: str
     admin_id_list: List[str]
-    member_list: List[GroupMemberInfo]
+    member_list: List[GroupMember]

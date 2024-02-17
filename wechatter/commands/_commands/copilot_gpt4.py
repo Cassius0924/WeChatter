@@ -6,9 +6,12 @@ from loguru import logger
 import wechatter.config as config
 import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
-from wechatter.database import GptChatInfo, GptChatMessage
-from wechatter.database import Message as DbMessage
-from wechatter.database import make_db_session
+from wechatter.database import (
+    GptChatInfo,
+    GptChatMessage,
+    Message as DbMessage,
+    make_db_session,
+)
 from wechatter.models.wechat import SendTo
 from wechatter.sender import sender
 from wechatter.utils import post_request_json
@@ -175,20 +178,20 @@ def _gptx_continue(model: str, to: SendTo, message: str = "") -> None:
 
 
 class CopilotGPT4:
-    """Copilot-GPT4"""
-
     api = f"{config.cp_gpt4_api_host}:{config.cp_gpt4_port}/v1/chat/completions"
     bearer_token = "Bearer " + config.cp_token
     save_path = pm.get_abs_path("data/copilot_gpt4/chats/")
 
     @staticmethod
     def create_chat(wx_id: str, model: str) -> int:
-        """创建一个新的对话"""
+        """
+        创建一个新的对话
+        """
         # 生成上一次对话的主题
         CopilotGPT4._save_chatting_chat_topic(wx_id, model)
         CopilotGPT4._set_all_chats_unchatting(wx_id, model)
         gpt_chat_info = GptChatInfo(
-            user_id=wx_id,
+            person_id=wx_id,
             model=model,
             talk_time=datetime.now(),
             topic=DEFAULT_TOPIC,
@@ -204,7 +207,8 @@ class CopilotGPT4:
 
     @staticmethod
     def continue_chat(wx_id: str, model: str, chat_index: int) -> Union[int, None]:
-        """继续对话，从对话记录文件中读取对话记录
+        """
+        继续对话，从对话记录文件中读取对话记录
         :param wx_id: 微信用户ID
         :param chat_index: 对话记录索引（从1开始）
         :return: 简略的对话记录
@@ -225,7 +229,9 @@ class CopilotGPT4:
 
     @staticmethod
     def _set_chatting_chat(wx_id: str, model: str, chat_id: int) -> None:
-        """设置正在进行中的对话记录"""
+        """
+        设置正在进行中的对话记录
+        """
         # 先将所有对话记录的 is_chating 字段设置为 False
         CopilotGPT4._set_all_chats_unchatting(wx_id, model)
         with make_db_session() as session:
@@ -235,7 +241,9 @@ class CopilotGPT4:
 
     @staticmethod
     def _delete_chat(wx_id: str, chat_id: int) -> None:
-        """删除对话记录"""
+        """
+        删除对话记录
+        """
         with make_db_session() as session:
             session.query(GptChatMessage).filter_by(gpt_chat_id=chat_id).delete()
             session.query(GptChatInfo).filter_by(id=chat_id).delete()
@@ -243,7 +251,9 @@ class CopilotGPT4:
 
     @staticmethod
     def get_brief_conversation_str(chat_info_id: int) -> str:
-        """获取对话记录的字符串"""
+        """
+        获取对话记录的字符串
+        """
         with make_db_session() as session:
             chat_info = session.query(GptChatInfo).filter_by(id=chat_info_id).first()
             conversation_str = f"✨==={chat_info.topic}===✨\n"
@@ -265,7 +275,9 @@ class CopilotGPT4:
     # TODO: 删掉
     @staticmethod
     def _get_brief_conversation_content(conversation: List) -> List:
-        """获取简略的对话记录的内容"""
+        """
+        获取简略的对话记录的内容
+        """
         content_list = []
         for conv in conversation[1:]:
             if len(conv["content"]) > 20:
@@ -275,16 +287,20 @@ class CopilotGPT4:
 
     @staticmethod
     def _set_all_chats_unchatting(wx_id: str, model: str) -> None:
-        """将所有对话记录的 is_chatting 字段设置为 False"""
+        """
+        将所有对话记录的 is_chatting 字段设置为 False
+        """
         with make_db_session() as session:
-            session.query(GptChatInfo).filter_by(user_id=wx_id, model=model).update(
+            session.query(GptChatInfo).filter_by(person_id=wx_id, model=model).update(
                 {"is_chatting": False}
             )
             session.commit()
 
     @staticmethod
     def is_chat_valid(chat_info_id: int) -> bool:
-        """判断对话是否有效"""
+        """
+        判断对话是否有效
+        """
         # 通过 conversation 长度判断对话是否有效
         with make_db_session() as session:
             chat_info = session.query(GptChatInfo).filter_by(id=chat_info_id).first()
@@ -294,12 +310,14 @@ class CopilotGPT4:
 
     @staticmethod
     def _list_chat_info(wx_id: str, model: str) -> List:
-        """列出用户的所有对话记录"""
+        """
+        列出用户的所有对话记录
+        """
         # 取出id，按照 chat_talk_time 字段倒序排序，取前20个
         with make_db_session() as session:
             chat_info_list = (
                 session.query(GptChatInfo.id)
-                .filter_by(user_id=wx_id, model=model)
+                .filter_by(person_id=wx_id, model=model)
                 .order_by(
                     GptChatInfo.is_chatting.desc(),
                     GptChatInfo.talk_time.desc(),
@@ -311,7 +329,9 @@ class CopilotGPT4:
 
     @staticmethod
     def get_chat_list_str(wx_id: str, model: str) -> str:
-        """获取用户的所有对话记录"""
+        """
+        获取用户的所有对话记录
+        """
         chat_info_list = CopilotGPT4._list_chat_info(wx_id, model)
         chat_info_list_str = "✨===GPT4对话记录===✨\n"
         if chat_info_list == []:
@@ -321,9 +341,9 @@ class CopilotGPT4:
             for i, id in enumerate(chat_info_list):
                 chat = session.query(GptChatInfo).filter_by(id=id).first()
                 if chat.is_chatting:
-                    chat_info_list_str += f"{i+1}. 💬{chat.topic}\n"
+                    chat_info_list_str += f"{i + 1}. 💬{chat.topic}\n"
                 else:
-                    chat_info_list_str += f"{i+1}. {chat.topic}\n"
+                    chat_info_list_str += f"{i + 1}. {chat.topic}\n"
             return chat_info_list_str
 
     @staticmethod
@@ -338,7 +358,7 @@ class CopilotGPT4:
             # session.commit()
             for conv in newconv:
                 wx_message = DbMessage(
-                    user_id=chat_info.user_id,
+                    person_id=chat_info.person_id,
                     type="text",
                     content=conv["content"],
                 )
@@ -352,7 +372,9 @@ class CopilotGPT4:
 
     @staticmethod
     def get_chat_info(wx_id: str, model: str, chat_index: int) -> Union[int, None]:
-        """获取用户的对话信息"""
+        """
+        获取用户的对话信息
+        """
         chat_info_id_list = CopilotGPT4._list_chat_info(wx_id, model)
         if chat_info_id_list == []:
             return None
@@ -362,19 +384,23 @@ class CopilotGPT4:
 
     @staticmethod
     def _get_chat_conversations(chat_id: int) -> List[GptChatMessage]:
-        """获取对话记录"""
+        """
+        获取对话记录
+        """
         with make_db_session() as session:
             chat_info = session.query(GptChatInfo).filter_by(id=chat_id).first()
             return chat_info.gpt_chat_messages
 
     @staticmethod
     def get_chatting_chat_info(wx_id: str, model: str) -> Union[int, None]:
-        """获取正在进行中的对话信息"""
+        """
+        获取正在进行中的对话信息
+        """
         # 获取对话元信息
         with make_db_session() as session:
             chat_info_id = (
                 session.query(GptChatInfo.id)
-                .filter_by(user_id=wx_id, model=model, is_chatting=True)
+                .filter_by(person_id=wx_id, model=model, is_chatting=True)
                 .first()
             )
             if chat_info_id is None:
@@ -383,7 +409,9 @@ class CopilotGPT4:
 
     @staticmethod
     def chat(chat_info_id: int, message: str) -> str:
-        """使用 Copilot-GPT4-Server 持续对话"""
+        """
+        持续对话
+        """
         # 对外暴露的对话方法，必须保存对话记录
         return CopilotGPT4._chat(
             chat_info_id=chat_info_id, message=message, is_save=True
@@ -391,7 +419,7 @@ class CopilotGPT4:
 
     @staticmethod
     def _chat(chat_info_id: int, message: str, is_save: bool) -> str:
-        """使用 Copilot-GPT4-Server 持续对话
+        """持续对话
         :param message: 用户消息
         :param is_save: 是否保存此轮对话记录
         """
@@ -425,62 +453,39 @@ class CopilotGPT4:
             if is_save is True:
                 newconv.append({"role": "assistant", "content": msg_content})
                 chat_info.extend_conversations(newconv)
-                wx_message = DbMessage(
-                    user_id="123",
-                    type="text",
-                    content="abc",
-                )
-                chat_message = GptChatMessage(
-                    gpt_chat_id="123",
-                    role="assistant",
-                    message=wx_message,
-                )
-                session.add(chat_message)
-                session.commit()
-                print("OKOKO1")
-
                 # CopilotGPT4._update_chat(chat_info, newconv)
                 chat_info.talk_time = datetime.now()
-                # with make_db_session() as session:
-                # TODO: ^^^^
-                wx_message = DbMessage(
-                    user_id="123",
-                    type="text",
-                    content="abc",
-                )
-                chat_message = GptChatMessage(
-                    gpt_chat_id="123",
-                    role="assistant",
-                    message=wx_message,
-                )
-                session.add(chat_message)
-                session.commit()
-                print("OKOKO")
-                for conv in newconv:
-                    wx_message = DbMessage(
-                        user_id=chat_info.user_id,
-                        type="text",
-                        content=conv["content"],
-                    )
-                    chat_message = GptChatMessage(
-                        gpt_chat_id=chat_info.id,
-                        role=conv["role"],
-                        message=wx_message,
-                    )
-                    session.add(chat_message)
-                session.commit()
+                with make_db_session() as session:
+                    # TODO: ^^^^
+                    for conv in newconv:
+                        wx_message = DbMessage(
+                            person_id=chat_info.person_id,
+                            type="text",
+                            content=conv["content"],
+                        )
+                        chat_message = GptChatMessage(
+                            gpt_chat_id=chat_info.id,
+                            role=conv["role"],
+                            message=wx_message,
+                        )
+                        session.add(chat_message)
+                    session.commit()
             return msg_content
 
     @staticmethod
     def _has_topic(chat_info_id: int) -> bool:
-        """判断对话是否有主题"""
+        """
+        判断对话是否有主题
+        """
         with make_db_session() as session:
             chat_info = session.query(GptChatInfo).filter_by(id=chat_info_id).first()
             return chat_info.topic != DEFAULT_TOPIC
 
     @staticmethod
     def _save_chatting_chat_topic(wx_id: str, model: str) -> None:
-        """生成正在进行的对话的主题"""
+        """
+        生成正在进行的对话的主题
+        """
         id = CopilotGPT4.get_chatting_chat_info(wx_id, model)
         if id is None or CopilotGPT4._has_topic(id):
             return
@@ -501,7 +506,9 @@ class CopilotGPT4:
 
     @staticmethod
     def _generate_chat_topic(chat_info_id: int) -> str:
-        """生成对话主题，用于保存对话记录"""
+        """
+        生成对话主题，用于保存对话记录
+        """
         assert CopilotGPT4.is_chat_valid(chat_info_id)
         # 通过一次对话生成对话主题，但这次对话不保存到对话记录中
         prompt = "请用10个字以内总结一下这次对话的主题，不带任何标点符号"

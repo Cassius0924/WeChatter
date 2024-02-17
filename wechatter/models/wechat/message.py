@@ -9,8 +9,8 @@ from loguru import logger
 from pydantic import BaseModel, computed_field
 
 import wechatter.config as config
-from wechatter.models.wechat.group_info import GroupInfo
-from wechatter.models.wechat.person_info import PersonInfo
+from wechatter.models.wechat.group import Group
+from wechatter.models.wechat.person import Person
 
 
 class MessageType(enum.Enum):
@@ -40,8 +40,8 @@ class MessageSource(BaseModel):
     消息来源类
     """
 
-    p_info: PersonInfo
-    g_info: Union[GroupInfo, None] = None
+    p_info: Person
+    g_info: Union[Group, None] = None
 
     def __str__(self) -> str:
         result = ""
@@ -89,7 +89,7 @@ class Message(BaseModel):
             g = "male"
         elif gender == 0:
             g = "female"
-        p_info = PersonInfo(
+        p_info = Person(
             id=payload.get("id", ""),
             name=payload.get("name", ""),
             alias=payload.get("alias", ""),
@@ -97,7 +97,7 @@ class Message(BaseModel):
             signature=payload.get("signature", ""),
             province=payload.get("province", ""),
             city=payload.get("city", ""),
-            phone_list=payload.get("phone", []),
+            # phone_list=payload.get("phone", []),
             is_star=payload.get("star", ""),
             is_friend=payload.get("friend", ""),
         )
@@ -107,7 +107,7 @@ class Message(BaseModel):
         if source_json["room"] != "":
             g_data = source_json["room"]
             payload = g_data.get("payload", {})
-            message_source.g_info = GroupInfo(
+            message_source.g_info = Group(
                 id=g_data.get("id", ""),
                 name=payload.get("topic", ""),
                 admin_id_list=payload.get("adminIdList", []),

@@ -1,12 +1,12 @@
-import unittest
 import json
+import unittest
+
 from wechatter.commands._commands import weibo_hot
 
 
 class TestWeiboHotCommand(unittest.TestCase):
-
     def setUp(self):
-        with open('tests/commands/test_weibo_hot/weibo_hot_response.json') as f:
+        with open("tests/commands/test_weibo_hot/weibo_hot_response.json") as f:
             self.r_json = json.load(f)
             self.weibo_hot_list = self.r_json["data"]["cards"][0]["card_group"][:20]
 
@@ -25,4 +25,4 @@ class TestWeiboHotCommand(unittest.TestCase):
 
     def test_generate_weibo_hot_message_empty_list(self):
         result = weibo_hot._generate_weibo_hot_message([])
-        self.assertEqual(result, '微博热搜列表为空')
+        self.assertEqual(result, "微博热搜列表为空")

@@ -4,16 +4,16 @@ from sqlalchemy.orm import Mapped, mapped_column
 from wechatter.database.tables import Base
 
 
-class UserGroupRelation(Base):
+class PersonGroupRelation(Base):
     """
     用户和群组的关系表
     """
 
-    __tablename__ = "user_group_relations"
+    __tablename__ = "person_group_relation"
 
-    user_id: Mapped[str] = mapped_column(
-        String, ForeignKey("users.id"), primary_key=True
+    person_id: Mapped[str] = mapped_column(
+        String, ForeignKey("person.id"), primary_key=True
     )
     group_id: Mapped[str] = mapped_column(
-        String, ForeignKey("groups.id"), primary_key=True
+        String, ForeignKey("group.id"), primary_key=True
     )

@@ -1,5 +1,4 @@
 import enum
-from typing import List
 
 from pydantic import BaseModel
 
@@ -14,7 +13,7 @@ class Gender(enum.Enum):
     unknown = "unknown"
 
 
-class PersonInfo(BaseModel):
+class Person(BaseModel):
     """
     个人消息类
     """
@@ -26,6 +25,6 @@ class PersonInfo(BaseModel):
     signature: str
     province: str
     city: str
-    phone_list: List[str]
+    # phone_list: List[str]
     is_star: bool
     is_friend: bool

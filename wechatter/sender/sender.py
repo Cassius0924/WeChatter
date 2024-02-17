@@ -1,6 +1,6 @@
 import json
 from functools import singledispatch
-from typing import List
+from typing import List, Union
 
 import requests
 import tenacity
@@ -104,7 +104,13 @@ def _validate(fn):
 
 
 @singledispatch
-def send_msg():
+def send_msg(
+    to: Union[str, SendTo],
+    message: str,
+    is_group: bool = False,
+    type: str = "text",
+    quotable: bool = False,
+):
     """
     发送消息
 

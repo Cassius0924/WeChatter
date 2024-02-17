@@ -1,7 +1,9 @@
 import os
 import unittest
 from unittest.mock import patch
+
 import qrcode as qrc
+
 from wechatter.commands._commands import qrcode
 
 
@@ -15,7 +17,7 @@ class TestQrCodeCommand(unittest.TestCase):
             os.remove(self.path)
 
     def test_generate_qrcode_success(self):
-        result = qrcode.generate_qrcode('https://www.baidu.com')
+        result = qrcode.generate_qrcode("https://www.baidu.com")
         self.assertIsInstance(result, qrc.image.pil.PilImage)
 
     def test_save_qrcode_attribute_error(self):
@@ -26,7 +28,7 @@ class TestQrCodeCommand(unittest.TestCase):
         qrcode.save_qrcode(self.img, self.path)
         self.assertTrue(os.path.exists(self.path))
 
-    @patch('os.access', return_value=False)
+    @patch("os.access", return_value=False)
     def test_save_qrcode_permission_error(self, mock_access):
         with self.assertRaises(PermissionError):
             qrcode.save_qrcode(self.img, self.path)

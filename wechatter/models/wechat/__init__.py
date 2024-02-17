@@ -1,8 +1,13 @@
+from .group import Group, GroupMember
 from .message import Message, MessageSource
-from .send_message import SendTo
+from .person import Person
+from .send_to import SendTo
 
 __all__ = [
     "Message",
     "MessageSource",
     "SendTo",
+    "Group",
+    "GroupMember",
+    "Person",
 ]

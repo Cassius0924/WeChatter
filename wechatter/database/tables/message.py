@@ -7,11 +7,11 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from wechatter.database.tables import Base
 from wechatter.database.tables.gpt_chat_message import GptChatMessage
-from wechatter.models.wechat import Message
 
 if TYPE_CHECKING:
     from wechatter.database.tables.group import Group
-    from wechatter.database.tables.user import User
+    from wechatter.database.tables.person import Person
+    from wechatter.models.wechat import Message as MessageModel
 
 
 class MessageType(enum.Enum):
@@ -30,12 +30,12 @@ class Message(Base):
     消息表
     """
 
-    __tablename__ = "messages"
+    __tablename__ = "message"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    user_id: Mapped[str] = mapped_column(String, ForeignKey("users.id"))
+    person_id: Mapped[str] = mapped_column(String, ForeignKey("person.id"))
     group_id: Mapped[Union[str, None]] = mapped_column(
-        String, ForeignKey("groups.id"), nullable=True
+        String, ForeignKey("group.id"), nullable=True
     )
     type: Mapped[MessageType]
     content: Mapped[str]
@@ -45,7 +45,7 @@ class Message(Base):
     is_mentioned: Mapped[bool] = mapped_column(Boolean, default=False)
     is_quoted: Mapped[bool] = mapped_column(Boolean, default=False)
 
-    user: Mapped["User"] = relationship("User", back_populates="messages")
+    person: Mapped["Person"] = relationship("Person", back_populates="messages")
     group: Mapped[Union["Group", None]] = relationship(
         "Group", back_populates="messages"
     )
@@ -54,22 +54,18 @@ class Message(Base):
     )
 
     @classmethod
-    def from_message(cls, message: Message):
-        """
-        从消息对象构造消息表对象
-        """
-        if message.is_group:
-            group_id = message.source.g_info.id
-        else:
-            group_id = None
+    def from_message_model(cls, message_model: "MessageModel"):
+        group_id = None
+        if message_model.is_group:
+            group_id = message_model.source.g_info.id
 
         return cls(
-            user_id=message.source.p_info.id,
+            person_id=message_model.source.p_info.id,
             group_id=group_id,
-            type=message.type.value,
-            content=message.content,
-            is_mentioned=message.is_mentioned,
-            is_quoted=message.is_quoted,
+            type=message_model.type.value,
+            content=message_model.content,
+            is_mentioned=message_model.is_mentioned,
+            is_quoted=message_model.is_quoted,
         )
 
     # @classmethod
