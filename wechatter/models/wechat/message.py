@@ -2,6 +2,7 @@
 import enum
 import json
 import re
+from functools import cached_property
 from typing import Union
 
 from loguru import logger
@@ -66,13 +67,13 @@ class Message(BaseModel):
     is_mentioned_: str
 
     @computed_field
-    @property
+    @cached_property
     def content(self) -> str:
         # 对于 iPad、手机端的微信，@名称后面会跟着一个未解码的空格的Unicode编码："@Cassius\u2005/help"
         return self.content_.replace("\u2005", " ", 1)
 
     @computed_field
-    @property
+    @cached_property
     def source(self) -> MessageSource:
         try:
             source_json = json.loads(self.source_)
@@ -115,18 +116,17 @@ class Message(BaseModel):
         return message_source
 
     @computed_field
-    @property
+    @cached_property
     def is_mentioned(self) -> bool:
         """
         是否@机器人
         """
-
         if self.is_mentioned_ == "1":
             return True
         return False
 
     @computed_field
-    @property
+    @cached_property
     def is_group(self) -> bool:
         """
         是否是群消息
@@ -134,15 +134,13 @@ class Message(BaseModel):
         return bool(self.source.g_info)
 
     @computed_field
-    @property
+    @cached_property
     def is_quoted(self) -> bool:
         """
         是否引用机器人消息
         """
-        # 判断是否为引用消息
-        quote_pattern = (
-            r"(?s)「(.*?)」\n- - - - - - - - - - - - - - -"  # 引用消息的正则
-        )
+        # 引用消息的正则
+        quote_pattern = r"(?s)「(.*?)」\n- - - - - - - - - - - - - - -"
         match_result = re.match(quote_pattern, self.content)
         # 判断是否为引用机器人消息
         if bool(match_result) and self.content.startswith(f"「{config.bot_name}"):
@@ -150,4 +148,9 @@ class Message(BaseModel):
         return False
 
     def __str__(self) -> str:
-        return f"消息内容：{self.content}\n消息来源：\n{self.source}\n是否@：{self.is_mentioned}\n是否引用：{self.is_quoted}"
+        return (
+            f"消息内容：{self.content}\n"
+            f"消息来源：\n{self.source}\n"
+            f"是否@：{self.is_mentioned}\n"
+            f"是否引用：{self.is_quoted}"
+        )
