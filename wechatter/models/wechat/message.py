@@ -7,8 +7,8 @@ from typing import Union
 from loguru import logger
 
 import wechatter.config as config
-from wechatter.models.message.group_info import GroupInfo
-from wechatter.models.message.person_info import PersonInfo
+from wechatter.models.wechat.group_info import GroupInfo
+from wechatter.models.wechat.person_info import PersonInfo
 
 
 class MessageType(enum.Enum):

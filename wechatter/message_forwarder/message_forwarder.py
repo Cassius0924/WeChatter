@@ -2,7 +2,7 @@ from typing import List
 
 from loguru import logger
 
-from wechatter.models.message import Message
+from wechatter.models.wechat import Message
 from wechatter.sender import sender
 
 

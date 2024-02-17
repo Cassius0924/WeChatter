@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import TYPE_CHECKING, List
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, func
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from wechatter.database.tables import Base
@@ -23,11 +23,11 @@ class GptChatInfo(Base):
     user_id: Mapped[str] = mapped_column(String, ForeignKey("users.id"))
     topic: Mapped[str]
     created_time: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
+        DateTime(timezone=True), default=datetime.now()
     )
     # 改名为 updated_time
     talk_time: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), onupdate=func.now()
+        DateTime(timezone=True), onupdate=datetime.now()
     )
     model: Mapped[str]
     is_chatting: Mapped[bool] = mapped_column(Boolean, default=True)

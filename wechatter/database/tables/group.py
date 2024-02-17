@@ -4,7 +4,7 @@ from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from wechatter.database.tables import Base
-from wechatter.models.message.group_info import GroupInfo
+from wechatter.models.wechat.group_info import GroupInfo
 
 if TYPE_CHECKING:
     from wechatter.database.tables.message import Message

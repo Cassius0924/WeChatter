@@ -9,7 +9,7 @@ from wechatter.webhook_handlers.hanlders import github_webhook_handler
 def handle_create(data: dict):
     payload = GithubCreateWebhook(**data)
     if payload.ref_type == "branch":
-        logger.info(f"Branche {payload.ref} was created by {payload.sender.login}.")
+        logger.info(f"Branch {payload.ref} was created by {payload.sender.login}.")
         message = (
             "==== GitHub Create 事件 ====\n"
             "🆕 有新的分支创建！\n"

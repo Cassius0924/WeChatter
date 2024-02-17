@@ -3,6 +3,7 @@ __pycache__/
 .vscode/
 .idea/
 .ruff_cache/
+.DS_Store
 
 # config.ini 配置文件
 config.ini

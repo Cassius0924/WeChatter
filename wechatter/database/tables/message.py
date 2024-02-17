@@ -7,7 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from wechatter.database.tables import Base
 from wechatter.database.tables.gpt_chat_message import GptChatMessage
-from wechatter.models.message import Message
+from wechatter.models.wechat import Message
 
 if TYPE_CHECKING:
     from wechatter.database.tables.group import Group

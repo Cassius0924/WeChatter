@@ -9,7 +9,7 @@ from wechatter.commands.handlers import command
 from wechatter.database import GptChatInfo, GptChatMessage
 from wechatter.database import Message as DbMessage
 from wechatter.database import make_db_session
-from wechatter.models.message import SendTo
+from wechatter.models.wechat import SendTo
 from wechatter.sender import sender
 from wechatter.utils import post_request_json
 

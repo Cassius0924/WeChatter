@@ -2,7 +2,7 @@ import enum
 
 from pydantic import BaseModel
 
-from wechatter.models.message.message import Message
+from wechatter.models.wechat.message import Message
 
 
 class GptChatRole(enum.Enum):

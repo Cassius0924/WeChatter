@@ -1,5 +1,5 @@
 # 消息通知器
-from wechatter.models.message import SendTo
+from wechatter.models.wechat import SendTo
 from wechatter.sender import sender
 
 

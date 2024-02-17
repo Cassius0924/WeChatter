@@ -8,7 +8,7 @@ from loguru import logger
 
 import wechatter.config as config
 import wechatter.utils.http_request as http_request
-from wechatter.models.message import SendTo
+from wechatter.models.wechat import SendTo
 
 
 # 对retry装饰器重新包装，增加日志输出

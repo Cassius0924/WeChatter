@@ -13,9 +13,9 @@ from wechatter.database import User as DbUser
 from wechatter.database import make_db_session
 from wechatter.message import MessageHandler
 from wechatter.message_forwarder import MessageForwarder
-from wechatter.models.message import Message
-from wechatter.models.message.group_info import GroupInfo
-from wechatter.models.message.person_info import PersonInfo
+from wechatter.models.wechat import Message
+from wechatter.models.wechat.group_info import GroupInfo
+from wechatter.models.wechat.person_info import PersonInfo
 from wechatter.sender import notifier
 
 router = APIRouter()

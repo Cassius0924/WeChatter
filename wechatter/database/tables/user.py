@@ -5,7 +5,7 @@ from sqlalchemy import Boolean, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from wechatter.database.tables import Base
-from wechatter.models.message.person_info import PersonInfo
+from wechatter.models.wechat.person_info import PersonInfo
 
 if TYPE_CHECKING:
     from wechatter.database.tables.gpt_chat_info import GptChatInfo

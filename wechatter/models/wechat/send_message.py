@@ -1,11 +1,12 @@
-from pydantic.dataclasses import dataclass
+from pydantic import BaseModel
 
-from wechatter.models.message.message import MessageSource
+from wechatter.models.wechat.message import MessageSource
 
 
-@dataclass
-class SendTo:
-    """发送对象类"""
+class SendTo(BaseModel):
+    """
+    发送对象类
+    """
 
     p_id: str
     p_name: str
@@ -26,4 +27,4 @@ class SendTo:
         if source.g_info is not None:
             g_id = source.g_info.id
             g_name = source.g_info.name
-        return cls(p_id, p_name, g_id, g_name)
+        return cls(p_id=p_id, p_name=p_name, g_id=g_id, g_name=g_name)

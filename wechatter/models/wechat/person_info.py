@@ -1,7 +1,7 @@
 import enum
 from typing import List
 
-from pydantic.dataclasses import dataclass
+from pydantic import BaseModel
 
 
 class Gender(enum.Enum):
@@ -14,8 +14,7 @@ class Gender(enum.Enum):
     unknown = "unknown"
 
 
-@dataclass
-class PersonInfo:
+class PersonInfo(BaseModel):
     """
     个人消息类
     """

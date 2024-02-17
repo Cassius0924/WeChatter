@@ -5,7 +5,7 @@ from loguru import logger
 
 import wechatter.config as config
 from wechatter.bot.bot_info import BotInfo
-from wechatter.models.message import Message, SendTo
+from wechatter.models.wechat import Message, SendTo
 
 
 class MessageHandler:
