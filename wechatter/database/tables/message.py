@@ -54,7 +54,7 @@ class Message(Base):
     )
 
     @classmethod
-    def from_message_model(cls, message_model: "MessageModel"):
+    def from_model(cls, message_model: "MessageModel"):
         group_id = None
         if message_model.is_group:
             group_id = message_model.source.g_info.id

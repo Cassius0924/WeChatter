@@ -52,7 +52,7 @@ class Person(Base):
     )
 
     @classmethod
-    def from_person_model(cls, person_model: "PersonModel"):
+    def from_model(cls, person_model: "PersonModel"):
         return cls(
             id=person_model.id,
             name=person_model.name,

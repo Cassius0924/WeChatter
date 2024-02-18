@@ -30,7 +30,7 @@ class Group(Base):
     messages: Mapped[List["Message"]] = relationship("Message", back_populates="group")
 
     @classmethod
-    def from_group_model(cls, group_model: "GroupModel"):
+    def from_model(cls, group_model: "GroupModel"):
         return cls(
             id=group_model.id,
             name=group_model.name,
