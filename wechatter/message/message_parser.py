@@ -47,7 +47,17 @@ class MessageHandler:
         # 开始处理命令
         cmd_handler = cmd_dict["handler"]
         if cmd_handler is not None:
-            cmd_handler(to, cmd_dict["arg"])
+            if cmd_dict["param_count"] == 2:
+                cmd_handler(
+                    to=to,
+                    message=cmd_dict["arg"],
+                )
+            elif cmd_dict["param_count"] == 3:
+                cmd_handler(
+                    to=to,
+                    message=cmd_dict["arg"],
+                    message_obj=message,
+                )
         else:
             logger.error("该命令未实现")
         return
@@ -61,6 +71,7 @@ class MessageHandler:
             "desc": "",
             "arg": "",
             "handler": None,
+            "param_count": 0,
         }
         # 不带命令前缀和@前缀的消息内容
         if is_mentioned and is_group:
@@ -77,6 +88,7 @@ class MessageHandler:
                 cmd_dict["command"] = command
                 cmd_dict["desc"] = info["desc"]
                 cmd_dict["handler"] = info["handler"]
+                cmd_dict["param_count"] = info["param_count"]
                 if len(cont_list) == 2:
                     cmd_dict["arg"] = cont_list[1]  # 消息内容
                 return cmd_dict

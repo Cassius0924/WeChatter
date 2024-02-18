@@ -146,8 +146,8 @@ def _send_msg1(
     :param type: 消息类型（text、fileUrl）
     :param quotable: 是否可引用（默认为不可引用，False）
     """
-    if quotable:
-        message = f"@{name} {message}"
+    # if quotable:
+    #     message = f"@{name} {message}"
     data = {
         "to": name,
         "isRoom": is_group,
@@ -168,9 +168,9 @@ def _send_msg2(to: SendTo, message: str, is_group: bool = True, type: str = "tex
     if not is_group:
         return _send_msg1(to.p_name, message, is_group=False, type=type)
 
-    if to.g_name != "":
+    if to.group:
         return _send_msg1(to.g_name, message, is_group=True, type=type)
-    elif to.p_name != "":
+    elif to.person:
         return _send_msg1(to.p_name, message, is_group=False, type=type)
     else:
         logger.error("发送消息失败，接收者为空")
