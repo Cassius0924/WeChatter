@@ -51,24 +51,22 @@ async def recv_wechat_msg(
 
     # 解析命令
     # 构造消息对象
-    message = Message(
+    message = Message.from_api_msg(
         type=type,
-        content_=content,
-        source_=source,
-        is_mentioned_=is_mentioned,
+        content=content,
+        source=source,
+        is_mentioned=is_mentioned,
     )
     # 向群组表中添加该群组
-    add_group(message.source.g_info)
+    add_group(message.group)
     # 向用户表中添加该用户
-    add_person(message.source.p_info)
+    add_person(message.person)
     # 向消息表中添加该消息
-    add_message(message)
+    message.id = add_message(message)
     # TODO: 添加自己发送的消息，等待 wechatbot-webhook 支持
 
     # DEBUG
-    print("==" * 20)
     print(str(message))
-    print("==" * 20)
 
     if config.message_forwarding_enabled:
         MessageForwarder(config.message_forwarding_rule_list).forward_message(message)
@@ -109,7 +107,7 @@ def add_group(group: Group) -> None:
     with make_db_session() as session:
         _group = session.query(DbGroup).filter(DbGroup.id == group.id).first()
         if _group is None:
-            _group = DbGroup.from_group_model(group)
+            _group = DbGroup.from_model(group)
             session.add(_group)
             # 逐个添加群组成员，若存在则更新
             for member in group.member_list:
@@ -142,7 +140,7 @@ def add_person(person: Person) -> None:
     with make_db_session() as session:
         _person = session.query(DbPerson).filter(DbPerson.id == person.id).first()
         if _person is None:
-            _person = DbPerson.from_person_model(person)
+            _person = DbPerson.from_model(person)
             session.add(_person)
             session.commit()
             logger.info(f"用户 {person.name} 已添加到数据库")
@@ -152,12 +150,13 @@ def add_person(person: Person) -> None:
             session.commit()
 
 
-def add_message(message: Message) -> None:
+def add_message(message: Message) -> int:
     """
     添加消息到消息表
     """
     with make_db_session() as session:
-        _message = DbMessage.from_message_model(message)
+        _message = DbMessage.from_model(message)
         session.add(_message)
         session.commit()
         logger.info(f"消息 {_message.id} 已添加到数据库")
+        return _message.id

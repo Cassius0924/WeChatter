@@ -1,10 +1,9 @@
-from typing import Union
+from typing import Optional
 
 from loguru import logger
 from pydantic import BaseModel, computed_field
 
 from wechatter.models.wechat.group import Group
-from wechatter.models.wechat.message import MessageSource
 from wechatter.models.wechat.person import Person
 
 
@@ -14,7 +13,7 @@ class SendTo(BaseModel):
     """
 
     person: Person
-    group: Union[Group, None]
+    group: Optional[Group] = None
 
     @computed_field
     @property
@@ -33,7 +32,7 @@ class SendTo(BaseModel):
 
     @computed_field
     @property
-    def g_id(self) -> Union[str, None]:
+    def g_id(self) -> Optional[str]:
         try:
             return self.group.id
         except AttributeError:
@@ -42,16 +41,9 @@ class SendTo(BaseModel):
 
     @computed_field
     @property
-    def g_name(self) -> Union[str, None]:
+    def g_name(self) -> Optional[str]:
         try:
             return self.group.name
         except AttributeError:
             logger.warning("此发送对象不是群聊")
             return None
-
-    @classmethod
-    def from_message_source(cls, source: MessageSource):
-        return cls(
-            person=source.p_info,
-            group=source.g_info,
-        )

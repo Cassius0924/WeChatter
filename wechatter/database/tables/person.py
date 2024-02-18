@@ -1,27 +1,15 @@
-import enum
 from typing import TYPE_CHECKING, List, Union
 
 from sqlalchemy import Boolean, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from wechatter.database.tables import Base
+from wechatter.models.wechat import Gender, GroupMember, Person as PersonModel
 
 if TYPE_CHECKING:
     from wechatter.database.tables.gpt_chat_info import GptChatInfo
     from wechatter.database.tables.group import Group
     from wechatter.database.tables.message import Message
-    from wechatter.models.wechat import GroupMember, Person as PersonModel
-
-
-class Gender(enum.Enum):
-    """
-    性别表
-    """
-
-    # 用命名小写，否则sqlalchemy会报错
-    male = "male"
-    female = "female"
-    unknown = "unknown"
 
 
 class Person(Base):
@@ -34,9 +22,9 @@ class Person(Base):
     id: Mapped[str] = mapped_column(String(100), primary_key=True)
     name: Mapped[str]
     alias: Mapped[Union[str, None]] = mapped_column(String, nullable=True)
-    gender: Mapped[Union[Gender, None]]
-    province: Mapped[Union[str, None]]
-    city: Mapped[Union[str, None]]
+    gender: Mapped[Union[Gender, None]] = mapped_column(String, nullable=True)
+    province: Mapped[Union[str, None]] = mapped_column(String, nullable=True)
+    city: Mapped[Union[str, None]] = mapped_column(String, nullable=True)
     # phone: Mapped[Union[str, None]] = mapped_column(String, nullable=True)
     is_star: Mapped[bool] = mapped_column(Boolean, default=False)
     is_friend: Mapped[bool] = mapped_column(Boolean, default=False)
@@ -52,7 +40,7 @@ class Person(Base):
     )
 
     @classmethod
-    def from_model(cls, person_model: "PersonModel"):
+    def from_model(cls, person_model: PersonModel):
         return cls(
             id=person_model.id,
             name=person_model.name,
@@ -72,7 +60,20 @@ class Person(Base):
             alias=member_model.alias,
         )
 
-    def update(self, person_model: "PersonModel"):
+    def to_model(self) -> PersonModel:
+        return PersonModel(
+            id=self.id,
+            name=self.name,
+            alias=self.alias,
+            gender=self.gender,
+            signature="",
+            province=self.province,
+            city=self.city,
+            is_star=self.is_star,
+            is_friend=self.is_friend,
+        )
+
+    def update(self, person_model: PersonModel):
         self.name = person_model.name
         self.alias = person_model.alias
         self.gender = person_model.gender.value

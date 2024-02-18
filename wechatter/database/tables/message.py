@@ -1,4 +1,3 @@
-import enum
 from datetime import datetime
 from typing import TYPE_CHECKING, Union
 
@@ -7,22 +6,11 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from wechatter.database.tables import Base
 from wechatter.database.tables.gpt_chat_message import GptChatMessage
+from wechatter.models.wechat import Message as MessageModel, MessageType
 
 if TYPE_CHECKING:
     from wechatter.database.tables.group import Group
     from wechatter.database.tables.person import Person
-    from wechatter.models.wechat import Message as MessageModel
-
-
-class MessageType(enum.Enum):
-    """
-    消息类型
-    """
-
-    text = "text"
-    file = "file"
-    urlLink = "urlLink"
-    friendship = "friendship"
 
 
 class Message(Base):
@@ -54,13 +42,14 @@ class Message(Base):
     )
 
     @classmethod
-    def from_model(cls, message_model: "MessageModel"):
+    def from_model(cls, message_model: MessageModel):
         group_id = None
         if message_model.is_group:
-            group_id = message_model.source.g_info.id
+            group_id = message_model.group.id
 
         return cls(
-            person_id=message_model.source.p_info.id,
+            id=message_model.id,
+            person_id=message_model.person.id,
             group_id=group_id,
             type=message_model.type.value,
             content=message_model.content,
@@ -68,6 +57,12 @@ class Message(Base):
             is_quoted=message_model.is_quoted,
         )
 
-    # @classmethod
-    # def create_gpt_chat_message(
-    #     cls,
+    def to_model(self) -> MessageModel:
+        return MessageModel(
+            id=self.id,
+            type=self.type,
+            person=self.person.to_model(),
+            group=self.group.to_model() if self.group else None,
+            content=self.content,
+            is_mentioned=self.is_mentioned,
+        )

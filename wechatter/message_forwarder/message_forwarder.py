@@ -15,15 +15,8 @@ class MessageForwarder:
     def forward_message(self, message: Message):
         """消息转发"""
 
-        # 判断消息来源
-        from_name = ""
-        if message.is_group:
-            from_name = message.source.g_info.name
-        else:
-            from_name = message.source.p_info.name
-
         # TODO: 转发文件
-
+        from_name = message.sender_name
         # 判断消息是否符合转发规则
         for rule in self.rule_list:
             # 判断消息来源是否符合转发规则
@@ -31,7 +24,7 @@ class MessageForwarder:
                 # 构造转发消息
                 msg = self.__construct_forwarding_message(message)
                 logger.info(
-                    f"转发消息：{from_name} -> {rule['to_persons']}\n"
+                    f"转发消息：{from_name} -> {rule['to_persons']}；"
                     f"转发消息：{from_name} -> {rule['to_groups']}"
                 )
                 sender.mass_send_msg(rule["to_persons"], msg)
@@ -42,13 +35,13 @@ class MessageForwarder:
         content = message.content
         if message.is_group:
             content = (
-                f"⤴️ {message.source.p_info.name}在{message.source.g_info.name}中说：\n"
+                f"⤴️ {message.person.name}在{message.group.name}中说：\n"
                 f"-------------------------\n"
                 f"{content}"
             )
         else:
             content = (
-                f"⤴️ {message.source.p_info.name}说：\n"
+                f"⤴️ {message.person.name}说：\n"
                 f"-------------------------\n"
                 f"{content}"
             )

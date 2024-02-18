@@ -3,7 +3,7 @@ import enum
 import json
 import re
 from functools import cached_property
-from typing import Union
+from typing import Optional
 
 from loguru import logger
 from pydantic import BaseModel, computed_field
@@ -35,48 +35,31 @@ class MessageSenderType(enum.Enum):
     # ARTICLE = 2
 
 
-class MessageSource(BaseModel):
-    """
-    消息来源类
-    """
-
-    p_info: Person
-    g_info: Union[Group, None] = None
-
-    def __str__(self) -> str:
-        result = ""
-        if self.g_info is not None:
-            result += str(self.g_info)
-        result += str(self.p_info)
-        return result
-
-
 class Message(BaseModel):
     """
     微信消息类（消息接收）
-    :property content: 消息内容
-    :property source: 消息来源
-    :property is_mentioned: 是否@机器人
-    :property is_quoted: 是否引用机器人消息
-    :property is_group: 是否是群消息
     """
 
     type: MessageType
-    content_: str
-    source_: str
-    is_mentioned_: str
+    person: Person
+    group: Optional[Group] = None
+    content: str
+    is_mentioned: bool = False
+    id: Optional[int] = None
 
-    @computed_field
-    @cached_property
-    def content(self) -> str:
-        # 对于 iPad、手机端的微信，@名称后面会跟着一个未解码的空格的Unicode编码："@Cassius\u2005/help"
-        return self.content_.replace("\u2005", " ", 1)
-
-    @computed_field
-    @cached_property
-    def source(self) -> MessageSource:
+    @classmethod
+    def from_api_msg(
+        cls,
+        type: MessageType,
+        content: str,
+        source: str,
+        is_mentioned: str,
+    ):
+        """
+        从API接口创建消息对象
+        """
         try:
-            source_json = json.loads(self.source_)
+            source_json = json.loads(source)
         except json.JSONDecodeError as e:
             logger.error("消息来源解析失败")
             raise e
@@ -89,7 +72,7 @@ class Message(BaseModel):
             g = "male"
         elif gender == 0:
             g = "female"
-        p_info = Person(
+        _person = Person(
             id=payload.get("id", ""),
             name=payload.get("name", ""),
             alias=payload.get("alias", ""),
@@ -101,37 +84,37 @@ class Message(BaseModel):
             is_star=payload.get("star", ""),
             is_friend=payload.get("friend", ""),
         )
-        message_source = MessageSource(p_info=p_info)
 
+        _group = None
         # room为群信息，只有群消息才有room
         if source_json["room"] != "":
             g_data = source_json["room"]
             payload = g_data.get("payload", {})
-            message_source.g_info = Group(
+            _group = Group(
                 id=g_data.get("id", ""),
                 name=payload.get("topic", ""),
                 admin_id_list=payload.get("adminIdList", []),
                 member_list=payload.get("memberList", []),
             )
-        return message_source
+        _content = content.replace("\u2005", " ", 1)
+        _is_mentioned = False
+        if is_mentioned == "1":
+            _is_mentioned = True
+        return cls(
+            type=type,
+            person=_person,
+            group=_group,
+            content=_content,
+            is_mentioned=is_mentioned,
+        )
 
     @computed_field
-    @cached_property
-    def is_mentioned(self) -> bool:
-        """
-        是否@机器人
-        """
-        if self.is_mentioned_ == "1":
-            return True
-        return False
-
-    @computed_field
-    @cached_property
+    @property
     def is_group(self) -> bool:
         """
         是否是群消息
         """
-        return bool(self.source.g_info)
+        return self.group is not None
 
     @computed_field
     @cached_property
@@ -143,14 +126,28 @@ class Message(BaseModel):
         quote_pattern = r"(?s)「(.*?)」\n- - - - - - - - - - - - - - -"
         match_result = re.match(quote_pattern, self.content)
         # 判断是否为引用机器人消息
-        if bool(match_result) and self.content.startswith(f"「{config.bot_name}"):
+        if match_result and self.content.startswith(f"「{config.bot_name}"):
             return True
         return False
 
+    # TODO: 判断所有的引用消息，不仅仅是机器人消息
+    #  待解决：在群中如果有人设置了自己的群中名称，那么引用内容的名字会变化，导致无法匹配到用户
+
+    @computed_field
+    @property
+    def sender_name(self) -> str:
+        """
+        返回消息发送对象名，如果是群则返回群名，如果不是则返回人名
+        """
+        return self.group.name if self.is_group else self.person.name
+
     def __str__(self) -> str:
+        source = self.person
+        if self.is_group:
+            source = self.group
         return (
             f"消息内容：{self.content}\n"
-            f"消息来源：\n{self.source}\n"
+            f"消息来源：{source}\n"
             f"是否@：{self.is_mentioned}\n"
             f"是否引用：{self.is_quoted}"
         )

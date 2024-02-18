@@ -1,24 +1,14 @@
-import enum
 from typing import TYPE_CHECKING
 
 from sqlalchemy import ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from wechatter.database.tables import Base
+from wechatter.models.gpt import GptChatMessage as GptChatMessageModel
 
 if TYPE_CHECKING:
     from wechatter.database.tables.gpt_chat_info import GptChatInfo
     from wechatter.database.tables.message import Message
-
-
-class GptChatRole(enum.Enum):
-    """
-    GPT聊天角色
-    """
-
-    system = "system"
-    user = "user"
-    assistant = "assistant"
 
 
 class GptChatMessage(Base):
@@ -33,7 +23,7 @@ class GptChatMessage(Base):
         Integer, ForeignKey("message.id"), unique=True
     )
     gpt_chat_id: Mapped[int] = mapped_column(Integer, ForeignKey("gpt_chat_info.id"))
-    role: Mapped[GptChatRole]
+    gpt_response: Mapped[str]
 
     message: Mapped["Message"] = relationship(
         "Message", back_populates="gpt_chat_message"
@@ -42,8 +32,18 @@ class GptChatMessage(Base):
         "GptChatInfo", back_populates="gpt_chat_messages"
     )
 
-    def to_conversation(self):
-        return {
-            "role": self.role.value,
-            "content": self.message.content,
-        }
+    @classmethod
+    def from_model(cls, gpt_chat_message_model: GptChatMessageModel):
+        return cls(
+            message_id=gpt_chat_message_model.message.id,
+            gpt_chat_id=gpt_chat_message_model.gpt_chat_info.id,
+            gpt_response=gpt_chat_message_model.gpt_response,
+        )
+
+    def to_model(self) -> GptChatMessageModel:
+        return GptChatMessageModel(
+            id=self.id,
+            message=self.message.to_model(),
+            gpt_chat_info=self.gpt_chat_info.to_model(),
+            gp_response=self.gpt_response,
+        )

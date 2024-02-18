@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -20,5 +20,6 @@ class Group(BaseModel):
 
     id: str
     name: str
-    admin_id_list: List[str]
+    # alias: str 目前上游不支持
+    admin_id_list: Optional[List[str]] = None
     member_list: List[GroupMember]

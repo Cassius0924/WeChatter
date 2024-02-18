@@ -41,7 +41,7 @@ class MessageHandler:
             logger.debug("该消息为群消息，但未@机器人，不处理")
             return
 
-        to = SendTo.from_message_source(message.source)
+        to = SendTo(person=message.person, group=message.group)
 
         # 是命令消息
         # 开始处理命令
