@@ -37,8 +37,8 @@ if __name__ == '__main__':
     backend_directory = "/myproject/WeChatter/configweb"
     frontend_directory = "/myproject/WeChatter/configweb"
 
-    backend_thread = threading.Thread(target=run_command, args=(backend_command, backend_directory))
-    frontend_thread = threading.Thread(target=run_command, args=(frontend_command, frontend_directory))
+    backend_thread = threading.Thread(target=run_command, args=(backend_command, backend_directory), daemon=True)
+    frontend_thread = threading.Thread(target=run_command, args=(frontend_command, frontend_directory), daemon=True)
 
     backend_thread.start()
     print("backend started")
