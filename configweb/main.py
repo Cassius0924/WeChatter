@@ -79,11 +79,14 @@ def update_config_section(section_name, updated_config):
 def run_command(command, working_directory):
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, cwd=working_directory)
     while process.poll() is None:
-        output = process.communicate()
+        output = process.communicate()#返回一个元组，第一个元素是子进程的输出，第二个元素是子进程的错误输出
         if output == '' and process.poll() is not None:
             break
         if output:
-            print(output)
+            print("输出:")
+            print('无输出' if output[0] is None else output[0]).encode('utf-8')
+            print("错误输出:")
+            print('None' if output[1] is None else output[1])
     return process.poll()
 
 
