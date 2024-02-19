@@ -1,12 +1,7 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
+import { BASE_URL, PORT } from '../../config';
 
-//本地
-// export const BASE_URL = "localhost";
-// export const PORT = "8000";
-//服务器
-export const BASE_URL = "47.92.99.199";
-export const PORT = "8000";
 
 function useFetchData(path) {
     const [data, setData] = useState({});
@@ -14,8 +9,6 @@ function useFetchData(path) {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        // axios.get(`http://127.0.0.1:8000/${path}`)
-        // axios.get(`http://47.92.99.199:30/api/${path}`)
         axios.get(`http://${BASE_URL}:${PORT}/${path}`)
             .then(res => {
                 setData(res.data);

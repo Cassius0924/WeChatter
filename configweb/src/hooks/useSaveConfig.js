@@ -1,17 +1,10 @@
 import {useCallback} from 'react';
 import axios from 'axios';
+import { BASE_URL, PORT } from '../../config';
 
-//本地
-// export const BASE_URL = "localhost";
-// export const PORT = "8000";
-//服务器
-export const BASE_URL = "47.92.99.199";
-export const PORT = "8000";
 
 function useSaveConfig(configName, config) {
     return useCallback(() => {
-        // axios.post(`http://127.0.0.1:8000/${configName}`, config)
-        // axios.post(`http://47.92.99.199:30/api/${configName}`, config)
         axios.post(`http://${BASE_URL}:${PORT}/${configName}`, config)
             .then(res => {
                 console.log(res.data);

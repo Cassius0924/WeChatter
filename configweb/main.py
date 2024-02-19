@@ -30,10 +30,6 @@ PORT = "3000"
 # 其他代码...
 
 origins = [
-    #    "http://localhost:8000",
-    #    "http://localhost:3000",
-    #    "http://47.92.99.199:30",
-    #    "http://47.92.99.199:8080"
     BASE_URL + PORT,
 ]
 

@@ -13,13 +13,8 @@ import CustomCommandKey from "./ui/Custom-Command-Key";
 import GasolinePriceCron from "./ui/Gasoline-Price-Cron";
 import ConfigWeb from "./ui/ConfigWeb";
 import axios from "axios";
+import { BASE_URL, PORT } from '../config';
 
-//本地
-// export const BASE_URL = "localhost";
-// export const PORT = "8000";
-//服务器
-export const BASE_URL = "47.92.99.199";
-export const PORT = "8000";
 
 function App() {
 
