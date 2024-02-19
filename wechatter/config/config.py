@@ -9,8 +9,7 @@ logger.info("开始读取配置文件...")
 wechatter_port = config_reader.getint("wechatter", "wechatter_port")
 
 # wx-bot-webhook 配置
-wx_webhook_host = config_reader.getstr("wx-bot-webhook", "wx_webhook_host")
-wx_webhook_port = config_reader.getint("wx-bot-webhook", "wx_webhook_port")
+wx_webhook_base_api = config_reader.getstr("wx-bot-webhook", "wx_webhook_base_api")
 wx_webhook_recv_api_path = config_reader.getstr(
     "wx-bot-webhook", "wx_webhook_recv_api_path"
 )
@@ -27,8 +26,7 @@ command_prefix = config_reader.getstr("chat", "command_prefix")
 need_mentioned = config_reader.getbool("chat", "need_mentioned")
 
 # copilot-gpt4 配置
-cp_gpt4_api_host = config_reader.getstr("copilot-gpt4", "cp_gpt4_api_host")
-cp_gpt4_port = config_reader.getint("copilot-gpt4", "cp_gpt4_port")
+cp_gpt4_base_api = config_reader.getstr("copilot-gpt4", "cp_gpt4_base_api")
 cp_token = config_reader.getstr("copilot-gpt4", "cp_token")
 
 # github-webhook 配置
@@ -66,7 +64,9 @@ custom_command_key_dict = config_reader.getdict(
 gasoline_price_cron_enable = config_reader.getbool(
     "gasoline-price-cron", "gasoline_price_cron_enabled"
 )
-gasoline_price_cron_rule_list = config_reader.getlist("gasoline-price-cron", "gasoline_price_cron_rule_list")
+gasoline_price_cron_rule_list = config_reader.getlist(
+    "gasoline-price-cron", "gasoline_price_cron_rule_list"
+)
 
 
 logger.info(config_reader.config_dict)

@@ -128,8 +128,8 @@ def _log(response: requests.Response) -> bool:
     return True
 
 
-URL = f"{config.wx_webhook_host}:{config.wx_webhook_port}/webhook/msg/v2"
-V1_URL = f"{config.wx_webhook_host}:{config.wx_webhook_port}/webhook/msg"
+URL = f"{config.wx_webhook_base_api}/webhook/msg/v2"
+V1_URL = f"{config.wx_webhook_base_api}/webhook/msg"
 
 
 def _validate(fn):

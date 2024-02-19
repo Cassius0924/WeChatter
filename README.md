@@ -57,6 +57,8 @@ cd WeChatter
 2. 安装依赖项
 
 ```bash
+# 如果需要，则创建虚拟环境...
+
 pip install -r requirements.txt
 ```
 
@@ -101,16 +103,13 @@ python3 main.py
 
 ## 支持的功能
 
-- [x] 消息转发，需[配置](#%EF%B8%8F-message-forwarding-配置)
-- [x] 天气预报定时推送，需[配置](#%EF%B8%8F-weather-cron-配置)
-- [x] 中石化92号汽油指导价定时推送，需[配置](#%EF%B8%8F-gasoline-price-cron-配置)
+- [x] 消息转发，需[配置](#%EF%B8%8F-message-forwarding-配置)。
+- [x] 消息可引用回复，用户通过引用并回复可以进一步获取消息内容。带“（可引用：***）”的机器人消息均为可进一步互动的可引用消息。
+- [x] 天气预报定时推送，需[配置](#%EF%B8%8F-weather-cron-配置)。
 
 ## 支持的 Webhook
 
-- [x] GitHub 仓库 Webhook，需[配置](#%EF%B8%8F-github-webhook-配置)
-
-> [!NOTE]
-> 需要在 GitHub 仓库 Settings 中添加 Webhook
+- [x] GitHub 仓库 Webhook，需在 GitHub 仓库 Settings 中添加 Webhook 并[配置](#%EF%B8%8F-github-webhook-配置)
 
 ## 配置文件
 
@@ -127,43 +126,41 @@ python3 main.py
 ### ⚙️ WxBotWebhook 配置
 
 | 配置项 | 解释 | 备注 |
-| --- | --- |  --- |
-| `wx_webhook_host` | 发送消息的地址 | 默认为 `localhost`，需和 `wxBotWebhook` 的 Docker IP 地址一致 |
-| `wx_webhook_port` | 发送消息的端口 | 默认为 `3001`，需和 `wxBotWebhook` 的 Docker 端口一致 |
-| `wx_webhook_recv_api_path` | 接收消息的接口路径 | 默认为 `/receive_msg`，此路径为 `RECV_MSG_API` 的路径 |
+| --- | --- | --- |
+| `wx_webhook_base_api`      | 发送消息的 BaseAPI | 默认为 `localhost:3001`，即 `wxBotWebhook` Docker 的地址 |
+| `wx_webhook_recv_api_path` | 接收消息的接口路径  | 默认为 `/receive_msg`，此路径为 Docker 参数 `RECVD_MSG_API` 的路径    |
 
 ### ⚙️ Admin 配置
 
 | 配置项 | 解释 | 备注 |
-| --- | --- |  --- |
+| --- | --- | --- |
 | `admin_list` | 设置管理员,用于接收机器人状态变化通知 | 填入管理员微信名（不是备注） |
 | `admin_group_list` | 与 `admin_list` 同理，接收机器人状态变化通知 | 填入群名称（不是群备注） |
 
 ### ⚙️ Bot 配置
 
 | 配置项 | 解释 | 备注 |
-| --- | --- |  --- |
+| --- | --- | --- |
 | `bot_name` | 微信机器人的名字 | 微信名称，非微信号 |
 
 ### ⚙️ Chat 配置
 
 | 配置项 | 解释 | 备注 |
-| --- | --- |  --- |
+| --- | --- | --- |
 | `command_prefix` | 机器人命令前缀 | 默认为 `/` ，可以设置为`>>`、`!` 等 |
 | `need_mentioned` | 群聊中的命令是否需要@机器人 | 默认为 `True` |
 
 ### ⚙️ Copilot GPT4 配置
 
 | 配置项 | 解释 |  备注 |
-| --- | --- |  --- |
-| `cp_gpt4_api_host` | CopilotGPT4 服务的API地址 | 默认为 `http://localhost` |
-| `cp_gpt4_port` | CopilotGPT4 服务的端口 | 默认为 `8080` |
-| `cp_token` | Copilot 的 Token | 以 `ghu_` 开头的字符串 |
+| --- | --- | --- |
+| `cp_gpt4_base_api` | CopilotGPT4 服务的 BaseAPI | 默认为 `http://localhost:8080` |
+| `cp_token` | GitHub Copilot 的 Token | 以 `ghu_` 开头的字符串 |
 
 ### ⚙️ GitHub Webhook 配置
 
 | 配置项 | 解释 | 备注 |
-| --- | --- |  --- |
+| --- | --- | --- |
 | `github_webhook_enabled` | 功能开关，是否接收 GitHub Webhook | 默认为 `False` |
 | `github_webhook_api_path` | 接收 GitHub Webhook 的接口路径 | 默认为 `/webhook/github` |
 | `github_webhook_receiver_list` | 接收 GitHub Webhook 的微信用户 |  |
@@ -175,14 +172,14 @@ python3 main.py
 | --- | --- |  --- | --- |
 | `message_forwarding_enabled` | | 功能开关，是否开启消息转发 | 默认为 `False` |
 | `message_forwarding_rule_list` | | 消息规则列表，每个规则包含三个字段：`froms`, `to_persons` 和 `to_groups` | 规则是由字典组成的JSON列表，最后的 `]` 不能单独一行 |
-| ➤➤➤ | `froms` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称 |
-| ➤➤➤ | `to_persons` | 消息转发目标用户列表，即消息接收用户 | 可以填多个用户名称或为空列表 |
-| ➤➤➤ | `to_groups` | 消息转发目标群列表，即消息接收群 | 可以填多个群名称或为空列表 |
+| | `froms` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称 |
+| | `to_persons` | 消息转发目标用户列表，即消息接收用户 | 可以填多个用户名称或为空列表 |
+| | `to_groups` | 消息转发目标群列表，即消息接收群 | 可以填多个群名称或为空列表 |
 
 ### ⚙️ Weather Cron 配置
 
 | 配置项 | 解释 | 备注 |
-| --- | --- |  --- |
+| --- | --- | --- |
 | `weather_cron_enabled` | 功能开关，是否开启定时天气推送 | 默认为 `False` |
 | `weather_cron_rule_list` | 推送规则列表，每个规则包含两个字段：`cron` 和 `tasks` | |
 
@@ -191,19 +188,10 @@ python3 main.py
 ### ⚙️ Custom Command Key 配置
 
 | 配置项 | 解释 | 备注 |
-| --- | --- |  --- |
+| --- | --- | --- |
 | `custom_command_key_dict` | 自定义命令关键词字典，格式为 `command: [key1, key2, ...]`, 其中 `command` 为命令名称，`key1` 和 `key2` 为自定义命令关键词 |  |
 
 关于命令名称可选值详见[自定义命令关键词配置详细](docs/custom_command_key_config_detail.md)
-
-### ⚙️ Gasoline Price Cron 配置
-
-| 配置项 | 解释 | 备注 |
-| --- | --- |  --- |
-| `gasoline_price_cron_enabled` | 功能开关，是否开启定时推送92号汽油指导价 | 默认为 `False` |
-| `gasoline_price_cron_rule_list` | 推送规则列表，每个规则包含两个字段：`cron` 和 `tasks` | |
-
-关于 `cron` 和 `tasks` 的配置见[中石化92号汽油指导价定时任务配置详细](docs/gasoline_price_cron_config_detail.md)
 
 ## 插件化
 
