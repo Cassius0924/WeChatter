@@ -1,5 +1,8 @@
 import subprocess
 import threading
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 
 def run_command(command, working_directory):
@@ -9,7 +12,8 @@ def run_command(command, working_directory):
         if output == '' and process.poll() is not None:
             break
         if output:
-            print(output.strip().decode('utf-8'))
+            # print(output.strip().decode('utf-8'))
+            logging.info(output.strip().decode('utf-8'))
     return process.poll()
 
 
