@@ -230,17 +230,16 @@ def run_main():
 @app.post("/stop-main")
 def stop_main():
     try:
-        print("nignig")
-        # # kill wechatter process
-        # stop_main_command = "kill $(lsof -t -i:400)"
-        # stop_main_directory = "../"
-        #
-        # stop_main_thread = threading.Thread(target=run_command, args=(stop_main_command, stop_main_directory),
-        #                                     daemon=True)
-        # stop_main_thread.start()
-        # stop_main_thread.join()
-        # print("wechatter stopped")
-        #
+        # kill wechatter process
+        stop_main_command = "kill $(lsof -t -i:400)"
+        stop_main_directory = "../"
+
+        stop_main_thread = threading.Thread(target=run_command, args=(stop_main_command, stop_main_directory),
+                                            daemon=True)
+        stop_main_thread.start()
+        stop_main_thread.join()
+        print("wechatter stopped")
+
         # # kill frontend process
         # stop_frontend_command = "kill $(lsof -t -i:3000)"
         # stop_frontend_directory = "../"
