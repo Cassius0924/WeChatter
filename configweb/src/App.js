@@ -108,7 +108,7 @@ function App() {
                                         onClick={async () => {
                                             try {
                                                 await axios.post(`http://${BASE_URL}:${PORT}/run-main`);
-                                                await axios.get(`http://${BASE_URL}:${PORT}/run-main`);
+                                                await axios.get(`http://${BASE_URL}:${PORT}/run-main`).then(res => {log(message)});
                                                 alert(log(message));
                                             } catch (error) {
                                                 console.error(error);
