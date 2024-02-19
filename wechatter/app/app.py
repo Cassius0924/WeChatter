@@ -1,7 +1,9 @@
 from fastapi import FastAPI
+from loguru import logger
 
 import wechatter.app.routers as routers
 import wechatter.config as config
+from wechatter.art_text import print_wechatter_art_text
 from wechatter.config.parsers import (
     parse_gasoline_price_cron_rule_list,
     parse_weather_cron_rule_list,
@@ -33,6 +35,8 @@ if not Scheduler.is_cron_tasks_empty():
     @app.on_event("startup")
     async def startup_event():
         scheduler.startup()
+        print_wechatter_art_text()
+        logger.info("WeChatter 启动成功！")
 
     @app.on_event("shutdown")
     async def shutdown_event():
