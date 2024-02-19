@@ -106,19 +106,40 @@ function App() {
                                 <div className="hidden md:ml-4 md:flex-shrink-0 md:flex md:items-center">
                                     <button
                                         className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-100 transition"
-                                        onClick={async () => {
-                                            try {
-                                                await axios.post(`http://${BASE_URL}:${PORT}/run-main`);
-                                                await new Promise(r => setTimeout(r, 1000));
-                                                await axios.get(`http://${BASE_URL}:${PORT}/run-main`)
+                                        // onClick={async () => {
+                                        //     try {
+                                        //         await axios.post(`http://${BASE_URL}:${PORT}/run-main`);
+                                        //         await new Promise(r => setTimeout(r, 1000));
+                                        //         await axios.get(`http://${BASE_URL}:${PORT}/run-main`)
+                                        //             .then(res => {
+                                        //                 console.log(res.data.message);
+                                        //                 alert(res.data.message)
+                                        //             });
+                                        //     } catch (error) {
+                                        //         console.error(error);
+                                        //         alert('Failed to run main.py');
+                                        //     }
+                                        // }}
+                                        onClick={() => {
+                                            axios.post(`http://${BASE_URL}:${PORT}/run-main`)
+                                                .catch(error => {
+                                                    console.error(error);
+                                                    alert('Failed to run main.py');
+                                                });
+
+                                            const intervalId = setInterval(() => {
+                                                axios.get(`http://${BASE_URL}:${PORT}/run-main`)
                                                     .then(res => {
                                                         console.log(res.data.message);
-                                                        alert(res.data.message)
+                                                        if (res.data.message === 'wechatter is running') {
+                                                            alert(res.data.message);
+                                                            clearInterval(intervalId);
+                                                        }
+                                                    })
+                                                    .catch(error => {
+                                                        console.error(error);
                                                     });
-                                            } catch (error) {
-                                                console.error(error);
-                                                alert('Failed to run main.py');
-                                            }
+                                            }, 1000); // 每秒发送一次请求
                                         }}
                                     >
                                         <span className="sr-only">View notifications</span>
