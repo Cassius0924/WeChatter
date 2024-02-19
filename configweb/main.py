@@ -230,36 +230,37 @@ def stop_main():
 @app.post("/stop-main")
 def stop_main():
     try:
-        # kill wechatter process
-        stop_main_command = "kill $(lsof -t -i:400)"
-        stop_main_directory = "../"
-
-        stop_main_thread = threading.Thread(target=run_command, args=(stop_main_command, stop_main_directory),
-                                            daemon=True)
-        stop_main_thread.start()
-        stop_main_thread.join()
-        print("wechatter stopped")
-
-        # kill frontend process
-        stop_frontend_command = "kill $(lsof -t -i:3000)"
-        stop_frontend_directory = "../"
-
-        stop_frontend_thread = threading.Thread(target=run_command,
-                                                args=(stop_frontend_command, stop_frontend_directory), daemon=True)
-        stop_frontend_thread.start()
-        stop_frontend_thread.join()
-        print("frontend stopped")
-
-        # kill backend process
-        # stop_backend_command = "kill $(lsof -t -i:8000)"
-        stop_backend_command = "for pid in $(lsof -t -i:8000); do pkill -9 -P $pid; done"
-        stop_backend_directory = "../"
-
-        stop_backend_thread = threading.Thread(target=run_command, args=(stop_backend_command, stop_backend_directory),
-                                               daemon=True)
-        stop_backend_thread.start()
-        stop_backend_thread.join()
-        print("backend stopped")
+        print("nignig")
+        # # kill wechatter process
+        # stop_main_command = "kill $(lsof -t -i:400)"
+        # stop_main_directory = "../"
+        #
+        # stop_main_thread = threading.Thread(target=run_command, args=(stop_main_command, stop_main_directory),
+        #                                     daemon=True)
+        # stop_main_thread.start()
+        # stop_main_thread.join()
+        # print("wechatter stopped")
+        #
+        # # kill frontend process
+        # stop_frontend_command = "kill $(lsof -t -i:3000)"
+        # stop_frontend_directory = "../"
+        #
+        # stop_frontend_thread = threading.Thread(target=run_command,
+        #                                         args=(stop_frontend_command, stop_frontend_directory), daemon=True)
+        # stop_frontend_thread.start()
+        # stop_frontend_thread.join()
+        # print("frontend stopped")
+        #
+        # # kill backend process
+        # # stop_backend_command = "kill $(lsof -t -i:8000)"
+        # stop_backend_command = "for pid in $(lsof -t -i:8000); do pkill -9 -P $pid; done"
+        # stop_backend_directory = "../"
+        #
+        # stop_backend_thread = threading.Thread(target=run_command, args=(stop_backend_command, stop_backend_directory),
+        #                                        daemon=True)
+        # stop_backend_thread.start()
+        # stop_backend_thread.join()
+        # print("backend stopped")
 
         # # activate backend and frontend
         # # 直接执行npm start：
@@ -272,7 +273,7 @@ def stop_main():
         # backend_and_frontend_thread.join()
         # print("backend and frontend started")
 
-        return {"message": ""}
+        return {"message": "hhh"}
     except Exception as e:
         return {"error": str(e)}
 
