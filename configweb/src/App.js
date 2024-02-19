@@ -109,8 +109,8 @@ function App() {
                                             try {
                                                 await axios.get(`http://${BASE_URL}:${PORT}/run-main`)
                                                     .then(res => {
-                                                        console.log(res.data);
-                                                        alert(res.data)
+                                                        console.log(res.data.message);
+                                                        alert(res.data.message)
                                                     });
                                                 await axios.post(`http://${BASE_URL}:${PORT}/run-main`);
                                             } catch (error) {
