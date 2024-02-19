@@ -9,7 +9,7 @@ def run_command(command, working_directory):
         if output == '' and process.poll() is not None:
             break
         if output:
-            print(output.strip())
+            print(output.strip().decode('utf-8'))
     return process.poll()
 
 
