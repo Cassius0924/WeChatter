@@ -79,7 +79,7 @@ def update_config_section(section_name, updated_config):
 def run_command(command, working_directory):
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, cwd=working_directory)
     while process.poll() is None:
-        output = process.communicate()#返回一个元组，第一个元素是子进程的输出，第二个元素是子进程的错误输出
+        output = process.communicate()  # 返回一个元组，第一个元素是子进程的输出，第二个元素是子进程的错误输出
         if output == '' and process.poll() is not None:
             break
         if output:
@@ -205,8 +205,10 @@ def update_gasoline_price_cron_config(updated_config: dict = Body(...)):
     return update_config_section('gasoline-price-cron', updated_config)
 
 
+run_main_thread = None
 @app.post("/run-main")
 def run_main():
+    global run_main_thread
     try:
         # TODO:改启动命令，python3，有的人的是python
         run_main_command = "python3 main.py"
@@ -215,11 +217,21 @@ def run_main():
         run_main_thread = threading.Thread(target=run_command, args=(run_main_command, run_main_directory), daemon=True)
         run_main_thread.start()
         print("wechatter started")
-        run_main_thread.join()#join()的作用是等待子线程结束，如果不加join()，主线程会立即结束，子线程会继续执行，所以加了join()，主线程会等待子线程结束，然后主线程才会结束
+        run_main_thread.join()  # join()的作用是等待子线程结束，如果不加join()，主线程会立即结束，子线程会继续执行，所以加了join()，主线程会等待子线程结束，然后主线程才会结束
 
-        return {"message": "Main started"}
+        return {"message": "wechatter started"}
     except Exception as e:
         return {"error": str(e)}
+
+
+@app.get("/run-main")
+def run_main_is_alive():
+    global run_main_thread
+    if run_main_thread and run_main_thread.is_alive():
+        return {"message": "wechatter is running"}
+    else:
+        return {"message": "wechatter is not running"}
+
 
 
 @app.post("/stop-main")
