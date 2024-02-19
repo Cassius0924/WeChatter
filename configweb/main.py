@@ -202,29 +202,29 @@ def run_main():
         return {"error": str(e)}
 
 
-@app.post("/stop-main")
-def stop_main():
-    try:
-        # Kill all child processes
-        stop_child_processes_command = "kill $(lsof -t -i:8000)"  # 后端端口号
-        # Kill the main process
-        stop_main_command = "kill $(lsof -t -i:400)"  # wechatter端口号
-        stop_main_directory = "../"
-
-        stop_child_processes_thread = threading.Thread(target=run_command,
-                                                       args=(stop_child_processes_command, stop_main_directory),
-                                                       daemon=True)
-        stop_child_processes_thread.start()
-        stop_child_processes_thread.join()
-
-        stop_main_thread = threading.Thread(target=run_command, args=(stop_main_command, stop_main_directory),
-                                            daemon=True)
-        stop_main_thread.start()
-        stop_main_thread.join()
-
-        return {"message": "Main and all child processes stopped"}
-    except Exception as e:
-        return {"error": str(e)}
+# @app.post("/stop-main")
+# def stop_main():
+#     try:
+#         # Kill all child processes
+#         stop_child_processes_command = "kill $(lsof -t -i:8000)"  # 后端端口号
+#         # Kill the main process
+#         stop_main_command = "kill $(lsof -t -i:400)"  # wechatter端口号
+#         stop_main_directory = "../"
+#
+#         stop_child_processes_thread = threading.Thread(target=run_command,
+#                                                        args=(stop_child_processes_command, stop_main_directory),
+#                                                        daemon=True)
+#         stop_child_processes_thread.start()
+#         stop_child_processes_thread.join()
+#
+#         stop_main_thread = threading.Thread(target=run_command, args=(stop_main_command, stop_main_directory),
+#                                             daemon=True)
+#         stop_main_thread.start()
+#         stop_main_thread.join()
+#
+#         return {"message": "Main and all child processes stopped"}
+#     except Exception as e:
+#         return {"error": str(e)}
 
 
 @app.post("/stop-main")
