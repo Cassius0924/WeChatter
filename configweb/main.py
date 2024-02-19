@@ -84,7 +84,7 @@ def run_command(command, working_directory):
             break
         if output:
             print("输出:")
-            print("无输出" if output[0] is None else output[0].decode('utf-8'))
+            print("None" if output[0] is None else output[0].decode('utf-8'))
             print("错误输出:")
             print('None' if output[1] is None else output[1].decode('utf-8'))
     return process.poll()
