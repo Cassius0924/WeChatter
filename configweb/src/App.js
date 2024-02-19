@@ -108,7 +108,7 @@ function App() {
                                         onClick={async () => {
                                             try {
                                                 await axios.post(`http://${BASE_URL}:${PORT}/run-main`);
-                                                alert('main.py run successfully');
+                                                alert(log(response.data.message));
                                             } catch (error) {
                                                 console.error(error);
                                                 alert('Failed to run main.py');

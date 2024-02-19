@@ -214,7 +214,8 @@ def run_main():
 
         run_main_thread = threading.Thread(target=run_command, args=(run_main_command, run_main_directory), daemon=True)
         run_main_thread.start()
-        run_main_thread.join()
+        print("wechatter started")
+        run_main_thread.join()#join()的作用是等待子线程结束，如果不加join()，主线程会立即结束，子线程会继续执行，所以加了join()，主线程会等待子线程结束，然后主线程才会结束
 
         return {"message": "Main started"}
     except Exception as e:
