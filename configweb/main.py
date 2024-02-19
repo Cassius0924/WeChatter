@@ -249,6 +249,7 @@ def stop_main():
         stop_frontend_thread.start()
         stop_frontend_thread.join()
         print("frontend stopped")
+
         # kill backend process
         stop_backend_command = "kill $(lsof -t -i:8000)"
         stop_backend_directory = "../"
@@ -259,22 +260,22 @@ def stop_main():
         stop_backend_thread.join()
         print("backend stopped")
 
-        # activate backend and frontend
-        # 直接执行npm start：
-        backend_and_frontend_command = "npm start"
-        backend_and_frontend_directory = "/myproject/WeChatter/configweb"
-
-        backend_and_frontend_thread = threading.Thread(target=run_command, args=(
-            backend_and_frontend_command, backend_and_frontend_directory), daemon=True)
-        backend_and_frontend_thread.start()
-        backend_and_frontend_thread.join()
-        print("backend and frontend started")
+        # # activate backend and frontend
+        # # 直接执行npm start：
+        # backend_and_frontend_command = "npm start"
+        # backend_and_frontend_directory = "/myproject/WeChatter/configweb"
+        #
+        # backend_and_frontend_thread = threading.Thread(target=run_command, args=(
+        #     backend_and_frontend_command, backend_and_frontend_directory), daemon=True)
+        # backend_and_frontend_thread.start()
+        # backend_and_frontend_thread.join()
+        # print("backend and frontend started")
 
         return {"message": ""}
     except Exception as e:
         return {"error": str(e)}
 
-# 无法解决死锁问题，具体如下：（现在用npm start就可以让前后端启动，在前端APP.js中，点击启动的button会执行await axios.post(`http://${BASE_URL}:${PORT}/run-main`)，服务器就会执行python3 main.py以启动另一个项目，cpu是正常的。点击停止的button会执行await axios.post(`http://${BASE_URL}:${PORT}/stop-main`)，服务器就会执行kill -9 $(lsof -t -i:400)，也执行成功了，已经启动的那个另一个项目的进程停止了，但是出现了问题：后端突然占用很大的cpu，平均有140%的cpu，具体是在点击停止的button的过程中，INFO:     Started reloader process [2993425] using StatReload
+# 无法解决死锁问题，问题具体如下：（现在用npm start就可以让前后端启动，在前端APP.js中，点击启动的button会执行await axios.post(`http://${BASE_URL}:${PORT}/run-main`)，服务器就会执行python3 main.py以启动另一个项目，cpu是正常的。点击停止的button会执行await axios.post(`http://${BASE_URL}:${PORT}/stop-main`)，服务器就会执行kill -9 $(lsof -t -i:400)，也执行成功了，已经启动的那个另一个项目的进程停止了，但是出现了问题：后端突然占用很大的cpu，平均有140%的cpu，具体是在点击停止的button的过程中，INFO:     Started reloader process [2993425] using StatReload
 # INFO:     Started server process [2993434]，这个2993434进程，突然变得占用cpu很大，他的command是python3 -c from multiprocessing.spawn import spawn main;spawn main(tracker fd=5,pipe handle=7)--multiprocessing-fork）
 
 # @app.post("/stop-main")
