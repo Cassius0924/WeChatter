@@ -14,7 +14,6 @@ import GasolinePriceCron from "./ui/Gasoline-Price-Cron";
 import ConfigWeb from "./ui/ConfigWeb";
 import axios from "axios";
 import {BASE_URL, PORT} from './config';
-import {wait} from "@testing-library/user-event/dist/utils";
 
 
 function App() {
@@ -139,7 +138,7 @@ function App() {
                                                     .catch(error => {
                                                         console.error(error);
                                                     });
-                                            }, 1000); // 每秒发送一次请求
+                                            }, 500); // 每秒发送一次请求
                                         }}
                                     >
                                         <span className="sr-only">View notifications</span>
