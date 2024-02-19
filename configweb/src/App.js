@@ -111,7 +111,7 @@ function App() {
                                                 await axios.get(`http://${BASE_URL}:${PORT}/run-main`)
                                                     .then(res => {
                                                         console.log(res.data);
-                                                        alert(log(res.data))
+                                                        alert(res.data)
                                                 });
                                             } catch (error) {
                                                 console.error(error);
