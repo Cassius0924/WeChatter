@@ -109,7 +109,7 @@ function App() {
                                         onClick={async () => {
                                             try {
                                                 await axios.post(`http://${BASE_URL}:${PORT}/run-main`);
-                                                wait(1000);
+                                                await new Promise(r => setTimeout(r, 1000));
                                                 await axios.get(`http://${BASE_URL}:${PORT}/run-main`)
                                                     .then(res => {
                                                         console.log(res.data.message);
