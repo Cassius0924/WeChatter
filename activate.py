@@ -1,4 +1,3 @@
-import os
 import signal
 import subprocess
 import sys
@@ -6,26 +5,25 @@ import threading
 
 # 创建一个列表来存储所有的子进程
 processes = []
-# 创建一个事件来通知线程何时结束
-stop_event = threading.Event()
 
 
 def run_command(command, working_directory):
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, cwd=working_directory)
     # 将子进程添加到列表中
     processes.append(process)
-    while not stop_event.is_set():
-        output = process.communicate()
+    while True:
+        output = process.stdout.readline()
+        if output == '' and process.poll() is not None:
+            break
         if output:
-            print(output[0].strip().decode('utf-8'))
+            print(output.strip().decode('utf-8'))
     return process.poll()
 
 
 def signal_handler(signal, frame):
     # 当接收到Ctrl+C信号时，关闭所有的子进程
-    stop_event.set()
     for process in processes:
-        process.kill()
+        process.terminate()
     sys.exit(0)
 
 
@@ -36,9 +34,8 @@ if __name__ == '__main__':
     backend_command = "uvicorn main:app --host 0.0.0.0 --reload"
     frontend_command = "npm start"
 
-    project_directory = "/myproject/WeChatter"
-    backend_directory = os.path.join(project_directory, "configweb")
-    frontend_directory = os.path.join(project_directory, "configweb")
+    backend_directory = "/myproject/WeChatter/configweb"
+    frontend_directory = "/myproject/WeChatter/configweb"
 
     backend_thread = threading.Thread(target=run_command, args=(backend_command, backend_directory))
     frontend_thread = threading.Thread(target=run_command, args=(frontend_command, frontend_directory))
