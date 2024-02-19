@@ -53,6 +53,10 @@ class MessageHandler:
                     message=message_obj.pure_content,
                     q_response=quoted_response.response,
                 )
+            else:
+                logger.warning(
+                    f"未找到可引用的命令消息处理函数: {quoted_response.command}"
+                )
             return
 
         # 非命令消息
