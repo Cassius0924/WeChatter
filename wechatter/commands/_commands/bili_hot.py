@@ -8,9 +8,11 @@ from wechatter.models.wechat import QuotedResponse, SendTo
 from wechatter.sender import sender
 from wechatter.utils import get_request_json, url_encode
 
+COMMAND_NAME = "bili-hot"
+
 
 @command(
-    command="bili-hot",
+    command=COMMAND_NAME,
     keys=["b站热搜", "bili-hot"],
     desc="获取b站热搜。",
 )
@@ -26,7 +28,7 @@ def bili_hot_command_handler(to: SendTo, message: str = ""):
             to,
             result,
             quoted_response=QuotedResponse(
-                command="bili-hot",
+                command=COMMAND_NAME,
                 response=q_response,
             ),
         )
@@ -55,8 +57,9 @@ def get_bili_hot_str() -> Tuple[str, str]:
         url="https://app.bilibili.com/x/v2/search/trending/ranking"
     )
     hot_list = _extract_bili_hot_data(response)
-    return _generate_bili_hot_message(hot_list), _generate_bili_hot_quoted_response(
-        hot_list
+    return (
+        _generate_bili_hot_message(hot_list),
+        _generate_bili_hot_quoted_response(hot_list),
     )
 
 
@@ -81,10 +84,10 @@ def _generate_bili_hot_message(hot_list: List) -> str:
 
 
 def _generate_bili_hot_quoted_response(hot_list: List) -> str:
-    search_url = "https://search.bilibili.com/all?keyword=%s"
+    search_api = "https://search.bilibili.com/all?keyword=%s"
     result = {}
     for i, hot_search in enumerate(hot_list):
-        keyword = hot_search.get("keyword")
+        keyword = hot_search.get("keyword", None)
         if keyword:
-            result[i + 1] = url_encode(search_url % keyword)
+            result[str(i + 1)] = url_encode(search_api % keyword)
     return json.dumps(result)

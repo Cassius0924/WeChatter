@@ -34,3 +34,8 @@ class TestGithubTrendingCommand(unittest.TestCase):
     def test_generate_zhihu_hot_message_empty_list(self):
         result = gt._generate_github_trending_message([])
         self.assertEqual(result, "暂无 GitHub 趋势")
+
+    def test_generate_github_trending_quoted_response_success(self):
+        result = gt._generate_github_trending_quoted_response(self.gt_list)
+        true_result = '{"1": "https://github.com/danielmiessler/fabric", "2": "https://github.com/InkboxSoftware/excelCPU", "3": "https://github.com/f/awesome-chatgpt-prompts", "4": "https://github.com/all-in-aigc/aicover", "5": "https://github.com/facebookresearch/codellama", "6": "https://github.com/webprodigies/plura-production", "7": "https://github.com/ExOK/Celeste64", "8": "https://github.com/haotian-liu/LLaVA", "9": "https://github.com/mlflow/mlflow", "10": "https://github.com/PKU-YuanGroup/MoE-LLaVA"}'
+        self.assertEqual(result, true_result)

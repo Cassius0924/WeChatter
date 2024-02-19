@@ -26,3 +26,8 @@ class TestZhihuHotCommand(unittest.TestCase):
     def test_generate_zhihu_hot_message_empty_list(self):
         result = zhihu_hot._generate_zhihu_hot_message([])
         self.assertEqual(result, "暂无知乎热搜")
+
+    def test_generate_zhihu_hot_quoted_response_success(self):
+        result = zhihu_hot._generate_zhihu_hot_quoted_response(self.zhihu_hot_list)
+        true_result = '{"1": "https://www.zhihu.com/question/642169181", "2": "https://www.zhihu.com/question/642297518", "3": "https://www.zhihu.com/question/642108938", "4": "https://www.zhihu.com/question/641995117", "5": "https://www.zhihu.com/question/642299758", "6": "https://www.zhihu.com/question/642287890", "7": "https://www.zhihu.com/question/642154023", "8": "https://www.zhihu.com/question/642290406", "9": "https://www.zhihu.com/question/641648705", "10": "https://www.zhihu.com/question/640060689", "11": "https://www.zhihu.com/question/642299465", "12": "https://www.zhihu.com/question/642125769", "13": "https://www.zhihu.com/question/642330312", "14": "https://www.zhihu.com/question/642307679", "15": "https://www.zhihu.com/question/642184584", "16": "https://www.zhihu.com/question/521484226", "17": "https://www.zhihu.com/question/642314136", "18": "https://www.zhihu.com/question/642267038", "19": "https://www.zhihu.com/question/641865103", "20": "https://www.zhihu.com/question/640626886"}'
+        self.assertEqual(result, true_result)
