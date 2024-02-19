@@ -13,7 +13,7 @@ import CustomCommandKey from "./ui/Custom-Command-Key";
 import GasolinePriceCron from "./ui/Gasoline-Price-Cron";
 import ConfigWeb from "./ui/ConfigWeb";
 import axios from "axios";
-import { BASE_URL, PORT } from './config';
+import {BASE_URL, PORT} from './config';
 
 
 function App() {
@@ -108,8 +108,11 @@ function App() {
                                         onClick={async () => {
                                             try {
                                                 await axios.post(`http://${BASE_URL}:${PORT}/run-main`);
-                                                await axios.get(`http://${BASE_URL}:${PORT}/run-main`).then(res => {log(message)});
-                                                alert(log(message));
+                                                await axios.get(`http://${BASE_URL}:${PORT}/run-main`)
+                                                    .then(res => {
+                                                        console.log(res.data);
+                                                        alert(log(res.data))
+                                                });
                                             } catch (error) {
                                                 console.error(error);
                                                 alert('Failed to run main.py');
