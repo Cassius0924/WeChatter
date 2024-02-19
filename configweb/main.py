@@ -10,11 +10,10 @@ from fastapi.middleware.cors import CORSMiddleware
 logging.basicConfig(level=logging.DEBUG)
 app = FastAPI()
 
-
 # #本地测试
 # BASE_URL = "http://localhost:"
 # PORT = "3000"
-#服务器
+# 服务器
 BASE_URL = "http://47.92.99.199:"
 PORT = "3000"
 
@@ -190,7 +189,7 @@ def update_gasoline_price_cron_config(updated_config: dict = Body(...)):
 @app.post("/run-main")
 def run_main():
     try:
-        #TODO:改启动命令，python3，有的人的是python
+        # TODO:改启动命令，python3，有的人的是python
         run_main_command = "python3 main.py"
         run_main_directory = "../"
 
@@ -203,40 +202,94 @@ def run_main():
         return {"error": str(e)}
 
 
-# @app.post("/stop-main")
-# def stop_main():
-#     try:
-#         # Kill all child processes
-#         stop_child_processes_command = "pkill -P $(lsof -t -i:8000)"#后端端口号
-#         # Kill the main process
-#         stop_main_command = "kill -9 $(lsof -t -i:400)"#wechatter端口号
-#         stop_main_directory = "../"
-#
-#         stop_child_processes_thread = threading.Thread(target=run_command, args=(stop_child_processes_command, stop_main_directory), daemon=True)
-#         stop_child_processes_thread.start()
-#         stop_child_processes_thread.join()
-#
-#         stop_main_thread = threading.Thread(target=run_command, args=(stop_main_command, stop_main_directory), daemon=True)
-#         stop_main_thread.start()
-#         stop_main_thread.join()
-#
-#         return {"message": "Main and all child processes stopped"}
-#     except Exception as e:
-#         return {"error": str(e)}
+@app.post("/stop-main")
+def stop_main():
+    try:
+        # Kill all child processes
+        stop_child_processes_command = "kill $(lsof -t -i:8000)"  # 后端端口号
+        # Kill the main process
+        stop_main_command = "kill $(lsof -t -i:400)"  # wechatter端口号
+        stop_main_directory = "../"
+
+        stop_child_processes_thread = threading.Thread(target=run_command,
+                                                       args=(stop_child_processes_command, stop_main_directory),
+                                                       daemon=True)
+        stop_child_processes_thread.start()
+        stop_child_processes_thread.join()
+
+        stop_main_thread = threading.Thread(target=run_command, args=(stop_main_command, stop_main_directory),
+                                            daemon=True)
+        stop_main_thread.start()
+        stop_main_thread.join()
+
+        return {"message": "Main and all child processes stopped"}
+    except Exception as e:
+        return {"error": str(e)}
 
 
 @app.post("/stop-main")
 def stop_main():
     try:
-        #TODO:改停止命令，改端口号，从config.ini中读取
-        # stop_main_command = "kill -9 $(lsof -t -i:400)"
+        # kill wechatter process
         stop_main_command = "kill $(lsof -t -i:400)"
         stop_main_directory = "../"
 
-        stop_main_thread = threading.Thread(target=run_command, args=(stop_main_command, stop_main_directory), daemon=True)
+        stop_main_thread = threading.Thread(target=run_command, args=(stop_main_command, stop_main_directory),
+                                            daemon=True)
         stop_main_thread.start()
         stop_main_thread.join()
+        print("wechatter stopped")
 
-        return {"message": "Main stopped"}
+        # kill backend process
+        stop_backend_command = "kill $(lsof -t -i:8000)"
+        stop_backend_directory = "../"
+
+        stop_backend_thread = threading.Thread(target=run_command, args=(stop_backend_command, stop_backend_directory),
+                                               daemon=True)
+        stop_backend_thread.start()
+        stop_backend_thread.join()
+        print("backend stopped")
+
+        # kill frontend process
+        stop_frontend_command = "kill $(lsof -t -i:3000)"
+        stop_frontend_directory = "../"
+
+        stop_frontend_thread = threading.Thread(target=run_command,
+                                                args=(stop_frontend_command, stop_frontend_directory), daemon=True)
+        stop_frontend_thread.start()
+        stop_frontend_thread.join()
+        print("frontend stopped")
+
+        # activate backend and frontend
+        # 直接执行npm start：
+        backend_and_frontend_command = "npm start"
+        backend_and_frontend_directory = "/myproject/WeChatter/configweb"
+
+        backend_and_frontend_thread = threading.Thread(target=run_command, args=(
+            backend_and_frontend_command, backend_and_frontend_directory), daemon=True)
+        backend_and_frontend_thread.start()
+        backend_and_frontend_thread.join()
+        print("backend and frontend started")
+
+        return {"message": ""}
     except Exception as e:
         return {"error": str(e)}
+
+# 无法解决死锁问题，具体如下：（现在用npm start就可以让前后端启动，在前端APP.js中，点击启动的button会执行await axios.post(`http://${BASE_URL}:${PORT}/run-main`)，服务器就会执行python3 main.py以启动另一个项目，cpu是正常的。点击停止的button会执行await axios.post(`http://${BASE_URL}:${PORT}/stop-main`)，服务器就会执行kill -9 $(lsof -t -i:400)，也执行成功了，已经启动的那个另一个项目的进程停止了，但是出现了问题：后端突然占用很大的cpu，平均有140%的cpu，具体是在点击停止的button的过程中，INFO:     Started reloader process [2993425] using StatReload
+# INFO:     Started server process [2993434]，这个2993434进程，突然变得占用cpu很大，他的command是python3 -c from multiprocessing.spawn import spawn main;spawn main(tracker fd=5,pipe handle=7)--multiprocessing-fork）
+
+# @app.post("/stop-main")
+# def stop_main():
+#     try:
+#         #TODO:改停止命令，改端口号，从config.ini中读取
+#         # stop_main_command = "kill -9 $(lsof -t -i:400)"
+#         stop_main_command = "kill $(lsof -t -i:400)"
+#         stop_main_directory = "../"
+#
+#         stop_main_thread = threading.Thread(target=run_command, args=(stop_main_command, stop_main_directory), daemon=True)
+#         stop_main_thread.start()
+#         stop_main_thread.join()
+#
+#         return {"message": "Main stopped"}
+#     except Exception as e:
+#         return {"error": str(e)}
