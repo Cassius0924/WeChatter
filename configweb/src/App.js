@@ -107,8 +107,8 @@ function App() {
                                         className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-100 transition"
                                         onClick={async () => {
                                             try {
-                                                await axios.post(`http://${BASE_URL}:${PORT}/run-main`).then(response => {log(response.data.message)});
-                                                alert(log(response.data.message));
+                                                await axios.post(`http://${BASE_URL}:${PORT}/run-main`).then(response => {console.log(response.data.message)});
+                                                // alert(log(response.data.message));
                                             } catch (error) {
                                                 console.error(error);
                                                 alert('Failed to run main.py');
