@@ -60,6 +60,12 @@ def update_config_section(section_name, updated_config):
         return {"error": str(e)}
 
 
+# ！！！已解决！！！解决方法：在run_command中，将process.stdout.readline()改为process.communicate()，并且将while True改为while process.poll() is None，
+# 原因：process.stdout.readline()是阻塞的，会一直等待子进程的输出，直到子进程结束，而process.communicate()是非阻塞的，会立即返回子进程的输出，如果子进程没有输出，就返回空字符串，如果子进程结束了，就返回子进程的输出，所以process.communicate()不会阻塞，而process.poll()是非阻塞的，会立即返回子进程的状态，如果子进程结束了，就返回子进程的状态，如果子进程没有结束，就返回None，所以while process.poll() is None不会阻塞，而while True会阻塞，所以将while True改为while process.poll() is None就不会死锁了
+
+# 死锁问题，问题具体如下：（现在用npm start就可以让前后端启动，在前端APP.js中，点击启动的button会执行await axios.post(`http://${BASE_URL}:${PORT}/run-main`)，服务器就会执行python3 main.py以启动另一个项目，cpu是正常的。点击停止的button会执行await axios.post(`http://${BASE_URL}:${PORT}/stop-main`)，服务器就会执行kill -9 $(lsof -t -i:400)，也执行成功了，已经启动的那个另一个项目的进程停止了，但是出现了问题：后端突然占用很大的cpu，平均有140%的cpu，具体是在点击停止的button的过程中，INFO:     Started reloader process [2993425] using StatReload
+# INFO:     Started server process [2993434]，这个2993434进程，突然变得占用cpu很大，他的command是python3 -c from multiprocessing.spawn import spawn main;spawn main(tracker fd=5,pipe handle=7)--multiprocessing-fork）
+
 # def run_command(command, working_directory):
 #     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, cwd=working_directory)
 #     while True:
@@ -212,34 +218,11 @@ def run_main():
         return {"error": str(e)}
 
 
-# @app.post("/stop-main")
-# def stop_main():
-#     try:
-#         # Kill all child processes
-#         stop_child_processes_command = "kill $(lsof -t -i:8000)"  # 后端端口号
-#         # Kill the main process
-#         stop_main_command = "kill $(lsof -t -i:400)"  # wechatter端口号
-#         stop_main_directory = "../"
-#
-#         stop_child_processes_thread = threading.Thread(target=run_command,
-#                                                        args=(stop_child_processes_command, stop_main_directory),
-#                                                        daemon=True)
-#         stop_child_processes_thread.start()
-#         stop_child_processes_thread.join()
-#
-#         stop_main_thread = threading.Thread(target=run_command, args=(stop_main_command, stop_main_directory),
-#                                             daemon=True)
-#         stop_main_thread.start()
-#         stop_main_thread.join()
-#
-#         return {"message": "Main and all child processes stopped"}
-#     except Exception as e:
-#         return {"error": str(e)}
-
-
 @app.post("/stop-main")
 def stop_main():
     try:
+        # TODO:改停止命令，改端口号，从config.ini中读取
+
         # kill wechatter process
         stop_main_command = "kill $(lsof -t -i:400)"
         stop_main_directory = "../"
@@ -247,61 +230,9 @@ def stop_main():
         stop_main_thread = threading.Thread(target=run_command, args=(stop_main_command, stop_main_directory),
                                             daemon=True)
         stop_main_thread.start()
-        print("nignig")
-        stop_main_thread.join()#这里会死锁，解决方法：在run_command中，将process.stdout.readline()改为process.communicate()，并且将while True改为while process.poll() is None
+        stop_main_thread.join()  # 这里会死锁，解决方法：在run_command中，将process.stdout.readline()改为process.communicate()，并且将while True改为while process.poll() is None
         print("wechatter stopped")
 
-        # # kill frontend process
-        # stop_frontend_command = "kill $(lsof -t -i:3000)"
-        # stop_frontend_directory = "../"
-        #
-        # stop_frontend_thread = threading.Thread(target=run_command,
-        #                                         args=(stop_frontend_command, stop_frontend_directory), daemon=True)
-        # stop_frontend_thread.start()
-        # stop_frontend_thread.join()
-        # print("frontend stopped")
-        #
-        # # kill backend process
-        # # stop_backend_command = "kill $(lsof -t -i:8000)"
-        # stop_backend_command = "for pid in $(lsof -t -i:8000); do pkill -9 -P $pid; done"
-        # stop_backend_directory = "../"
-        #
-        # stop_backend_thread = threading.Thread(target=run_command, args=(stop_backend_command, stop_backend_directory),
-        #                                        daemon=True)
-        # stop_backend_thread.start()
-        # stop_backend_thread.join()
-        # print("backend stopped")
-
-        # # activate backend and frontend
-        # # 直接执行npm start：
-        # backend_and_frontend_command = "npm start"
-        # backend_and_frontend_directory = "/myproject/WeChatter/configweb"
-        #
-        # backend_and_frontend_thread = threading.Thread(target=run_command, args=(
-        #     backend_and_frontend_command, backend_and_frontend_directory), daemon=True)
-        # backend_and_frontend_thread.start()
-        # backend_and_frontend_thread.join()
-        # print("backend and frontend started")
-
-        return {"message": "hhh"}
+        return {"message": "wechatter stopped"}
     except Exception as e:
         return {"error": str(e)}
-
-# 无法解决死锁问题，问题具体如下：（现在用npm start就可以让前后端启动，在前端APP.js中，点击启动的button会执行await axios.post(`http://${BASE_URL}:${PORT}/run-main`)，服务器就会执行python3 main.py以启动另一个项目，cpu是正常的。点击停止的button会执行await axios.post(`http://${BASE_URL}:${PORT}/stop-main`)，服务器就会执行kill -9 $(lsof -t -i:400)，也执行成功了，已经启动的那个另一个项目的进程停止了，但是出现了问题：后端突然占用很大的cpu，平均有140%的cpu，具体是在点击停止的button的过程中，INFO:     Started reloader process [2993425] using StatReload
-# INFO:     Started server process [2993434]，这个2993434进程，突然变得占用cpu很大，他的command是python3 -c from multiprocessing.spawn import spawn main;spawn main(tracker fd=5,pipe handle=7)--multiprocessing-fork）
-
-# @app.post("/stop-main")
-# def stop_main():
-#     try:
-#         #TODO:改停止命令，改端口号，从config.ini中读取
-#         # stop_main_command = "kill -9 $(lsof -t -i:400)"
-#         stop_main_command = "kill $(lsof -t -i:400)"
-#         stop_main_directory = "../"
-#
-#         stop_main_thread = threading.Thread(target=run_command, args=(stop_main_command, stop_main_directory), daemon=True)
-#         stop_main_thread.start()
-#         stop_main_thread.join()
-#
-#         return {"message": "Main stopped"}
-#     except Exception as e:
-#         return {"error": str(e)}
