@@ -60,10 +60,20 @@ def update_config_section(section_name, updated_config):
         return {"error": str(e)}
 
 
+# def run_command(command, working_directory):
+#     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, cwd=working_directory)
+#     while True:
+#         output = process.stdout.readline()
+#         if output == '' and process.poll() is not None:
+#             break
+#         if output:
+#             print(output.strip())
+#     return process.poll()
+
 def run_command(command, working_directory):
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, cwd=working_directory)
-    while True:
-        output = process.stdout.readline()
+    while process.poll() is None:
+        output = process.communicate()
         if output == '' and process.poll() is not None:
             break
         if output:
@@ -238,7 +248,7 @@ def stop_main():
                                             daemon=True)
         stop_main_thread.start()
         print("nignig")
-        stop_main_thread.join()
+        stop_main_thread.join()#这里会死锁，解决方法：在run_command中，将process.stdout.readline()改为process.communicate()，并且将while True改为while process.poll() is None
         print("wechatter stopped")
 
         # # kill frontend process
