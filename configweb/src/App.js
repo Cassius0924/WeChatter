@@ -14,6 +14,7 @@ import GasolinePriceCron from "./ui/Gasoline-Price-Cron";
 import ConfigWeb from "./ui/ConfigWeb";
 import axios from "axios";
 import {BASE_URL, PORT} from './config';
+import {wait} from "@testing-library/user-event/dist/utils";
 
 
 function App() {
@@ -108,6 +109,7 @@ function App() {
                                         onClick={async () => {
                                             try {
                                                 await axios.post(`http://${BASE_URL}:${PORT}/run-main`);
+                                                wait(1000)
                                                 await axios.get(`http://${BASE_URL}:${PORT}/run-main`)
                                                     .then(res => {
                                                         console.log(res.data.message);
