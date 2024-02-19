@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
-import { BASE_URL, PORT } from '../../config';
+import { BASE_URL, PORT } from '././config';
 
 
 function useFetchData(path) {

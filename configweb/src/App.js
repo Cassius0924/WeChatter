@@ -13,7 +13,7 @@ import CustomCommandKey from "./ui/Custom-Command-Key";
 import GasolinePriceCron from "./ui/Gasoline-Price-Cron";
 import ConfigWeb from "./ui/ConfigWeb";
 import axios from "axios";
-import { BASE_URL, PORT } from '../config';
+import { BASE_URL, PORT } from './config';
 
 
 function App() {
