@@ -105,42 +105,46 @@ function App() {
                                 <div className="hidden md:ml-4 md:flex-shrink-0 md:flex md:items-center">
                                     <button
                                         className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-100 transition"
-                                        // onClick={async () => {
-                                        //     try {
-                                        //         await axios.post(`http://${BASE_URL}:${PORT}/run-main`);
-                                        //         await new Promise(r => setTimeout(r, 1000));
-                                        //         await axios.get(`http://${BASE_URL}:${PORT}/run-main`)
-                                        //             .then(res => {
-                                        //                 console.log(res.data.message);
-                                        //                 alert(res.data.message)
-                                        //             });
-                                        //     } catch (error) {
-                                        //         console.error(error);
-                                        //         alert('Failed to run main.py');
-                                        //     }
-                                        // }}
                                         onClick={() => {
-                                            axios.post(`http://${BASE_URL}:${PORT}/run-main`)
+                                            // 先检查是否已经启动main.py
+                                            axios.get(`http://${BASE_URL}:${PORT}/run-main`)
+                                                .then(res => {
+                                                    console.log(res.data.message);
+                                                    if (res.data.message === 'wechatter is running') {
+                                                        alert(res.data.message);
+                                                    } else {
+                                                        // 如果还没有启动，就启动它
+                                                        axios.post(`http://${BASE_URL}:${PORT}/run-main`)
+                                                            .then(res => {
+                                                                console.log(res.data.message);
+                                                            })
+                                                            .catch(error => {
+                                                                console.error(error);
+                                                                alert('Failed to run wechatter');
+                                                            });
+
+                                                        // 然后定期检查它的状态
+                                                        const intervalId = setInterval(() => {
+                                                            axios.get(`http://${BASE_URL}:${PORT}/run-main`)
+                                                                .then(res => {
+                                                                    console.log(res.data.message);
+                                                                    if (res.data.message === 'wechatter is running') {
+                                                                        alert(res.data.message);
+                                                                        clearInterval(intervalId);
+                                                                    }
+                                                                })
+                                                                .catch(error => {
+                                                                    console.error(error);
+                                                                });
+                                                        }, 500); // 每秒发送一次请求
+                                                    }
+                                                })
                                                 .catch(error => {
                                                     console.error(error);
-                                                    alert('Failed to run main.py');
                                                 });
-
-                                            const intervalId = setInterval(() => {
-                                                axios.get(`http://${BASE_URL}:${PORT}/run-main`)
-                                                    .then(res => {
-                                                        console.log(res.data.message);
-                                                        if (res.data.message === 'wechatter is running') {
-                                                            alert(res.data.message);
-                                                            clearInterval(intervalId);
-                                                        }
-                                                    })
-                                                    .catch(error => {
-                                                        console.error(error);
-                                                    });
-                                            }, 500); // 每秒发送一次请求
                                         }}
                                     >
+
                                         <span className="sr-only">View notifications</span>
                                         <svg t="1707823319943" className="icon" viewBox="0 0 1024 1024" version="1.1"
                                              xmlns="http://www.w3.org/2000/svg" p-id="2482" width="32" height="32">
