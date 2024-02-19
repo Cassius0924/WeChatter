@@ -229,7 +229,8 @@ def run_main():
 def stop_main():
     try:
         #TODO:改停止命令，改端口号，从config.ini中读取
-        stop_main_command = "kill -9 $(lsof -t -i:400)"
+        # stop_main_command = "kill -9 $(lsof -t -i:400)"
+        stop_main_command = "kill $(lsof -t -i:400)"
         stop_main_directory = "../"
 
         stop_main_thread = threading.Thread(target=run_command, args=(stop_main_command, stop_main_directory), daemon=True)
