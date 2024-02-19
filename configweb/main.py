@@ -84,7 +84,7 @@ def run_command(command, working_directory):
             break
         if output:
             print("输出:")
-            print('无输出' if output[0] is None else output[0].decode('utf-8'))
+            print("无输出" if output[0] is None else output[0].decode('utf-8'))
             print("错误输出:")
             print('None' if output[1] is None else output[1].decode('utf-8'))
     return process.poll()
@@ -233,7 +233,7 @@ def stop_main():
         stop_main_thread = threading.Thread(target=run_command, args=(stop_main_command, stop_main_directory),
                                             daemon=True)
         stop_main_thread.start()
-        stop_main_thread.join()  # 这里会死锁，解决方法：在run_command中，将process.stdout.readline()改为process.communicate()，并且将while True改为while process.poll() is None
+        stop_main_thread.join()  # !!!已解决!!!这里会死锁，解决方法：在run_command中，将process.stdout.readline()改为process.communicate()，并且将while True改为while process.poll() is None
         print("wechatter stopped")
 
         return {"message": "wechatter stopped"}
