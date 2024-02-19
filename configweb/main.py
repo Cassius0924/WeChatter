@@ -7,22 +7,13 @@ from fastapi import Body
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-# #配置url和端口
-# config = configparser.ConfigParser()
-# config.read('../config.ini', encoding='utf-8')
-#
-# front_url = config.get('server', 'front_url')
-# front_port = config.get('server', 'front_port')
-#
-# BASE_URL = f"http://{front_url}:"
-# PORT = front_port
-
 logging.basicConfig(level=logging.DEBUG)
 app = FastAPI()
 
-#本地测试
-BASE_URL = "http://localhost:"
-PORT = "3000"
+
+# #本地测试
+# BASE_URL = "http://localhost:"
+# PORT = "3000"
 #服务器
 BASE_URL = "http://47.92.99.199:"
 PORT = "3000"
