@@ -1,21 +1,6 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 
-//前端无法获取config.ini文件，所以这里直接写死
-// const fs = require('fs');
-// const path = require('path');
-// const ini = require('ini');
-//
-// // 获取项目根目录的路径
-// const rootDir = path.resolve(__dirname, '../..');
-//
-// // 读取并解析 config.ini
-// const config = ini.parse(fs.readFileSync(path.join(rootDir, 'config.ini'), 'utf-8'));
-//
-// // 现在你可以使用 config 对象了
-// export const front_url = config.server.front_url;
-// export const front_port = config.server.front_port;
-
 //本地
 // export const BASE_URL = "localhost";
 // export const PORT = "8000";
