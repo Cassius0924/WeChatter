@@ -1,4 +1,3 @@
-# 消息类
 import enum
 import json
 import re
@@ -11,6 +10,7 @@ from pydantic import BaseModel, computed_field
 import wechatter.config as config
 from wechatter.models.wechat.group import Group
 from wechatter.models.wechat.person import Person
+from wechatter.models.wechat.quoted_response import QUOTABLE_FORMAT
 
 
 class MessageType(enum.Enum):
@@ -140,6 +140,32 @@ class Message(BaseModel):
         返回消息发送对象名，如果是群则返回群名，如果不是则返回人名
         """
         return self.group.name if self.is_group else self.person.name
+
+    @computed_field
+    @cached_property
+    def quotable_id(self) -> Optional[str]:
+        """
+        获取引用消息的id
+        """
+        if self.is_quoted:
+            pattern = rf'「.+{QUOTABLE_FORMAT % "(.{3})"}'
+            try:
+                return re.search(pattern, self.content).group(1)
+            except AttributeError:
+                return None
+        return None
+
+    @computed_field
+    @cached_property
+    def pure_content(self) -> str:
+        """
+        获取不带引用的消息内容，即用户真实发送的消息
+        """
+        if self.is_quoted:
+            pattern = "「[\s\S]+」\n- - - - - - - - - - - - - - -\n([\s\S]*)"
+            return re.search(pattern, self.content).group(1)
+        else:
+            return self.content
 
     def __str__(self) -> str:
         source = self.person

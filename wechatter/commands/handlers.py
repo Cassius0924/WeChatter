@@ -7,20 +7,28 @@ import wechatter.config as config
 
 commands = {}
 """
-存储所有命令消息和其信息的及其处理函数的字典。
+存储所有命令的信息及其处理函数的字典
+"""
+quoted_handlers = {}
+"""
+存储所有可引用的命令消息的处理函数的字典
 """
 
 
-def command(command: str, keys: List[str], desc: str):
-    """
-    注册命令
-    :param command: 命令
-    :param keys: 命令关键词列表
-    :param desc: 命令描述
-    :return: 装饰器
-    """
+# 改为类装饰器
+class command:
+    def __init__(self, command: str, keys: List[str], desc: str):
+        """
+        :param command: 命令
+        :param keys: 命令关键词列表
+        :param desc: 命令描述
+        """
+        # TODO: 检测command是否重复
+        self.command = command
+        self.keys = keys
+        self.desc = desc
 
-    def decorator(func):
+    def __call__(self, func):
         sig = inspect.signature(func)
         params = sig.parameters
         if len(params) < 2:
@@ -50,16 +58,19 @@ def command(command: str, keys: List[str], desc: str):
             logger.error(error_message)
             raise ValueError(error_message)
 
-        commands[command] = {}
+        commands[self.command] = {}
         # 自定义命令关键词
-        if config.custom_command_key_dict.get(command, None):
-            keys.extend(config.custom_command_key_dict[command])
+        if config.custom_command_key_dict.get(self.command, None):
+            self.keys.extend(config.custom_command_key_dict[self.command])
 
-        commands[command]["keys"] = keys
-        commands[command]["desc"] = desc
-        commands[command]["handler"] = func
-        commands[command]["param_count"] = len(params)
+        commands[self.command]["keys"] = self.keys
+        commands[self.command]["desc"] = self.desc
+        commands[self.command]["handler"] = func
+        commands[self.command]["param_count"] = len(params)
 
+        return self
+
+    def quoted_handler(self, func):
+        # TODO: 判断参数是否合理
+        quoted_handlers[self.command] = func
         return func
-
-    return decorator

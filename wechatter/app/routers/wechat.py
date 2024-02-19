@@ -6,7 +6,7 @@ from loguru import logger
 
 import wechatter.config as config
 from wechatter.bot.bot_info import BotInfo
-from wechatter.commands import commands
+from wechatter.commands import commands, quoted_handlers
 from wechatter.database import (
     Group as DbGroup,
     Message as DbMessage,
@@ -72,7 +72,7 @@ async def recv_wechat_msg(
         MessageForwarder(config.message_forwarding_rule_list).forward_message(message)
 
     # 传入命令字典，构造消息处理器
-    message_handler = MessageHandler(commands)
+    message_handler = MessageHandler(commands=commands, quoted_handlers=quoted_handlers)
     # 用户发来的消息均送给消息解析器处理
     message_handler.handle_message(message)
 
