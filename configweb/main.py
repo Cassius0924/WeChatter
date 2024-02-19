@@ -251,7 +251,8 @@ def stop_main():
         print("frontend stopped")
 
         # kill backend process
-        stop_backend_command = "kill $(lsof -t -i:8000)"
+        # stop_backend_command = "kill $(lsof -t -i:8000)"
+        stop_backend_command = "for pid in $(lsof -t -i:8000); do pkill -9 -P $pid; done"
         stop_backend_directory = "../"
 
         stop_backend_thread = threading.Thread(target=run_command, args=(stop_backend_command, stop_backend_directory),
