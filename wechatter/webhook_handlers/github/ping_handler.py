@@ -16,4 +16,4 @@ def handle_ping(data: dict):
         f"📚 仓库：{payload.repository.full_name}\n"
         f"🧑‍💻 触发者：{payload.sender.login}\n"
     )
-    sender.send_msg_to_github_webhook_receivers(message)
+    sender.mass_send_msg_to_github_webhook_receivers(message)

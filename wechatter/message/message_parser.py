@@ -5,17 +5,21 @@ from loguru import logger
 
 import wechatter.config as config
 from wechatter.bot.bot_info import BotInfo
-from wechatter.models.message import Message, SendTo
+from wechatter.models.wechat import Message, SendTo
 
 
 class MessageHandler:
-    """消息处理器，用于处理用户发来的消息"""
+    """
+    消息处理器，用于处理用户发来的消息
+    """
 
     def __init__(self, commands: dict):
         self.__commands = commands
 
     def handle_message(self, message: Message) -> None:
-        """处理消息"""
+        """
+        处理消息
+        """
         # 解析命令
         content = message.content  # 消息内容
         # 消息内容格式: /<cmd> <arg>
@@ -37,24 +41,37 @@ class MessageHandler:
             logger.debug("该消息为群消息，但未@机器人，不处理")
             return
 
-        to = SendTo.from_message_source(message.source)
+        to = SendTo(person=message.person, group=message.group)
 
         # 是命令消息
         # 开始处理命令
         cmd_handler = cmd_dict["handler"]
         if cmd_handler is not None:
-            cmd_handler(to, cmd_dict["arg"])
+            if cmd_dict["param_count"] == 2:
+                cmd_handler(
+                    to=to,
+                    message=cmd_dict["arg"],
+                )
+            elif cmd_dict["param_count"] == 3:
+                cmd_handler(
+                    to=to,
+                    message=cmd_dict["arg"],
+                    message_obj=message,
+                )
         else:
             logger.error("该命令未实现")
         return
 
     def parse_command(self, content: str, is_mentioned: bool, is_group: bool) -> dict:
-        """解析命令"""
+        """
+        解析命令
+        """
         cmd_dict = {
             "command": "None",
             "desc": "",
             "arg": "",
             "handler": None,
+            "param_count": 0,
         }
         # 不带命令前缀和@前缀的消息内容
         if is_mentioned and is_group:
@@ -71,6 +88,7 @@ class MessageHandler:
                 cmd_dict["command"] = command
                 cmd_dict["desc"] = info["desc"]
                 cmd_dict["handler"] = info["handler"]
+                cmd_dict["param_count"] = info["param_count"]
                 if len(cont_list) == 2:
                     cmd_dict["arg"] = cont_list[1]  # 消息内容
                 return cmd_dict

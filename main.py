@@ -2,6 +2,7 @@
 import uvicorn
 from loguru import logger
 
+import wechatter.database as db
 import wechatter.utils.file_manager as fm
 from wechatter.init_logger import init_logger
 
@@ -17,7 +18,6 @@ def main():
     # 为了让此文件的 config 模块是首次导入，下面这些模块需要放到 config 导入之后
     from wechatter.app.app import app
     from wechatter.bot.bot_info import BotInfo
-    from wechatter.sqlite.sqlite_manager import SqliteManager
     # isort: on
 
     BotInfo.update_name(config.bot_name)
@@ -25,11 +25,8 @@ def main():
     fm.check_and_create_folder("data/qrcodes")
     fm.check_and_create_folder("data/todos")
     fm.check_and_create_folder("data/text_image")
-    # 创建文件
-    fm.check_and_create_file("data/wechatter.sqlite")
-    # 创建数据库表
-    sqlite_manager = SqliteManager("data/wechatter.sqlite")
-    sqlite_manager.excute_folder("wechatter/sqlite/sqls")
+
+    db.create_tables()
 
     logger.info("WeChatter 启动成功！")
     # 启动uvicorn

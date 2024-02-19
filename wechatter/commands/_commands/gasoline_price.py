@@ -5,7 +5,7 @@ from loguru import logger
 import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
 from wechatter.exceptions import Bs4ParsingError
-from wechatter.models.message import SendTo
+from wechatter.models.wechat import SendTo
 from wechatter.sender import sender
 from wechatter.utils import get_request, load_json
 

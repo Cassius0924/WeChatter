@@ -2,7 +2,7 @@
 import wechatter.config as config
 from wechatter.commands import commands
 from wechatter.commands.handlers import command
-from wechatter.models.message import SendTo
+from wechatter.models.wechat import SendTo
 from wechatter.sender import sender
 from wechatter.utils.text_to_image import text_to_image
 

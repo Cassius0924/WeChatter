@@ -1,7 +1,7 @@
 from loguru import logger
 
 from wechatter.commands.handlers import command
-from wechatter.models.message import SendTo
+from wechatter.models.wechat import SendTo
 from wechatter.sender import sender
 from wechatter.utils.time import get_current_ymd
 
