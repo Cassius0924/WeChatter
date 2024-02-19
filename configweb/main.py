@@ -240,16 +240,6 @@ def stop_main():
         stop_main_thread.join()
         print("wechatter stopped")
 
-        # kill backend process
-        stop_backend_command = "kill $(lsof -t -i:8000)"
-        stop_backend_directory = "../"
-
-        stop_backend_thread = threading.Thread(target=run_command, args=(stop_backend_command, stop_backend_directory),
-                                               daemon=True)
-        stop_backend_thread.start()
-        stop_backend_thread.join()
-        print("backend stopped")
-
         # kill frontend process
         stop_frontend_command = "kill $(lsof -t -i:3000)"
         stop_frontend_directory = "../"
@@ -259,6 +249,15 @@ def stop_main():
         stop_frontend_thread.start()
         stop_frontend_thread.join()
         print("frontend stopped")
+        # kill backend process
+        stop_backend_command = "kill $(lsof -t -i:8000)"
+        stop_backend_directory = "../"
+
+        stop_backend_thread = threading.Thread(target=run_command, args=(stop_backend_command, stop_backend_directory),
+                                               daemon=True)
+        stop_backend_thread.start()
+        stop_backend_thread.join()
+        print("backend stopped")
 
         # activate backend and frontend
         # 直接执行npm start：
