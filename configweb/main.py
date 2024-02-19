@@ -190,10 +190,11 @@ def update_gasoline_price_cron_config(updated_config: dict = Body(...)):
 @app.post("/run-main")
 def run_main():
     try:
+        #TODO:改启动命令，python3，有的人的是python
         run_main_command = "python3 main.py"
         run_main_directory = "../"
 
-        run_main_thread = threading.Thread(target=run_command, args=(run_main_command, run_main_directory))
+        run_main_thread = threading.Thread(target=run_command, args=(run_main_command, run_main_directory), daemon=True)
         run_main_thread.start()
         run_main_thread.join()
 
@@ -205,10 +206,11 @@ def run_main():
 @app.post("/stop-main")
 def stop_main():
     try:
+        #TODO:改停止命令，改端口号，从config.ini中读取
         stop_main_command = "kill -9 $(lsof -t -i:400)"
         stop_main_directory = "../"
 
-        stop_main_thread = threading.Thread(target=run_command, args=(stop_main_command, stop_main_directory))
+        stop_main_thread = threading.Thread(target=run_command, args=(stop_main_command, stop_main_directory), daemon=True)
         stop_main_thread.start()
         stop_main_thread.join()
 
