@@ -300,9 +300,9 @@ def _send_msg_list2(
     if not is_group:
         return _send_msg_list1(to.p_name, message_list, is_group=False, type=type)
 
-    if to.g_name != "":
+    if to.group:
         return _send_msg_list1(to.g_name, message_list, is_group=True, type=type)
-    elif to.p_name != "":
+    elif to.person:
         return _send_msg_list1(to.p_name, message_list, is_group=False, type=type)
     else:
         logger.error("发送消息失败，接收者为空")
@@ -374,9 +374,9 @@ def _send_localfile_msg2(to: SendTo, file_path: str, is_group: bool = True):
     if not is_group:
         return _send_localfile_msg1(to.p_name, file_path, is_group=False)
 
-    if to.g_name != "":
+    if to.group:
         return _send_localfile_msg1(to.g_name, file_path, is_group=True)
-    elif to.p_name != "":
+    elif to.person:
         return _send_localfile_msg1(to.p_name, file_path, is_group=False)
     else:
         logger.error("发送消息失败，接收者为空")
