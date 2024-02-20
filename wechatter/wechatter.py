@@ -1,4 +1,3 @@
-# WeChatter 启动文件
 #
 #  __     __   ______   ______   __  __   ______   ______  ______  ______   ______
 # /\ \  _ \ \ /\  ___\ /\  ___\ /\ \_\ \ /\  __ \ /\__  _\/\__  _\/\  ___\ /\  == \
@@ -15,6 +14,10 @@ from wechatter.init_logger import init_logger
 
 
 def main():
+    """
+    WeChatter 启动文件
+    """
+
     # 初始化 logger
     init_logger()
 
@@ -36,7 +39,7 @@ def main():
     db.create_tables()
 
     # 启动uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=config.wechatter_port)
+    uvicorn.run(app, host="127.0.0.1", port=config.wechatter_port)
 
 
 if __name__ == "__main__":

@@ -75,7 +75,7 @@ vim config.ini
 4. 启动 WeChatter
 
 ```bash
-python3 main.py
+python3 -m wechatter
 ```
 
 5. 测试机器人
