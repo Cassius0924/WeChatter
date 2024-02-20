@@ -90,8 +90,8 @@ def run_command(command, working_directory):
 
     while True:
         output = process.stdout.readline()
-        if output == b'' and process.poll() is not None:
-            break
+        # if output == b'' and process.poll() is not None:
+        #     break
         if output:
             print("输出:", output.decode('utf-8'))
 
