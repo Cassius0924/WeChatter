@@ -106,12 +106,12 @@ function App() {
                                     <button
                                         className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-100 transition"
                                         onClick={() => {
-                                            // 先检查是否已经启动main.py
+                                            // 先检查是否已经启动WeChatter
                                             axios.get(`http://${BASE_URL}:${PORT}/run-main`)
                                                 .then(res => {
                                                     console.log(res.data.message);
                                                     if (res.data.message === 'wechatter is running') {
-                                                        alert('❇️WeChatter已经在运行啦❇️');
+                                                        alert('❇️WeChatter已经在运行啦，请勿重复点击❇️');
                                                     } else {
                                                         // 如果还没有启动，就启动它
                                                         axios.post(`http://${BASE_URL}:${PORT}/run-main`)
@@ -159,14 +159,30 @@ function App() {
                                 <div className="hidden md:ml-4 md:flex-shrink-0 md:flex md:items-center">
                                     <button
                                         className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-100 transition"
-                                        onClick={async () => {
-                                            try {
-                                                await axios.post(`http://${BASE_URL}:${PORT}/stop-main`);
-                                                alert('❗️成功停止WeChatter❗️');
-                                            } catch (error) {
-                                                console.error(error);
-                                                alert('Failed to stop main.py');
-                                            }
+                                        onClick={() => {
+                                            // 先检查WeChatter是否已经启动，若启动了就停止它，否则直接返回已经停止了，不要重复点击
+                                            axios.get(`http://${BASE_URL}:${PORT}/run-main`)
+                                                .then(res => {
+                                                    console.log(res.data.message);
+                                                    if (res.data.message === 'wechatter is running') {
+                                                        axios.post(`http://${BASE_URL}:${PORT}/stop-main`)
+                                                            .then(res => {
+                                                                console.log(res.data.message);
+                                                                if (res.data.message === 'wechatter stopped') {
+                                                                    alert('❗成功停止WeChatter❗');
+                                                                }
+                                                            })
+                                                            .catch(error => {
+                                                                console.error(error);
+                                                                alert('Failed to stop wechatter');
+                                                            });
+                                                    } else {
+                                                        alert('❇️WeChatter已经停止，请勿重复点击❇️');
+                                                    }
+                                                })
+                                                .catch(error => {
+                                                    console.error(error);
+                                                });
                                         }}
                                     >
                                         <span className="sr-only">View notifications</span>
