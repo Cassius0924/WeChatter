@@ -1,5 +1,6 @@
 import configparser
 import logging
+import queue
 import subprocess
 import threading
 
@@ -85,19 +86,31 @@ def update_config_section(section_name, updated_config):
 #     return process.poll()
 
 
+def enqueue_output(out, queue):
+    for line in iter(out.readline, b''):
+        queue.put(line)
+    out.close()
+
+
 def run_command(command, working_directory):
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=working_directory)
-    while True:
-        output = process.stdout.readline()
-        if output == '' and process.poll() is not None:
-            break
-        if output:
-            print(output.strip())
-        err = process.stderr.readline()
-        if err:
-            print(err.strip())
-    rc = process.poll()
-    return rc
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                               cwd=working_directory)
+    q_stdout = queue.Queue()
+    q_stderr = queue.Queue()
+    t_stdout = threading.Thread(target=enqueue_output, args=(process.stdout, q_stdout))
+    t_stderr = threading.Thread(target=enqueue_output, args=(process.stderr, q_stderr))
+    t_stdout.daemon = True
+    t_stderr.daemon = True
+    t_stdout.start()
+    t_stderr.start()
+    while process.poll() is None:
+        while not q_stdout.empty():
+            print("输出:")
+            print(q_stdout.get().decode('utf-8'))
+        while not q_stderr.empty():
+            print("错误输出:")
+            print(q_stderr.get().decode('utf-8'))
+    return process.poll()
 
 
 # def run_command(command, working_directory):
@@ -230,6 +243,8 @@ def update_gasoline_price_cron_config(updated_config: dict = Body(...)):
 
 
 run_main_thread = None
+
+
 @app.post("/run-main")
 def run_main():
     global run_main_thread
@@ -255,7 +270,6 @@ def run_main_is_alive():
         return {"message": "wechatter is running"}
     else:
         return {"message": "wechatter is not running"}
-
 
 
 @app.post("/stop-main")
