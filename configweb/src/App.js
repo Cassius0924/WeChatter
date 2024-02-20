@@ -177,7 +177,7 @@ function App() {
                                                                 alert('Failed to stop wechatter');
                                                             });
                                                     } else {
-                                                        alert('❇️WeChatter已经停止，请勿重复点击❇️');
+                                                        alert('❇️WeChatter没有运行，请勿重复点击❇️');
                                                     }
                                                 })
                                                 .catch(error => {
