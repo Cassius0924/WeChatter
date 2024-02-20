@@ -1,6 +1,5 @@
 import configparser
 import logging
-import queue
 import subprocess
 import threading
 
@@ -87,12 +86,21 @@ def update_config_section(section_name, updated_config):
 
 
 def run_command(command, working_directory):
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
-                               cwd=working_directory)
-    stdout, stderr = process.communicate()
-    print("输出:")
-    print(stdout.decode('utf-8'))
-    return process.poll()
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=working_directory)
+
+    while True:
+        output = process.stdout.readline()
+        if output == b'' and process.poll() is not None:
+            break
+        if output:
+            print("输出:", output.decode('utf-8'))
+
+        error_output = process.stderr.readline()
+        if error_output:
+            print("错误输出:", error_output.decode('utf-8'))
+
+    rc = process.poll()
+    return rc
 
 
 # def run_command(command, working_directory):
