@@ -60,11 +60,19 @@ def update_config_section(section_name, updated_config):
         return {"error": str(e)}
 
 
-# ！！！已解决！！！解决方法：在run_command中，将process.stdout.readline()改为process.communicate()，并且将while True改为while process.poll() is None，
-# 原因：process.stdout.readline()是阻塞的，会一直等待子进程的输出，直到子进程结束，而process.communicate()是非阻塞的，会立即返回子进程的输出，如果子进程没有输出，就返回空字符串，如果子进程结束了，就返回子进程的输出，所以process.communicate()不会阻塞，而process.poll()是非阻塞的，会立即返回子进程的状态，如果子进程结束了，就返回子进程的状态，如果子进程没有结束，就返回None，所以while process.poll() is None不会阻塞，而while True会阻塞，所以将while True改为while process.poll() is None就不会死锁了
+# ！！！已解决！！！解决方法：在run_command中，将process.stdout.readline()改为process.communicate()，并且将while True改为while process.poll()
+# is None， 原因：process.stdout.readline()是阻塞的，会一直等待子进程的输出，直到子进程结束，而process.communicate(
+# )是非阻塞的，会立即返回子进程的输出，如果子进程没有输出，就返回空字符串，如果子进程结束了，就返回子进程的输出，所以process.communicate()不会阻塞，而process.poll(
+# )是非阻塞的，会立即返回子进程的状态，如果子进程结束了，就返回子进程的状态，如果子进程没有结束，就返回None，所以while process.poll() is None不会阻塞，而while True会阻塞，所以将while
+# True改为while process.poll() is None就不会死锁了
 
-# 死锁问题，问题具体如下：（现在用npm start就可以让前后端启动，在前端APP.js中，点击启动的button会执行await axios.post(`http://${BACKEND_URL}:${BACKEND_PORT}/run-main`)，服务器就会执行python3 main.py以启动另一个项目，cpu是正常的。点击停止的button会执行await axios.post(`http://${BACKEND_URL}:${BACKEND_PORT}/stop-main`)，服务器就会执行kill -9 $(lsof -t -i:400)，也执行成功了，已经启动的那个另一个项目的进程停止了，但是出现了问题：后端突然占用很大的cpu，平均有140%的cpu，具体是在点击停止的button的过程中，INFO:     Started reloader process [2993425] using StatReload
-# INFO:     Started server process [2993434]，这个2993434进程，突然变得占用cpu很大，他的command是python3 -c from multiprocessing.spawn import spawn main;spawn main(tracker fd=5,pipe handle=7)--multiprocessing-fork）
+# 死锁问题，问题具体如下：（现在用npm start就可以让前后端启动，在前端APP.js中，点击启动的button会执行await axios.post(`http://${BACKEND_URL}:${
+# BACKEND_PORT}/run-main`)，服务器就会执行python3 main.py以启动另一个项目，cpu是正常的。点击停止的button会执行await axios.post(`http://${
+# BACKEND_URL}:${BACKEND_PORT}/stop-main`)，服务器就会执行kill -9 $(lsof -t
+# -i:400)，也执行成功了，已经启动的那个另一个项目的进程停止了，但是出现了问题：后端突然占用很大的cpu，平均有140%的cpu，具体是在点击停止的button的过程中，INFO:     Started reloader
+# process [2993425] using StatReload INFO:     Started server process [
+# 2993434]，这个2993434进程，突然变得占用cpu很大，他的command是python3 -c from multiprocessing.spawn import spawn main;spawn main(
+# tracker fd=5,pipe handle=7)--multiprocessing-fork）
 
 # def run_command(command, working_directory):
 #     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, cwd=working_directory)
@@ -76,18 +84,34 @@ def update_config_section(section_name, updated_config):
 #             print(output.strip())
 #     return process.poll()
 
+
 def run_command(command, working_directory):
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, cwd=working_directory)
-    while process.poll() is None:
-        output = process.communicate()  # 返回一个元组，第一个元素是子进程的输出，第二个元素是子进程的错误输出
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=working_directory)
+    while True:
+        output = process.stdout.readline()
         if output == '' and process.poll() is not None:
             break
         if output:
-            print("输出:")
-            print("None" if output[0] is None else output[0].decode('utf-8'))
-            print("错误输出:")
-            print('None' if output[1] is None else output[1].decode('utf-8'))
-    return process.poll()
+            print(output.strip())
+        err = process.stderr.readline()
+        if err:
+            print(err.strip())
+    rc = process.poll()
+    return rc
+
+
+# def run_command(command, working_directory):
+#     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, cwd=working_directory)
+#     while process.poll() is None:
+#         output = process.communicate()  # 返回一个元组，第一个元素是子进程的输出，第二个元素是子进程的错误输出
+#         if output == '' and process.poll() is not None:
+#             break
+#         if output:
+#             print("输出:")
+#             print("None" if output[0] is None else output[0].decode('utf-8'))
+#             print("错误输出:")
+#             print('None' if output[1] is None else output[1].decode('utf-8'))
+#     return process.poll()
 
 
 @app.get("/")
