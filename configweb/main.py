@@ -93,23 +93,16 @@ def enqueue_output(out, queue):
 
 
 def run_command(command, working_directory):
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
                                cwd=working_directory)
     q_stdout = queue.Queue()
-    q_stderr = queue.Queue()
     t_stdout = threading.Thread(target=enqueue_output, args=(process.stdout, q_stdout))
-    t_stderr = threading.Thread(target=enqueue_output, args=(process.stderr, q_stderr))
     t_stdout.daemon = True
-    t_stderr.daemon = True
     t_stdout.start()
-    t_stderr.start()
     while process.poll() is None:
         while not q_stdout.empty():
             print("输出:")
             print(q_stdout.get().decode('utf-8'))
-        while not q_stderr.empty():
-            print("错误输出:")
-            print(q_stderr.get().decode('utf-8'))
     return process.poll()
 
 
