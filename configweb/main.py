@@ -13,8 +13,9 @@ app = FastAPI()
 # #本地测试
 # BASE_URL = "http://localhost:"
 # PORT = "3000"
-# 服务器
-BASE_URL = "http://47.92.99.199:"
+# 服务器前端
+# BASE_URL = "http://47.92.99.199:"
+BASE_URL = "http://0.0.0.0:"
 PORT = "3000"
 
 # 其他代码...
