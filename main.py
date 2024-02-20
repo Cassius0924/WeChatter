@@ -1,6 +1,13 @@
 # WeChatter 启动文件
+#
+#  __     __   ______   ______   __  __   ______   ______  ______  ______   ______
+# /\ \  _ \ \ /\  ___\ /\  ___\ /\ \_\ \ /\  __ \ /\__  _\/\__  _\/\  ___\ /\  == \
+# \ \ \/ ".\ \\ \  __\ \ \ \____\ \  __ \\ \  __ \\/_/\ \/\/_/\ \/\ \  __\ \ \  __<
+#  \ \__/".~\_\\ \_____\\ \_____\\ \_\ \_\\ \_\ \_\  \ \_\   \ \_\ \ \_____\\ \_\ \_\
+#   \/_/   \/_/ \/_____/ \/_____/ \/_/\/_/ \/_/\/_/   \/_/    \/_/  \/_____/ \/_/ /_/
+#
+
 import uvicorn
-from loguru import logger
 
 import wechatter.database as db
 import wechatter.utils.file_manager as fm
@@ -28,7 +35,6 @@ def main():
 
     db.create_tables()
 
-    logger.info("WeChatter 启动成功！")
     # 启动uvicorn
     uvicorn.run(app, host="0.0.0.0", port=config.wechatter_port)
 

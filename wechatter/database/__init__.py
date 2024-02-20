@@ -5,6 +5,7 @@ from .tables.gpt_chat_message import GptChatMessage
 from .tables.group import Group
 from .tables.message import Message
 from .tables.person import Person
+from .tables.quoted_response import QuotedResponse
 
 __all__ = [
     "make_db_session",
@@ -14,4 +15,5 @@ __all__ = [
     "Message",
     "Group",
     "Person",
+    "QuotedResponse",
 ]

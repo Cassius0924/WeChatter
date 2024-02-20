@@ -30,6 +30,8 @@ def weather_command_handler(to: SendTo, message: str = "") -> None:
         sender.send_msg(to, result)
 
 
+# TODO: Quoted Handler，获取更具体的天气，关键词例如：明天，逐日，日出日落，空气质量，紫外线指数等
+
 # class WeatherTip:
 #     def __init__(self, priority, condition, tip):
 #         self.priority = priority

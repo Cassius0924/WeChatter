@@ -191,7 +191,7 @@ def _gptx_continue(model: str, to: SendTo, message: str = "") -> None:
 
 
 class CopilotGPT4:
-    api = f"{config.cp_gpt4_api_host}:{config.cp_gpt4_port}/v1/chat/completions"
+    api = f"{config.cp_gpt4_base_api}/v1/chat/completions"
     bearer_token = "Bearer " + config.cp_token
     save_path = pm.get_abs_path("data/copilot_gpt4/chats/")
 

@@ -8,7 +8,8 @@ from loguru import logger
 
 import wechatter.config as config
 import wechatter.utils.http_request as http_request
-from wechatter.models.wechat import SendTo
+from wechatter.models.wechat import QuotedResponse, SendTo
+from wechatter.sender.quotable import make_quotable
 
 
 # 对retry装饰器重新包装，增加日志输出
@@ -16,7 +17,7 @@ def _retry(
     stop=tenacity.stop_after_attempt(3),
     retry_error_log_level="ERROR",
 ):
-    def wrapper(func):
+    def retry_wrapper(func):
         @tenacity.retry(stop=stop)
         def wrapped_func(*args, **kwargs):
             try:
@@ -30,9 +31,53 @@ def _retry(
 
         return wrapped_func
 
-    return wrapper
+    return retry_wrapper
 
 
+# TODO: 改成装饰器
+def _logging(func):
+    def logging_wrapper(*args, **kwargs):
+        response = func(*args, **kwargs)
+        r_json = response.json()
+        # https://github.com/danni-cool/wechatbot-webhook?tab=readme-ov-file#%E8%BF%94%E5%9B%9E%E5%80%BC-response-%E7%BB%93%E6%9E%84
+        if r_json["message"].startswith("Message"):
+            pass
+        elif r_json["message"].startswith("Some"):
+            logger.error("发送消息失败，参数校验不通过")
+        elif r_json["message"].startswith("All"):
+            logger.error("发送消息失败，所有消息均发送失败")
+            return
+        elif r_json["message"].startswith("Part"):
+            logger.warning("发送消息失败，部分消息发送成功")
+            return
+
+        if "task" not in r_json:
+            return
+
+        try:
+            data = json.loads(response.request.body.decode("utf-8"))
+        except UnicodeDecodeError:
+            # 本地文件发送无法解码
+            # logger.info("发送图片成功")
+            return
+        except json.JSONDecodeError as e:
+            logger.error(f"发送消息失败，错误信息：{str(e)}")
+            return
+
+        if isinstance(data, list):
+            for item in data:
+                logger.info(
+                    f"发送消息成功，发送给：{item['to']}，发送的内容：{item['data']}"
+                )
+        elif isinstance(data, dict):
+            logger.info(
+                f"发送消息成功，发送给：{data['to']}，发送的内容：{data['data']}"
+            )
+
+    return logging_wrapper
+
+
+@_logging
 @_retry()
 def _post_request(
     url, data=None, json=None, files=None, headers={}, timeout=5
@@ -42,9 +87,11 @@ def _post_request(
     )
 
 
-# TODO: 改成装饰器
 def _log(response: requests.Response) -> bool:
-    """检查发送状态"""
+    """
+    检查发送状态
+    """
+
     r_json = response.json()
     # https://github.com/danni-cool/wechatbot-webhook?tab=readme-ov-file#%E8%BF%94%E5%9B%9E%E5%80%BC-response-%E7%BB%93%E6%9E%84
     if r_json["message"].startswith("Message"):
@@ -81,8 +128,8 @@ def _log(response: requests.Response) -> bool:
     return True
 
 
-URL = f"{config.wx_webhook_host}:{config.wx_webhook_port}/webhook/msg/v2"
-V1_URL = f"{config.wx_webhook_host}:{config.wx_webhook_port}/webhook/msg"
+URL = f"{config.wx_webhook_base_api}/webhook/msg/v2"
+V1_URL = f"{config.wx_webhook_base_api}/webhook/msg"
 
 
 def _validate(fn):
@@ -109,7 +156,7 @@ def send_msg(
     message: str,
     is_group: bool = False,
     type: str = "text",
-    quotable: bool = False,
+    quoted_response: QuotedResponse = None,
 ):
     """
     发送消息
@@ -117,14 +164,14 @@ def send_msg(
     当传入的第一个参数是字符串时，is_group 默认为 False。
     当传入的第一个参数是 SendTo 对象时，is_group 默认为 True。
 
-    当 quotable 为 Ture 时，该消息为可引用消息。表示该消息被
+    当 quoted_response 不为 None 时，该消息为可引用消息。表示该消息被
     引用回复后，会触发进一步的消息互动。
 
     :param to: 接收对象的名字或SendTo对象
     :param message: 消息内容
     :param is_group: 是否为群组（默认值根据 to 的类型而定）
     :param type: 消息类型，可选 text、fileUrl（默认值为 text）
-    :param quotable: 是否可引用（默认值为 False）
+    :param quoted_response: 被引用后的回复消息（默认值为 None）
     """
     pass
 
@@ -136,51 +183,81 @@ def _send_msg1(
     message: str,
     is_group: bool = False,
     type: str = "text",
-    quotable: bool = False,
-) -> None:
+    quoted_response: QuotedResponse = None,
+):
     """
     发送消息
     :param name: 接收者
     :param message: 消息内容
     :param is_group: 是否为群组（默认为个人，False）
     :param type: 消息类型（text、fileUrl）
-    :param quotable: 是否可引用（默认为不可引用，False）
+    :param quoted_response: 被引用后的回复消息（默认值为 None）
     """
-    # if quotable:
-    #     message = f"@{name} {message}"
+    if quoted_response:
+        message = make_quotable(message=message, quoted_response=quoted_response)
     data = {
         "to": name,
         "isRoom": is_group,
         "data": {"type": type, "content": message},
     }
-    _log(_post_request(URL, json=data))
+    _post_request(URL, json=data)
 
 
 @send_msg.register(SendTo)
-def _send_msg2(to: SendTo, message: str, is_group: bool = True, type: str = "text"):
+def _send_msg2(
+    to: SendTo,
+    message: str,
+    is_group: bool = True,
+    type: str = "text",
+    quoted_response: QuotedResponse = None,
+):
     """
     发送消息
     :param to: SendTo 对象
     :param message: 消息内容
     :param is_group: 是否为群组（默认为群组，True）
     :param type: 消息类型（text、fileUrl）
+    :param quoted_response: 被引用后的回复消息（默认值为 None）
     """
     if not is_group:
-        return _send_msg1(to.p_name, message, is_group=False, type=type)
+        return _send_msg1(
+            to.p_name,
+            message,
+            is_group=False,
+            type=type,
+            quoted_response=quoted_response,
+        )
 
     if to.group:
-        return _send_msg1(to.g_name, message, is_group=True, type=type)
+        return _send_msg1(
+            to.g_name,
+            message,
+            is_group=True,
+            type=type,
+            quoted_response=quoted_response,
+        )
     elif to.person:
-        return _send_msg1(to.p_name, message, is_group=False, type=type)
+        return _send_msg1(
+            to.p_name,
+            message,
+            is_group=False,
+            type=type,
+            quoted_response=quoted_response,
+        )
     else:
         logger.error("发送消息失败，接收者为空")
 
 
 @singledispatch
-def send_msg_list():
+def send_msg_list(
+    to: Union[str, SendTo],
+    message_list: List[str],
+    is_group: bool = False,
+    type: str = "text",
+):
     """
     发送多条消息，消息类型相同
-    :param name: 接收者
+    :param to: 接收者
     :param message_list: 消息内容列表
     :param is_group: 是否为群组
     :param type: 消息类型（text、fileUrl）
@@ -191,7 +268,10 @@ def send_msg_list():
 @send_msg_list.register(str)
 @_validate
 def _send_msg_list1(
-    name: str, message_list: List[str], is_group: bool = False, type: str = "text"
+    name: str,
+    message_list: List[str],
+    is_group: bool = False,
+    type: str = "text",
 ):
     """
     发送多条消息，消息类型相同
@@ -203,7 +283,7 @@ def _send_msg_list1(
     data = {"to": name, "isRoom": is_group, "data": []}
     for message in message_list:
         data["data"].append({"type": type, "content": message})
-    _log(_post_request(URL, json=data))
+    _post_request(URL, json=data)
 
 
 @send_msg_list.register(SendTo)
@@ -220,9 +300,9 @@ def _send_msg_list2(
     if not is_group:
         return _send_msg_list1(to.p_name, message_list, is_group=False, type=type)
 
-    if to.g_name != "":
+    if to.group:
         return _send_msg_list1(to.g_name, message_list, is_group=True, type=type)
-    elif to.p_name != "":
+    elif to.person:
         return _send_msg_list1(to.p_name, message_list, is_group=False, type=type)
     else:
         logger.error("发送消息失败，接收者为空")
@@ -230,7 +310,11 @@ def _send_msg_list2(
 
 @_validate
 def mass_send_msg(
-    name_list: List[str], message: str, is_group: bool = False, type: str = "text"
+    name_list: List[str],
+    message: str,
+    is_group: bool = False,
+    type: str = "text",
+    quoted_response: QuotedResponse = None,
 ):
     """
     群发消息，给多个人发送一条消息
@@ -238,7 +322,10 @@ def mass_send_msg(
     :param message: 消息内容
     :param is_group: 是否为群组
     :param type: 消息类型（text、fileUrl）
+    :param quoted_response: 被引用后的回复消息（默认值为 None）
     """
+    if quoted_response:
+        message = make_quotable(message=message, quoted_response=quoted_response)
     data = []
     for name in name_list:
         data.append(
@@ -248,7 +335,7 @@ def mass_send_msg(
                 "data": {"type": type, "content": message},
             }
         )
-    _log(_post_request(URL, json=data))
+    _post_request(URL, json=data)
 
 
 @singledispatch
@@ -273,7 +360,7 @@ def _send_localfile_msg1(name: str, file_path: str, is_group: bool = False):
     """
     data = {"to": name, "isRoom": int(is_group)}
     files = {"content": open(file_path, "rb")}
-    _log(_post_request(V1_URL, data=data, files=files))
+    _post_request(V1_URL, data=data, files=files)
 
 
 @send_localfile_msg.register(SendTo)
@@ -287,19 +374,25 @@ def _send_localfile_msg2(to: SendTo, file_path: str, is_group: bool = True):
     if not is_group:
         return _send_localfile_msg1(to.p_name, file_path, is_group=False)
 
-    if to.g_name != "":
+    if to.group:
         return _send_localfile_msg1(to.g_name, file_path, is_group=True)
-    elif to.p_name != "":
+    elif to.person:
         return _send_localfile_msg1(to.p_name, file_path, is_group=False)
     else:
         logger.error("发送消息失败，接收者为空")
 
 
-def mass_send_msg_to_admins(message: str, type: str = "text"):
+def mass_send_msg_to_admins(
+    message: str, type: str = "text", quoted_response: QuotedResponse = None
+):
     """
     群发消息给所有管理员
     :param message: 消息内容
+    :param type: 消息类型（text、fileUrl）
+    :param quoted_response: 被引用后的回复消息（默认值为 None）
     """
+    if quoted_response:
+        message = make_quotable(message=message, quoted_response=quoted_response)
     if len(config.admin_list) == 0:
         logger.warning("管理员列表为空")
     else:
@@ -310,15 +403,26 @@ def mass_send_msg_to_admins(message: str, type: str = "text"):
         mass_send_msg(config.admin_group_list, message, is_group=True, type=type)
 
 
-def mass_send_msg_to_github_webhook_receivers(message: str):
+def mass_send_msg_to_github_webhook_receivers(
+    message: str, type: str = "text", quoted_response: QuotedResponse = None
+):
     """
     群发消息给所有 GitHub Webhook 接收者
     :param message: 消息内容
+    :param type: 消息类型（text、fileUrl）
+    :param quoted_response: 被引用后的回复消息（默认值为 None）
     """
+    if quoted_response:
+        message = make_quotable(message=message, quoted_response=quoted_response)
     if len(config.github_webhook_receiver_list) == 0:
         logger.warning("GitHub Webhook 接收者列表为空")
     else:
-        mass_send_msg(config.github_webhook_receiver_list, message, type="text")
+        mass_send_msg(
+            config.github_webhook_receiver_list,
+            message,
+            is_group=False,
+            type=type,
+        )
     if len(config.github_webhook_receive_group_list) == 0:
         logger.warning("GitHub Webhook 接收群列表为空")
     else:
@@ -326,5 +430,5 @@ def mass_send_msg_to_github_webhook_receivers(message: str):
             config.github_webhook_receive_group_list,
             message,
             is_group=True,
-            type="text",
+            type=type,
         )
