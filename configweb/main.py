@@ -86,23 +86,12 @@ def update_config_section(section_name, updated_config):
 #     return process.poll()
 
 
-def enqueue_output(out, queue):
-    for line in iter(out.readline, b''):
-        queue.put(line)
-    out.close()
-
-
 def run_command(command, working_directory):
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
                                cwd=working_directory)
-    q_stdout = queue.Queue()
-    t_stdout = threading.Thread(target=enqueue_output, args=(process.stdout, q_stdout))
-    t_stdout.daemon = True
-    t_stdout.start()
-    while process.poll() is None:
-        while not q_stdout.empty():
-            print("输出:")
-            print(q_stdout.get().decode('utf-8'))
+    stdout, stderr = process.communicate()
+    print("输出:")
+    print(stdout.decode('utf-8'))
     return process.poll()
 
 
