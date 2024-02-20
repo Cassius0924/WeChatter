@@ -13,7 +13,7 @@ import CustomCommandKey from "./ui/Custom-Command-Key";
 import GasolinePriceCron from "./ui/Gasoline-Price-Cron";
 import ConfigWeb from "./ui/ConfigWeb";
 import axios from "axios";
-import {BASE_URL, PORT} from './config';
+import {BACKEND_URL, BACKEND_PORT} from './config';
 
 
 function App() {
@@ -107,14 +107,14 @@ function App() {
                                         className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-100 transition"
                                         onClick={() => {
                                             // 先检查是否已经启动WeChatter
-                                            axios.get(`http://${BASE_URL}:${PORT}/run-main`)
+                                            axios.get(`http://${BACKEND_URL}:${BACKEND_PORT}/run-main`)
                                                 .then(res => {
                                                     console.log(res.data.message);
                                                     if (res.data.message === 'wechatter is running') {
                                                         alert('❇️WeChatter已经在运行啦，请勿重复点击❇️');
                                                     } else {
                                                         // 如果还没有启动，就启动它
-                                                        axios.post(`http://${BASE_URL}:${PORT}/run-main`)
+                                                        axios.post(`http://${BACKEND_URL}:${BACKEND_PORT}/run-main`)
                                                             .then(res => {
                                                                 console.log(res.data.message);
                                                             })
@@ -125,7 +125,7 @@ function App() {
 
                                                         // 然后定期检查它的状态
                                                         const intervalId = setInterval(() => {
-                                                            axios.get(`http://${BASE_URL}:${PORT}/run-main`)
+                                                            axios.get(`http://${BACKEND_URL}:${BACKEND_PORT}/run-main`)
                                                                 .then(res => {
                                                                     console.log(res.data.message);
                                                                     if (res.data.message === 'wechatter is running') {
@@ -136,7 +136,7 @@ function App() {
                                                                 .catch(error => {
                                                                     console.error(error);
                                                                 });
-                                                        }, 500); // 每秒发送一次请求
+                                                        }, 500); // 每0.5秒发送一次请求
                                                     }
                                                 })
                                                 .catch(error => {
@@ -161,11 +161,11 @@ function App() {
                                         className="p-1 border-2 border-transparent text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:text-gray-500 focus:bg-gray-100 transition"
                                         onClick={() => {
                                             // 先检查WeChatter是否已经启动，若启动了就停止它，否则直接返回已经停止了，不要重复点击
-                                            axios.get(`http://${BASE_URL}:${PORT}/run-main`)
+                                            axios.get(`http://${BACKEND_URL}:${BACKEND_PORT}/run-main`)
                                                 .then(res => {
                                                     console.log(res.data.message);
                                                     if (res.data.message === 'wechatter is running') {
-                                                        axios.post(`http://${BASE_URL}:${PORT}/stop-main`)
+                                                        axios.post(`http://${BACKEND_URL}:${BACKEND_PORT}/stop-main`)
                                                             .then(res => {
                                                                 console.log(res.data.message);
                                                                 if (res.data.message === 'wechatter stopped') {
