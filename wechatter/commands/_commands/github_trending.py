@@ -129,10 +129,10 @@ def _generate_github_trending_message(gt_list: List) -> str:
     gt_str = "✨=====GitHub Trending=====✨\n"
     for i, trending in enumerate(gt_list[:10]):  # 只获取前10个趋势
         gt_str += (
-            f"{i + 1}. 🏎️  {trending['author']} / {trending['repo']}\n"
-            f"⭐  {trending['star_total']} total (⭐{trending['star_today']})\n"
-            f"🔤  {trending['programmingLanguage']}\n"
-            f"📖  {trending['comment']}\n"
+            f"{i + 1}.📦 {trending['author']} / {trending['repo']}\n"
+            f"   ⭐ {trending['star_total']} total (⭐{trending['star_today']})\n"
+            f"   🔤 {trending['programmingLanguage']}\n"
+            f"   📖 {trending['comment']}\n"
         )
 
     return gt_str

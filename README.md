@@ -1,16 +1,19 @@
-# WeChatter
+# WeChatter: Make WeChat Better
 
 <div align="center">
 
 [![CI/CD](https://github.com/Cassius0924/WeChatter/actions/workflows/test.yml/badge.svg)](https://github.com/Cassius0924/WeChatter/actions/workflows/test.yml)
 [![GitHub Release](https://img.shields.io/github/v/release/Cassius0924/WeChatter)](https://github.com/Cassius0924/WeChatter/releases)
 [![GitHub License](https://img.shields.io/github/license/Cassius0924/WeChatter)](https://github.com/Cassius0924/WeChatter/blob/master/LICENSE)
+![Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)
 
 </div>
 
 ## 介绍
 
 基于 [wechatbot-webhook](https://github.com/danni-cool/wechatbot-webhook) 的微信机器人💬，支持 GPT 问答、热搜、天气预报、消息转发、Webhook提醒等功能。
+
+[![wechatter show](docs/images/wechatter_show.png)](docs/command_show.md)
 
 ## 快速开始
 
@@ -82,24 +85,24 @@ python3 main.py
 ## 支持的命令
 
 - [x] GPT 问答，基于 [Copilot-GPT4-Server](https://github.com/aaamoon/copilot-gpt4-service)
-- [x] 获取 Bilibili 热搜
-- [x] 获取知乎热搜
-- [x] 获取微博热搜
-- [x] 获取抖音热搜
-- [x] 获取 GitHub 趋势
-- [x] 单词/词语翻译
-- [x] 获取少数派早报
-- [x] 获取历史上的今天
-- [x] 二维码生成器
+- [x] Bilibili 热搜
+- [x] 知乎热搜
+- [x] 微博热搜
+- [x] 抖音热搜
+- [x] GitHub 趋势
+- [x] 单词词语翻译
+- [x] 少数派早报
+- [x] 历史上的今天
+- [x] 二维码生成
 - [x] 待办清单（TODO）
-- [x] 获取人民日报PDF
-- [x] 获取天气预报
-- [x] 获取食物热量/卡路里
-- [x] 随机获取冷知识
-- [x] 获取中石化92号汽油指导价
+- [x] 人民日报PDF
+- [x] 天气预报
+- [x] 食物热量
+- [x] 冷知识
+- [x] 中石化92号汽油指导价
 
 > [!TIP]
-> 更多命令使用 `/help` 命令查看。
+> 命令帮助请使用 `/help` 命令查询或查看[命令功能展示](docs/command_show.md)。
 
 ## 支持的功能
 
@@ -192,6 +195,12 @@ python3 main.py
 | `custom_command_key_dict` | 自定义命令关键词字典，格式为 `command: [key1, key2, ...]`, 其中 `command` 为命令名称，`key1` 和 `key2` 为自定义命令关键词 |  |
 
 关于命令名称可选值详见[自定义命令关键词配置详细](docs/custom_command_key_config_detail.md)
+
+# 贡献者
+
+Thanks to the following people who have contributed to this project:
+
+[![Contributors](https://contrib.rocks/image?repo=Cassius0924/WeChatter)](https://github.com/Cassius0924/WeChatter/graphs/contributors)
 
 ## 插件化
 
