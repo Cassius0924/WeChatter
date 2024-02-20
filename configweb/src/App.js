@@ -111,7 +111,7 @@ function App() {
                                                 .then(res => {
                                                     console.log(res.data.message);
                                                     if (res.data.message === 'wechatter is running') {
-                                                        alert(res.data.message);
+                                                        alert('❇️WeChatter已经在运行啦❇️');
                                                     } else {
                                                         // 如果还没有启动，就启动它
                                                         axios.post(`http://${BASE_URL}:${PORT}/run-main`)
@@ -129,7 +129,7 @@ function App() {
                                                                 .then(res => {
                                                                     console.log(res.data.message);
                                                                     if (res.data.message === 'wechatter is running') {
-                                                                        alert(res.data.message);
+                                                                        alert('✅WeChatter运行成功✅')
                                                                         clearInterval(intervalId);
                                                                     }
                                                                 })
@@ -162,7 +162,7 @@ function App() {
                                         onClick={async () => {
                                             try {
                                                 await axios.post(`http://${BASE_URL}:${PORT}/stop-main`);
-                                                alert('stop main.py successfully');
+                                                alert('❗️成功停止WeChatter❗️');
                                             } catch (error) {
                                                 console.error(error);
                                                 alert('Failed to stop main.py');
