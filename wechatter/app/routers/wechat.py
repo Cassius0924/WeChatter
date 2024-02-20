@@ -13,8 +13,7 @@ from wechatter.database import (
     Person as DbPerson,
     make_db_session,
 )
-from wechatter.message import MessageHandler
-from wechatter.message_forwarder import MessageForwarder
+from wechatter.message import MessageForwarder, MessageHandler
 from wechatter.models.wechat import Message
 from wechatter.models.wechat.group import Group
 from wechatter.models.wechat.person import Person

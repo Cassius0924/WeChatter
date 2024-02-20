@@ -39,7 +39,7 @@ def main():
     db.create_tables()
 
     # 启动uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=config.wechatter_port)
+    uvicorn.run(app, host="0.0.0.0", port=config.wechatter_port)
 
 
 if __name__ == "__main__":
