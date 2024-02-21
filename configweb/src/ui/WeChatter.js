@@ -4,8 +4,8 @@ import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
 
 function WeChatter() {
-    const [config, setConfig] = useFetchData('wechatter_port');
-    const handleSave = useSaveConfig('wechatter_port', config);
+    const [config, setConfig] = useFetchData('wechatter');
+    const handleSave = useSaveConfig('wechatter', config);
 
     return (
         <div className="border-4 border-dashed border-gray-200 rounded-lg mb-6">
