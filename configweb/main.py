@@ -47,6 +47,7 @@ def update_config_section(section_name, updated_config):
         config = configparser.ConfigParser()
         config.read('../config.ini', encoding='utf-8')
         changes = {}
+        print(updated_config)
         for key, value in updated_config.items():
             old_value = config.get(section_name, key) if config.has_option(section_name, key) else None
             if old_value != value:
