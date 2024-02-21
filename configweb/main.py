@@ -48,7 +48,7 @@ def get_config_section(section_name):
         with open('../config.yaml', 'r', encoding='utf-8') as f:
             config = yaml.safe_load(f)
         # section_config = config.get(section_name)
-        section_config = dict(config.get[section_name])#"error": "'int' object is not iterable": config.get(section_name)返回的是一个int，不是一个dict,所以要用dict()转换一下,具体操作：dict(config.get(section_name))
+        section_config = dict(config.get(section_name))#这里有问题，config.get[section_name]是一个方法，不能用[]，应该用()
         if section_config is None:
             raise KeyError(f"Section '{section_name}' not found in configuration file.")
         return section_config
