@@ -17,6 +17,10 @@ def _retry(
     stop=tenacity.stop_after_attempt(3),
     retry_error_log_level="ERROR",
 ):
+    """
+    重试装饰器
+    """
+
     def retry_wrapper(func):
         @tenacity.retry(stop=stop)
         def wrapped_func(*args, **kwargs):
@@ -35,6 +39,10 @@ def _retry(
 
 
 def _logging(func):
+    """
+    日志装饰器
+    """
+
     def logging_wrapper(*args, **kwargs):
         response = func(*args, **kwargs)
         r_json = response.json()
@@ -86,49 +94,10 @@ def _post_request(
     )
 
 
-def _log(response: requests.Response) -> bool:
-    """
-    检查发送状态
-    """
-
-    r_json = response.json()
-    # https://github.com/danni-cool/wechatbot-webhook?tab=readme-ov-file#%E8%BF%94%E5%9B%9E%E5%80%BC-response-%E7%BB%93%E6%9E%84
-    if r_json["message"].startswith("Message"):
-        pass
-    elif r_json["message"].startswith("Some"):
-        logger.error("发送消息失败，参数校验不通过")
-    elif r_json["message"].startswith("All"):
-        logger.error("发送消息失败，所有消息均发送失败")
-        return False
-    elif r_json["message"].startswith("Part"):
-        logger.warning("发送消息失败，部分消息发送成功")
-        return False
-
-    if "task" not in r_json:
-        return False
-
-    try:
-        data = json.loads(response.request.body.decode("utf-8"))
-    except UnicodeDecodeError:
-        # 本地文件发送无法解码
-        # logger.info("发送图片成功")
-        return True
-    except json.JSONDecodeError as e:
-        logger.error(f"发送消息失败，错误信息：{str(e)}")
-        return False
-
-    if isinstance(data, list):
-        for item in data:
-            logger.info(
-                f"发送消息成功，发送给：{item['to']}，发送的内容：{item['data']}"
-            )
-    elif isinstance(data, dict):
-        logger.info(f"发送消息成功，发送给：{data['to']}，发送的内容：{data['data']}")
-    return True
-
-
 URL = f"{config['wx_webhook_base_api']}/webhook/msg/v2"
 V1_URL = f"{config['wx_webhook_base_api']}/webhook/msg"
+
+MSG_TYPE = ["text", "fileUrl", "localfile"]
 
 
 def _validate(func):
@@ -138,11 +107,18 @@ def _validate(func):
 
     def validate_wrapper(to, message, *args, **kwargs):
         if not to:
-            logger.error("发送消息失败，接收者为空")
+            logger.error(f"发送消息失败，接收者为空：{func.__name__}")
             return
         if not message:
-            logger.error("发送消息失败，消息内容为空")
+            logger.error(f"发送消息失败，消息内容为空：{func.__name__}")
             return
+        # 检查kwargs中type的值是否合法
+        if "type" in kwargs:
+            if kwargs["type"] not in MSG_TYPE:
+                logger.error(
+                    f"发送消息失败，消息类型 type 的值不合法，type 只能为以下值之一: {MSG_TYPE}"
+                )
+                return
 
         return func(to, message, *args, **kwargs)
 
@@ -192,6 +168,9 @@ def _send_msg1(
     :param type: 消息类型（text、fileUrl）
     :param quoted_response: 被引用后的回复消息（默认值为 None）
     """
+    if type == "localfile":
+        return _send_localfile_msg1(name, message, is_group)
+
     if quoted_response:
         message = make_quotable(message=message, quoted_response=quoted_response)
 
@@ -321,9 +300,15 @@ def mass_send_msg(
     :param name_list: 接收者列表
     :param message: 消息内容
     :param is_group: 是否为群组
-    :param type: 消息类型（text、fileUrl）
+    :param type: 消息类型（text、fileUrl、localfile）
     :param quoted_response: 被引用后的回复消息（默认值为 None）
     """
+    if type == "localfile":
+        # 由于本地文件不支持群发，使用循环单发
+        for name in name_list:
+            _send_localfile_msg1(name, message, is_group)
+        return
+
     if quoted_response:
         message = make_quotable(message=message, quoted_response=quoted_response)
 

@@ -20,7 +20,7 @@ def help_command_handler(to: Union[str, SendTo], message: str = "") -> None:
     help_msg = get_help_msg()
     response = text_to_image(help_msg)
     if response:
-        sender.send_localfile_msg(to, response)
+        sender.send_msg(to, response, type="localfile")
 
 
 def get_help_msg() -> str:
