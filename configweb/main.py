@@ -50,7 +50,7 @@ def get_config_section(section_name):
         section_config = config.get(section_name)
         if section_config is None:
             raise KeyError(f"Section '{section_name}' not found in configuration file.")
-        return {section_name: section_config}
+        return {section_name: "section_config"}
     except Exception as e:
         return {"error": str(e)}
 
