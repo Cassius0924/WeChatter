@@ -65,7 +65,7 @@ def update_config_section(section_name, updated_value):
             config = yaml.load(f)
 
         # 更新特定的部分
-        config[section_name] = updated_value
+        config[section_name] = updated_value[section_name]
 
         # 再写回文件
         with open('../config.yaml', 'w', encoding='utf-8') as f:
