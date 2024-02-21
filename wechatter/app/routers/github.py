@@ -10,7 +10,9 @@ router = APIRouter()
 
 @router.post(config["github_webhook_api_path"])
 async def recv_github_webhook(request: Request):
-    """接收 GitHub Webhook"""
+    """
+    接收 GitHub Webhook
+    """
     data = await request.json()
     github_event = request.headers.get("X-GitHub-Event")
 
@@ -24,7 +26,7 @@ async def recv_github_webhook(request: Request):
     except ValueError as e:
         logger.error(f"GitHub Webhook 解析失败: {str(e)}")
         return JSONResponse(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content={"detail": str(e)}
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content="Analysis failed"
         )
 
     return {"detail": "Webhook received"}
