@@ -20,7 +20,7 @@ function WeChatter() {
                     <input type="text"
                            className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                            placeholder="4000"
-                           value={config.wechatter_port || ''}
+                           value={config.wechatter_port || ''}//这里的config.wechatter_port是从useFetchData('wechatter')中获取的
                            onChange={e => setConfig({...config, wechatter_port: e.target.value})}/>
                     <button
                         onClick={handleSave}
