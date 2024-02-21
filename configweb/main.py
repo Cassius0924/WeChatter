@@ -1,8 +1,8 @@
 import logging
 import subprocess
 import threading
+from ruamel.yaml import YAML
 
-import yaml
 from fastapi import Body
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -56,12 +56,15 @@ def get_config_section(section_name):
 
 def update_config_section(section_name, updated_value):
     try:
+        yaml = YAML()
+        yaml.preserve_quotes = True
+        yaml.indent(mapping=2, sequence=4, offset=2)
         # 先读取整个配置文件
         with open('../config.yaml', 'r', encoding='utf-8') as f:
-            config = yaml.safe_load(f)
+            config = yaml.load(f)
 
         # 更新特定的部分
-        config[section_name] = updated_value[section_name]
+        config[section_name] = updated_value
 
         # 再写回文件
         with open('../config.yaml', 'w', encoding='utf-8') as f:
