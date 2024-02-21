@@ -2,6 +2,7 @@ import logging
 import subprocess
 import threading
 from ruamel.yaml import YAML
+import ast
 
 from fastapi import Body
 from fastapi import FastAPI
@@ -60,9 +61,17 @@ def update_config_section(section_name, updated_value):
         yaml = YAML()
         yaml.preserve_quotes = True
         yaml.indent(mapping=2, sequence=4, offset=2)
+
         # 先读取整个配置文件
         with open('../config.yaml', 'r', encoding='utf-8') as f:
             config = yaml.load(f)
+
+        # 尝试将每个值转换为其原始类型
+        for key, value in updated_value.items():
+            try:
+                updated_value[key] = ast.literal_eval(value)
+            except (ValueError, SyntaxError):
+                pass  # 如果转换失败，保持原样
 
         # 更新特定的部分
         config[section_name] = updated_value[section_name]
@@ -70,7 +79,7 @@ def update_config_section(section_name, updated_value):
         # 再写回文件
         with open('../config.yaml', 'w', encoding='utf-8') as f:
             yaml.dump(config, f)
-        print(updated_value[section_name])
+
         print(f"Config updated successfully: {section_name} - {updated_value}")
         return {"message": "Config updated successfully", "changes": updated_value}
 
