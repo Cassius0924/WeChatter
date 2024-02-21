@@ -59,6 +59,14 @@ def get_current_date() -> str:
     return time.strftime("%y-%m-%d", time.localtime())
 
 
+def get_current_week() -> str:
+    """
+    获取当前日期
+    :return: 返回格式化后的日期字符串
+    """
+    return time.strftime("%w", time.localtime())
+
+
 def get_current_time() -> str:
     """
     获取当前时间

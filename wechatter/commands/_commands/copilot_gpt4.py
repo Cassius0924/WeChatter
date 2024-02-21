@@ -15,11 +15,17 @@ from wechatter.models.gpt import GptChatInfo
 from wechatter.models.wechat import Person, SendTo
 from wechatter.sender import sender
 from wechatter.utils import post_request_json
+from wechatter.utils.time import get_current_date, get_current_time, get_current_week
 
 DEFAULT_TOPIC = "（对话进行中*）"
 # DEFAULT_MODEL = "gpt-4"
 # TODO: 初始化对话，Prompt选择
-DEFAULT_CONVERSATION = [{"role": "system", "content": "你是一位乐于助人的助手"}]
+DEFAULT_CONVERSATION = [
+    {
+        "role": "system",
+        "content": f"你的名字是 WeChatter，是一位虚拟助手。今天是{get_current_date()}（年月日），星期{get_current_week()}，现在是{get_current_time()}。",
+    }
+]
 
 
 @command(

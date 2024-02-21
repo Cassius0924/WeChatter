@@ -93,7 +93,7 @@ python3 -m wechatter
 - [x] 单词词语翻译（不支持定时任务）
 - [x] 少数派早报
 - [x] 历史上的今天
-- [x] 二维码生成（不支持定时任务）
+- [x] 二维码生成
 - [x] 待办清单（不支持定时任务）
 - [x] 人民日报 PDF
 - [x] 天气预报
@@ -116,7 +116,7 @@ python3 -m wechatter
 
 ## 配置文件
 
-项目根目录中的 `config.ini.example` 为配置文件模版，首次启动项目前需要复制一份配置文件，并命名为 `config.ini`。 编辑 `config.ini`。
+项目根目录中的 `config.yaml.example` 为配置文件模版，首次启动项目前需要复制一份配置文件，并命名为 `config.yaml`。 编辑 `config.yaml`。
 
 下表为配置项解释：
 
@@ -199,7 +199,7 @@ python3 -m wechatter
 
 ## 日志文件
 
-若你需要查看日志文件，请目录项目目录下的 `logs/` 文件夹。
+日志文件存放在项目根目录下的 `logs/` 文件夹中。
 
 默认的日志记录级别为 `INFO`，若需要调整日志记录级别，请修改环境变量 `WECHATTER_LOG_LEVEL`，可设置 `DEBUG`、`INFO`、`WARNING`、`ERROR`、`CRITICAL`。
 

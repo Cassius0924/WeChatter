@@ -1,3 +1,4 @@
+import os
 from typing import List
 
 from apscheduler.triggers.cron import CronTrigger
@@ -9,7 +10,6 @@ from wechatter.models.wechat import QuotedResponse
 from wechatter.sender import sender
 
 # 一般来说，与数据库有交互的命令都不支持定时任务
-# TODO: 支持发送图片的命令
 UNSUPPORTED_COMMANDS = [
     "gpt4",
     "gpt4-chats",
@@ -21,9 +21,10 @@ UNSUPPORTED_COMMANDS = [
     "gpt-record",
     "todo",
     "todo-remove",
-    "qrcode",
     "help",
 ]
+
+SEND_FILE_COMMANDS = ["qrcode"]
 
 
 def parse_task_cron_list(task_cron_list: List) -> List:
@@ -99,27 +100,39 @@ def parse_task_cron_list(task_cron_list: List) -> List:
                             command=cmd,
                             response=q_response,
                         )
-                    # 不支持引用回复的命令
-                    else:
+                    else:  # 不支持引用回复的命令
                         try:
                             message = COMMANDS[cmd]["mainfunc"](*args)
                         except TypeError as e:
                             logger.error(f"[{desc}] 任务的命令参数不正确: {str(e)}")
                             raise TypeError(f"[{desc}] 任务的命令参数不正确: {str(e)}")
                         quoted_response = None
+                    # 判断一下是发送文本消息还是文件
+                    type = "text"
+                    if cmd in SEND_FILE_COMMANDS:
+                        type = "localfile"
                     # 发送消息
-                    sender.mass_send_msg(
-                        to_person_list,
-                        message,
-                        is_group=False,
-                        quoted_response=quoted_response,
-                    )
-                    sender.mass_send_msg(
-                        to_group_list,
-                        message,
-                        is_group=True,
-                        quoted_response=quoted_response,
-                    )
+                    if to_person_list:
+                        sender.mass_send_msg(
+                            to_person_list,
+                            message,
+                            is_group=False,
+                            type=type,
+                            quoted_response=quoted_response,
+                        )
+                    if to_group_list:
+                        sender.mass_send_msg(
+                            to_group_list,
+                            message,
+                            is_group=True,
+                            type=type,
+                            quoted_response=quoted_response,
+                        )
+                    # 删除发送的文件
+                    if cmd in SEND_FILE_COMMANDS:
+                        if os.path.exists(message):
+                            os.remove(message)
+                    logger.info(f"[{desc}] 任务的命令执行成功: {cmd}")
 
                 funcs.append(_func)
         except KeyError as e:
