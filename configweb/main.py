@@ -179,7 +179,8 @@ def update_wx_bot_webhook_config(updated_config: dict = Body(...)):
 
 @app.get("/admin")
 def get_admin_config():
-    return get_config_sections('admin')
+    sections = get_config_sections(['admin_list', 'admin_group_list'])
+    return get_config_sections(sections)
 
 
 @app.post("/admin")
