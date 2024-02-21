@@ -2,7 +2,7 @@ import enum
 import json
 import re
 from functools import cached_property
-from typing import Optional
+from typing import Optional, Tuple
 
 from loguru import logger
 from pydantic import BaseModel, computed_field
@@ -11,6 +11,9 @@ from wechatter.bot import BotInfo
 from wechatter.models.wechat.group import Group
 from wechatter.models.wechat.person import Person
 from wechatter.models.wechat.quoted_response import QUOTABLE_FORMAT
+
+PERSON_FORWARDING_MESSAGE_FORMAT = "⤴️ [%s] 说：\n" "-------------------------\n"
+GROUP_FORWARDING_MESSAGE_FORMAT = "⤴️ [%s] 在 [%s] 说：\n" "-------------------------\n"
 
 
 class MessageType(enum.Enum):
@@ -57,6 +60,11 @@ class Message(BaseModel):
     ):
         """
         从API接口创建消息对象
+        :param type: 消息类型
+        :param content: 消息内容
+        :param source: 消息来源
+        :param is_mentioned: 是否@机器人
+        :return: 消息对象
         """
         try:
             source_json = json.loads(source)
@@ -113,6 +121,7 @@ class Message(BaseModel):
     def is_group(self) -> bool:
         """
         是否是群消息
+        :return: 是否是群消息
         """
         return self.group is not None
 
@@ -121,6 +130,7 @@ class Message(BaseModel):
     def is_quoted(self) -> bool:
         """
         是否引用机器人消息
+        :return: 是否引用机器人消息
         """
         # 引用消息的正则
         quote_pattern = r"(?s)「(.*?)」\n- - - - - - - - - - - - - - -"
@@ -138,6 +148,7 @@ class Message(BaseModel):
     def sender_name(self) -> str:
         """
         返回消息发送对象名，如果是群则返回群名，如果不是则返回人名
+        :return: 消息发送对象名
         """
         return self.group.name if self.is_group else self.person.name
 
@@ -146,6 +157,7 @@ class Message(BaseModel):
     def quotable_id(self) -> Optional[str]:
         """
         获取引用消息的id
+        :return: 引用消息的id
         """
         if self.is_quoted:
             pattern = f'^「[^「]+{QUOTABLE_FORMAT % "(.{3})"}'
@@ -160,12 +172,42 @@ class Message(BaseModel):
     def pure_content(self) -> str:
         """
         获取不带引用的消息内容，即用户真实发送的消息
+        :return: 不带引用的消息内容
         """
         if self.is_quoted:
             pattern = "「[\s\S]+」\n- - - - - - - - - - - - - - -\n([\s\S]*)"
             return re.search(pattern, self.content).group(1)
         else:
             return self.content
+
+    @computed_field
+    @cached_property
+    def forwarded_source(self) -> Optional[Tuple[str, bool]]:
+        """
+        获取转发消息的来源的名字
+        :return: 消息来源的名字和是否为群的元组(source, is_group)
+        """
+        if self.is_quoted:
+            # 先尝试匹配群消息
+            group_format = GROUP_FORWARDING_MESSAGE_FORMAT.replace("[", "\[").replace(
+                "]", "\]"
+            )
+            pattern = re.compile(f'{group_format % ("(.+)", "(.+)")}')
+            try:
+                return re.search(pattern, self.content).group(2), True
+            except AttributeError:
+                pass
+            # 再尝试匹配个人消息
+            person_format = PERSON_FORWARDING_MESSAGE_FORMAT.replace("[", "\[").replace(
+                "]", "\]"
+            )
+            pattern = re.compile(f'{person_format % "(.+)"}')
+            try:
+                return re.search(pattern, self.content).group(1), False
+            except AttributeError:
+                return None
+        else:
+            return None
 
     def __str__(self) -> str:
         source = self.person
