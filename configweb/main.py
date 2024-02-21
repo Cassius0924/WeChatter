@@ -70,9 +70,7 @@ def update_config_section(section_name, updated_config):
         #         changes[key] = {"old": old_value, "new": value}
 
         # 更新配置文件
-        with open('../config.yaml', 'r', encoding='utf-8') as f:
-            config = yaml.safe_load(f)
-        config[section_name] = updated_config
+        config = updated_config
         with open('../config.yaml', 'w', encoding='utf-8') as f:
             yaml.dump(config, f)
 
