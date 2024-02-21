@@ -61,13 +61,6 @@ def update_config_section(section_name, updated_config):
         if "error" in current_config:
             return current_config  # 如果出现错误，直接返回
 
-        current_config = current_config[section_name]  # 获取真实的配置值
-        # changes = {}
-        # for key, value in updated_config.items():
-        #     old_value = current_config.get(key)
-        #     if old_value != value:
-        #         current_config[key] = value
-        #         changes[key] = {"old": old_value, "new": value}
 
         # 更新配置文件
         config = updated_config
@@ -76,8 +69,7 @@ def update_config_section(section_name, updated_config):
 
         print(f"Config updated successfully: {section_name} - {updated_config}")
         return {"message": "Config updated successfully", "changes": updated_config}
-        # print(f"Config updated successfully: {section_name} - {changes}")
-        # return {"message": "Config updated successfully", "changes": changes}
+
     except Exception as e:
         return {"error": str(e)}
 
