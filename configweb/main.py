@@ -47,11 +47,10 @@ def get_config_section(section_name):
     try:
         with open('../config.yaml', 'r', encoding='utf-8') as f:
             config = yaml.safe_load(f)
-        # section_config = config.get(section_name)
-        section_config = dict(config.get(section_name))#这里有问题，config.get[section_name]是一个方法，不能用[]，应该用()
+        section_config = config.get(section_name)
         if section_config is None:
             raise KeyError(f"Section '{section_name}' not found in configuration file.")
-        return section_config
+        return {section_name: section_config}
     except Exception as e:
         return {"error": str(e)}
 
