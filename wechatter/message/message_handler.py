@@ -4,8 +4,8 @@ from typing import Dict
 
 from loguru import logger
 
-import wechatter.config as config
-from wechatter.bot.bot_info import BotInfo
+from wechatter.bot import BotInfo
+from wechatter.config import config
 from wechatter.database import QuotedResponse, make_db_session
 from wechatter.models.wechat import Message, SendTo
 
@@ -66,7 +66,7 @@ class MessageHandler:
 
         # TODO: 可以为不同的群设置是否need_mentioned
         if (
-            config.need_mentioned
+            config["need_mentioned"]
             and message_obj.is_group
             and not message_obj.is_mentioned
         ):
@@ -113,10 +113,10 @@ class MessageHandler:
         for command, info in self.commands.items():
             # 第一个空格或回车前的内容即为指令
             cont_list = re.split(r"\s|\n", content, 1)
-            if not cont_list[0].startswith(config.command_prefix):
+            if not cont_list[0].startswith(config["command_prefix"]):
                 continue
             # 去掉命令前缀
-            no_prefix = cont_list[0][len(config.command_prefix) :]
+            no_prefix = cont_list[0][len(config["command_prefix"]) :]
             if no_prefix.lower() in info["keys"]:
                 cmd_dict["command"] = command
                 cmd_dict["desc"] = info["desc"]

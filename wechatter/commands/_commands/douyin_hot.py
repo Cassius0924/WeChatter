@@ -1,5 +1,5 @@
 import json
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Union
 
 from loguru import logger
 
@@ -16,7 +16,7 @@ COMMAND_NAME = "douyin-hot"
     keys=["抖音热搜", "douyin-hot"],
     desc="获取抖音热搜。",
 )
-def douyin_hot_command_handler(to: SendTo, message: str = "") -> None:
+def douyin_hot_command_handler(to: Union[str, SendTo], message: str = "") -> None:
     try:
         result, q_response = get_douyin_hot_str()
     except Exception as e:
@@ -54,6 +54,7 @@ def douyin_hot_quoted_handler(
         sender.send_msg(to, hot_url)
 
 
+@douyin_hot_command_handler.mainfunc
 def get_douyin_hot_str() -> Tuple[str, str]:
     r_json = get_request_json(
         url="https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/"

@@ -60,7 +60,7 @@ cd WeChatter
 2. 安装依赖项
 
 ```bash
-# 如果需要，则创建虚拟环境...
+# 如果需要，可创建虚拟环境...
 
 pip install -r requirements.txt
 ```
@@ -68,14 +68,14 @@ pip install -r requirements.txt
 3. 复制并编辑配置文件
 
 ```bash
-cp config.ini.example config.ini
-vim config.ini
+cp config.yaml.example config.yaml
+vim config.yaml
 ```
 
 4. 启动 WeChatter
 
 ```bash
-python3 main.py
+python3 -m wechatter
 ```
 
 5. 测试机器人
@@ -84,18 +84,18 @@ python3 main.py
 
 ## 支持的命令
 
-- [x] GPT 问答，基于 [Copilot-GPT4-Server](https://github.com/aaamoon/copilot-gpt4-service)
+- [x] GPT 问答，基于 [Copilot-GPT4-Service](https://github.com/aaamoon/copilot-gpt4-service)（不支持定时任务）
 - [x] Bilibili 热搜
 - [x] 知乎热搜
 - [x] 微博热搜
 - [x] 抖音热搜
 - [x] GitHub 趋势
-- [x] 单词词语翻译
+- [x] 单词词语翻译（不支持定时任务）
 - [x] 少数派早报
 - [x] 历史上的今天
-- [x] 二维码生成
-- [x] 待办清单（TODO）
-- [x] 人民日报PDF
+- [x] 二维码生成（不支持定时任务）
+- [x] 待办清单（不支持定时任务）
+- [x] 人民日报 PDF
 - [x] 天气预报
 - [x] 食物热量
 - [x] 冷知识
@@ -106,13 +106,13 @@ python3 main.py
 
 ## 支持的功能
 
-- [x] 消息转发，需[配置](#%EF%B8%8F-message-forwarding-配置)。
-- [x] 消息可引用回复，用户通过引用并回复可以进一步获取消息内容。带“（可引用：***）”的机器人消息均为可进一步互动的可引用消息。
-- [x] 天气预报定时推送，需[配置](#%EF%B8%8F-weather-cron-配置)。
+- [x] 消息转发，需[自行配置](#%EF%B8%8F-message-forwarding-配置)。
+- [x] 定时任务推送，大部分命令均支持定时任务。需[自行配置](#%EF%B8%8F-task-cron-配置)。
+- [x] 消息可引用回复，用户可以通过引用并回复命令消息进一步获取消息内容。带“（可引用：***）”的机器人消息均为可进一步互动的可引用消息。
 
 ## 支持的 Webhook
 
-- [x] GitHub 仓库 Webhook，需在 GitHub 仓库 Settings 中添加 Webhook 并[配置](#%EF%B8%8F-github-webhook-配置)
+- [x] GitHub 仓库 Webhook，需在 GitHub 仓库 Settings 中添加 Webhook 并[配置](#%EF%B8%8F-github-webhook-配置)。
 
 ## 配置文件
 
@@ -131,7 +131,7 @@ python3 main.py
 | 配置项 | 解释 | 备注 |
 | --- | --- | --- |
 | `wx_webhook_base_api`      | 发送消息的 BaseAPI | 默认为 `localhost:3001`，即 `wxBotWebhook` Docker 的地址 |
-| `wx_webhook_recv_api_path` | 接收消息的接口路径  | 默认为 `/receive_msg`，此路径为 Docker 参数 `RECVD_MSG_API` 的路径    |
+| `wx_webhook_recv_api_path` | 接收消息的接口路径  | 默认为 `/receive_msg`，此路径为 Docker 参数 `RECVD_MSG_API` 的路径 |
 
 ### ⚙️ Admin 配置
 
@@ -150,7 +150,7 @@ python3 main.py
 
 | 配置项 | 解释 | 备注 |
 | --- | --- | --- |
-| `command_prefix` | 机器人命令前缀 | 默认为 `/` ，可以设置为`>>`、`!` 等 |
+| `command_prefix` | 机器人命令前缀 | 默认为 `/` ，可以设置为`>>`、`!` 等任意字符 |
 | `need_mentioned` | 群聊中的命令是否需要@机器人 | 默认为 `True` |
 
 ### ⚙️ Copilot GPT4 配置
@@ -166,7 +166,7 @@ python3 main.py
 | --- | --- | --- |
 | `github_webhook_enabled` | 功能开关，是否接收 GitHub Webhook | 默认为 `False` |
 | `github_webhook_api_path` | 接收 GitHub Webhook 的接口路径 | 默认为 `/webhook/github` |
-| `github_webhook_receiver_list` | 接收 GitHub Webhook 的微信用户 |  |
+| `github_webhook_receiver_list` | 接收 GitHub Webhook 的微信用户 | |
 | `github_webhook_receive_group_list` | 接收 GitHub Webhook 的微信群 | |
 
 ### ⚙️ Message Forwarding 配置
@@ -174,19 +174,20 @@ python3 main.py
 | 配置项 | 子项 | 解释 | 备注 |
 | --- | --- |  --- | --- |
 | `message_forwarding_enabled` | | 功能开关，是否开启消息转发 | 默认为 `False` |
-| `message_forwarding_rule_list` | | 消息规则列表，每个规则包含三个字段：`froms`, `to_persons` 和 `to_groups` | 规则是由字典组成的JSON列表，最后的 `]` 不能单独一行 |
-| | `froms` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称 |
-| | `to_persons` | 消息转发目标用户列表，即消息接收用户 | 可以填多个用户名称或为空列表 |
-| | `to_groups` | 消息转发目标群列表，即消息接收群 | 可以填多个群名称或为空列表 |
+| `message_forwarding_rule_list` | | 消息规则列表，每个规则包含三个字段：`from_list`、`to_person_list` 和 `to_group_list` |  |
+| | `from_list` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称 |
+| | `to_person_list` | 消息转发目标用户列表，即消息接收用户 | 可以填多个用户名称或为空列表 |
+| | `to_group_list` | 消息转发目标群列表，即消息接收群 | 可以填多个群名称或为空列表 |
 
-### ⚙️ Weather Cron 配置
+### ⚙️ Task Cron 配置
 
 | 配置项 | 解释 | 备注 |
 | --- | --- | --- |
-| `weather_cron_enabled` | 功能开关，是否开启定时天气推送 | 默认为 `False` |
-| `weather_cron_rule_list` | 推送规则列表，每个规则包含两个字段：`cron` 和 `tasks` | |
+| `all_task_cron_enabled` | 所有定时任务的总开关 | 默认为 `True` |
+| `task_cron_list` | 定时任务列表，每个任务包含四个字段：`task`、`enabled`、`cron` 和 `commands` | |
 
-关于 `cron` 和 `tasks` 的配置见[天气预报定时任务配置详细](docs/weather_cron_config_detail.md)
+[//]: # (引导用户查看定时任务配置详细docs/task_cron_config_detail)
+关于定时任务配置详细请参阅[定时任务配置详细](docs/task_cron_config_detail.md)。
 
 ### ⚙️ Custom Command Key 配置
 
@@ -194,11 +195,21 @@ python3 main.py
 | --- | --- | --- |
 | `custom_command_key_dict` | 自定义命令关键词字典，格式为 `command: [key1, key2, ...]`, 其中 `command` 为命令名称，`key1` 和 `key2` 为自定义命令关键词 |  |
 
-关于命令名称可选值详见[自定义命令关键词配置详细](docs/custom_command_key_config_detail.md)
+关于命令名称可选值请参阅[自定义命令关键词配置详细](docs/custom_command_key_config_detail.md)。
 
-# 贡献者
+## 日志文件
 
-Thanks to the following people who have contributed to this project:
+若你需要查看日志文件，请目录项目目录下的 `logs/` 文件夹。
+
+默认的日志记录级别为 `INFO`，若需要调整日志记录级别，请修改环境变量 `WECHATTER_LOG_LEVEL`，可设置 `DEBUG`、`INFO`、`WARNING`、`ERROR`、`CRITICAL`。
+
+```bash
+export WECHATTER_LOG_LEVEL=DEBUG
+```
+
+## 贡献者
+
+***Thanks to the following people who have contributed to this project:***
 
 [![Contributors](https://contrib.rocks/image?repo=Cassius0924/WeChatter)](https://github.com/Cassius0924/WeChatter/graphs/contributors)
 

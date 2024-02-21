@@ -1,5 +1,5 @@
 import json
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import requests
 from bs4 import BeautifulSoup
@@ -19,7 +19,7 @@ COMMAND_NAME = "github-trending"
     keys=["github趋势", "github-trending"],
     desc="获取 GitHub 趋势。",
 )
-def github_trending_command_handler(to: SendTo, message: str = "") -> None:
+def github_trending_command_handler(to: Union[str, SendTo], message: str = "") -> None:
     try:
         result, q_response = get_github_trending_str()
     except Exception as e:
@@ -57,6 +57,7 @@ def github_trending_quoted_handler(
         sender.send_msg(to, trending_url)
 
 
+@github_trending_command_handler.mainfunc
 def get_github_trending_str() -> Tuple[str, str]:
     response = get_request(url="https://github.com/trending", timeout=10)
     gt_list = _parse_github_trending_response(response)

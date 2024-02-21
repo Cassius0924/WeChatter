@@ -1,5 +1,5 @@
 import json
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 import requests
 from bs4 import BeautifulSoup
@@ -19,7 +19,7 @@ COMMAND_NAME = "pai-post"
     keys=["派早报", "pai-post"],
     desc="获取少数派早报。",
 )
-def pai_post_command_handler(to: SendTo, message: str = "") -> None:
+def pai_post_command_handler(to: Union[str, SendTo], message: str = "") -> None:
     try:
         result, q_response = get_pai_post_str()
     except Exception as e:
@@ -57,6 +57,7 @@ def pai_post_quoted_handler(
         sender.send_msg(to, hot_url)
 
 
+@pai_post_command_handler.mainfunc
 def get_pai_post_str() -> Tuple[str, str]:
     response = get_request(url="https://sspai.com/")
     pai_post_list = _parse_pai_post_response(response)

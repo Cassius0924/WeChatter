@@ -3,7 +3,7 @@ from typing import List
 
 from loguru import logger
 
-import wechatter.config as config
+from wechatter.config import config
 
 commands = {}
 """
@@ -19,6 +19,7 @@ quoted_handlers = {}
 class command:
     def __init__(self, command: str, keys: List[str], desc: str):
         """
+        注册命令
         :param command: 命令
         :param keys: 命令关键词列表
         :param desc: 命令描述
@@ -60,17 +61,31 @@ class command:
 
         commands[self.command] = {}
         # 自定义命令关键词
-        if config.custom_command_key_dict.get(self.command, None):
-            self.keys.extend(config.custom_command_key_dict[self.command])
+        if config["custom_command_key_dict"].get(self.command, None):
+            self.keys.extend(config["custom_command_key_dict"][self.command])
 
         commands[self.command]["keys"] = self.keys
         commands[self.command]["desc"] = self.desc
         commands[self.command]["handler"] = func
         commands[self.command]["param_count"] = len(params)
+        commands[self.command]["is_quotable"] = False
 
         return self
 
     def quoted_handler(self, func):
+        """
+        设置命令的引用消息处理函数
+        :param func: 命令的引用消息处理函数
+        """
         # TODO: 判断参数是否合理
+        commands[self.command]["is_quotable"] = True
         quoted_handlers[self.command] = func
+        return func
+
+    def mainfunc(self, func):
+        """
+        设置命令的主函数，这个函数一般是返回命令的结果和命令的引用消息
+        :param func: 命令的主函数
+        """
+        commands[self.command]["mainfunc"] = func
         return func

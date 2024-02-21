@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Union
 
 from loguru import logger
 
@@ -13,7 +13,7 @@ from wechatter.utils import get_request_json
     keys=["历史上的今天", "today-in-history", "t-i-h"],
     desc="获取历史上的今天。",
 )
-def today_in_history_command_handler(to: SendTo, message: str = "") -> None:
+def today_in_history_command_handler(to: Union[str, SendTo], message: str = "") -> None:
     # 获取历史上的今天
     try:
         result = get_today_in_history_str()
@@ -25,6 +25,7 @@ def today_in_history_command_handler(to: SendTo, message: str = "") -> None:
         sender.send_msg(to, result)
 
 
+@today_in_history_command_handler.mainfunc
 def get_today_in_history_str() -> str:
     response = get_request_json(url="https://60s-view.deno.dev/history")
     tih_list = _extract_today_in_history_data(response)
