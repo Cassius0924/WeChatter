@@ -148,7 +148,7 @@ class Message(BaseModel):
         获取引用消息的id
         """
         if self.is_quoted:
-            pattern = rf'「.+{QUOTABLE_FORMAT % "(.{3})"}'
+            pattern = f'^「[^「]+{QUOTABLE_FORMAT % "(.{3})"}'
             try:
                 return re.search(pattern, self.content).group(1)
             except AttributeError:
