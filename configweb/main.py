@@ -61,7 +61,7 @@ def update_config_section(section_name, updated_config):
         if "error" in current_config:
             return current_config  # 如果出现错误，直接返回
 
-
+        print(updated_config)
         # 更新配置文件
         config = updated_config
         with open('../config.yaml', 'w', encoding='utf-8') as f:
