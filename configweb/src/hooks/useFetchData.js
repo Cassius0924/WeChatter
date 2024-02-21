@@ -4,7 +4,7 @@ import { BACKEND_URL, BACKEND_PORT } from '../config';
 
 
 function useFetchData(path) {
-    const [data, setData] = useState({});
+    const [data, setData] = useState({});//解释：useState()返回一个数组，第一个元素是状态值，第二个元素是更新状态值的函数
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 

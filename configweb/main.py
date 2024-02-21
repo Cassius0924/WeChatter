@@ -159,12 +159,12 @@ def read_root():
 
 @app.get("/wechatter")
 def get_wechatter_config():
-    return get_config_section('wechatter')
+    return get_config_section('wechatter_port')
 
 
 @app.post("/wechatter")
 def update_wechatter_config(updated_config: dict = Body(...)):
-    return update_config_section('wechatter', updated_config)
+    return update_config_section('wechatter_port', updated_config)
 
 
 @app.get("/wx-bot-webhook")
