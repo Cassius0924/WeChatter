@@ -1,5 +1,5 @@
 import json
-from typing import Dict, List
+from typing import Dict, List, Union
 
 import requests
 from bs4 import BeautifulSoup
@@ -19,7 +19,7 @@ from wechatter.utils.time import get_current_hour, get_current_minute, get_curre
     keys=["weather", "天气", "天气预报", "几度"],
     desc="获取天气预报",
 )
-def weather_command_handler(to: SendTo, message: str = "") -> None:
+def weather_command_handler(to: Union[str, SendTo], message: str = "") -> None:
     try:
         result = get_weather_str(message)
     except Exception as e:
@@ -96,6 +96,7 @@ CITY_IDS_PATH = pm.get_abs_path("assets/weather_china/city_ids.json")
 
 
 # 封装起来，方便定时任务调用
+@weather_command_handler.mainfunc
 def get_weather_str(city: str) -> str:
     city_id = _get_city_id(city)
     response = get_request(url=f"http://www.weather.com.cn/weather1dn/{city_id}.shtml")

@@ -4,9 +4,9 @@ from typing import Union
 from fastapi import APIRouter, Form, UploadFile
 from loguru import logger
 
-import wechatter.config as config
-from wechatter.bot.bot_info import BotInfo
+from wechatter.bot import BotInfo
 from wechatter.commands import commands, quoted_handlers
+from wechatter.config import config
 from wechatter.database import (
     Group as DbGroup,
     Message as DbMessage,
@@ -22,7 +22,7 @@ from wechatter.sender import notifier
 router = APIRouter()
 
 
-@router.post(config.wx_webhook_recv_api_path)
+@router.post(config["wx_webhook_recv_api_path"])
 async def recv_wechat_msg(
     type: str = Form(),
     content: Union[UploadFile, str] = Form(),
@@ -67,8 +67,10 @@ async def recv_wechat_msg(
     # DEBUG
     print(str(message))
 
-    if config.message_forwarding_enabled:
-        MessageForwarder(config.message_forwarding_rule_list).forward_message(message)
+    if config["message_forwarding_enabled"]:
+        MessageForwarder(config["message_forwarding_rule_list"]).forward_message(
+            message
+        )
 
     # 传入命令字典，构造消息处理器
     message_handler = MessageHandler(commands=commands, quoted_handlers=quoted_handlers)

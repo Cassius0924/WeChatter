@@ -1,6 +1,6 @@
 import os
 import re
-from typing import List
+from typing import List, Union
 
 from loguru import logger
 
@@ -17,7 +17,7 @@ from wechatter.utils import load_json, save_json
     keys=["待办事项", "待办", "todo"],
     desc="获取待办事项。",
 )
-def todo_command_handler(to: SendTo, message: str = "") -> None:
+def todo_command_handler(to: Union[str, SendTo], message: str = "") -> None:
     # 判断是查询还是添加
     if message == "":
         # 获取待办事项
@@ -40,7 +40,7 @@ def todo_command_handler(to: SendTo, message: str = "") -> None:
     keys=["删除待办事项", "todo-remove", "rmtd"],
     desc="删除待办事项。",
 )
-def remove_todo_command_handler(to: SendTo, message: str = "") -> None:
+def remove_todo_command_handler(to: Union[str, SendTo], message: str = "") -> None:
     indices = [
         int(idx.strip()) - 1
         for idx in re.split(r"[\s,]+", message)

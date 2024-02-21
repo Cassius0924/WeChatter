@@ -6,8 +6,8 @@ import requests
 import tenacity
 from loguru import logger
 
-import wechatter.config as config
 import wechatter.utils.http_request as http_request
+from wechatter.config import config
 from wechatter.models.wechat import QuotedResponse, SendTo
 from wechatter.sender.quotable import make_quotable
 
@@ -34,7 +34,6 @@ def _retry(
     return retry_wrapper
 
 
-# TODO: 改成装饰器
 def _logging(func):
     def logging_wrapper(*args, **kwargs):
         response = func(*args, **kwargs)
@@ -128,26 +127,26 @@ def _log(response: requests.Response) -> bool:
     return True
 
 
-URL = f"{config.wx_webhook_base_api}/webhook/msg/v2"
-V1_URL = f"{config.wx_webhook_base_api}/webhook/msg"
+URL = f"{config['wx_webhook_base_api']}/webhook/msg/v2"
+V1_URL = f"{config['wx_webhook_base_api']}/webhook/msg"
 
 
-def _validate(fn):
+def _validate(func):
     """
     验证接收者和消息内容是否为空
     """
 
-    def wrapper(n, m, *args, **kwargs):
-        if not n:
+    def validate_wrapper(to, message, *args, **kwargs):
+        if not to:
             logger.error("发送消息失败，接收者为空")
             return
-        if not m:
+        if not message:
             logger.error("发送消息失败，消息内容为空")
             return
 
-        return fn(n, m, *args, **kwargs)
+        return func(to, message, *args, **kwargs)
 
-    return wrapper
+    return validate_wrapper
 
 
 @singledispatch
@@ -195,6 +194,7 @@ def _send_msg1(
     """
     if quoted_response:
         message = make_quotable(message=message, quoted_response=quoted_response)
+
     data = {
         "to": name,
         "isRoom": is_group,
@@ -326,6 +326,7 @@ def mass_send_msg(
     """
     if quoted_response:
         message = make_quotable(message=message, quoted_response=quoted_response)
+
     data = []
     for name in name_list:
         data.append(
@@ -339,10 +340,10 @@ def mass_send_msg(
 
 
 @singledispatch
-def send_localfile_msg():
+def send_localfile_msg(to: Union[str, SendTo], file_path: str, is_group: bool = False):
     """
     发送本地文件
-    :param name: 接收者
+    :param to: 接收者
     :param file_path: 文件路径
     :param is_group: 是否为群组
     """
@@ -393,14 +394,15 @@ def mass_send_msg_to_admins(
     """
     if quoted_response:
         message = make_quotable(message=message, quoted_response=quoted_response)
-    if len(config.admin_list) == 0:
+
+    if len(config["admin_list"]) == 0:
         logger.warning("管理员列表为空")
     else:
-        mass_send_msg(config.admin_list, message, type=type)
-    if len(config.admin_group_list) == 0:
+        mass_send_msg(config["admin_list"], message, type=type)
+    if len(config["admin_group_list"]) == 0:
         logger.warning("管理员群列表为空")
     else:
-        mass_send_msg(config.admin_group_list, message, is_group=True, type=type)
+        mass_send_msg(config["admin_group_list"], message, is_group=True, type=type)
 
 
 def mass_send_msg_to_github_webhook_receivers(
@@ -414,20 +416,23 @@ def mass_send_msg_to_github_webhook_receivers(
     """
     if quoted_response:
         message = make_quotable(message=message, quoted_response=quoted_response)
-    if len(config.github_webhook_receiver_list) == 0:
+
+    person_list = config.get("github_webhook_receive_person_list")
+    group_list = config.get("github_webhook_receive_group_list")
+    if not person_list:
         logger.warning("GitHub Webhook 接收者列表为空")
     else:
         mass_send_msg(
-            config.github_webhook_receiver_list,
+            person_list,
             message,
             is_group=False,
             type=type,
         )
-    if len(config.github_webhook_receive_group_list) == 0:
+    if not group_list:
         logger.warning("GitHub Webhook 接收群列表为空")
     else:
         mass_send_msg(
-            config.github_webhook_receive_group_list,
+            group_list,
             message,
             is_group=True,
             type=type,

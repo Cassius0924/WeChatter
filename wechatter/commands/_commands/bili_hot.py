@@ -1,5 +1,5 @@
 import json
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Union
 
 from loguru import logger
 
@@ -11,12 +11,13 @@ from wechatter.utils import get_request_json, url_encode
 COMMAND_NAME = "bili-hot"
 
 
+# TODO: 所有的handler代码逻辑都一样，可以尝试优化为一个函数，都调用各自的mainfunc
 @command(
     command=COMMAND_NAME,
     keys=["b站热搜", "bili-hot"],
     desc="获取b站热搜。",
 )
-def bili_hot_command_handler(to: SendTo, message: str = ""):
+def bili_hot_command_handler(to: Union[SendTo, str], message: str = ""):
     try:
         result, q_response = get_bili_hot_str()
     except Exception as e:
@@ -52,6 +53,7 @@ def bili_hot_quoted_handler(to: SendTo, message: str = "", q_response: str = "")
         sender.send_msg(to, hot_url)
 
 
+@bili_hot_command_handler.mainfunc
 def get_bili_hot_str() -> Tuple[str, str]:
     response = get_request_json(
         url="https://app.bilibili.com/x/v2/search/trending/ranking"

@@ -1,5 +1,5 @@
 import json
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Union
 
 from loguru import logger
 
@@ -16,7 +16,7 @@ COMMAND_NAME = "weibo-hot"
     keys=["微博热搜", "weibo-hot"],
     desc="获取微博热搜。",
 )
-def weibo_hot_command_handler(to: SendTo, message: str = "") -> None:
+def weibo_hot_command_handler(to: Union[str, SendTo], message: str = "") -> None:
     try:
         result, q_response = get_weibo_hot_str()
     except Exception as e:
@@ -54,6 +54,7 @@ def weibo_hot_quoted_handler(
         sender.send_msg(to, hot_url)
 
 
+@weibo_hot_command_handler.mainfunc
 def get_weibo_hot_str() -> Tuple[str, str]:
     r_json = get_request_json(
         url="https://m.weibo.cn/api/container/getIndex?containerid=106003%26filter_type%3Drealtimehot"

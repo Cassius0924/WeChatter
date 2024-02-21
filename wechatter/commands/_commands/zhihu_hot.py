@@ -1,5 +1,5 @@
 import json
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Union
 
 from loguru import logger
 
@@ -16,7 +16,7 @@ COMMAND_NAME = "zhihu-hot"
     keys=["知乎热搜", "zhihu-hot"],
     desc="获取知乎热搜。",
 )
-def zhihu_hot_command_handler(to: SendTo, message: str = "") -> None:
+def zhihu_hot_command_handler(to: Union[str, SendTo], message: str = "") -> None:
     try:
         result, q_response = get_zhihu_hot_str()
     except Exception as e:
@@ -54,6 +54,7 @@ def zhihu_hot_quoted_handler(
         sender.send_msg(to, hot_url)
 
 
+@zhihu_hot_command_handler.mainfunc
 def get_zhihu_hot_str() -> Tuple[str, str]:
     response = get_request_json(url="https://api.zhihu.com/topstory/hot-list?limit=10")
     hot_list = _extract_zhihu_hot_data(response)

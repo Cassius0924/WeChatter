@@ -3,9 +3,9 @@ from typing import List, Union
 
 from loguru import logger
 
-import wechatter.config as config
 import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
+from wechatter.config import config
 from wechatter.database import (
     GptChatInfo as DbGptChatInfo,
     GptChatMessage as DbGptChatMessage,
@@ -191,8 +191,8 @@ def _gptx_continue(model: str, to: SendTo, message: str = "") -> None:
 
 
 class CopilotGPT4:
-    api = f"{config.cp_gpt4_base_api}/v1/chat/completions"
-    bearer_token = "Bearer " + config.cp_token
+    api = f"{config['cp_gpt4_base_api']}/v1/chat/completions"
+    bearer_token = "Bearer " + config["cp_token"]
     save_path = pm.get_abs_path("data/copilot_gpt4/chats/")
 
     @staticmethod

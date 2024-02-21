@@ -5,8 +5,7 @@ __pycache__/
 .ruff_cache/
 .DS_Store
 
-# config.ini 配置文件
-config.ini
+config.yaml
 
 data/
 

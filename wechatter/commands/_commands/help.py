@@ -1,14 +1,16 @@
 # 获取命令帮助消息
-import wechatter.config as config
+from typing import Union
+
 from wechatter.commands import commands
 from wechatter.commands.handlers import command
+from wechatter.config import config
 from wechatter.models.wechat import SendTo
 from wechatter.sender import sender
 from wechatter.utils.text_to_image import text_to_image
 
 
 @command(command="help", keys=["帮助", "help"], desc="获取帮助信息。")
-def help_command_handler(to: SendTo, message: str = "") -> None:
+def help_command_handler(to: Union[str, SendTo], message: str = "") -> None:
     # # 获取帮助信息(文本)
     # from command.help import get_help_msg
     # response = get_help_msg()
@@ -28,6 +30,6 @@ def get_help_msg() -> str:
             continue
         cmd_msg = ""
         for key in value["keys"]:
-            cmd_msg += config.command_prefix + key + "\n"
+            cmd_msg += config["command_prefix"] + key + "\n"
         help_msg += cmd_msg + "-->「" + value["desc"] + "」\n\n"
     return help_msg

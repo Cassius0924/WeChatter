@@ -7,7 +7,7 @@ from typing import Optional
 from loguru import logger
 from pydantic import BaseModel, computed_field
 
-import wechatter.config as config
+from wechatter.bot import BotInfo
 from wechatter.models.wechat.group import Group
 from wechatter.models.wechat.person import Person
 from wechatter.models.wechat.quoted_response import QUOTABLE_FORMAT
@@ -126,7 +126,7 @@ class Message(BaseModel):
         quote_pattern = r"(?s)「(.*?)」\n- - - - - - - - - - - - - - -"
         match_result = re.match(quote_pattern, self.content)
         # 判断是否为引用机器人消息
-        if match_result and self.content.startswith(f"「{config.bot_name}"):
+        if match_result and self.content.startswith(f"「{BotInfo.name}"):
             return True
         return False
 
