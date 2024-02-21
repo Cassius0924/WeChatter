@@ -43,17 +43,16 @@ app.add_middleware(
 #         return {"error": str(e)}
 
 
-def get_config_section(section_name):
+def get_config_sections(section_names):
     try:
         yaml = YAML()
         with open('../config.yaml', 'r', encoding='utf-8') as f:
             config = yaml.load(f)
-            print(config)
-        section_config = config.get(section_name)
-        print(section_config)
-        if section_config is None:
-            raise KeyError(f"Section '{section_name}' not found in configuration file.")
-        return {section_name: str(section_config)}
+        section_configs = {section_name: config.get(section_name) for section_name in section_names}
+        for section_name, section_config in section_configs.items():
+            if section_config is None:
+                raise KeyError(f"Section '{section_name}' not found in configuration file.")
+        return section_configs
     except Exception as e:
         return {"error": str(e)}
 
@@ -158,7 +157,8 @@ def read_root():
 
 @app.get("/wechatter")
 def get_wechatter_config():
-    return get_config_section('wechatter_port')
+    sections = get_config_sections(['wechatter_port'])
+    return get_config_sections(sections)
 
 
 @app.post("/wechatter")
@@ -168,7 +168,8 @@ def update_wechatter_config(updated_config: dict = Body(...)):
 
 @app.get("/wx-bot-webhook")
 def get_wx_bot_webhook_config():
-    return get_config_section('wx-bot-webhook')
+    sections = get_config_sections(['wx_webhook_base_api', 'wx_webhook_recv_api_path'])
+    return get_config_sections(sections)
 
 
 @app.post("/wx-bot-webhook")
@@ -178,7 +179,7 @@ def update_wx_bot_webhook_config(updated_config: dict = Body(...)):
 
 @app.get("/admin")
 def get_admin_config():
-    return get_config_section('admin')
+    return get_config_sections('admin')
 
 
 @app.post("/admin")
@@ -188,7 +189,7 @@ def update_admin_config(updated_config: dict = Body(...)):
 
 @app.get("/bot")
 def get_bot_config():
-    return get_config_section('bot')
+    return get_config_sections('bot')
 
 
 @app.post("/bot")
@@ -198,7 +199,7 @@ def update_bot_config(updated_config: dict = Body(...)):
 
 @app.get("/chat")
 def get_chat_config():
-    return get_config_section('chat')
+    return get_config_sections('chat')
 
 
 @app.post("/chat")
@@ -208,7 +209,7 @@ def update_chat_config(updated_config: dict = Body(...)):
 
 @app.get("/copilot-gpt4")
 def get_copilot_gpt4_config():
-    return get_config_section('copilot-gpt4')
+    return get_config_sections('copilot-gpt4')
 
 
 @app.post("/copilot-gpt4")
@@ -218,7 +219,7 @@ def update_copilot_gpt4_config(updated_config: dict = Body(...)):
 
 @app.get("/github-webhook")
 def get_github_webhook_config():
-    return get_config_section('github-webhook')
+    return get_config_sections('github-webhook')
 
 
 @app.post("/github-webhook")
@@ -228,7 +229,7 @@ def update_github_webhook_config(updated_config: dict = Body(...)):
 
 @app.get("/message-forwarding")
 def get_message_forwarding_config():
-    return get_config_section('message-forwarding')
+    return get_config_sections('message-forwarding')
 
 
 @app.post("/message-forwarding")
@@ -238,7 +239,7 @@ def update_message_forwarding_config(updated_config: dict = Body(...)):
 
 @app.get("/weather-cron")
 def get_weather_cron_config():
-    return get_config_section('weather-cron')
+    return get_config_sections('weather-cron')
 
 
 @app.post("/weather-cron")
@@ -248,7 +249,7 @@ def update_weather_cron_config(updated_config: dict = Body(...)):
 
 @app.get("/custom-command-key")
 def get_custom_command_key_config():
-    return get_config_section('custom-command-key')
+    return get_config_sections('custom-command-key')
 
 
 @app.post("/custom-command-key")
@@ -258,7 +259,7 @@ def update_custom_command_key_config(updated_config: dict = Body(...)):
 
 @app.get("/gasoline-price-cron")
 def get_gasoline_price_cron_config():
-    return get_config_section('gasoline-price-cron')
+    return get_config_sections('gasoline-price-cron')
 
 
 @app.post("/gasoline-price-cron")
