@@ -81,7 +81,7 @@ def update_config_section(section_name, updated_value):
         with open('../config.yaml', 'w', encoding='utf-8') as f:
             yaml.dump(config, f)
 
-        print(f"Config updated successfully: {section_name} - old:{old_value} --> new:{new_value}")
+        print(f"Config updated successfully: {section_name} : (old:{old_value} --> new:{new_value})")
         return {"message": "Config updated successfully", "changes": updated_value}
 
     except Exception as e:
