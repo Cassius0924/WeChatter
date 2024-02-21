@@ -43,17 +43,28 @@ app.add_middleware(
 #         return {"error": str(e)}
 
 
+# def get_config_section(section_name):
+#     try:
+#         yaml = YAML()
+#         with open('../config.yaml', 'r', encoding='utf-8') as f:
+#             config = yaml.load(f)
+#             print(config)
+#         section_config = config.get(section_name)
+#         print(section_config)
+#         if section_config is None:
+#             raise KeyError(f"Section '{section_name}' not found in configuration file.")
+#         return {section_name: str(section_config)}
+#     except Exception as e:
+#         return {"error": str(e)}
 def get_config_section(section_name):
     try:
         yaml = YAML()
         with open('../config.yaml', 'r', encoding='utf-8') as f:
             config = yaml.load(f)
-            print(config)
-        section_config = config.get(section_name)
-        print(section_config)
-        if section_config is None:
-            raise KeyError(f"Section '{section_name}' not found in configuration file.")
-        return {section_name: str(section_config)}
+            section_config = config.get(section_name)
+            if section_config is None:
+                raise KeyError(f"Section '{section_name}' not found in configuration file.")
+            return section_config
     except Exception as e:
         return {"error": str(e)}
 
