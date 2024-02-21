@@ -70,7 +70,7 @@ def update_config_section(section_name, updated_value):
         # 再写回文件
         with open('../config.yaml', 'w', encoding='utf-8') as f:
             yaml.dump(config, f)
-
+        print(updated_value[section_name])
         print(f"Config updated successfully: {section_name} - {updated_value}")
         return {"message": "Config updated successfully", "changes": updated_value}
 
