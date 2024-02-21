@@ -1,12 +1,12 @@
+import ast
 import logging
 import subprocess
 import threading
-from ruamel.yaml import YAML
-import ast
 
 from fastapi import Body
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from ruamel.yaml import YAML
 
 logging.basicConfig(level=logging.DEBUG)
 app = FastAPI()
@@ -66,27 +66,29 @@ def update_config_section(section_name, updated_value):
         with open('../config.yaml', 'r', encoding='utf-8') as f:
             config = yaml.load(f)
         old_value = config.get(section_name)
+
         # 尝试将每个值转换为其原始类型
+        converted_value = {}
         for key, value in updated_value.items():
             try:
-                updated_value[key] = ast.literal_eval(value)
+                converted_value[key] = ast.literal_eval(value)
             except (ValueError, SyntaxError):
-                pass  # 如果转换失败，保持原样
+                converted_value[key] = value  # 如果转换失败，保持原样
 
         # 更新特定的部分
-        new_value = updated_value[section_name]
-        config[section_name] = new_value
+        new_value = converted_value.get(section_name)
+        if new_value is not None:
+            config[section_name] = new_value
 
         # 再写回文件
         with open('../config.yaml', 'w', encoding='utf-8') as f:
             yaml.dump(config, f)
 
         print(f"Config updated successfully: {section_name} : (old:{old_value} --> new:{new_value})")
-        return {"message": "Config updated successfully", "changes": updated_value}
+        return {"message": "Config updated successfully", "changes": converted_value}
 
     except Exception as e:
         return {"error": str(e)}
-
 
 
 # ！！！已解决！！！解决方法：在run_command中，将process.stdout.readline()改为process.communicate()，并且将while True改为while process.poll()
