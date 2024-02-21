@@ -166,7 +166,7 @@ def update_wechatter_config(updated_config: dict = Body(...)):
 
 @app.get("/wx-bot-webhook")
 def get_wx_bot_webhook_config():
-    return get_config_section('wx_webhook_base_api')
+    return get_config_section('wx-bot-webhook')
 
 
 @app.post("/wx-bot-webhook")
