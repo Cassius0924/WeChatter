@@ -1,0 +1,62 @@
+# 微信机器人配置文件
+# 配置说明：https://github.com/Cassius0924/WeChatter?tab=readme-ov-file#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6
+
+# Wechatter
+wechatter_port: 4000
+
+# WX Webhook
+wx_webhook_base_api: http://localhost:3001
+wx_webhook_recv_api_path: /receive_msg
+
+# Admin
+admin_list: [ "文件传输助手", "AdminName" ]
+admin_group_list: [ "AdminGroupName" ]
+
+# Bot
+bot_name: Cassius
+
+# Chat
+command_prefix: /
+need_mentioned: False
+
+# Copilot GPT4
+cp_gpt4_base_api: http://localhost:999
+cp_token: ghu_your_token
+
+# GitHub Webhook
+github_webhook_enabled: True
+github_webhook_api_path: /webhook/github
+github_webhook_receive_person_list: [ ]
+github_webhook_receive_group_list: [ ]
+
+# Message Forwarding：消息转发
+message_forwarding_enabled: True
+message_forwarding_rule_list:
+  - from_list: [ "缘" ]
+    to_person_list: [ ]
+    to_group_list: [ "WeChatter" ]
+
+# Task Cron：定时任务
+# 配置说明：https://github.com/Cassius0924/WeChatter/blob/master/docs/task_cron_config_detail.md
+all_task_cron_enabled: True
+task_cron_list:
+  - task: "每天早上8点发送天气预报和知乎热搜"
+    enabled: True
+    cron:
+      hour: "8"
+      minute: "0"
+      second: "0"
+      timezone: "Asia/Shanghai"
+    commands:
+      - cmd: "weather"
+        args: [ "汕尾" ]
+        to_person_list: [ "缘" ]
+      - cmd: "zhihu-hot"
+        to_group_list: [ "WeChatter" ]
+
+# Custom Command Key: 自定义命令关键词
+# 配置说明：https://github.com/Cassius0924/WeChatter/blob/master/docs/custom_command_key_config_detail.md
+custom_command_key_dict:
+  gpt4: [ ">" ]
+  bili-hot: [ "bh" ]
+  weather: [ "w", "温度" ]

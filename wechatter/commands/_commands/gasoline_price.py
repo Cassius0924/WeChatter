@@ -1,3 +1,5 @@
+from typing import Union
+
 import requests
 from bs4 import BeautifulSoup
 from loguru import logger
@@ -5,7 +7,7 @@ from loguru import logger
 import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
 from wechatter.exceptions import Bs4ParsingError
-from wechatter.models.message import SendTo
+from wechatter.models.wechat import SendTo
 from wechatter.sender import sender
 from wechatter.utils import get_request, load_json
 
@@ -15,7 +17,7 @@ from wechatter.utils import get_request, load_json
     keys=["汽油", "gasoline-price", "汽油价格", "中石化"],
     desc="获取汽油价格。",
 )
-def gasoline_price_command_handler(to: SendTo, message: str = "") -> None:
+def gasoline_price_command_handler(to: Union[str, SendTo], message: str = "") -> None:
     try:
         result = get_gasoline_price_str(message)
     except Exception as e:
@@ -28,7 +30,7 @@ def gasoline_price_command_handler(to: SendTo, message: str = "") -> None:
 
 # TODO：查询其他类型的油价，如95，97柴油等，例子：查询95号汽油只需改成{city_id}_4_1.html
 # TODO: 现在查询的是中国石油化工,添加查询中国石油天然气，只需改成{city_id}_2_2.html
-# 封装起来，方便定时任务调用
+@gasoline_price_command_handler.mainfunc
 def get_gasoline_price_str(city_name: str) -> str:
     """
     获取城市的汽油价格

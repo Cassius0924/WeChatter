@@ -1,5 +1,5 @@
 import random
-from typing import List
+from typing import List, Union
 
 import requests
 from bs4 import BeautifulSoup
@@ -7,17 +7,18 @@ from loguru import logger
 
 from wechatter.commands.handlers import command
 from wechatter.exceptions import Bs4ParsingError
-from wechatter.models.message import SendTo
+from wechatter.models.wechat import SendTo
 from wechatter.sender import sender
 from wechatter.utils import get_request
 
 
+# TODO: 重写!!!
 @command(
     command="trivia",
     keys=["冷知识", "trivia"],
     desc="获取冷知识。",
 )
-def trivia_command_handler(to: SendTo, message: str = "") -> None:
+def trivia_command_handler(to: Union[str, SendTo], message: str = "") -> None:
     random_number = random.randint(1, 917)
     try:
         response = get_request(
