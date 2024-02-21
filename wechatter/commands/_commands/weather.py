@@ -1,5 +1,5 @@
 import json
-from typing import Dict, List
+from typing import Dict, List, Union
 
 import requests
 from bs4 import BeautifulSoup
@@ -8,7 +8,7 @@ from loguru import logger
 import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
 from wechatter.exceptions import Bs4ParsingError
-from wechatter.models.message import SendTo
+from wechatter.models.wechat import SendTo
 from wechatter.sender import sender
 from wechatter.utils import get_request, load_json
 from wechatter.utils.time import get_current_hour, get_current_minute, get_current_ymdh
@@ -19,7 +19,7 @@ from wechatter.utils.time import get_current_hour, get_current_minute, get_curre
     keys=["weather", "天气", "天气预报", "几度"],
     desc="获取天气预报",
 )
-def weather_command_handler(to: SendTo, message: str = "") -> None:
+def weather_command_handler(to: Union[str, SendTo], message: str = "") -> None:
     try:
         result = get_weather_str(message)
     except Exception as e:
@@ -29,6 +29,8 @@ def weather_command_handler(to: SendTo, message: str = "") -> None:
     else:
         sender.send_msg(to, result)
 
+
+# TODO: Quoted Handler，获取更具体的天气，关键词例如：明天，逐日，日出日落，空气质量，紫外线指数等
 
 # class WeatherTip:
 #     def __init__(self, priority, condition, tip):
@@ -94,6 +96,7 @@ CITY_IDS_PATH = pm.get_abs_path("assets/weather_china/city_ids.json")
 
 
 # 封装起来，方便定时任务调用
+@weather_command_handler.mainfunc
 def get_weather_str(city: str) -> str:
     city_id = _get_city_id(city)
     response = get_request(url=f"http://www.weather.com.cn/weather1dn/{city_id}.shtml")

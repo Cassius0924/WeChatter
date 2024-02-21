@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Union
 from urllib.parse import quote
 
 import requests
@@ -7,7 +7,7 @@ from loguru import logger
 
 from wechatter.commands.handlers import command
 from wechatter.exceptions import Bs4ParsingError
-from wechatter.models.message import SendTo
+from wechatter.models.wechat import SendTo
 from wechatter.sender import sender
 from wechatter.utils import get_request
 
@@ -17,7 +17,7 @@ from wechatter.utils import get_request
     keys=["食物热量", "food-calories", "热量", "calories", "卡路里"],
     desc="获取食物热量。",
 )
-def food_calories_command_handler(to: SendTo, message: str = "") -> None:
+def food_calories_command_handler(to: Union[str, SendTo], message: str = "") -> None:
     try:
         result = get_food_calories_str(message)
     except Exception as e:
@@ -28,6 +28,7 @@ def food_calories_command_handler(to: SendTo, message: str = "") -> None:
         sender.send_msg(to, result)
 
 
+@food_calories_command_handler.mainfunc
 def get_food_calories_str(message: str) -> str:
     if not message:
         return "查询失败，请输入食物名称"

@@ -1,14 +1,16 @@
 import json
 import unittest
+
 from wechatter.commands._commands import today_in_history
 
 
 class TestTodayInHistoryCommand(unittest.TestCase):
-
     def setUp(self):
-        with open('tests/commands/test_today_in_history/today_in_history_response.json') as f:
+        with open(
+            "tests/commands/test_today_in_history/today_in_history_response.json"
+        ) as f:
             self.tih_response = json.load(f)
-            self.tih_list = self.tih_response['data']
+            self.tih_list = self.tih_response["data"]
 
     def test_extract_today_in_history_data_success(self):
         result = today_in_history._extract_today_in_history_data(self.tih_response)

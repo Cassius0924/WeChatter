@@ -5,36 +5,30 @@ from loguru import logger
 
 from wechatter.models.scheduler import CronTask
 
-CRON_TASKS: List[CronTask] = []
-
 
 class Scheduler:
-    def __init__(self):
+    def __init__(self, cron_task_list: List[CronTask] = None):
         self.scheduler = BackgroundScheduler()
-
-    @staticmethod
-    def add_cron_task(cron_task: CronTask):
-        """添加定时任务"""
-        CRON_TASKS.append(cron_task)
-
-    @staticmethod
-    def add_cron_tasks(cron_tasks: List[CronTask]):
-        """添加定时任务"""
-        CRON_TASKS.extend(cron_tasks)
-
-    @staticmethod
-    def is_cron_tasks_empty():
-        """判断定时任务是否为空"""
-        return len(CRON_TASKS) == 0
+        self.cron_task_list = cron_task_list
 
     def startup(self):
-        """启动定时任务"""
-        for ct in CRON_TASKS:
-            self.scheduler.add_job(ct.func, ct.trigger)
+        """
+        启动定时任务
+        """
+        if not self.cron_task_list:
+            logger.info("定时任务为空，不启动定时任务")
+            return
+        for cron_task in self.cron_task_list:
+            if cron_task.enabled:
+                for func in cron_task.funcs:
+                    self.scheduler.add_job(func, cron_task.cron_trigger)
+                logger.info(f"定时任务已添加: {cron_task.desc}")
         self.scheduler.start()
         logger.info("定时任务已启动")
 
     def shutdown(self):
-        """停止定时任务"""
+        """
+        停止定时任务
+        """
         self.scheduler.shutdown()
         logger.info("定时任务已停止")

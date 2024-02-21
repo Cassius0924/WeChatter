@@ -7,7 +7,7 @@ from loguru import logger
 from wechatter.utils.path_manager import get_abs_path
 
 # 使用环境变量中的 LOG_LEVEL
-LOG_LEVEL_NAME = os.environ.get("LOG_LEVEL", "INFO")
+LOG_LEVEL_NAME = os.environ.get("WECHATTER_LOG_LEVEL", "INFO")
 LOG_LEVEL = logging.getLevelName(LOG_LEVEL_NAME)
 
 LOGURU_FORMAT = (
@@ -40,7 +40,12 @@ class InterceptHandler(logging.Handler):
         # TODO: 解决DEBUG级别下multipart.multipart:callback太多问题
 
 
-def init_logger():
+def init_logger(log_level: str = ""):
+    if log_level:
+        global LOG_LEVEL_NAME, LOG_LEVEL
+        LOG_LEVEL_NAME = log_level
+        LOG_LEVEL = logging.getLevelName(LOG_LEVEL_NAME)
+
     # 拦截根日志记录器的所有内容
     logging.root.handlers = [InterceptHandler()]
     logging.root.setLevel(LOG_LEVEL)

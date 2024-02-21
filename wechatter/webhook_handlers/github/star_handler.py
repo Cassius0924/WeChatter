@@ -14,10 +14,10 @@ def handle_star(data: dict):
             "==== GitHub Star 事件 ====\n"
             f"⭐️ {payload.repository.full_name} 的 Star 数量 +1 🆙！\n"
         )
-        sender.send_msg_to_github_webhook_receivers(message)
+        sender.mass_send_msg_to_github_webhook_receivers(message)
     else:
         message = (
             "==== GitHub Star 事件 ====\n"
             f"⭐️ {payload.repository.full_name} 的 Star 数量 -1 🔽！\n"
         )
-        sender.send_msg_to_github_webhook_receivers(message)
+        sender.mass_send_msg_to_github_webhook_receivers(message)

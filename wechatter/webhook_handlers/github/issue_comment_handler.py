@@ -25,4 +25,4 @@ def handle_issue_comment(data: dict):
         f"🧑‍💻 创建者：{payload.issue.user.login}\n"
         f"🔗 查看详情：{payload.issue.html_url}"
     )
-    sender.send_msg_to_github_webhook_receivers(message)
+    sender.mass_send_msg_to_github_webhook_receivers(message)

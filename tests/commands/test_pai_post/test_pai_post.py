@@ -32,3 +32,8 @@ class TestPaiPostCommand(unittest.TestCase):
     def test_generate_zhihu_hot_message_empty_list(self):
         result = pai_post._generate_pai_post_message([])
         self.assertEqual(result, "暂无少数派早报")
+
+    def test_generate_pai_post_quoted_response_success(self):
+        result = pai_post._generate_pai_post_quoted_response(self.pai_post_list)
+        true_result = '{"1": "https://sspai.com/post/86250", "2": "https://sspai.com/post/86250", "3": "https://sspai.com/post/86250", "4": "https://sspai.com/post/86250", "5": "https://sspai.com/post/86250", "6": "https://sspai.com/post/86222", "7": "https://sspai.com/post/86222", "8": "https://sspai.com/post/86222", "9": "https://sspai.com/post/86222", "10": "https://sspai.com/post/86222", "11": "https://sspai.com/post/86222"}'
+        self.assertEqual(result, true_result)

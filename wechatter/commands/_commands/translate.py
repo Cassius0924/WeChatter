@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Union
 
 import langid
 import requests
@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup, Tag
 from loguru import logger
 
 from wechatter.commands.handlers import command
-from wechatter.models.message import SendTo
+from wechatter.models.wechat import SendTo
 from wechatter.sender import sender
 from wechatter.utils import get_request, get_request_json
 
@@ -16,22 +16,9 @@ from wechatter.utils import get_request, get_request_json
     keys=["word", "单词"],
     desc="翻译单词或短语。",
 )
-def word_command_handler(to: SendTo, message: str = "") -> None:
-    from_lang = _detect_lang(message)
-    to_lang = "chinese"
-
-    # 自动翻译 en -> zh, zh -> en, other -> zh --if not--> en
-    if from_lang == "":
-        error_message = "翻译失败，无法检测文本语言"
-        logger.error(error_message)
-        sender.send_msg(to, error_message)
-        return
-
-    from_lang, to_lang = _auto_translate(from_lang, to_lang)
-
-    # 获取翻译
+def word_command_handler(to: Union[str, SendTo], message: str = "") -> None:
     try:
-        result = get_reverso_context_tran_str(message, from_lang, to_lang)
+        result = get_reverso_context_tran_str(message)
     except Exception as e:
         error_message = f"翻译失败，错误信息: {str(e)}"
         logger.error(error_message)
@@ -74,13 +61,23 @@ MODEL_DICT = {
     "chinese": "zh-pinyin", "russian": "ru-wikipedia", "japanese": "ja-latin",
     "arabic": "ar-wikipedia", "ukrainian": "uk-slovnyk", "korean": "ko-romanization",
 }
-
-
 # fmt: on
 
 
 # 获取翻译字符串
-def get_reverso_context_tran_str(content: str, from_lang: str, to_lang: str) -> str:
+@word_command_handler.mainfunc
+def get_reverso_context_tran_str(content: str) -> str:
+    from_lang = _detect_lang(content)
+    to_lang = "chinese"
+
+    # 自动翻译 en -> zh, zh -> en, other -> zh --if not--> en
+    if from_lang == "":
+        error_message = "翻译失败，无法检测文本语言"
+        logger.error(error_message)
+        raise ValueError(error_message)
+
+    from_lang, to_lang = _auto_translate(from_lang, to_lang)
+
     if not _check_lang_support(from_lang, to_lang):
         logger.error(f"不支持的语言翻译：{from_lang} -> {to_lang}")
         raise ValueError(f"不支持的语言翻译：{from_lang} -> {to_lang}")

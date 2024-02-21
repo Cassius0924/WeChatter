@@ -2,13 +2,13 @@ from fastapi import APIRouter, Request, status
 from fastapi.responses import JSONResponse
 from loguru import logger
 
-import wechatter.config as config
+from wechatter.config import config
 from wechatter.webhook_handlers import github_webhook_handlers as handlers
 
 router = APIRouter()
 
 
-@router.post(config.github_webhook_api_path)
+@router.post(config["github_webhook_api_path"])
 async def recv_github_webhook(request: Request):
     """接收 GitHub Webhook"""
     data = await request.json()
@@ -22,7 +22,7 @@ async def recv_github_webhook(request: Request):
     try:
         handler(data)
     except ValueError as e:
-        logger.error(f"GitHub Webhook 处理失败: {str(e)}")
+        logger.error(f"GitHub Webhook 解析失败: {str(e)}")
         return JSONResponse(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content={"detail": str(e)}
         )

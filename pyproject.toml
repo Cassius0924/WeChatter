@@ -12,3 +12,4 @@ docstring-code-format = true
 line_length = 88
 multi_line_output = 3
 include_trailing_comma = true
+combine_as_imports = true

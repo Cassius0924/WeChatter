@@ -34,11 +34,11 @@ class PullRequest(BaseModel):
     state: str
     title: str
     user: User
-    body: Optional[str]
+    body: Optional[str] = None
     base: PrBranch
     head: PrBranch
     merged: bool
-    merged_by: Optional[User]
+    merged_by: Optional[User] = None
 
 
 class GithubPrWebhook(BaseModel):

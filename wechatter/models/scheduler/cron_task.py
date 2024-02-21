@@ -1,9 +1,13 @@
-from typing import Callable
+from typing import Callable, List
 
 from apscheduler.triggers.cron import CronTrigger
+from pydantic import BaseModel, ConfigDict
 
 
-class CronTask:
-    def __init__(self, func: Callable, trigger: CronTrigger):
-        self.func = func
-        self.trigger = trigger
+class CronTask(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    enabled: bool
+    desc: str
+    cron_trigger: CronTrigger
+    funcs: List[Callable]

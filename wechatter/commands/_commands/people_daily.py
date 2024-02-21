@@ -1,18 +1,23 @@
+from typing import Union
+
 from loguru import logger
 
 from wechatter.commands.handlers import command
-from wechatter.models.message import SendTo
+from wechatter.models.wechat import SendTo
 from wechatter.sender import sender
 from wechatter.utils.time import get_current_ymd
 
 
+# TODO: 重写!!!
 @command(
     command="people-daily",
     keys=["人民日报", "people", "people-daily"],
     desc="获取人民日报。",
 )
-def people_daily_command_handler(to: SendTo, message: str = "") -> None:
-    """发送人民日报url"""
+def people_daily_command_handler(to: Union[str, SendTo], message: str = "") -> None:
+    """
+    发送人民日报pdf
+    """
     _send_people_daily(to, message, type="fileUrl")
 
 
@@ -21,12 +26,14 @@ def people_daily_command_handler(to: SendTo, message: str = "") -> None:
     keys=["人民日报链接", "people-url", "people-daily-url"],
     desc="获取人民日报url。",
 )
-def people_daily_url_command_handler(to: SendTo, message: str = "") -> None:
-    """发送人民日报url"""
+def people_daily_url_command_handler(to: Union[str, SendTo], message: str = "") -> None:
+    """
+    发送人民日报url
+    """
     _send_people_daily(to, message, type="text")
 
 
-def _send_people_daily(to: SendTo, message: str, type: str) -> None:
+def _send_people_daily(to: Union[str, SendTo], message: str, type: str) -> None:
     if message == "":
         try:
             url = get_today_people_daliy_url()

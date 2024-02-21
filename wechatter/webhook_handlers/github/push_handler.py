@@ -26,4 +26,4 @@ def handle_push(data: dict):
         message += f"📃 提交信息：{payload.commits.pop().message}\n"
     message += f"🔗 查看详情：{branch_url}"
 
-    sender.send_msg_to_github_webhook_receivers(message)
+    sender.mass_send_msg_to_github_webhook_receivers(message)
