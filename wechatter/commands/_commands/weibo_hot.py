@@ -35,9 +35,7 @@ def weibo_hot_command_handler(to: Union[str, SendTo], message: str = "") -> None
 
 
 @weibo_hot_command_handler.quoted_handler
-def weibo_hot_quoted_handler(
-    to: SendTo, message: str = "", q_response: str = ""
-) -> None:
+def weibo_hot_quoted_handler(to: SendTo, message: str = "", q_response: str = ""):
     if not message.isdigit():
         logger.error("输入的热搜编号不是数字")
         sender.send_msg(to, "请输入热搜编号")

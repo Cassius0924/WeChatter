@@ -38,9 +38,7 @@ def github_trending_command_handler(to: Union[str, SendTo], message: str = "") -
 
 
 @github_trending_command_handler.quoted_handler
-def github_trending_quoted_handler(
-    to: SendTo, message: str = "", q_response: str = ""
-) -> None:
+def github_trending_quoted_handler(to: SendTo, message: str = "", q_response: str = ""):
     if not message.isdigit():
         logger.error("输入的趋势编号不是数字")
         sender.send_msg(to, "请输入趋势编号")

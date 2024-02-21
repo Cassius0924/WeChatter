@@ -1,9 +1,10 @@
 import inspect
-from typing import List
+from typing import List, Tuple
 
 from loguru import logger
 
 from wechatter.config import config
+from wechatter.models.wechat import SendTo
 
 commands = {}
 """
@@ -77,15 +78,39 @@ class command:
         设置命令的引用消息处理函数
         :param func: 命令的引用消息处理函数
         """
-        # TODO: 判断参数是否合理
-        commands[self.command]["is_quotable"] = True
-        quoted_handlers[self.command] = func
-        return func
+        sig = inspect.signature(func)
+        params = list(sig.parameters.items())
+        param_1, param_2, param_3 = params[0][1], params[1][1], params[2][1]
+        if param_1.name != "to":
+            e = f"参数名错误，引用消息处理函数的第1个参数必须为 to：{func.__name__}"
+        elif param_1.annotation is not SendTo:
+            e = f"参数类型错误，引用消息处理函数的第1个参数的类型必须为 SendTo：{func.__name__}"
+        elif param_2.name != "message":
+            e = f"参数名错误，引用消息处理函数的第2个参数必须为 message：{func.__name__}"
+        elif param_2.annotation is not str:
+            e = f"参数类型错误，引用消息处理函数的第2个参数的类型必须为 str：{func.__name__}"
+        elif param_3.name != "q_response":
+            e = f"参数名错误，引用消息处理函数的第3个参数必须为 q_response: {func.__name__}"
+        elif param_3.annotation is not str:
+            e = f"参数类型错误，引用消息处理函数的第3个参数的类型必须为 str：{func.__name__}"
+        else:
+            commands[self.command]["is_quotable"] = True
+            quoted_handlers[self.command] = func
+            return func
+        logger.error(e)
+        raise ValueError(e)
 
     def mainfunc(self, func):
         """
         设置命令的主函数，这个函数一般是返回命令的结果和命令的引用消息
         :param func: 命令的主函数
         """
+        sig = inspect.signature(func)
+        ret_type = sig.return_annotation
+        if ret_type is not str and ret_type is not Tuple[str, str]:
+            error_message = f"返回值类型错误，命令的主函数的返回值类型必须为 str 或 Tuple[str, str]：{func.__name__}"
+            logger.error(error_message)
+            raise ValueError(error_message)
+
         commands[self.command]["mainfunc"] = func
         return func
