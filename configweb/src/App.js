@@ -13,7 +13,7 @@ import CustomCommandKey from "./ui/Custom-Command-Key";
 import GasolinePriceCron from "./ui/Gasoline-Price-Cron";
 import ConfigWeb from "./ui/ConfigWeb";
 import axios from "axios";
-import {BACKEND_URL, BACKEND_PORT} from './config';
+import {BACKEND_PORT, BACKEND_URL} from './config';
 
 
 function App() {
@@ -48,7 +48,7 @@ function App() {
                                     </Link>
                                 </div>
                                 <div className="hidden md:ml-6 md:flex md:space-x-8">
-                                    <Link to="WeChatter"
+                                    <Link to="WeChatter"//link to哪里：就是url的路径，不是组件的路径,具体是：http://localhost:3000/WeChatter
                                           className="border-b-2 border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 focus:outline-none focus:border-indigo-700 transition">
                                         WeChatter
                                     </Link>
@@ -210,7 +210,7 @@ function App() {
                 <Routes>
                     <Route path="*" element={window.location.pathname.startsWith('/api') ? null : <ConfigWeb/>}/>
                     <Route path="/ConfigWeb" element={<ConfigWeb/>}/>
-                    <Route path="/wechatter" element={<WeChatter/>}/>
+                    <Route path="/wechatter" element={<WeChatter/>}/>//这里的path是url的路径，不是组件的路径，具体是：http://localhost:3000/wechatter
                     <Route path="/wx-bot-webhook" element={<WxBotWebhook/>}/>
                     <Route path="/admin" element={<Admin/>}/>
                     <Route path="/bot" element={<Bot/>}/>
