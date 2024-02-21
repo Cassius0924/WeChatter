@@ -1,9 +1,8 @@
-import configparser
 import logging
 import subprocess
 import threading
-import yaml
 
+import yaml
 from fastapi import Body
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -59,41 +58,21 @@ def update_config_section(section_name, updated_config):
     try:
         config = get_config_section(section_name)
         changes = {}
-        for key, value in updated_config.items():
-            old_value = config.get(section_name, key) if section_name in config else None
-            if old_value != value:
-                config.set(section_name, key, value)
-                changes[key] = {"old": old_value, "new": value}
-        with open('../config.ini', 'w', encoding='utf-8') as configfile:
-            config.write(configfile)
-            print(f"Config updated successfully: {section_name} - {changes}")
+        if section_name in config:
+            for key, value in updated_config.items():
+                old_value = config[section_name].get(key)
+                if old_value != value:
+                    config[section_name][key] = value
+                    changes[key] = {"old": old_value, "new": value}
+        else:
+            config[section_name] = updated_config
+            changes = {key: {"old": None, "new": value} for key, value in updated_config.items()}
+        with open('../config.yaml', 'w', encoding='utf-8') as f:
+            yaml.dump(config, f)
+        print(f"Config updated successfully: {section_name} - {changes}")
         return {"message": "Config updated successfully", "changes": changes}
     except Exception as e:
         return {"error": str(e)}
-
-
-# def update_config_section(section_name, updated_config):
-#     try:
-#         config = get_config_section(section_name)
-#         changes = {}
-#         if section_name in config:
-#             for key, value in updated_config.items():
-#                 old_value = config[section_name].get(key)
-#                 if old_value != value:
-#                     config[section_name][key] = value
-#                     changes[key] = {"old": old_value, "new": value}
-#         else:
-#             config[section_name] = updated_config
-#             changes = {key: {"old": None, "new": value} for key, value in updated_config.items()}
-#         with open('../config.yaml', 'w', encoding='utf-8') as f:
-#             yaml.dump(config, f)
-#         print(f"Config updated successfully: {section_name} - {changes}")
-#         return {"message": "Config updated successfully", "changes": changes}
-#     except Exception as e:
-#         return {"error": str(e)}
-
-
-
 
 
 # ！！！已解决！！！解决方法：在run_command中，将process.stdout.readline()改为process.communicate()，并且将while True改为while process.poll()
@@ -122,7 +101,8 @@ def update_config_section(section_name, updated_config):
 
 
 def run_command(command, working_directory):
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=working_directory)
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                               cwd=working_directory)
 
     while True:
         output = process.stdout.readline()
