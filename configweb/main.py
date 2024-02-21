@@ -54,21 +54,21 @@ def get_config_section(section_name):
         return {"error": str(e)}
 
 
-def update_config_section(section_name, updated_config):
+def update_config_section(section_name, updated_value):
     try:
-        # 使用 get_config_section 函数获取当前配置
-        current_config = get_config_section(section_name)
-        if "error" in current_config:
-            return current_config  # 如果出现错误，直接返回
+        # 先读取整个配置文件
+        with open('../config.yaml', 'r', encoding='utf-8') as f:
+            config = yaml.safe_load(f)
 
-        print(updated_config)
-        # 更新配置文件
-        config = updated_config
+        # 更新特定的部分
+        config[section_name] = updated_value
+
+        # 再写回文件
         with open('../config.yaml', 'w', encoding='utf-8') as f:
             yaml.dump(config, f)
 
-        print(f"Config updated successfully: {section_name} - {updated_config}")
-        return {"message": "Config updated successfully", "changes": updated_config}
+        print(f"Config updated successfully: {section_name} - {updated_value}")
+        return {"message": "Config updated successfully", "changes": updated_value}
 
     except Exception as e:
         return {"error": str(e)}
