@@ -44,8 +44,9 @@ app.add_middleware(
 
 def get_config_section(section_name):
     try:
+        yaml = YAML()
         with open('../config.yaml', 'r', encoding='utf-8') as f:
-            config = yaml.safe_load(f)
+            config = yaml.load(f)
         section_config = config.get(section_name)
         if section_config is None:
             raise KeyError(f"Section '{section_name}' not found in configuration file.")

@@ -14,3 +14,4 @@ tenacity==8.2.3
 pydantic==2.5.3
 sqlalchemy==2.0.25
 PyYAML==6.0
+ruamel.yaml==0.18.6
