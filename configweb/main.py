@@ -56,23 +56,31 @@ def get_config_section(section_name):
 
 def update_config_section(section_name, updated_config):
     try:
-        config = get_config_section(section_name)
+        # 使用 get_config_section 函数获取当前配置
+        current_config = get_config_section(section_name)
+        if "error" in current_config:
+            return current_config  # 如果出现错误，直接返回
+
+        current_config = current_config[section_name]  # 获取真实的配置值
         changes = {}
-        if section_name in config:
-            for key, value in updated_config.items():
-                old_value = config[section_name].get(key)
-                if old_value != value:
-                    config[section_name][key] = value
-                    changes[key] = {"old": old_value, "new": value}
-        else:
-            config[section_name] = updated_config
-            changes = {key: {"old": None, "new": value} for key, value in updated_config.items()}
+        for key, value in updated_config.items():
+            old_value = current_config.get(key)
+            if old_value != value:
+                current_config[key] = value
+                changes[key] = {"old": old_value, "new": value}
+
+        # 更新配置文件
+        with open('../config.yaml', 'r', encoding='utf-8') as f:
+            config = yaml.safe_load(f)
+        config[section_name] = current_config
         with open('../config.yaml', 'w', encoding='utf-8') as f:
             yaml.dump(config, f)
+
         print(f"Config updated successfully: {section_name} - {changes}")
         return {"message": "Config updated successfully", "changes": changes}
     except Exception as e:
         return {"error": str(e)}
+
 
 
 # ！！！已解决！！！解决方法：在run_command中，将process.stdout.readline()改为process.communicate()，并且将while True改为while process.poll()
