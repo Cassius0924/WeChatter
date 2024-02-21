@@ -26,9 +26,9 @@ def qrcode_command_handler(to: Union[str, SendTo], message: str = "") -> None:
         sender.send_msg(to, error_message)
     else:
         sender.send_localfile_msg(to, path)
-
-
-# TODO: 发送后删除二维码
+    finally:
+        if os.path.exists(path):
+            os.remove(path)
 
 
 def get_qrcode_saved_path(data: str) -> str:
