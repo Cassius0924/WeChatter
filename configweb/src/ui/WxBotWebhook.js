@@ -4,7 +4,7 @@ import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
 
 function WxBotWebhook() {
-    const [config, setConfig] = useFetchData('wx-bot-webhook');
+    const [config, setConfig] = useFetchData('wx_webhook_base_api');
     const handleSave = useSaveConfig('wx-bot-webhook', config);
 
         return (
