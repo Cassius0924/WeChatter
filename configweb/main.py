@@ -240,7 +240,7 @@ def run_main():
     global run_main_thread
     try:
         # TODO:改启动命令，python3，有的人的是python
-        run_main_command = "python3 main.py"
+        run_main_command = "python3 -m wechatter"
         run_main_directory = "../"
 
         run_main_thread = threading.Thread(target=run_command, args=(run_main_command, run_main_directory), daemon=True)
