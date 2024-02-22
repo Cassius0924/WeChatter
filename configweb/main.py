@@ -69,6 +69,10 @@ def update_config_section(section_name, updated_value):
             config = yaml.load(f)
         old_value = config.get(section_name)
         new_value = updated_value.get(section_name)
+
+        print(f"旧值是 {old_value}")
+        print(f"新值是 {new_value}")
+
         # 判断old_value是什么类型
         print(f"旧值的类型是{type(old_value)}")
         # 判断new_value是什么类型
