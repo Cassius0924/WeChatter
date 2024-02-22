@@ -74,6 +74,9 @@ def _get_quoted_response(quotable_id: str) -> QuotedResponse:
     return quoted_response
 
 
+message_forwarder = MessageForwarder(config["message_forwarding_rule_list"])
+
+
 class MessageHandler:
     """
     消息处理器，用于处理用户发来的消息
@@ -94,8 +97,7 @@ class MessageHandler:
         """
 
         if config["message_forwarding_enabled"]:
-            message_forwarder = MessageForwarder(config["message_forwarding_rule_list"])
-            message_forwarder.forward_message(message_obj)
+            message_forwarder.forwarding(message_obj)
 
             if message_obj.forwarded_source:
                 message_forwarder.reply_forwarded_message(message_obj)

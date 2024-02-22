@@ -178,7 +178,8 @@ python3 -m wechatter
 | --- | --- |  --- | --- |
 | `message_forwarding_enabled` | | 功能开关，是否开启消息转发 | 默认为 `False` |
 | `message_forwarding_rule_list` | | 消息规则列表，每个规则包含三个字段：`from_list`、`to_person_list` 和 `to_group_list` |  |
-| | `from_list` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称 |
+| | `from_list` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称，若要转发所有消息则使用 `["%ALL"]` |
+| | `from_list_exclude` | 消息转发来源排除列表，不转发此列表的用户和群 | 只在 `from_list` 为 `["%ALL"]` 时生效 |
 | | `to_person_list` | 消息转发目标用户列表，即消息接收用户 | 可以填多个用户名称或为空列表 |
 | | `to_group_list` | 消息转发目标群列表，即消息接收群 | 可以填多个群名称或为空列表 |
 
@@ -189,7 +190,6 @@ python3 -m wechatter
 | `all_task_cron_enabled` | 所有定时任务的总开关 | 默认为 `True` |
 | `task_cron_list` | 定时任务列表，每个任务包含四个字段：`task`、`enabled`、`cron` 和 `commands` | |
 
-[//]: # (引导用户查看定时任务配置详细docs/task_cron_config_detail)
 关于定时任务配置详细请参阅[定时任务配置详细](docs/task_cron_config_detail.md)。
 
 ### ⚙️ Custom Command Key 配置

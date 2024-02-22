@@ -192,7 +192,7 @@ class Message(BaseModel):
             group_format = GROUP_FORWARDING_MESSAGE_FORMAT.replace("[", "\[").replace(
                 "]", "\]"
             )
-            pattern = re.compile(f'{group_format % ("(.+)", "(.+)")}')
+            pattern = re.compile(f'{group_format % ("(.*)", "(.+)")}')
             try:
                 # 将名字和该名字是否为群都返回，便于在回复时判断
                 return re.search(pattern, self.content).group(2), True
