@@ -72,10 +72,8 @@ def update_config_section(section_name, updated_value):
         # 判断old_value是什么类型
         print(type(old_value))
 
-        # 更新特定的部分
+        # 获取更新特定的部分
         new_value = updated_value.get(section_name)
-        if new_value is not None:
-            config[section_name] = new_value
 
         print(type(new_value))
         # 判断新旧两个值的类型是否相同
@@ -115,11 +113,14 @@ def update_config_section(section_name, updated_value):
 
                 new_value = CommentedSeq(new_value)
                 print(f"新值是list，转换为CommentedSeq: {new_value}")
-        elif old_value == new_value:
+
+        if old_value == new_value:
             print(f"新旧两个值相同，无需更新: {section_name} : (old:{old_value} --> new:{new_value})")
             return {"message": "新旧两个值相同，无需更新", "changes": {section_name: (old_value, new_value)}}
 
         # 写入配置文件
+        if new_value is not None:
+            config[section_name] = new_value
         else:
             with open('../config.yaml', 'w', encoding='utf-8') as f:
                 yaml.dump(config, f)
