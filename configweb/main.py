@@ -52,6 +52,10 @@ def get_config_sections(section_names):
         for section_name, section_config in section_configs.items():
             if section_config is None:
                 raise KeyError(f"Section '{section_name}' not found in configuration file.")
+            # Convert Python boolean values to strings
+            for key, value in section_config.items():
+                if isinstance(value, bool):
+                    section_config[key] = str(value).lower()
         return section_configs
     except Exception as e:
         return {"error": str(e)}
