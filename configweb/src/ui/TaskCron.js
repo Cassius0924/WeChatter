@@ -12,7 +12,7 @@ function TaskCron() {
     }, [config]);
     const [taskCronList, setTaskCronList] = useState(config.task_cron_list || []);
     useEffect(() => {
-        if (config.task_cron_list) {
+        if (config && config.task_cron_list) {
             setTaskCronList(config.task_cron_list);
         }
     }, [config]);
