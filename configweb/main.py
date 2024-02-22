@@ -70,9 +70,9 @@ def update_config_section(section_name, updated_value):
         old_value = config.get(section_name)
         new_value = updated_value.get(section_name)
         # 判断old_value是什么类型
-        print(type(old_value))
+        print(f"旧值的类型是{type(old_value)}")
         # 判断new_value是什么类型
-        print(type(new_value))
+        print(f"更新前，新值的类型是{type(new_value)}")
 
         # 判断新旧两个值是否相同
         if old_value == new_value:
@@ -84,16 +84,16 @@ def update_config_section(section_name, updated_value):
             if isinstance(old_value, int) and isinstance(new_value,
                                                          str):  # 情况1：旧值是int，新值是str（前端传过来的是str）如（wechatter_port）
                 new_value = int(new_value)
-                print(f"新值是str，转换为int: {new_value}")
+                print(f"更新前，新值是str，转换为int: {new_value}")
             elif isinstance(old_value, bool) and isinstance(new_value,
                                                           str):  # 情况2：旧值是bool，新值是str，如（need_mentioned
                 # 、github_webhook_enabled、message_forwarding_enabled、all_task_cron_enabled）
                 if new_value.lower() == 'true':
                     new_value = True
-                    print(f"新值是str，转换为bool: {new_value}")
+                    print(f"更新前，新值是str，转换为bool: {new_value}")
                 elif new_value.lower() == 'false':
                     new_value = False
-                    print(f"新值是str，转换为bool: {new_value}")
+                    print(f"更新前，新值是str，转换为bool: {new_value}")
                 else:
                     raise ValueError(f"请输入正确的bool值: {new_value}")
             elif isinstance(old_value, ruamel.yaml.comments.CommentedSeq) and isinstance(new_value,
@@ -101,7 +101,7 @@ def update_config_section(section_name, updated_value):
                 # .comments.CommentedSeq，新值是str，如（admin_list,admin_group_list,）
                 value = new_value.split(',')
                 new_value = CommentedSeq(value)
-                print(f"新值是str，转换为CommentedSeq: {new_value}")
+                print(f"更新前，新值是str，转换为CommentedSeq: {new_value}")
             elif isinstance(old_value, ruamel.yaml.comments.CommentedSeq) and isinstance(new_value,
                                                                                        list):  # 情况4：旧值是ruamel.yaml.comments.CommentedSeq，新值是list，如（message_forwarding_rule_list）
                 # 遍历列表中的每个字典
@@ -114,12 +114,12 @@ def update_config_section(section_name, updated_value):
                             dict_obj[key] = value.split(',')
 
                 new_value = CommentedSeq(new_value)
-                print(f"新值是list，转换为CommentedSeq: {new_value}")
+                print(f"更新前，新值是list，转换为CommentedSeq: {new_value}")
             else:
                 pass
 
         # 写入配置文件
-        print(f"新的type:{type(new_value)}")
+        print(f"更新后，新的type是{type(new_value)}")
         config[section_name] = new_value
         print(config[section_name])
         with open('../config.yaml', 'w', encoding='utf-8') as f:
