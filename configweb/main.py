@@ -126,9 +126,9 @@ def update_config_section(section_name, updated_value):
                 pass
 
         # 写入配置文件
-        print(f"更新后，新的type是{type(new_value)}")
+        print(f"更新后，新值的type是{type(new_value)}")
         config[section_name] = new_value
-        print(config[section_name])
+        print(f"更新后，新值{config[section_name]}")
         with open('../config.yaml', 'w', encoding='utf-8') as f:
             yaml.dump(config, f)
             print(f"Config updated successfully: {section_name} : (old:{old_value} --> new:{new_value})")
