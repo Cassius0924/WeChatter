@@ -3,13 +3,12 @@ import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
 
 function TaskCron() {
-    // const [config, setConfig] = useFetchData('task-cron');
+    const [config, setConfig] = useFetchData('task-cron');
     const handleSave = useSaveConfig('task-cron', config);
     useEffect(() => {
         console.log('config changed');
         console.log(config);
     }, [config]);
-    let config = [{'task': '哈哈哈', 'enabled': True, 'cron': {'hour': '7', 'minute': '0', 'second': '0', 'timezone': 'bj'}, 'commands': [{'cmd': 'weather', 'args': ['江门'], 'to_person_list': ['皓皓']}]}, {'task': '', 'enabled': False, 'cron': {'hour': '', 'minute': '', 'second': '', 'timezone': ''}, 'commands': [{'cmd': '', 'args': [], 'to_person_list': []}]}]
     const [taskCronList, setTaskCronList] = useState(config.task_cron_list || []);
 
     const handleAddTask = () => {
