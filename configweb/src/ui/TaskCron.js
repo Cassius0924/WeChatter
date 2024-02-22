@@ -3,66 +3,7 @@ import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
 
 function TaskCron() {
-    // const [config, setConfig] = useFetchData('task-cron');
-    const [ setConfig] = useFetchData('task-cron');
-    let config = {
-        "all_task_cron_enabled": true,
-        "task_cron_list": [
-            {
-                "task": "每天早上8点发送天气预报和知乎热搜",
-                "enabled": true,
-                "cron": {
-                    "hour": "7",
-                    "minute": "0",
-                    "second": "0",
-                    "timezone": "Asia/Shanghai"
-                },
-                "commands": [
-                    {
-                        "cmd": "weather",
-                        "args": [
-                            "蓬江"
-                        ],
-                        "to_person_list": [
-                            "皓皓",
-                            "🎉花火💥",
-                            "稻草城",
-                            "· C ·"
-                        ]
-                    },
-                    {
-                        "cmd": "weather",
-                        "args": [
-                            "林口"
-                        ],
-                        "to_person_list": [
-                            "无敌呆比熊"
-                        ]
-                    },
-                    {
-                        "cmd": "zhihu-hot",
-                        "to_group_list": [
-                            "WeChatter"
-                        ]
-                    },
-                    {
-                        "cmd": "gasoline-price",
-                        "args": [
-                            "蓬江区"
-                        ],
-                        "to_person_list": [
-                            "皓皓",
-                            "🎉花火💥",
-                            "稻草城"
-                        ],
-                        "to_group_list": [
-                            "WeChatter"
-                        ]
-                    }
-                ]
-            }
-        ]
-    };
+    const [config, setConfig] = useFetchData('task-cron');
     const handleSave = useSaveConfig('task-cron', config);
     useEffect(() => {
         console.log('config changed');
