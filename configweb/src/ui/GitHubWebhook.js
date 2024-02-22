@@ -42,8 +42,8 @@ function GithubWebhook() {
                     <input type="text"
                            className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                            placeholder="[]"
-                           value={config.github_webhook_receiver_list || ''}
-                           onChange={e => setConfig({...config, github_webhook_receiver_list: e.target.value})}/>
+                           value={config.github_webhook_receive_person_list || ''}
+                           onChange={e => setConfig({...config, github_webhook_receive_person_list: e.target.value})}/>
                     <h3 className="mb-4 text-lg leading-6 font-medium text-gray-900">
                         github_webhook_receive_group_list
                     </h3>

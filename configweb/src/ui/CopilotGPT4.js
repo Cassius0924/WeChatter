@@ -20,19 +20,9 @@ function CopilotGPT4() {
                     <input type="text"
                            className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                            placeholder="http://localhost"
-                           value={config.cp_gpt4_api_host || ''}
+                           value={config.cp_gpt4_base_api || ''}
                            onChange={e => setConfig({...config, cp_gpt4_api_host: e.target.value})}/>
-                    <h3 className="mb-4 text-lg leading-6 font-medium text-gray-900">
-                        cp_gpt4_port
-                    </h3>
-                    <p className="mb-4 text-sm leading-5 text-gray-500">
-                        Copilot GPT4 服务的端口（999）
-                    </p>
-                    <input type="text"
-                           className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                           placeholder="999"
-                           value={config.cp_gpt4_port || ''}
-                           onChange={e => setConfig({...config, cp_gpt4_port: e.target.value})}/>
+
                     <h3 className="mb-4 text-lg leading-6 font-medium text-gray-900">
                         cp_token
                     </h3>
