@@ -178,7 +178,7 @@ python3 -m wechatter
 | --- | --- |  --- | --- |
 | `message_forwarding_enabled` | | 功能开关，是否开启消息转发 | 默认为 `False` |
 | `message_forwarding_rule_list` | | 消息规则列表，每个规则包含三个字段：`from_list`、`to_person_list` 和 `to_group_list` |  |
-| | `from_list` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称 |
+| | `from_list` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称，若要转发所有消息则使用 `["%ALL"]` |
 | | `to_person_list` | 消息转发目标用户列表，即消息接收用户 | 可以填多个用户名称或为空列表 |
 | | `to_group_list` | 消息转发目标群列表，即消息接收群 | 可以填多个群名称或为空列表 |
 

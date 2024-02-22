@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict, List
 
 from loguru import logger
 
@@ -10,15 +10,47 @@ from wechatter.models.wechat import (
 from wechatter.sender import sender
 
 
+def _forwarding_by_rule(message_obj: Message, rule: Dict):
+    """
+    根据规则转发消息
+    :param message_obj: 消息对象
+    :param rule: 规则
+    """
+    to_person_list = rule.get("to_person_list")
+    if to_person_list:
+        msg = _construct_forwarding_message(message_obj)
+        logger.info(f"转发消息：{message_obj.sender_name} -> {to_person_list}")
+        sender.mass_send_msg(to_person_list, msg, is_group=False)
+    to_group_list = rule.get("to_group_list")
+    if to_group_list:
+        msg = _construct_forwarding_message(message_obj)
+        logger.info(f"转发消息：{message_obj.sender_name} -> {to_group_list}")
+        sender.mass_send_msg(to_group_list, msg, is_group=True)
+
+
 class MessageForwarder:
     """
     消息转发器类
     """
 
     def __init__(self, rule_list: List):
-        self.rule_list = rule_list
+        """
+        初始化
+        :param rule_list: 转发规则列表
+        """
+        self.all_message_rules = []
+        self.specific_message_rules = {}
 
-    def forward_message(self, message_obj: Message):
+        for rule in rule_list:
+            if "%ALL" in rule["from_list"]:
+                self.all_message_rules.append(rule)
+            else:
+                for from_name in rule["from_list"]:
+                    if from_name not in self.specific_message_rules:
+                        self.specific_message_rules[from_name] = []
+                    self.specific_message_rules[from_name].append(rule)
+
+    def forwarding(self, message_obj: Message):
         """
         消息转发
         :param message_obj: 消息对象
@@ -26,22 +58,13 @@ class MessageForwarder:
         # TODO: 转发文件
         from_name = message_obj.sender_name
 
-        # TODO: from_list 支持通配符
-
-        # 判断消息是否符合转发规则
-        for rule in self.rule_list:
-            # 判断消息来源是否符合转发规则
-            if from_name in rule["from_list"]:
-                # 构造转发消息
-                msg = _construct_forwarding_message(message_obj)
-                to_person_list = rule.get("to_person_list")
-                if to_person_list:
-                    logger.info(f"转发消息：{from_name} -> {to_person_list}")
-                    sender.mass_send_msg(to_person_list, msg, is_group=False)
-                to_group_list = rule.get("to_group_list")
-                if to_group_list:
-                    logger.info(f"转发消息：{from_name} -> {to_group_list}")
-                    sender.mass_send_msg(to_group_list, msg, is_group=True)
+        # 判断消息来源是否符合转发规则
+        if from_name in self.specific_message_rules:
+            for rule in self.specific_message_rules[from_name]:
+                _forwarding_by_rule(message_obj, rule)
+        elif self.all_message_rules:
+            for rule in self.all_message_rules:
+                _forwarding_by_rule(message_obj, rule)
 
     @staticmethod
     def reply_forwarded_message(message_obj: Message):

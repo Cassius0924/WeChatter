@@ -95,7 +95,7 @@ class MessageHandler:
 
         if config["message_forwarding_enabled"]:
             message_forwarder = MessageForwarder(config["message_forwarding_rule_list"])
-            message_forwarder.forward_message(message_obj)
+            message_forwarder.forwarding(message_obj)
 
             if message_obj.forwarded_source:
                 message_forwarder.reply_forwarded_message(message_obj)
