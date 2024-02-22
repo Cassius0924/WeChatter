@@ -6,6 +6,7 @@ from fastapi import Body
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from ruamel.yaml import YAML
+from ruamel.yaml.comments import CommentedSeq
 
 logging.basicConfig(level=logging.DEBUG)
 app = FastAPI()
@@ -68,7 +69,7 @@ def update_config_section(section_name, updated_value):
             config = yaml.load(f)
         old_value = config.get(section_name)
 
-        #判断old_value是什么类型
+        # 判断old_value是什么类型
         print(type(old_value))
 
         # 更新特定的部分
@@ -77,11 +78,36 @@ def update_config_section(section_name, updated_value):
             config[section_name] = new_value
 
         print(type(new_value))
-        #如果new_value是str类型，先判断是否是数字，如果是数字，转换成int类型
-        if isinstance(new_value, str):
-            if new_value.isdigit():
+        # 判断新旧两个值的类型是否相同
+        if type(old_value) != type(new_value):
+            if isinstance(old_value, int) and isinstance(new_value,
+                                                         str):  # 情况1：旧值是int，新值是str（前端传过来的是str）如（wechatter_port）
                 new_value = int(new_value)
-                config[section_name] = new_value
+            if isinstance(old_value, bool) and isinstance(new_value,
+                                                          str):  # 情况2：旧值是bool，新值是str，如（need_mentioned
+                # 、github_webhook_enabled、message_forwarding_enabled、all_task_cron_enabled）
+                if new_value.lower() == 'true':
+                    new_value = True
+                elif new_value.lower() == 'false':
+                    new_value = False
+                else:
+                    raise ValueError(f"请输入正确的bool值: {new_value}")
+            if isinstance(old_value, ruamel.yaml.comments.CommentedSeq) and isinstance(new_value,
+                                                                                       str):  # 情况3：旧值是ruamel.yaml
+                # .comments.CommentedSeq，新值是str，如（admin_list,admin_group_list,）
+                value = new_value.split(',')
+                new_value = CommentedSeq(value)
+            if isinstance(old_value, ruamel.yaml.comments.CommentedSeq) and isinstance(new_value, list):# 情况4：旧值是ruamel.yaml.comments.CommentedSeq，新值是list，如（message_forwarding_rule_list）
+                # 遍历列表中的每个字典
+                for dict_obj in new_value:
+                    # 遍历字典中的每个键和值
+                    for key, value in dict_obj.items():
+                        # 检查值是否是字符串
+                        if isinstance(value, str):
+                            # 如果是，尝试将其分割为列表
+                            dict_obj[key] = value.split(',')
+
+                new_value = CommentedSeq(new_value)
 
         if old_value == new_value:
             print(f"新旧两个值相同，无需更新: {section_name} : (old:{old_value} --> new:{new_value})")
@@ -199,7 +225,6 @@ def update_admin_config(updated_config: dict = Body(...)):
     return {"admin_list": succeed_admin_list, "admin_group_list": succeed_admin_group_list}
 
 
-
 @app.get("/bot")
 def get_bot_config():
     sections = get_config_sections(['bot_name'])
@@ -250,9 +275,14 @@ def get_github_webhook_config():
 def update_github_webhook_config(updated_config: dict = Body(...)):
     succeed_github_webhook_enabled = update_config_section('github_webhook_enabled', updated_config)
     succeed_github_webhook_api_path = update_config_section('github_webhook_api_path', updated_config)
-    succeed_github_webhook_receive_person_list = update_config_section('github_webhook_receive_person_list', updated_config)
-    succeed_github_webhook_receive_group_list = update_config_section('github_webhook_receive_group_list', updated_config)
-    return {"github_webhook_enabled": succeed_github_webhook_enabled, "github_webhook_api_path": succeed_github_webhook_api_path, "github_webhook_receive_person_list": succeed_github_webhook_receive_person_list, "github_webhook_receive_group_list": succeed_github_webhook_receive_group_list}
+    succeed_github_webhook_receive_person_list = update_config_section('github_webhook_receive_person_list',
+                                                                       updated_config)
+    succeed_github_webhook_receive_group_list = update_config_section('github_webhook_receive_group_list',
+                                                                      updated_config)
+    return {"github_webhook_enabled": succeed_github_webhook_enabled,
+            "github_webhook_api_path": succeed_github_webhook_api_path,
+            "github_webhook_receive_person_list": succeed_github_webhook_receive_person_list,
+            "github_webhook_receive_group_list": succeed_github_webhook_receive_group_list}
 
 
 @app.get("/message-forwarding")
@@ -265,7 +295,8 @@ def get_message_forwarding_config():
 def update_message_forwarding_config(updated_config: dict = Body(...)):
     succeed_message_forwarding_enabled = update_config_section('message_forwarding_enabled', updated_config)
     succeed_message_forwarding_rule_list = update_config_section('message_forwarding_rule_list', updated_config)
-    return {"message_forwarding_enabled": succeed_message_forwarding_enabled, "message_forwarding_rule_list": succeed_message_forwarding_rule_list}
+    return {"message_forwarding_enabled": succeed_message_forwarding_enabled,
+            "message_forwarding_rule_list": succeed_message_forwarding_rule_list}
 
 
 @app.get("/task-cron")
