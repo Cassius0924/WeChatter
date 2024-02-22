@@ -74,8 +74,24 @@ function TaskCron() {
                     </h3>
                     {taskCronList.map((task, taskIndex) => (
                         <div key={taskIndex}>
-                            {/* Render task fields here */}
-                            {/* Render commands here */}
+                            <h4>Task {taskIndex + 1}</h4>
+                            <input type="text" placeholder="Task name" value={task.task} onChange={e => {
+                                const newTaskCronList = [...taskCronList];
+                                newTaskCronList[taskIndex].task = e.target.value;
+                                setTaskCronList(newTaskCronList);
+                            }}/>
+                            <input type="checkbox" checked={task.enabled} onChange={e => {
+                                const newTaskCronList = [...taskCronList];
+                                newTaskCronList[taskIndex].enabled = e.target.checked;
+                                setTaskCronList(newTaskCronList);
+                            }}/>
+                            {/* Render cron fields here */}
+                            {task.commands.map((command, commandIndex) => (
+                                <div key={commandIndex}>
+                                    {/* Render command fields here */}
+                                    <button onClick={() => handleRemoveCommand(taskIndex, commandIndex)}>Remove Command</button>
+                                </div>
+                            ))}
                             <button onClick={() => handleRemoveTask(taskIndex)}>Remove Task</button>
                             <button onClick={() => handleAddCommand(taskIndex)}>Add Command</button>
                         </div>
@@ -93,6 +109,7 @@ function TaskCron() {
 }
 
 export default TaskCron;
+
 
 
 
