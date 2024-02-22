@@ -67,10 +67,16 @@ def update_config_section(section_name, updated_value):
             config = yaml.load(f)
         old_value = config.get(section_name)
 
+        #判断old_value是什么类型
+        print(type(old_value))
+
+
         # 更新特定的部分
         new_value = updated_value.get(section_name)
         if new_value is not None:
             config[section_name] = new_value
+
+        print(type(new_value))
 
         if old_value == new_value:
             print(f"新旧两个值相同，无需更新: {section_name} : (old:{old_value} --> new:{new_value})")
