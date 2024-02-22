@@ -31,9 +31,6 @@ function MessageForwarding() {
                     <h3 className="mb-4 text-lg leading-6 font-medium text-gray-900">
                         message_forwarding_rule_list
                     </h3>
-                    <p2 className="mb-4 text-sm leading-5 text-gray-500">
-                        自定义消息转发规则列表
-                    </p2>
                     <p className="mb-4 text-sm leading-5 text-gray-500">
                         from_list: 消息来源列表
                     </p>
