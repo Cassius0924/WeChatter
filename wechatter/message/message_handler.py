@@ -1,4 +1,3 @@
-# 消息解析器
 import re
 from typing import Dict
 
@@ -7,7 +6,72 @@ from loguru import logger
 from wechatter.bot import BotInfo
 from wechatter.config import config
 from wechatter.database import QuotedResponse, make_db_session
+from wechatter.message.message_forwarder import MessageForwarder
 from wechatter.models.wechat import Message, SendTo
+
+
+def _execute_command(cmd_dict: Dict, to: SendTo, message_obj: Message):
+    """
+    执行命令
+    :param cmd_dict: 命令字典
+    :param to: 发送对象
+    :param message_obj: 消息对象
+    """
+
+    cmd_handler = cmd_dict["handler"]
+    if cmd_handler is not None:
+        if cmd_dict["param_count"] == 2:
+            cmd_handler(
+                to=to,
+                message=cmd_dict["args"],
+            )
+        elif cmd_dict["param_count"] == 3:
+            cmd_handler(
+                to=to,
+                message=cmd_dict["args"],
+                message_obj=message_obj,
+            )
+    else:
+        logger.error("该命令未实现")
+
+
+def _execute_quoted_handler(
+    quoted_handler, to: SendTo, message_obj: Message, quoted_response: QuotedResponse
+):
+    """
+    执行可引用的命令消息处理函数
+    :param quoted_handler: 可引用的命令消息处理函数
+    :param to: 发送对象
+    :param message_obj: 消息内容
+    :param quoted_response: 可引用的命令消息
+    """
+
+    if quoted_handler:
+        quoted_handler(
+            to=to,
+            message=message_obj.pure_content,
+            q_response=quoted_response.response,
+        )
+    else:
+        logger.warning(f"未找到可引用的命令消息处理函数: {quoted_response.command}")
+
+
+def _get_quoted_response(quotable_id: str) -> QuotedResponse:
+    """
+    获取可引用的命令消息
+    :param quotable_id: 可引用的命令消息id
+    :return: 可引用的命令消息
+    """
+
+    with make_db_session() as session:
+        _quoted_response = (
+            session.query(QuotedResponse)
+            .filter_by(quotable_id=quotable_id)
+            .order_by(QuotedResponse.id.desc())
+            .first()
+        )
+        quoted_response = _quoted_response.to_model()
+    return quoted_response
 
 
 class MessageHandler:
@@ -28,7 +92,17 @@ class MessageHandler:
         处理消息
         :param message_obj: 消息对象
         """
+
+        if config["message_forwarding_enabled"]:
+            message_forwarder = MessageForwarder(config["message_forwarding_rule_list"])
+            message_forwarder.forward_message(message_obj)
+
+            if message_obj.forwarded_source:
+                message_forwarder.reply_forwarded_message(message_obj)
+                return
+
         to = SendTo(person=message_obj.person, group=message_obj.group)
+
         # 解析命令
         content = message_obj.content
         cmd_dict = self.__parse_command(
@@ -36,27 +110,13 @@ class MessageHandler:
         )
         logger.info(cmd_dict["desc"])
 
-        # 如果是，处理可引用的命令消息
+        # 是可引用的命令消息
         if message_obj.quotable_id:
-            with make_db_session() as session:
-                _quoted_response = (
-                    session.query(QuotedResponse)
-                    .filter_by(quotable_id=message_obj.quotable_id)
-                    .order_by(QuotedResponse.id.desc())
-                    .first()
-                )
-                quoted_response = _quoted_response.to_model()
+            quoted_response = _get_quoted_response(message_obj.quotable_id)
             quoted_handler = self.quoted_handlers.get(quoted_response.command, None)
-            if quoted_handler:
-                quoted_handler(
-                    to=to,
-                    message=message_obj.pure_content,
-                    q_response=quoted_response.response,
-                )
-            else:
-                logger.warning(
-                    f"未找到可引用的命令消息处理函数: {quoted_response.command}"
-                )
+            _execute_quoted_handler(
+                quoted_handler, to, message_obj, quoted_response=quoted_response
+            )
             return
 
         # 非命令消息
@@ -75,22 +135,7 @@ class MessageHandler:
 
         # 是命令消息
         # 开始处理命令
-        cmd_handler = cmd_dict["handler"]
-        if cmd_handler is not None:
-            if cmd_dict["param_count"] == 2:
-                cmd_handler(
-                    to=to,
-                    message=cmd_dict["arg"],
-                )
-            elif cmd_dict["param_count"] == 3:
-                cmd_handler(
-                    to=to,
-                    message=cmd_dict["arg"],
-                    message_obj=message_obj,
-                )
-        else:
-            logger.error("该命令未实现")
-        return
+        _execute_command(cmd_dict, to, message_obj)
 
     def __parse_command(self, content: str, is_mentioned: bool, is_group: bool) -> Dict:
         """
@@ -102,7 +147,7 @@ class MessageHandler:
         cmd_dict = {
             "command": "None",
             "desc": "",
-            "arg": "",
+            "args": "",
             "handler": None,
             "param_count": 0,
         }
@@ -123,6 +168,6 @@ class MessageHandler:
                 cmd_dict["handler"] = info["handler"]
                 cmd_dict["param_count"] = info["param_count"]
                 if len(cont_list) == 2:
-                    cmd_dict["arg"] = cont_list[1]  # 消息内容
+                    cmd_dict["args"] = cont_list[1]  # 消息内容
                 return cmd_dict
         return cmd_dict
