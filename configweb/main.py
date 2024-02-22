@@ -83,7 +83,6 @@ def update_config_section(section_name, updated_value):
                 yaml.dump(config, f)
                 print(f"Config updated successfully: {section_name} : (old:{old_value} --> new:{new_value})")
                 return {"message": "Config updated successfully", "changes": {section_name: (old_value, new_value)}}
-        # return {"message": "Config updated successfully", "changes": {section_name: (old_value, new_value)}}
     except Exception as e:
         return {"error": str(e)}
 
@@ -173,8 +172,10 @@ def get_wx_bot_webhook_config():
 
 @app.post("/wx-bot-webhook")
 def update_wx_bot_webhook_config(updated_config: dict = Body(...)):
-    update_config_section('wx_webhook_base_api', updated_config)
-    update_config_section('wx_webhook_recv_api_path', updated_config)
+    succeed_wx_webhook_base_api = update_config_section('wx_webhook_base_api', updated_config)
+    succeed_wx_webhook_recv_api_path = update_config_section('wx_webhook_recv_api_path', updated_config)
+    return succeed_wx_webhook_base_api, succeed_wx_webhook_recv_api_path
+
 
 
 @app.get("/admin")
