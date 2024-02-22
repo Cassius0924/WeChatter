@@ -67,12 +67,12 @@ def update_config_section(section_name, updated_value):
         with open('../config.yaml', 'r', encoding='utf-8') as f:
             config = yaml.load(f)
         old_value = config.get(section_name)
-
+        print(f"updated_value: {updated_value}")
         # 尝试将每个值转换为其原始类型
         converted_value = {}
         for key, value in updated_value.items():
             try:
-                # converted_value[key] = ast.literal_eval(value)
+                # converted_value[key] = ast.literal_eval(value)#这个方法不行，因为value是字符串，ast.literal_eval,只能转换字符串，不能转换字典
                 converted_value[key] = value
             except (ValueError, SyntaxError):
                 converted_value[key] = value  # 如果转换失败，保持原样
