@@ -1,4 +1,3 @@
-import ast
 import logging
 import subprocess
 import threading
@@ -158,15 +157,13 @@ def get_wechatter_config():
 
 @app.post("/wechatter")
 def update_wechatter_config(updated_config: dict = Body(...)):
-    sections = update_config_section('wechatter_port', updated_config)
-    return sections
+    succeed_wechatter_port = update_config_section('wechatter_port', updated_config)
+    return {"wechatter_port": succeed_wechatter_port}
 
 
 @app.get("/wx-bot-webhook")
 def get_wx_bot_webhook_config():
     sections = get_config_sections(['wx_webhook_base_api', 'wx_webhook_recv_api_path'])
-    print(sections)
-    print(get_config_sections(sections))
     return sections
 
 
@@ -174,8 +171,8 @@ def get_wx_bot_webhook_config():
 def update_wx_bot_webhook_config(updated_config: dict = Body(...)):
     succeed_wx_webhook_base_api = update_config_section('wx_webhook_base_api', updated_config)
     succeed_wx_webhook_recv_api_path = update_config_section('wx_webhook_recv_api_path', updated_config)
-    return {"succeed_wx_webhook_base_api": succeed_wx_webhook_base_api, "succeed_wx_webhook_recv_api_path": succeed_wx_webhook_recv_api_path}
-
+    return {"wx_webhook_base_api": succeed_wx_webhook_base_api,
+            "wx_webhook_recv_api_path": succeed_wx_webhook_recv_api_path}
 
 
 @app.get("/admin")
@@ -186,7 +183,10 @@ def get_admin_config():
 
 @app.post("/admin")
 def update_admin_config(updated_config: dict = Body(...)):
-    return update_config_section('admin', updated_config)
+    succeed_admin_list = update_config_section('admin_list', updated_config)
+    succeed_admin_group_list = update_config_section('admin_group_list', updated_config)
+    return {"admin_list": succeed_admin_list, "admin_group_list": succeed_admin_group_list}
+
 
 
 @app.get("/bot")
@@ -197,7 +197,8 @@ def get_bot_config():
 
 @app.post("/bot")
 def update_bot_config(updated_config: dict = Body(...)):
-    return update_config_section('bot', updated_config)
+    succeed_bot_name = update_config_section('bot_name', updated_config)
+    return {"bot_name": succeed_bot_name}
 
 
 @app.get("/chat")
@@ -208,7 +209,9 @@ def get_chat_config():
 
 @app.post("/chat")
 def update_chat_config(updated_config: dict = Body(...)):
-    return update_config_section('chat', updated_config)
+    succeed_command_prefix = update_config_section('command_prefix', updated_config)
+    succeed_need_mentioned = update_config_section('need_mentioned', updated_config)
+    return {"command_prefix": succeed_command_prefix, "need_mentioned": succeed_need_mentioned}
 
 
 @app.get("/copilot-gpt4")
@@ -219,18 +222,26 @@ def get_copilot_gpt4_config():
 
 @app.post("/copilot-gpt4")
 def update_copilot_gpt4_config(updated_config: dict = Body(...)):
-    return update_config_section('copilot-gpt4', updated_config)
+    succeed_cp_gpt4_base_api = update_config_section('cp_gpt4_base_api', updated_config)
+    succeed_cp_token = update_config_section('cp_token', updated_config)
+    return {"cp_gpt4_base_api": succeed_cp_gpt4_base_api, "cp_token": succeed_cp_token}
 
 
 @app.get("/github-webhook")
 def get_github_webhook_config():
-    sections = get_config_sections(['github_webhook_enabled', 'github_webhook_api_path', 'github_webhook_receive_person_list', 'github_webhook_receive_group_list'])
+    sections = get_config_sections(
+        ['github_webhook_enabled', 'github_webhook_api_path', 'github_webhook_receive_person_list',
+         'github_webhook_receive_group_list'])
     return sections
 
 
 @app.post("/github-webhook")
 def update_github_webhook_config(updated_config: dict = Body(...)):
-    return update_config_section('github-webhook', updated_config)
+    succeed_github_webhook_enabled = update_config_section('github_webhook_enabled', updated_config)
+    succeed_github_webhook_api_path = update_config_section('github_webhook_api_path', updated_config)
+    succeed_github_webhook_receive_person_list = update_config_section('github_webhook_receive_person_list', updated_config)
+    succeed_github_webhook_receive_group_list = update_config_section('github_webhook_receive_group_list', updated_config)
+    return {"github_webhook_enabled": succeed_github_webhook_enabled, "github_webhook_api_path": succeed_github_webhook_api_path, "github_webhook_receive_person_list": succeed_github_webhook_receive_person_list, "github_webhook_receive_group_list": succeed_github_webhook_receive_group_list}
 
 
 @app.get("/message-forwarding")
@@ -241,7 +252,9 @@ def get_message_forwarding_config():
 
 @app.post("/message-forwarding")
 def update_message_forwarding_config(updated_config: dict = Body(...)):
-    return update_config_section('message-forwarding', updated_config)
+    succeed_message_forwarding_enabled = update_config_section('message_forwarding_enabled', updated_config)
+    succeed_message_forwarding_rule_list = update_config_section('message_forwarding_rule_list', updated_config)
+    return {"message_forwarding_enabled": succeed_message_forwarding_enabled, "message_forwarding_rule_list": succeed_message_forwarding_rule_list}
 
 
 @app.get("/task-cron")
@@ -252,7 +265,9 @@ def get_task_cron_config():
 
 @app.post("/task-cron")
 def update_task_cron_config(updated_config: dict = Body(...)):
-    return update_config_section('weather-cron', updated_config)
+    succeed_all_task_cron_enabled = update_config_section('all_task_cron_enabled', updated_config)
+    succeed_task_cron_list = update_config_section('task_cron_list', updated_config)
+    return {"all_task_cron_enabled": succeed_all_task_cron_enabled, "task_cron_list": succeed_task_cron_list}
 
 
 @app.get("/custom-command-key")
@@ -263,8 +278,8 @@ def get_custom_command_key_config():
 
 @app.post("/custom-command-key")
 def update_custom_command_key_config(updated_config: dict = Body(...)):
-    return update_config_section('custom-command-key', updated_config)
-
+    succeed_custom_command_key_dict = update_config_section('custom_command_key_dict', updated_config)
+    return {"custom_command_key_dict": succeed_custom_command_key_dict}
 
 
 run_main_thread = None
