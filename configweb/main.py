@@ -84,6 +84,7 @@ def update_config_section(section_name, updated_value):
                                                          str):  # 情况1：旧值是int，新值是str（前端传过来的是str）如（wechatter_port）
                 new_value = int(new_value)
                 print(f"新值是str，转换为int: {new_value}")
+                print(type(new_value))
             if isinstance(old_value, bool) and isinstance(new_value,
                                                           str):  # 情况2：旧值是bool，新值是str，如（need_mentioned
                 # 、github_webhook_enabled、message_forwarding_enabled、all_task_cron_enabled）
@@ -114,7 +115,7 @@ def update_config_section(section_name, updated_value):
 
                 new_value = CommentedSeq(new_value)
                 print(f"新值是list，转换为CommentedSeq: {new_value}")
-        if old_value == new_value:
+        elif old_value == new_value:
             print(f"新旧两个值相同，无需更新: {section_name} : (old:{old_value} --> new:{new_value})")
             return {"message": "新旧两个值相同，无需更新", "changes": {section_name: (old_value, new_value)}}
 
