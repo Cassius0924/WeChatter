@@ -11,6 +11,8 @@ function MessageForwarding() {
         console.log(config);
     }, [config]);
 
+    const ruleList = config.message_forwarding_rule_list ? config.message_forwarding_rule_list[0] : {};
+
     return (
         <div className="border-4 border-dashed border-gray-200 rounded-lg mb-6">
             <div className="flex flex-col items-center justify-center h-full">
@@ -30,13 +32,23 @@ function MessageForwarding() {
                         message_forwarding_rule_list
                     </h3>
                     <p className="mb-4 text-sm leading-5 text-gray-500">
-                        自定义消息转发规则列表（JSON格式）
+                        自定义消息转发规则列表
                     </p>
-                    <textarea
-                        className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                        placeholder='[{"froms": ["SenderName", "SenderGroupName"], "to_persons": ["ReceiverName1", "ReceiverName2"], "to_groups": ["ReceiverGroupName"]}]'
-                        value={config.message_forwarding_rule_list || ''}
-                        onChange={e => setConfig({...config, message_forwarding_rule_list: e.target.value})}/>
+                    <input type="text"
+                           className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                           placeholder=""
+                           value={ruleList.from_list || ''}
+                           onChange={e => setConfig({...ruleList, from_list: e.target.value})}/>
+                    <input type="text"
+                            className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                            placeholder=""
+                            value={ruleList.to_person_list || ''}
+                            onChange={e => setConfig({...ruleList, to_person_list: e.target.value})}/>
+                    <input type="text"
+                            className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                            placeholder=""
+                            value={ruleList.to_group_list || ''}
+                            onChange={e => setConfig({...ruleList, to_group_list: e.target.value})}/>
                     <button
                         onClick={handleSave}
                         className="mt-4 px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md">

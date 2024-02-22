@@ -80,17 +80,13 @@ function App() {
                                           className="text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition">
                                         Message-Forwarding
                                     </Link>
-                                    <Link to="Weather-Cron"
+                                    <Link to="Task-Cron"
                                           className="text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition">
-                                        Weather-Cron
+                                        Task-Cron
                                     </Link>
                                     <Link to="Custom-Command-Key"
                                           className="text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition">
                                         Custom-Command-Key
-                                    </Link>
-                                    <Link to="Gasoline-Price-Cron"
-                                          className="text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition">
-                                        Gasoline-Price-Cron
                                     </Link>
                                 </div>
                             </div>
