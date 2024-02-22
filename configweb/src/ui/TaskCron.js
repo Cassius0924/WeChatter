@@ -86,9 +86,38 @@ function TaskCron() {
                                 setTaskCronList(newTaskCronList);
                             }}/>
                             {/* Render cron fields here */}
+                            <div>
+                                <h5>Cron Fields</h5>
+                                <input type="text" placeholder="Hour" value={task.cron.hour} onChange={e => {
+                                    const newTaskCronList = [...taskCronList];
+                                    newTaskCronList[taskIndex].cron.hour = e.target.value;
+                                    setTaskCronList(newTaskCronList);
+                                }}/>
+                                <input type="text" placeholder="Minute" value={task.cron.minute} onChange={e => {
+                                    const newTaskCronList = [...taskCronList];
+                                    newTaskCronList[taskIndex].cron.minute = e.target.value;
+                                    setTaskCronList(newTaskCronList);
+                                }}/>
+                                <input type="text" placeholder="Second" value={task.cron.second} onChange={e => {
+                                    const newTaskCronList = [...taskCronList];
+                                    newTaskCronList[taskIndex].cron.second = e.target.value;
+                                    setTaskCronList(newTaskCronList);
+                                }}/>
+                                <input type="text" placeholder="Timezone" value={task.cron.timezone} onChange={e => {
+                                    const newTaskCronList = [...taskCronList];
+                                    newTaskCronList[taskIndex].cron.timezone = e.target.value;
+                                    setTaskCronList(newTaskCronList);
+                                }}/>
+                            </div>
                             {task.commands.map((command, commandIndex) => (
                                 <div key={commandIndex}>
                                     {/* Render command fields here */}
+                                    <h5>Command {commandIndex + 1}</h5>
+                                    <input type="text" placeholder="Command" value={command.cmd} onChange={e => {
+                                        const newTaskCronList = [...taskCronList];
+                                        newTaskCronList[taskIndex].commands[commandIndex].cmd = e.target.value;
+                                        setTaskCronList(newTaskCronList);
+                                    }}/>
                                     <button onClick={() => handleRemoveCommand(taskIndex, commandIndex)}>Remove Command</button>
                                 </div>
                             ))}
@@ -109,6 +138,7 @@ function TaskCron() {
 }
 
 export default TaskCron;
+
 
 
 
