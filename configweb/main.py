@@ -90,8 +90,8 @@ def update_config_section(section_name, updated_value):
             yaml.dump(config, f)
 
         print(f"Config updated successfully: {section_name} : (old:{old_value} --> new:{new_value})")
-        return {"message": "Config updated successfully", "changes": {section_name: (old_value, new_value)}}
-
+        # return {"message": "Config updated successfully", "changes": {section_name: (old_value, new_value)}}
+        return
     except Exception as e:
         return {"error": str(e)}
 
