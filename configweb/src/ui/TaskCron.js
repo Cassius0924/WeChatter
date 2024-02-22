@@ -50,6 +50,30 @@ function TaskCron() {
         setTaskCronList(newTaskCronList);
     };
 
+    const handleAddArg = (taskIndex, commandIndex) => {
+        const newTaskCronList = [...taskCronList];
+        newTaskCronList[taskIndex].commands[commandIndex].args.push("");
+        setTaskCronList(newTaskCronList);
+    };
+
+    const handleRemoveArg = (taskIndex, commandIndex, argIndex) => {
+        const newTaskCronList = [...taskCronList];
+        newTaskCronList[taskIndex].commands[commandIndex].args = newTaskCronList[taskIndex].commands[commandIndex].args.filter((_, i) => i !== argIndex);
+        setTaskCronList(newTaskCronList);
+    };
+
+    const handleAddPerson = (taskIndex, commandIndex) => {
+        const newTaskCronList = [...taskCronList];
+        newTaskCronList[taskIndex].commands[commandIndex].to_person_list.push("");
+        setTaskCronList(newTaskCronList);
+    };
+
+    const handleRemovePerson = (taskIndex, commandIndex, personIndex) => {
+        const newTaskCronList = [...taskCronList];
+        newTaskCronList[taskIndex].commands[commandIndex].to_person_list = newTaskCronList[taskIndex].commands[commandIndex].to_person_list.filter((_, i) => i !== personIndex);
+        setTaskCronList(newTaskCronList);
+    };
+
     useEffect(() => {
         setConfig({...config, task_cron_list: taskCronList});
     }, [taskCronList]);
@@ -118,6 +142,28 @@ function TaskCron() {
                                         newTaskCronList[taskIndex].commands[commandIndex].cmd = e.target.value;
                                         setTaskCronList(newTaskCronList);
                                     }}/>
+                                    {command.args.map((arg, argIndex) => (
+                                        <div key={argIndex}>
+                                            <input type="text" placeholder="Arg" value={arg} onChange={e => {
+                                                const newTaskCronList = [...taskCronList];
+                                                newTaskCronList[taskIndex].commands[commandIndex].args[argIndex] = e.target.value;
+                                                setTaskCronList(newTaskCronList);
+                                            }}/>
+                                            <button onClick={() => handleRemoveArg(taskIndex, commandIndex, argIndex)}>Remove Arg</button>
+                                        </div>
+                                    ))}
+                                    {command.to_person_list.map((person, personIndex) => (
+                                        <div key={personIndex}>
+                                            <input type="text" placeholder="Person" value={person} onChange={e => {
+                                                const newTaskCronList = [...taskCronList];
+                                                newTaskCronList[taskIndex].commands[commandIndex].to_person_list[personIndex] = e.target.value;
+                                                setTaskCronList(newTaskCronList);
+                                            }}/>
+                                            <button onClick={() => handleRemovePerson(taskIndex, commandIndex, personIndex)}>Remove Person</button>
+                                        </div>
+                                    ))}
+                                    <button onClick={() => handleAddArg(taskIndex, commandIndex)}>Add Arg</button>
+                                    <button onClick={() => handleAddPerson(taskIndex, commandIndex)}>Add Person</button>
                                     <button onClick={() => handleRemoveCommand(taskIndex, commandIndex)}>Remove Command</button>
                                 </div>
                             ))}
@@ -138,6 +184,7 @@ function TaskCron() {
 }
 
 export default TaskCron;
+
 
 
 
