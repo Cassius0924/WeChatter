@@ -83,6 +83,7 @@ def update_config_section(section_name, updated_value):
             if isinstance(old_value, int) and isinstance(new_value,
                                                          str):  # 情况1：旧值是int，新值是str（前端传过来的是str）如（wechatter_port）
                 new_value = int(new_value)
+                print(f"新值是str，转换为int: {new_value}")
             if isinstance(old_value, bool) and isinstance(new_value,
                                                           str):  # 情况2：旧值是bool，新值是str，如（need_mentioned
                 # 、github_webhook_enabled、message_forwarding_enabled、all_task_cron_enabled）
@@ -92,12 +93,15 @@ def update_config_section(section_name, updated_value):
                     new_value = False
                 else:
                     raise ValueError(f"请输入正确的bool值: {new_value}")
+                print(f"新值是str，转换为bool: {new_value}")
             if isinstance(old_value, ruamel.yaml.comments.CommentedSeq) and isinstance(new_value,
                                                                                        str):  # 情况3：旧值是ruamel.yaml
                 # .comments.CommentedSeq，新值是str，如（admin_list,admin_group_list,）
                 value = new_value.split(',')
                 new_value = CommentedSeq(value)
-            if isinstance(old_value, ruamel.yaml.comments.CommentedSeq) and isinstance(new_value, list):# 情况4：旧值是ruamel.yaml.comments.CommentedSeq，新值是list，如（message_forwarding_rule_list）
+                print(f"新值是str，转换为CommentedSeq: {new_value}")
+            if isinstance(old_value, ruamel.yaml.comments.CommentedSeq) and isinstance(new_value,
+                                                                                       list):  # 情况4：旧值是ruamel.yaml.comments.CommentedSeq，新值是list，如（message_forwarding_rule_list）
                 # 遍历列表中的每个字典
                 for dict_obj in new_value:
                     # 遍历字典中的每个键和值
@@ -108,7 +112,7 @@ def update_config_section(section_name, updated_value):
                             dict_obj[key] = value.split(',')
 
                 new_value = CommentedSeq(new_value)
-
+                print(f"新值是list，转换为CommentedSeq: {new_value}")
         if old_value == new_value:
             print(f"新旧两个值相同，无需更新: {section_name} : (old:{old_value} --> new:{new_value})")
             return {"message": "新旧两个值相同，无需更新", "changes": {section_name: (old_value, new_value)}}
