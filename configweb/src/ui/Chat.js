@@ -28,10 +28,10 @@ function Chat() {
                     <p className="mb-4 text-sm leading-5 text-gray-500">
                         群消息命令是否需要@机器人才能触发（True/False）
                     </p>
-                    <input type="text"
+                    <input type="boolean"
                            className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                            placeholder="True"
-                           value={config.need_mentioned.toString() || ''}
+                           value={config.need_mentioned || ''}
                            onChange={e => setConfig({...config, need_mentioned: e.target.value})}/>
                     <button
                         onClick={handleSave}
