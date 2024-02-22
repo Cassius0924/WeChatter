@@ -116,13 +116,13 @@ def update_config_section(section_name, updated_value):
                 print(f"新值是list，转换为CommentedSeq: {new_value}")
 
         # 写入配置文件
-            print(f"新的type:{type(new_value)}")
-            config[section_name] = new_value
-            print(config[section_name])
-            with open('../config.yaml', 'w', encoding='utf-8') as f:
-                yaml.dump(config, f)
-                print(f"Config updated successfully: {section_name} : (old:{old_value} --> new:{new_value})")
-                return {"message": "Config updated successfully", "changes": {section_name: (old_value, new_value)}}
+        print(f"新的type:{type(new_value)}")
+        config[section_name] = new_value
+        print(config[section_name])
+        with open('../config.yaml', 'w', encoding='utf-8') as f:
+            yaml.dump(config, f)
+            print(f"Config updated successfully: {section_name} : (old:{old_value} --> new:{new_value})")
+            return {"message": "Config updated successfully", "changes": {section_name: (old_value, new_value)}}
     except Exception as e:
         return {"error": str(e)}
 
