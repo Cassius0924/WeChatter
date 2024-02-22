@@ -74,12 +74,9 @@ function TaskCron() {
         setTaskCronList(newTaskCronList);
     };
 
-    // useEffect(() => {//解释：这里的useEffect是为了监听taskCronList的变化，一旦taskCronList变化，就会触发这个useEffect
-    //     setConfig({...config, task_cron_list: taskCronList});
-    // }, [taskCronList]);
-    useEffect(() => {
-        setTaskCronList(config.task_cron_list || []);
-    }, [config]);
+    useEffect(() => {//解释：这里的useEffect是为了监听taskCronList的变化，一旦taskCronList变化，就会触发这个useEffect
+        setConfig({...config, task_cron_list: taskCronList});
+    }, [taskCronList]);
 
     return (
         <div className="border-4 border-dashed border-gray-200 rounded-lg mb-6">
