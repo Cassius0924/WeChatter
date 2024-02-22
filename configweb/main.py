@@ -190,7 +190,8 @@ def update_admin_config(updated_config: dict = Body(...)):
 
 @app.get("/bot")
 def get_bot_config():
-    return get_config_sections('bot')
+    sections = get_config_sections(['bot_name'])
+    return get_config_sections(sections)
 
 
 @app.post("/bot")
@@ -200,7 +201,8 @@ def update_bot_config(updated_config: dict = Body(...)):
 
 @app.get("/chat")
 def get_chat_config():
-    return get_config_sections('chat')
+    sections = get_config_sections(['command_prefix', 'need_mentioned'])
+    return get_config_sections(sections)
 
 
 @app.post("/chat")
@@ -210,7 +212,8 @@ def update_chat_config(updated_config: dict = Body(...)):
 
 @app.get("/copilot-gpt4")
 def get_copilot_gpt4_config():
-    return get_config_sections('copilot-gpt4')
+    sections = get_config_sections(['cp_gpt4_base_api', 'cp_token'])
+    return get_config_sections(sections)
 
 
 @app.post("/copilot-gpt4")
@@ -220,7 +223,8 @@ def update_copilot_gpt4_config(updated_config: dict = Body(...)):
 
 @app.get("/github-webhook")
 def get_github_webhook_config():
-    return get_config_sections('github-webhook')
+    sections = get_config_sections(['github_webhook_enabled', 'github_webhook_api_path', 'github_webhook_receive_person_list', 'github_webhook_receive_group_list'])
+    return get_config_sections(sections)
 
 
 @app.post("/github-webhook")
@@ -230,7 +234,8 @@ def update_github_webhook_config(updated_config: dict = Body(...)):
 
 @app.get("/message-forwarding")
 def get_message_forwarding_config():
-    return get_config_sections('message-forwarding')
+    sections = get_config_sections(['message_forwarding_enabled', 'message_forwarding_rule_list'])
+    return get_config_sections(sections)
 
 
 @app.post("/message-forwarding")
@@ -238,34 +243,27 @@ def update_message_forwarding_config(updated_config: dict = Body(...)):
     return update_config_section('message-forwarding', updated_config)
 
 
-@app.get("/weather-cron")
-def get_weather_cron_config():
-    return get_config_sections('weather-cron')
+@app.get("/task-cron")
+def get_task_cron_config():
+    sections = get_config_sections(['all_task_cron_enabled', 'task_cron_list'])
+    return get_config_sections(sections)
 
 
-@app.post("/weather-cron")
-def update_weather_cron_config(updated_config: dict = Body(...)):
+@app.post("/task-cron")
+def update_task_cron_config(updated_config: dict = Body(...)):
     return update_config_section('weather-cron', updated_config)
 
 
 @app.get("/custom-command-key")
 def get_custom_command_key_config():
-    return get_config_sections('custom-command-key')
+    sections = get_config_sections(['custom_command_key_dict'])
+    return get_config_sections(sections)
 
 
 @app.post("/custom-command-key")
 def update_custom_command_key_config(updated_config: dict = Body(...)):
     return update_config_section('custom-command-key', updated_config)
 
-
-@app.get("/gasoline-price-cron")
-def get_gasoline_price_cron_config():
-    return get_config_sections('gasoline-price-cron')
-
-
-@app.post("/gasoline-price-cron")
-def update_gasoline_price_cron_config(updated_config: dict = Body(...)):
-    return update_config_section('gasoline-price-cron', updated_config)
 
 
 run_main_thread = None
