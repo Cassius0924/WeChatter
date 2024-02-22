@@ -119,9 +119,8 @@ def update_config_section(section_name, updated_value):
             return {"message": "新旧两个值相同，无需更新", "changes": {section_name: (old_value, new_value)}}
 
         # 写入配置文件
-        if new_value is not None:
-            config[section_name] = new_value
         else:
+            config[section_name] = new_value
             with open('../config.yaml', 'w', encoding='utf-8') as f:
                 yaml.dump(config, f)
                 print(f"Config updated successfully: {section_name} : (old:{old_value} --> new:{new_value})")
