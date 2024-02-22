@@ -16,16 +16,20 @@ def _forwarding_by_rule(message_obj: Message, rule: Dict):
     :param message_obj: 消息对象
     :param rule: 规则
     """
-    to_person_list = rule.get("to_person_list")
+    # 应用 exclude 规则
+    # 开始转发消息
+    to_person_list = rule["to_person_list"]
+    if message_obj.sender_name in rule.get("from_list_exclude", []):
+        return
     if to_person_list:
         msg = _construct_forwarding_message(message_obj)
-        logger.info(f"转发消息：{message_obj.sender_name} -> {to_person_list}")
         sender.mass_send_msg(to_person_list, msg, is_group=False)
-    to_group_list = rule.get("to_group_list")
+        logger.info(f"转发消息：{message_obj.sender_name} -> {to_person_list}")
+    to_group_list = rule["to_group_list"]
     if to_group_list:
         msg = _construct_forwarding_message(message_obj)
-        logger.info(f"转发消息：{message_obj.sender_name} -> {to_group_list}")
         sender.mass_send_msg(to_group_list, msg, is_group=True)
+        logger.info(f"转发消息：{message_obj.sender_name} -> {to_group_list}")
 
 
 class MessageForwarder:
@@ -38,17 +42,37 @@ class MessageForwarder:
         初始化
         :param rule_list: 转发规则列表
         """
-        self.all_message_rules = []
+        self.all_message_rule = {
+            "from_list_exclude": [],
+            "to_group_list": [],
+            "to_person_list": [],
+        }
         self.specific_message_rules = {}
 
         for rule in rule_list:
             if "%ALL" in rule["from_list"]:
-                self.all_message_rules.append(rule)
+                self.all_message_rule["from_list_exclude"].extend(
+                    rule.get("from_list_exclude", [])
+                )
+                self.all_message_rule["to_group_list"].extend(
+                    rule.get("to_group_list", [])
+                )
+                self.all_message_rule["to_person_list"].extend(
+                    rule.get("to_person_list", [])
+                )
             else:
                 for from_name in rule["from_list"]:
                     if from_name not in self.specific_message_rules:
-                        self.specific_message_rules[from_name] = []
-                    self.specific_message_rules[from_name].append(rule)
+                        self.specific_message_rules[from_name] = {
+                            "to_group_list": [],
+                            "to_person_list": [],
+                        }
+                    self.specific_message_rules[from_name]["to_group_list"].extend(
+                        rule.get("to_group_list", [])
+                    )
+                    self.specific_message_rules[from_name]["to_person_list"].extend(
+                        rule.get("to_person_list", [])
+                    )
 
     def forwarding(self, message_obj: Message):
         """
@@ -56,15 +80,15 @@ class MessageForwarder:
         :param message_obj: 消息对象
         """
         # TODO: 转发文件
-        from_name = message_obj.sender_name
 
         # 判断消息来源是否符合转发规则
-        if from_name in self.specific_message_rules:
-            for rule in self.specific_message_rules[from_name]:
-                _forwarding_by_rule(message_obj, rule)
-        elif self.all_message_rules:
-            for rule in self.all_message_rules:
-                _forwarding_by_rule(message_obj, rule)
+        if self.all_message_rule:
+            rule = self.all_message_rule
+            _forwarding_by_rule(message_obj, rule)
+
+        if message_obj.sender_name in self.specific_message_rules.keys():
+            rule = self.specific_message_rules[message_obj.sender_name]
+            _forwarding_by_rule(message_obj, rule)
 
     @staticmethod
     def reply_forwarded_message(message_obj: Message):
