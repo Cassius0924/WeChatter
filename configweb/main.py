@@ -51,6 +51,7 @@ def get_config_sections(section_names):
         for section_name, section_config in section_configs.items():
             if section_config is None:
                 raise KeyError(f"Section '{section_name}' not found in configuration file.")
+        print(type(section_configs))
         return section_configs
     except Exception as e:
         return {"error": str(e)}
@@ -70,13 +71,17 @@ def update_config_section(section_name, updated_value):
         #判断old_value是什么类型
         print(type(old_value))
 
-
         # 更新特定的部分
         new_value = updated_value.get(section_name)
         if new_value is not None:
             config[section_name] = new_value
 
         print(type(new_value))
+        #如果new_value是str类型，先判断是否是数字，如果是数字，转换成int类型
+        if isinstance(new_value, str):
+            if new_value.isdigit():
+                new_value = int(new_value)
+                config[section_name] = new_value
 
         if old_value == new_value:
             print(f"新旧两个值相同，无需更新: {section_name} : (old:{old_value} --> new:{new_value})")
