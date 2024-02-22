@@ -7,6 +7,7 @@ function Chat() {
     const [config, setConfig] = useFetchData('chat');
     const handleSave = useSaveConfig('chat', config);
     useEffect(() => {
+        console.log('config changed');
         console.log(config);
     }, [config]);
     return (
