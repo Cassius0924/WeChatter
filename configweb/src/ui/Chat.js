@@ -1,13 +1,14 @@
 // Chat.js
-import React from 'react';
+import React, {useEffect} from 'react';
 import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
 
 function Chat() {
     const [config, setConfig] = useFetchData('chat');
     const handleSave = useSaveConfig('chat', config);
-    print(config)
-
+    useEffect(() => {
+        console.log(config);
+    }, [config]);
     return (
         <div className="border-4 border-dashed border-gray-200 rounded-lg mb-6">
             <div className="flex flex-col items-center justify-center h-full">
