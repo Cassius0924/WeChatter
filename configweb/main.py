@@ -67,6 +67,7 @@ def update_config_section(section_name, updated_value):
         with open('../config.yaml', 'r', encoding='utf-8') as f:
             config = yaml.load(f)
         old_value = config.get(section_name)
+        print(f"old_value: {old_value}")
         print(f"updated_value: {updated_value}")
         # 尝试将每个值转换为其原始类型
         converted_value = {}
