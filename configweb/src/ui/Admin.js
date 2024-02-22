@@ -1,11 +1,16 @@
 // Admin.js
-import React from 'react';
+import React, {useEffect} from 'react';
 import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
 
 function Admin() {
     const [config, setConfig, isLoading, error] = useFetchData('admin');
     const handleSave = useSaveConfig('admin', config);
+    useEffect(() => {
+        console.log('config changed');
+        console.log(config);
+        console.log(setConfig);
+    }, [config]);
     if (isLoading) {
         return <div>Loading...</div>;
     }
