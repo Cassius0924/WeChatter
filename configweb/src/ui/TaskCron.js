@@ -8,6 +8,7 @@ function TaskCron() {
     useEffect(() => {
         console.log('config changed');
         console.log(config);
+        console.log(setConfig);
     }, [config]);
     const [taskCronList, setTaskCronList] = useState(config.task_cron_list || []);
 
