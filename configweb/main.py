@@ -68,16 +68,18 @@ def update_config_section(section_name, updated_value):
         with open('../config.yaml', 'r', encoding='utf-8') as f:
             config = yaml.load(f)
         old_value = config.get(section_name)
-
+        new_value = updated_value.get(section_name)
         # 判断old_value是什么类型
         print(type(old_value))
-
-        # 获取更新特定的部分
-        new_value = updated_value.get(section_name)
-
+        # 判断new_value是什么类型
         print(type(new_value))
+
+        # 判断新旧两个值是否相同
+        if old_value == new_value:
+            print(f"新旧两个值相同，无需更新: {section_name} : (old:{old_value} --> new:{new_value})")
+            return {"message": "新旧两个值相同，无需更新", "changes": {section_name: (old_value, new_value)}}
         # 判断新旧两个值的类型是否相同
-        if type(old_value) != type(new_value):
+        elif type(old_value) != type(new_value):
             if isinstance(old_value, int) and isinstance(new_value,
                                                          str):  # 情况1：旧值是int，新值是str（前端传过来的是str）如（wechatter_port）
                 new_value = int(new_value)
@@ -114,12 +116,7 @@ def update_config_section(section_name, updated_value):
                 new_value = CommentedSeq(new_value)
                 print(f"新值是list，转换为CommentedSeq: {new_value}")
 
-        if old_value == new_value:
-            print(f"新旧两个值相同，无需更新: {section_name} : (old:{old_value} --> new:{new_value})")
-            return {"message": "新旧两个值相同，无需更新", "changes": {section_name: (old_value, new_value)}}
-
         # 写入配置文件
-        else:
             config[section_name] = new_value
             print(config[section_name])
             with open('../config.yaml', 'w', encoding='utf-8') as f:
