@@ -183,11 +183,14 @@ def get_wx_bot_webhook_config():
 def update_wx_bot_webhook_config(updated_config: dict = Body(...)):
     wx_webhook_base_api_succeed = update_config_section('wx_webhook_base_api', updated_config)
     wx_webhook_recv_api_path_succeed = update_config_section('wx_webhook_recv_api_path', updated_config)
+    if wx_webhook_base_api_succeed:
+        return {"message": "wx_webhook_base_api updated successfully"}
+    if wx_webhook_recv_api_path_succeed:
+        return {"message": "wx_webhook_recv_api_path updated successfully"}
     if not wx_webhook_base_api_succeed:
         return {"error": "wx_webhook_base_api update failed"}
     if not wx_webhook_recv_api_path_succeed:
         return {"error": "wx_webhook_recv_api_path update failed"}
-    return wx_webhook_base_api_succeed and wx_webhook_recv_api_path_succeed
 
 
 @app.get("/admin")
