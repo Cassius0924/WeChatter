@@ -1,11 +1,15 @@
 // MessageForwarding.js
-import React from 'react';
+import React, {useEffect} from 'react';
 import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
 
 function MessageForwarding() {
     const [config, setConfig] = useFetchData('message-forwarding');
     const handleSave = useSaveConfig('message-forwarding', config);
+    useEffect(() => {
+        console.log('config changed');
+        console.log(config);
+    }, [config]);
 
     return (
         <div className="border-4 border-dashed border-gray-200 rounded-lg mb-6">
