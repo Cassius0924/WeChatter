@@ -38,7 +38,7 @@ function MessageForwarding() {
                            className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                            placeholder=""
                            value={ruleList.from_list || ''}
-                           onChange={e => setConfig({...ruleList, from_list: e.target.value})}/>
+                           onChange={e => setConfig({...config, from_list: e.target.value})}/>
                     <p className="mb-4 text-sm leading-5 text-gray-500">
                         to_person_list: 转发给个人列表
                     </p>
@@ -46,7 +46,7 @@ function MessageForwarding() {
                             className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                             placeholder=""
                             value={ruleList.to_person_list || ''}
-                            onChange={e => setConfig({...ruleList, to_person_list: e.target.value})}/>
+                            onChange={e => setConfig({...config, to_person_list: e.target.value})}/>
                     <p className="mb-4 text-sm leading-5 text-gray-500">
                         to_group_list: 转发给群组列表
                     </p>
@@ -54,7 +54,7 @@ function MessageForwarding() {
                             className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                             placeholder=""
                             value={ruleList.to_group_list || ''}
-                            onChange={e => setConfig({...ruleList, to_group_list: e.target.value})}/>
+                            onChange={e => setConfig({...config, to_group_list: e.target.value})}/>
                     <button
                         onClick={handleSave}
                         className="mt-4 px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md">
