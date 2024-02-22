@@ -87,8 +87,11 @@ def update_config_section(section_name, updated_value):
         if not isinstance(old_value, type(new_value)):
             if isinstance(old_value, int) and isinstance(new_value,
                                                          str):  # 情况1：旧值是int，新值是str（前端传过来的是str）如（wechatter_port）
-                new_value = int(new_value)
-                print(f"更新前，新值是str，转换为int: {new_value}")
+                if new_value.isdigit():
+                    new_value = int(new_value)
+                    print(f"更新前，新值是str，转换为int: {new_value}")
+                else:
+                    pass
             elif isinstance(old_value, bool) and isinstance(new_value,
                                                             str):  # 情况2：旧值是bool，新值是str，如（need_mentioned
                 # 、github_webhook_enabled、message_forwarding_enabled、all_task_cron_enabled）
