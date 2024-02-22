@@ -6,6 +6,7 @@ import useSaveConfig from '../hooks/useSaveConfig';
 function Chat() {
     const [config, setConfig] = useFetchData('chat');
     const handleSave = useSaveConfig('chat', config);
+    print(config)
 
     return (
         <div className="border-4 border-dashed border-gray-200 rounded-lg mb-6">
