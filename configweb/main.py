@@ -76,7 +76,7 @@ def update_config_section(section_name, updated_value):
                 converted_value[key] = value
             except (ValueError, SyntaxError):
                 converted_value[key] = value  # 如果转换失败，保持原样
-
+        print(f"converted_value: {converted_value}")
         # 更新特定的部分
         new_value = converted_value.get(section_name)
         if new_value is not None:
