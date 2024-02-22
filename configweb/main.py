@@ -90,7 +90,7 @@ def update_config_section(section_name, updated_value):
                 new_value = int(new_value)
                 print(f"更新前，新值是str，转换为int: {new_value}")
             elif isinstance(old_value, bool) and isinstance(new_value,
-                                                          str):  # 情况2：旧值是bool，新值是str，如（need_mentioned
+                                                            str):  # 情况2：旧值是bool，新值是str，如（need_mentioned
                 # 、github_webhook_enabled、message_forwarding_enabled、all_task_cron_enabled）
                 if new_value.lower() == 'true':
                     new_value = True
@@ -101,13 +101,13 @@ def update_config_section(section_name, updated_value):
                 else:
                     raise ValueError(f"请输入正确的bool值: {new_value}")
             elif isinstance(old_value, CommentedSeq) and isinstance(new_value,
-                                                                                       str):  # 情况3：旧值是ruamel.yaml
+                                                                    str):  # 情况3：旧值是ruamel.yaml
                 # .comments.CommentedSeq，新值是str，如（admin_list,admin_group_list,）
                 value = new_value.split(',')
                 new_value = CommentedSeq(value)
                 print(f"更新前，新值是str，转换为CommentedSeq: {new_value}")
             elif isinstance(old_value, CommentedSeq) and isinstance(new_value,
-                                                                                       list):  # 情况4：旧值是ruamel.yaml.comments.CommentedSeq，新值是list，如（message_forwarding_rule_list）
+                                                                    list):  # 情况4：旧值是ruamel.yaml.comments.CommentedSeq，新值是list，如（message_forwarding_rule_list）
                 # 遍历列表中的每个字典
                 for dict_obj in new_value:
                     # 遍历字典中的每个键和值
