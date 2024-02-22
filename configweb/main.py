@@ -114,6 +114,8 @@ def update_config_section(section_name, updated_value):
 
                 new_value = CommentedSeq(new_value)
                 print(f"新值是list，转换为CommentedSeq: {new_value}")
+            else:
+                pass
 
         # 写入配置文件
         print(f"新的type:{type(new_value)}")
