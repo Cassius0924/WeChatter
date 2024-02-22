@@ -1,5 +1,5 @@
 // MessageForwarding.js
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
 
@@ -12,6 +12,14 @@ function MessageForwarding() {
     }, [config]);
 
     const ruleList = config.message_forwarding_rule_list ? config.message_forwarding_rule_list[0] : {};
+    const [taskCronList, setTaskCronList] = useState([]);
+
+    useEffect(() => {
+        if (config.task_cron_list) {
+            setTaskCronList(config.task_cron_list);
+        }
+    }, [config]);
+
 
     return (
         <div className="border-4 border-dashed border-gray-200 rounded-lg mb-6">
