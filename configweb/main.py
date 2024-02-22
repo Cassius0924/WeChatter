@@ -121,6 +121,7 @@ def update_config_section(section_name, updated_value):
         # 写入配置文件
         else:
             config[section_name] = new_value
+            print(config[section_name])
             with open('../config.yaml', 'w', encoding='utf-8') as f:
                 yaml.dump(config, f)
                 print(f"Config updated successfully: {section_name} : (old:{old_value} --> new:{new_value})")
