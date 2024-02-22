@@ -72,7 +72,8 @@ def update_config_section(section_name, updated_value):
         converted_value = {}
         for key, value in updated_value.items():
             try:
-                converted_value[key] = ast.literal_eval(value)
+                # converted_value[key] = ast.literal_eval(value)
+                converted_value[key] = value
             except (ValueError, SyntaxError):
                 converted_value[key] = value  # 如果转换失败，保持原样
 
