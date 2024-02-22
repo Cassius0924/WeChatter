@@ -49,9 +49,9 @@ def get_config_sections(section_names):
             config = yaml.load(f)
         section_configs = {section_name: config.get(section_name) for section_name in section_names}
         for section_name, section_config in section_configs.items():
+            print(type(config.get(section_name)))
             if section_config is None:
                 raise KeyError(f"Section '{section_name}' not found in configuration file.")
-        print(type(section_configs))
         return section_configs
     except Exception as e:
         return {"error": str(e)}
