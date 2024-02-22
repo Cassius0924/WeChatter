@@ -9,7 +9,6 @@ import GitHubWebhook from "./GitHubWebhook";
 import MessageForwarding from "./MessageForwarding";
 import TaskCron from "./TaskCron";
 import CustomCommandKey from "./Custom-Command-Key";
-import GasolinePriceCron from "./Gasoline-Price-Cron";
 
 function ConfigWeb() {
     return (
@@ -24,7 +23,6 @@ function ConfigWeb() {
             <MessageForwarding/>
             <TaskCron/>
             <CustomCommandKey/>
-            <GasolinePriceCron/>
         </main>
     );
 }

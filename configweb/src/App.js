@@ -10,7 +10,6 @@ import GitHubWebhook from "./ui/GitHubWebhook";
 import MessageForwarding from "./ui/MessageForwarding";
 import TaskCron from "./ui/TaskCron";
 import CustomCommandKey from "./ui/Custom-Command-Key";
-import GasolinePriceCron from "./ui/Gasoline-Price-Cron";
 import ConfigWeb from "./ui/ConfigWeb";
 import axios from "axios";
 import {BACKEND_URL, BACKEND_PORT} from './config';

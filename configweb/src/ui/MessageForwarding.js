@@ -31,19 +31,28 @@ function MessageForwarding() {
                     <h3 className="mb-4 text-lg leading-6 font-medium text-gray-900">
                         message_forwarding_rule_list
                     </h3>
-                    <p className="mb-4 text-sm leading-5 text-gray-500">
+                    <p2 className="mb-4 text-sm leading-5 text-gray-500">
                         自定义消息转发规则列表
+                    </p2>
+                    <p className="mb-4 text-sm leading-5 text-gray-500">
+                        from_list: 消息来源列表
                     </p>
                     <input type="text"
                            className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                            placeholder=""
                            value={ruleList.from_list || ''}
                            onChange={e => setConfig({...ruleList, from_list: e.target.value})}/>
+                    <p className="mb-4 text-sm leading-5 text-gray-500">
+                        to_person_list: 转发给个人列表
+                    </p>
                     <input type="text"
                             className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                             placeholder=""
                             value={ruleList.to_person_list || ''}
                             onChange={e => setConfig({...ruleList, to_person_list: e.target.value})}/>
+                    <p className="mb-4 text-sm leading-5 text-gray-500">
+                        to_group_list: 转发给群组列表
+                    </p>
                     <input type="text"
                             className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                             placeholder=""
