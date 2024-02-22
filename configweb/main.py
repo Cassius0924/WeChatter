@@ -79,7 +79,7 @@ def update_config_section(section_name, updated_value):
             print(f"新旧两个值相同，无需更新: {section_name} : (old:{old_value} --> new:{new_value})")
             return {"message": "新旧两个值相同，无需更新", "changes": {section_name: (old_value, new_value)}}
         # 判断新旧两个值的类型是否相同
-        elif type(old_value) != type(new_value):
+        if type(old_value) != type(new_value):
             if isinstance(old_value, int) and isinstance(new_value,
                                                          str):  # 情况1：旧值是int，新值是str（前端传过来的是str）如（wechatter_port）
                 new_value = int(new_value)
