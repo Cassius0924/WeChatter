@@ -108,7 +108,7 @@ python3 -m wechatter
 ## 支持的功能
 
 - [x] **消息可引用回复**： 用户可以通过引用并回复命令消息进一步获取消息内容。带`（可引用：***）`的机器人消息即为可进一步互动的可引用消息。
-- [x] **消息转发**： 转发用户或群的消息到其他用户或群，并支持引用回复转发消息。需进行[配置](#%EF%B8%8F-message-forwarding-配置)
+- [x] **消息转发**： 转发用户或群的消息到其他用户或群，并支持引用回复转发消息。需进行[配置](#%EF%B8%8F-message-forwarding-配置)。
 <img src="docs/images/message_forwarding_and_quoted_reply.png">
 
 - [x] **定时任务**：大部分命令均支持定时任务。需进行[配置](#%EF%B8%8F-task-cron-配置)。
