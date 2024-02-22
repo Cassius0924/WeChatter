@@ -67,19 +67,21 @@ def update_config_section(section_name, updated_value):
         with open('../config.yaml', 'r', encoding='utf-8') as f:
             config = yaml.load(f)
         old_value = config.get(section_name)
-        print(f"old_value: {old_value}")
-        print(f"updated_value: {updated_value}")
+        # print(f"old_value: {old_value}")
+        # print(f"updated_value: {updated_value}")
+
         # 尝试将每个值转换为其原始类型
-        converted_value = {}
-        for key, value in updated_value.items():
-            try:
-                # converted_value[key] = ast.literal_eval(value)#这个方法不行，因为value是字符串，ast.literal_eval,只能转换字符串，不能转换字典
-                converted_value[key] = value
-            except (ValueError, SyntaxError):
-                converted_value[key] = value  # 如果转换失败，保持原样
-        print(f"converted_value: {converted_value}")
+        # converted_value = {}
+        # for key, value in updated_value.items():
+        #     try:
+        #         # converted_value[key] = ast.literal_eval(value)#这个方法不行，因为value是字符串，ast.literal_eval,只能转换字符串，不能转换字典
+        #         converted_value[key] = value
+        #     except (ValueError, SyntaxError):
+        #         converted_value[key] = value  # 如果转换失败，保持原样
+        # print(f"converted_value: {converted_value}")
+
         # 更新特定的部分
-        new_value = converted_value.get(section_name)
+        new_value = updated_value.get(section_name)
         if new_value is not None:
             config[section_name] = new_value
 
@@ -88,7 +90,7 @@ def update_config_section(section_name, updated_value):
             yaml.dump(config, f)
 
         print(f"Config updated successfully: {section_name} : (old:{old_value} --> new:{new_value})")
-        return {"message": "Config updated successfully", "changes": converted_value}
+        return {"message": "Config updated successfully", "changes": {section_name: (old_value, new_value)}}
 
     except Exception as e:
         return {"error": str(e)}
