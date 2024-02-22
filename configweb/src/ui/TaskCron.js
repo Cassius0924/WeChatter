@@ -3,13 +3,13 @@ import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
 
 function TaskCron() {
-    const [config, setConfig] = useFetchData('task-cron');
+    // const [config, setConfig] = useFetchData('task-cron');
     const handleSave = useSaveConfig('task-cron', config);
     useEffect(() => {
         console.log('config changed');
         console.log(config);
     }, [config]);
-
+    let config = [{'task': '哈哈哈', 'enabled': True, 'cron': {'hour': '7', 'minute': '0', 'second': '0', 'timezone': 'bj'}, 'commands': [{'cmd': 'weather', 'args': ['江门'], 'to_person_list': ['皓皓']}]}, {'task': '', 'enabled': False, 'cron': {'hour': '', 'minute': '', 'second': '', 'timezone': ''}, 'commands': [{'cmd': '', 'args': [], 'to_person_list': []}]}]
     const [taskCronList, setTaskCronList] = useState(config.task_cron_list || []);
 
     const handleAddTask = () => {
@@ -52,7 +52,7 @@ function TaskCron() {
 
     const handleAddArg = (taskIndex, commandIndex) => {
         const newTaskCronList = [...taskCronList];
-        newTaskCronList[taskIndex].commands[commandIndex].args.push("");
+        newTaskCronList[taskIndex].commands[commandIndex].args.push("");//解释：这里的args是一个数组，所以要push一个空字符串
         setTaskCronList(newTaskCronList);
     };
 
@@ -74,7 +74,7 @@ function TaskCron() {
         setTaskCronList(newTaskCronList);
     };
 
-    useEffect(() => {
+    useEffect(() => {//解释：这里的useEffect是为了监听taskCronList的变化，一旦taskCronList变化，就会触发这个useEffect
         setConfig({...config, task_cron_list: taskCronList});
     }, [taskCronList]);
 
