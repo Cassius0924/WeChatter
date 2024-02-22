@@ -85,14 +85,10 @@ def update_config_section(section_name, updated_value):
         # 判断新旧两个值的类型是否相同
         # if type(old_value) != type(new_value):
         if not isinstance(old_value, type(new_value)):
-            if isinstance(old_value, int) and isinstance(new_value,
-                                                         str):  # 情况1：旧值是int，新值是str（前端传过来的是str）如（wechatter_port）
-                if new_value.isdigit():
-                    new_value = int(new_value)
-                    print(f"更新前，新值是str，转换为int: {new_value}")
-                # 情况2：旧值是bool，新值是str，如（need_mentioned
+            if isinstance(old_value, bool) and isinstance(new_value,
+                                                          str):  # 情况2：旧值是bool，新值是str，如（need_mentioned
                 # 、github_webhook_enabled、message_forwarding_enabled、all_task_cron_enabled）
-                elif new_value.lower() == 'true':
+                if new_value.lower() == 'true':
                     new_value = True
                     print(f"更新前，新值是str，转换为bool: {new_value}")
                 elif new_value.lower() == 'false':
@@ -100,6 +96,13 @@ def update_config_section(section_name, updated_value):
                     print(f"更新前，新值是str，转换为bool: {new_value}")
                 else:
                     raise ValueError(f"请输入正确的bool值: {new_value}")
+            elif isinstance(old_value, int) and isinstance(new_value,
+                                                           str):  # 情况1：旧值是int，新值是str（前端传过来的是str）如（wechatter_port）
+                if new_value.isdigit():
+                    new_value = int(new_value)
+                    print(f"更新前，新值是str，转换为int: {new_value}")
+                else:
+                    pass
             elif isinstance(old_value, CommentedSeq) and isinstance(new_value,
                                                                     str):  # 情况3：旧值是ruamel.yaml
                 # .comments.CommentedSeq，新值是str，如（admin_list,admin_group_list,）
