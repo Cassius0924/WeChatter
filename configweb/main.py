@@ -90,12 +90,9 @@ def update_config_section(section_name, updated_value):
                 if new_value.isdigit():
                     new_value = int(new_value)
                     print(f"更新前，新值是str，转换为int: {new_value}")
-                else:
-                    pass
-            elif isinstance(old_value, bool) and isinstance(new_value,
-                                                            str):  # 情况2：旧值是bool，新值是str，如（need_mentioned
+                # 情况2：旧值是bool，新值是str，如（need_mentioned
                 # 、github_webhook_enabled、message_forwarding_enabled、all_task_cron_enabled）
-                if new_value.lower() == 'true':
+                elif new_value.lower() == 'true':
                     new_value = True
                     print(f"更新前，新值是str，转换为bool: {new_value}")
                 elif new_value.lower() == 'false':
