@@ -174,7 +174,7 @@ def get_wx_bot_webhook_config():
 def update_wx_bot_webhook_config(updated_config: dict = Body(...)):
     succeed_wx_webhook_base_api = update_config_section('wx_webhook_base_api', updated_config)
     succeed_wx_webhook_recv_api_path = update_config_section('wx_webhook_recv_api_path', updated_config)
-    return succeed_wx_webhook_base_api, succeed_wx_webhook_recv_api_path
+    return succeed_wx_webhook_base_api and succeed_wx_webhook_recv_api_path
 
 
 
