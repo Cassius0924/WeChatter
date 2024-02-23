@@ -76,6 +76,13 @@ function TaskCron() {
                                         value={(command.args || []).join(', ')}
                                         onChange={e => handleCommandChange(taskIndex, commandIndex, 'args', e.target.value.split(', '))}
                                     />
+                                    <input
+                                        type="text"
+                                        className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                        placeholder="To Person List"
+                                        value={(command.to_person_list || []).join(', ')}
+                                        onChange={e => handleCommandChange(taskIndex, commandIndex, 'to_person_list', e.target.value.split(', '))}
+                                    />
                                 </div>
                             ))}
                         </div>
