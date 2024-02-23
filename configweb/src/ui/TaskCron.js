@@ -13,9 +13,9 @@ function TaskCron() {
 
     const taskCronList = config.task_cron_list || [];
 
-    const handleChange = (index, field, value) => {
+    const handleChange = (taskIndex, field, value) => {
         const newTaskCronList = [...taskCronList];
-        newTaskCronList[index][field] = value;
+        newTaskCronList[taskIndex][field] = value;
         setConfig({
             ...config,
             task_cron_list: newTaskCronList,
@@ -46,7 +46,14 @@ function TaskCron() {
                             <input
                                 type="text"
                                 className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                                placeholder={taskCron.task}
+                                placeholder="Task"
+                                value={taskCron.task}
+                                onChange={e => handleChange(taskIndex, 'task', e.target.value)}
+                            />
+                            <input
+                                type="text"
+                                className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                placeholder="Enabled"
                                 value={taskCron.enabled ? 'Enabled' : 'Disabled'}
                                 onChange={e => handleChange(taskIndex, 'enabled', e.target.value === 'Enabled')}
                             />
@@ -58,9 +65,16 @@ function TaskCron() {
                                     <input
                                         type="text"
                                         className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                                        placeholder={command.cmd}
+                                        placeholder="Command"
                                         value={command.cmd}
                                         onChange={e => handleCommandChange(taskIndex, commandIndex, 'cmd', e.target.value)}
+                                    />
+                                    <input
+                                        type="text"
+                                        className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                        placeholder="Args"
+                                        value={command.args.join(', ')}
+                                        onChange={e => handleCommandChange(taskIndex, commandIndex, 'args', e.target.value.split(', '))}
                                     />
                                 </div>
                             ))}
@@ -76,6 +90,7 @@ function TaskCron() {
         </div>
     );
 }
+
 
 export default TaskCron;
 
