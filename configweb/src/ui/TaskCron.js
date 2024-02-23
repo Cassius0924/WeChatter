@@ -1,9 +1,9 @@
-// TaskCronList.js
+// TaskCron.js
 import React, {useEffect} from 'react';
 import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
 
-function TaskCronList() {
+function TaskCron() {
     const [config, setConfig] = useFetchData('task-cron-list');
     const handleSave = useSaveConfig('task-cron-list', config);
     useEffect(() => {
@@ -67,7 +67,7 @@ function TaskCronList() {
     );
 }
 
-export default TaskCronList;
+export default TaskCron;
 
 
 // import React, {useEffect, useState} from 'react';
