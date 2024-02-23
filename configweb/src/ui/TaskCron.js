@@ -62,6 +62,7 @@ function TaskCron() {
                                     <h5 className="mb-2 text-sm leading-6 font-medium text-gray-900">
                                         Command {commandIndex + 1}
                                     </h5>
+                                    {/*cmd*/}
                                     <input
                                         type="text"
                                         className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
@@ -69,6 +70,7 @@ function TaskCron() {
                                         value={command.cmd}
                                         onChange={e => handleCommandChange(taskIndex, commandIndex, 'cmd', e.target.value)}
                                     />
+                                    {/*args*/}
                                     <input
                                         type="text"
                                         className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
@@ -76,6 +78,7 @@ function TaskCron() {
                                         value={(command.args || []).join(', ')}
                                         onChange={e => handleCommandChange(taskIndex, commandIndex, 'args', e.target.value.split(', '))}
                                     />
+                                    {/*to_person_list*/}
                                     <input
                                         type="text"
                                         className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
@@ -83,6 +86,13 @@ function TaskCron() {
                                         value={(command.to_person_list || []).join(', ')}
                                         onChange={e => handleCommandChange(taskIndex, commandIndex, 'to_person_list', e.target.value.split(', '))}
                                     />
+                                    {/*to_group_list*/}
+                                    <input
+                                        type="text"
+                                        className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                        placeholder="To Group List"
+                                        value={(command.to_group_list || []).join(', ')}
+                                        onChange={e => handleCommandChange(taskIndex, commandIndex, 'to_group_list', e.target.value.split(', '))}
                                 </div>
                             ))}
                         </div>
