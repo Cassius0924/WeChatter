@@ -12,13 +12,14 @@ function CustomCommandKey() {
     }, [config]);
 
     const commandKeyDict = config.custom_command_key_dict || {};
+    console.log(commandKeyDict);
 
     const handleChange = (key, value) => {
         setConfig({
             ...config,
             custom_command_key_dict: {
                 ...commandKeyDict,
-                [key]: value.split(',').map(item => item.trim()),
+                [key]: value.split(',').map(item => item.trim()),//这里作用：将字符串转换为数组
             },
         });
     };
