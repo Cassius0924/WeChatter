@@ -11,6 +11,7 @@ function useFetchData(path) {
     useEffect(() => {
         axios.get(`http://${BACKEND_URL}:${BACKEND_PORT}/${path}`)
             .then(res => {
+                console.log(res.data);
                 setData(res.data);
                 setIsLoading(false);
             })
