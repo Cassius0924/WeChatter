@@ -93,6 +93,7 @@ function TaskCron() {
                                         placeholder="To Group List"
                                         value={(command.to_group_list || []).join(', ')}
                                         onChange={e => handleCommandChange(taskIndex, commandIndex, 'to_group_list', e.target.value.split(', '))}
+                                    />
                                 </div>
                             ))}
                         </div>
