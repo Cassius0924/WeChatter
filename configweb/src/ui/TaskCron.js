@@ -4,8 +4,8 @@ import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
 
 function TaskCron() {
-    const [config, setConfig] = useFetchData('task-cron-list');
-    const handleSave = useSaveConfig('task-cron-list', config);
+    const [config, setConfig] = useFetchData('task-cron');
+    const handleSave = useSaveConfig('task-cron', config);
     useEffect(() => {
         console.log('config changed');
         console.log(config);
