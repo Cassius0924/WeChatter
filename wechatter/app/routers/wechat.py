@@ -39,7 +39,7 @@ async def recv_wechat_msg(
 
     # 判断是否是系统事件
     if is_system_event == "1":
-        logger.info(f"收到系统事件：{content}")
+        logger.warning(f"收到系统事件：{content}")
         handle_system_event(content)
         return
 

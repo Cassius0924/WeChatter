@@ -2,6 +2,7 @@ from typing import Dict, List
 
 from loguru import logger
 
+from wechatter.config.parsers import parse_message_forwarding_rule_list
 from wechatter.models.wechat import (
     GROUP_FORWARDING_MESSAGE_FORMAT,
     PERSON_FORWARDING_MESSAGE_FORMAT,
@@ -42,37 +43,10 @@ class MessageForwarder:
         初始化
         :param rule_list: 转发规则列表
         """
-        self.all_message_rule = {
-            "from_list_exclude": [],
-            "to_group_list": [],
-            "to_person_list": [],
-        }
-        self.specific_message_rules = {}
-
-        for rule in rule_list:
-            if "%ALL" in rule["from_list"]:
-                self.all_message_rule["from_list_exclude"].extend(
-                    rule.get("from_list_exclude", [])
-                )
-                self.all_message_rule["to_group_list"].extend(
-                    rule.get("to_group_list", [])
-                )
-                self.all_message_rule["to_person_list"].extend(
-                    rule.get("to_person_list", [])
-                )
-            else:
-                for from_name in rule["from_list"]:
-                    if from_name not in self.specific_message_rules:
-                        self.specific_message_rules[from_name] = {
-                            "to_group_list": [],
-                            "to_person_list": [],
-                        }
-                    self.specific_message_rules[from_name]["to_group_list"].extend(
-                        rule.get("to_group_list", [])
-                    )
-                    self.specific_message_rules[from_name]["to_person_list"].extend(
-                        rule.get("to_person_list", [])
-                    )
+        (
+            self.all_message_rule,
+            self.specific_message_rules,
+        ) = parse_message_forwarding_rule_list(rule_list)
 
     def forwarding(self, message_obj: Message):
         """
