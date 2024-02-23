@@ -96,9 +96,12 @@ class MessageHandler:
         :param message_obj: 消息对象
         """
 
-        if config["message_forwarding_enabled"]:
+        # 消息转发
+        if config["message_forwarding_enabled"] and not message_obj.is_official_account:
+            # 尝试进行消息转发
             message_forwarder.forwarding(message_obj)
 
+            # 尝试进行转发消息的回复
             if message_obj.forwarded_source:
                 message_forwarder.reply_forwarded_message(message_obj)
                 return
@@ -110,7 +113,6 @@ class MessageHandler:
         cmd_dict = self.__parse_command(
             content, message_obj.is_mentioned, message_obj.is_group
         )
-        logger.info(cmd_dict["desc"])
 
         # 是可引用的命令消息
         if message_obj.quotable_id:
@@ -126,6 +128,7 @@ class MessageHandler:
             logger.info("该消息不是命令类型")
             return
 
+        logger.info(cmd_dict["desc"])
         # TODO: 可以为不同的群设置是否need_mentioned
         if (
             config["need_mentioned"]

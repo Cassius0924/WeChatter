@@ -80,6 +80,9 @@ class Message(BaseModel):
             g = "male"
         elif gender == 0:
             g = "female"
+        # 判断 id 长度：个人用户为65位，公众号为33位（包括@符号）
+        # FIXME: 央视新闻公众号的id长度为65位
+        is_official_account = len(payload.get("id", "")) == 33
         _person = Person(
             id=payload.get("id", ""),
             name=payload.get("name", ""),
@@ -91,6 +94,7 @@ class Message(BaseModel):
             # phone_list=payload.get("phone", []),
             is_star=payload.get("star", ""),
             is_friend=payload.get("friend", ""),
+            is_official_account=is_official_account,
         )
 
         _group = None
@@ -209,6 +213,15 @@ class Message(BaseModel):
                 return None
         else:
             return None
+
+    @computed_field
+    @cached_property
+    def is_official_account(self) -> bool:
+        """
+        是否是公众号消息
+        :return: 是否是公众号消息
+        """
+        return self.person.is_official_account
 
     def __str__(self) -> str:
         source = self.person
