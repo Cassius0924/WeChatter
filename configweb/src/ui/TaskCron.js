@@ -73,7 +73,7 @@ function TaskCron() {
                                         type="text"
                                         className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                                         placeholder="Args"
-                                        value={command.args.join(', ')}
+                                        value={(command.args || []).join(', ')}
                                         onChange={e => handleCommandChange(taskIndex, commandIndex, 'args', e.target.value.split(', '))}
                                     />
                                 </div>
@@ -83,7 +83,7 @@ function TaskCron() {
                     <button
                         onClick={handleSave}
                         className="mt-4 px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md">
-                        保存
+                    保存
                     </button>
                 </div>
             </div>
