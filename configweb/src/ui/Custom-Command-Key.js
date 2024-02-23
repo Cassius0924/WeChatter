@@ -19,7 +19,7 @@ function CustomCommandKey() {
             ...config,
             custom_command_key_dict: {
                 ...commandKeyDict,
-                [key]: value.split(',').map(item => item.trim()),//这里作用：将字符串转换为数组
+                [key]: value.split(',').map(item => item.trim()),
             },
         });
     };
