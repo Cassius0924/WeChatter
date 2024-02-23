@@ -22,6 +22,15 @@ function TaskCron() {
         });
     };
 
+    const handleCommandChange = (taskIndex, commandIndex, field, value) => {
+        const newTaskCronList = [...taskCronList];
+        newTaskCronList[taskIndex].commands[commandIndex][field] = value;
+        setConfig({
+            ...config,
+            task_cron_list: newTaskCronList,
+        });
+    };
+
     return (
         <div className="border-4 border-dashed border-gray-200 rounded-lg mb-6">
             <div className="flex flex-col items-center justify-center h-full">
@@ -29,8 +38,8 @@ function TaskCron() {
                     <h3 className="mb-4 text-lg leading-6 font-medium text-gray-900">
                         任务计划列表
                     </h3>
-                    {taskCronList.map((taskCron, index) => (
-                        <div key={index}>
+                    {taskCronList.map((taskCron, taskIndex) => (
+                        <div key={taskIndex}>
                             <h4 className="mb-2 text-md leading-6 font-medium text-gray-900">
                                 {taskCron.task}
                             </h4>
@@ -39,8 +48,22 @@ function TaskCron() {
                                 className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                                 placeholder={taskCron.task}
                                 value={taskCron.enabled ? 'Enabled' : 'Disabled'}
-                                onChange={e => handleChange(index, 'enabled', e.target.value === 'Enabled')}
+                                onChange={e => handleChange(taskIndex, 'enabled', e.target.value === 'Enabled')}
                             />
+                            {taskCron.commands.map((command, commandIndex) => (
+                                <div key={commandIndex}>
+                                    <h5 className="mb-2 text-sm leading-6 font-medium text-gray-900">
+                                        Command {commandIndex + 1}
+                                    </h5>
+                                    <input
+                                        type="text"
+                                        className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                        placeholder={command.cmd}
+                                        value={command.cmd}
+                                        onChange={e => handleCommandChange(taskIndex, commandIndex, 'cmd', e.target.value)}
+                                    />
+                                </div>
+                            ))}
                         </div>
                     ))}
                     <button
