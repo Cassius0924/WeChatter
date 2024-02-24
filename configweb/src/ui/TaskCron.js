@@ -104,13 +104,13 @@ function TaskCron() {
                                     className="mt-4 px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-md">
                                     添加任务
                                 </button>
+                                <button
+                                    onClick={() => handleDeleteCron(taskIndex)}
+                                    className="mt-4 px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-md">
+                                    删除任务
+                                </button>
                                 <h4 className="mb-2 text-md leading-6 font-medium text-gray-900">
                                     Task {taskIndex + 1}
-                                    <button
-                                        onClick={() => handleDeleteCron(taskIndex)}
-                                        className="mt-4 px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-md">
-                                        删除任务
-                                    </button>
                                 </h4>
                                 <input
                                     type="text"
@@ -209,17 +209,17 @@ function TaskCron() {
                                             onChange={e => handleCommandChange(taskIndex, commandIndex, 'to_group_list', e.target.value.split(', '))}
                                         />
                                         <button
+                                            onClick={() => handleAddCommand(taskIndex)}
+                                            className="mt-4 px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-md">
+                                            添加命令
+                                        </button>
+                                        <button
                                             onClick={() => handleDeleteCommand(taskIndex, commandIndex)}
                                             className="mt-4 px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-md">
                                             删除命令
                                         </button>
                                     </div>
                                 ))}
-                                <button
-                                    onClick={() => handleAddCommand(taskIndex)}
-                                    className="mt-4 px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-md">
-                                    添加命令
-                                </button>
                             </div>
                         ))}
                         <button
