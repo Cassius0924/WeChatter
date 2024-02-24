@@ -223,13 +223,29 @@ function TaskCron() {
                                 <button
                                     onClick={handleSave}
                                     className="mt-4 px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md">
-                                保存
+                                    保存
                                 </button>
                             </div>
                         ))}
+
                     </div>
+                    <button
+                        onClick={handleSave}
+                        className="mt-4 px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md">
+                        保存
+                    </button>
                 </div>
+                <button
+                    onClick={handleSave}
+                    className="mt-4 px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md">
+                    保存
+                </button>
             </div>
+            <button
+                onClick={handleSave}
+                className="mt-4 px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md">
+                保存
+            </button>
         </div>
     );
 }
