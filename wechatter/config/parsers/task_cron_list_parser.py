@@ -87,7 +87,7 @@ def parse_task_cron_list(task_cron_list: List) -> List:
                     logger.error(f"[{desc}] 任务的命令不存在: {cmd}")
                     raise ValueError(f"[{desc}] 任务的命令不存在: {cmd}")
 
-                def _func(
+                def func(
                     _cmd: str,
                     _to_person_list: List,
                     _to_group_list: List,
@@ -115,7 +115,7 @@ def parse_task_cron_list(task_cron_list: List) -> List:
                         quoted_response = None
                     # 判断一下是发送文本消息还是文件
                     type = "text"
-                    if cmd in SEND_FILE_COMMANDS:
+                    if _cmd in SEND_FILE_COMMANDS:
                         type = "localfile"
                     # 发送消息
                     if _to_person_list:
@@ -140,7 +140,7 @@ def parse_task_cron_list(task_cron_list: List) -> List:
                             os.remove(message)
                     logger.info(f"[{_desc}] 任务的命令执行成功: {_cmd}")
 
-                funcs.append((_func, (cmd, to_person_list, to_group_list, desc, *args)))
+                funcs.append((func, (cmd, to_person_list, to_group_list, desc, *args)))
         except KeyError as e:
             if task_cron.get("task"):
                 logger.error(f"[{task_cron['task']}] 定时任务规则缺少 {e.args[0]} 字段")
