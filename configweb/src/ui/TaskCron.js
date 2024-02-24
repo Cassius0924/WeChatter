@@ -218,8 +218,18 @@ function TaskCron() {
                                             className="mt-4 px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-md">
                                             删除命令
                                         </button>
+                                        <button
+                                            onClick={handleSave}
+                                            className="mt-4 px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md">
+                                            保存
+                                        </button>
                                     </div>
                                 ))}
+                                <button
+                                    onClick={handleSave}
+                                    className="mt-4 px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md">
+                                保存
+                                </button>
                             </div>
                         ))}
                         <button
