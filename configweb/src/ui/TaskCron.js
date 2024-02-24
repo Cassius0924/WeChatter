@@ -78,6 +78,17 @@ function TaskCron() {
         });
     };
 
+    // 在TaskCron组件中添加handleDeleteCron事件处理器
+    const handleDeleteCron = (taskIndex) => {
+            const newTaskCronList = [...taskCronList];
+            newTaskCronList.splice(taskIndex, 1);
+            setConfig({
+                ...config,
+                task_cron_list: newTaskCronList,
+            });
+        };
+
+
     return (
         <div className="border-4 border-dashed border-gray-200 rounded-lg mb-6">
             <div className="flex flex-col items-center justify-center h-full">
@@ -85,12 +96,18 @@ function TaskCron() {
                     <h3 className="mb-4 text-lg leading-6 font-medium text-gray-900">
                         任务计划列表
                     </h3>
+
                     {taskCronList.map((taskCron, taskIndex) => (
                         <div key={taskIndex}>
+                            <button
+                                onClick={handleAddCron}
+                                className="mt-4 px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-md">
+                                添加任务
+                            </button>
                             <h4 className="mb-2 text-md leading-6 font-medium text-gray-900">
                                 Task {taskIndex + 1}
                                 <button
-                                    onClick={() => handleDeleteCommand(taskIndex)}
+                                    onClick={() => handleDeleteCron(taskIndex)}
                                     className="mt-4 px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-md">
                                     删除任务
                                 </button>
@@ -117,28 +134,40 @@ function TaskCron() {
                                     className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                                     placeholder="Hour"
                                     value={taskCron.cron.hour}
-                                    onChange={e => handleChange(taskIndex, 'cron', {...taskCron.cron, hour: e.target.value})}
+                                    onChange={e => handleChange(taskIndex, 'cron', {
+                                        ...taskCron.cron,
+                                        hour: e.target.value
+                                    })}
                                 />
                                 <input
                                     type="text"
                                     className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                                     placeholder="Minute"
                                     value={taskCron.cron.minute}
-                                    onChange={e => handleChange(taskIndex, 'cron', {...taskCron.cron, minute: e.target.value})}
+                                    onChange={e => handleChange(taskIndex, 'cron', {
+                                        ...taskCron.cron,
+                                        minute: e.target.value
+                                    })}
                                 />
                                 <input
                                     type="text"
                                     className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                                     placeholder="Second"
                                     value={taskCron.cron.second}
-                                    onChange={e => handleChange(taskIndex, 'cron', {...taskCron.cron, second: e.target.value})}
+                                    onChange={e => handleChange(taskIndex, 'cron', {
+                                        ...taskCron.cron,
+                                        second: e.target.value
+                                    })}
                                 />
                                 <input
                                     type="text"
                                     className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                                     placeholder="Timezone"
                                     value={taskCron.cron.timezone}
-                                    onChange={e => handleChange(taskIndex, 'cron', {...taskCron.cron, timezone: e.target.value})}
+                                    onChange={e => handleChange(taskIndex, 'cron', {
+                                        ...taskCron.cron,
+                                        timezone: e.target.value
+                                    })}
                                 />
                             </div>
 
@@ -196,7 +225,7 @@ function TaskCron() {
                     <button
                         onClick={handleSave}
                         className="mt-4 px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md">
-                    保存
+                        保存
                     </button>
                 </div>
             </div>
