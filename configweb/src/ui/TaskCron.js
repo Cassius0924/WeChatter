@@ -57,27 +57,6 @@ function TaskCron() {
         });
     };
 
-    // 在TaskCron组件中添加handleAddCron事件处理器
-    const handleAddCron = () => {
-        const newTaskCronList = [...taskCronList];
-        const newCron = {
-            task: '新任务',
-            enabled: true,
-            cron: {
-                hour: '*',
-                minute: '*',
-                second: '*/8',
-                timezone: 'Asia/Shanghai',
-            },
-            commands: [],
-        };
-        newTaskCronList.push(newCron);
-        setConfig({
-            ...config,
-            task_cron_list: newTaskCronList,
-        });
-    };
-
     return (
         <div className="border-4 border-dashed border-gray-200 rounded-lg mb-6">
             <div className="flex flex-col items-center justify-center h-full">
