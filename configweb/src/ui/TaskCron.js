@@ -69,7 +69,14 @@ function TaskCron() {
                 second: '*/8',
                 timezone: 'Asia/Shanghai',
             },
-            commands: [],
+            commands: [
+                {
+                    cmd: [],
+                    args: [],
+                    to_person_list: [],
+                    to_group_list: [],
+                }
+            ],
         };
         newTaskCronList.push(newCron);
         setConfig({
