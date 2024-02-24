@@ -178,6 +178,16 @@ function TaskCron() {
 
                                 {taskCron.commands.map((command, commandIndex) => (
                                     <div key={commandIndex}>
+                                        <button
+                                            onClick={() => handleAddCommand(taskIndex)}
+                                            className="mt-4 px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-md">
+                                            添加命令
+                                        </button>
+                                        <button
+                                            onClick={() => handleDeleteCommand(taskIndex, commandIndex)}
+                                            className="mt-4 px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-md">
+                                            删除命令
+                                        </button>
                                         <h5 className="mb-2 text-sm leading-6 font-medium text-gray-900">
                                             Command {commandIndex + 1}
                                         </h5>
@@ -213,27 +223,27 @@ function TaskCron() {
                                             value={(command.to_group_list || []).join(', ')}
                                             onChange={e => handleCommandChange(taskIndex, commandIndex, 'to_group_list', e.target.value.split(', '))}
                                         />
-                                        <button
-                                            onClick={() => handleAddCommand(taskIndex)}
-                                            className="mt-4 px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-md">
-                                            添加命令
-                                        </button>
-                                        <button
-                                            onClick={() => handleDeleteCommand(taskIndex, commandIndex)}
-                                            className="mt-4 px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-md">
-                                            删除命令
-                                        </button>
+                                        {/*<button*/}
+                                        {/*    onClick={() => handleAddCommand(taskIndex)}*/}
+                                        {/*    className="mt-4 px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-md">*/}
+                                        {/*    添加命令*/}
+                                        {/*</button>*/}
+                                        {/*<button*/}
+                                        {/*    onClick={() => handleDeleteCommand(taskIndex, commandIndex)}*/}
+                                        {/*    className="mt-4 px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-md">*/}
+                                        {/*    删除命令*/}
+                                        {/*</button>*/}
                                     </div>
                                 ))}
                             </div>
                         ))}
 
                     </div>
-                    <button
-                        onClick={handleSave}
-                        className="mt-4 px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md">
-                        保存
-                    </button>
+                    {/*<button*/}
+                    {/*    onClick={handleSave}*/}
+                    {/*    className="mt-4 px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md">*/}
+                    {/*    保存*/}
+                    {/*</button>*/}
                 </div>
             </div>
         </div>
