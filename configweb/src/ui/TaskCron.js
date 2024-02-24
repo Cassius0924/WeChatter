@@ -51,12 +51,12 @@ function TaskCron() {
                                 onChange={e => handleChange(taskIndex, 'task', e.target.value)}
                             />
                             <input
-                                type="text"
-                                className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                                placeholder="Enabled"
-                                value={taskCron.enabled ? 'Enabled' : 'Disabled'}
-                                onChange={e => handleChange(taskIndex, 'enabled', e.target.value === 'Enabled')}
+                                type="checkbox"
+                                className="form-checkbox mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                checked={taskCron.enabled}
+                                onChange={e => handleChange(taskIndex, 'enabled', e.target.checked)}
                             />
+
                             {taskCron.commands.map((command, commandIndex) => (
                                 <div key={commandIndex}>
                                     <h5 className="mb-2 text-sm leading-6 font-medium text-gray-900">
