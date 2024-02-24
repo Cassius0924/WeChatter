@@ -1,4 +1,4 @@
-from typing import Callable, List
+from typing import Callable, List, Tuple
 
 from apscheduler.triggers.cron import CronTrigger
 from pydantic import BaseModel, ConfigDict
@@ -10,4 +10,4 @@ class CronTask(BaseModel):
     enabled: bool
     desc: str
     cron_trigger: CronTrigger
-    funcs: List[Callable]
+    funcs: List[Tuple[Callable, Tuple]]

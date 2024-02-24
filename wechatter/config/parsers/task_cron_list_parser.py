@@ -87,22 +87,22 @@ def parse_task_cron_list(task_cron_list: List) -> List:
                     logger.error(f"[{desc}] 任务的命令不存在: {cmd}")
                     raise ValueError(f"[{desc}] 任务的命令不存在: {cmd}")
 
-                def _func():
+                def _func(_cmd: str, *_args):
                     # 如果命令支持引用回复
-                    if COMMANDS[cmd]["is_quotable"]:
+                    if COMMANDS[_cmd]["is_quotable"]:
                         try:
-                            message, q_response = COMMANDS[cmd]["mainfunc"](*args)
+                            message, q_response = COMMANDS[_cmd]["mainfunc"](*_args)
                         except TypeError as e:
                             # 如果用户配置的参数不正确
                             logger.error(f"[{desc}] 任务的命令参数不正确: {str(e)}")
                             raise TypeError(f"[{desc}] 任务的命令参数不正确: {str(e)}")
                         quoted_response = QuotedResponse(
-                            command=cmd,
+                            command=_cmd,
                             response=q_response,
                         )
                     else:  # 不支持引用回复的命令
                         try:
-                            message = COMMANDS[cmd]["mainfunc"](*args)
+                            message = COMMANDS[_cmd]["mainfunc"](*_args)
                         except TypeError as e:
                             logger.error(f"[{desc}] 任务的命令参数不正确: {str(e)}")
                             raise TypeError(f"[{desc}] 任务的命令参数不正确: {str(e)}")
@@ -129,12 +129,12 @@ def parse_task_cron_list(task_cron_list: List) -> List:
                             quoted_response=quoted_response,
                         )
                     # 删除发送的文件
-                    if cmd in SEND_FILE_COMMANDS:
+                    if _cmd in SEND_FILE_COMMANDS:
                         if os.path.exists(message):
                             os.remove(message)
-                    logger.info(f"[{desc}] 任务的命令执行成功: {cmd}")
+                    logger.info(f"[{desc}] 任务的命令执行成功: {_cmd}")
 
-                funcs.append(_func)
+                funcs.append((_func, (cmd, *args)))
         except KeyError as e:
             if task_cron.get("task"):
                 logger.error(f"[{task_cron['task']}] 定时任务规则缺少 {e.args[0]} 字段")

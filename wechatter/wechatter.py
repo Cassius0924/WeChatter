@@ -30,7 +30,7 @@ def main():
 
     # 启动uvicorn
     port = config["wechatter_port"]
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=port)  # nosec
 
 
 if __name__ == "__main__":

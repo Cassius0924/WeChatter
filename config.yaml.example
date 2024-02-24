@@ -30,11 +30,15 @@ github_webhook_receive_person_list: [ ]
 github_webhook_receive_group_list: [ ]
 
 # Message Forwarding：消息转发
-message_forwarding_enabled: True
+message_forwarding_enabled: False
 message_forwarding_rule_list:
-  - from_list: [ "缘" ]
-    to_person_list: [ ]
-    to_group_list: [ "WeChatter" ]
+  - from_list: [ "%ALL" ]
+    from_list_exclude: [ "You" ]
+    to_person_list: [ "You" ]
+    to_group_list: [ ]
+  - from_list: [ "Jay", "Tom" ]
+    to_person_list: [ "Cassius" ]
+    to_group_list: [ "Team" ]
 
 # Task Cron：定时任务
 # 配置说明：https://github.com/Cassius0924/WeChatter/blob/master/docs/task_cron_config_detail.md

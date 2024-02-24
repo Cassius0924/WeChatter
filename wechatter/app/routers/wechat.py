@@ -13,7 +13,7 @@ from wechatter.database import (
     Person as DbPerson,
     make_db_session,
 )
-from wechatter.message import MessageForwarder, MessageHandler
+from wechatter.message import MessageHandler
 from wechatter.models.wechat import Message
 from wechatter.models.wechat.group import Group
 from wechatter.models.wechat.person import Person
@@ -66,11 +66,6 @@ async def recv_wechat_msg(
 
     # DEBUG
     print(str(message))
-
-    if config["message_forwarding_enabled"]:
-        MessageForwarder(config["message_forwarding_rule_list"]).forward_message(
-            message
-        )
 
     # 传入命令字典，构造消息处理器
     message_handler = MessageHandler(commands=commands, quoted_handlers=quoted_handlers)

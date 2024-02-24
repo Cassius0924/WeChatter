@@ -20,8 +20,8 @@ class Scheduler:
             return
         for cron_task in self.cron_task_list:
             if cron_task.enabled:
-                for func in cron_task.funcs:
-                    self.scheduler.add_job(func, cron_task.cron_trigger)
+                for func, args in cron_task.funcs:
+                    self.scheduler.add_job(func, cron_task.cron_trigger, args=args)
                 logger.info(f"定时任务已添加: {cron_task.desc}")
         self.scheduler.start()
         logger.info("定时任务已启动")

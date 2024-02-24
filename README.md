@@ -11,9 +11,10 @@
 
 ## 介绍
 
-基于 [wechatbot-webhook](https://github.com/danni-cool/wechatbot-webhook) 的微信机器人💬，支持 GPT 问答、热搜、天气预报、消息转发、Webhook提醒等功能。
+一个基于 [wechatbot-webhook](https://github.com/danni-cool/wechatbot-webhook) 的微信机器人💬，支持 GPT 问答、热搜推送、天气预报、消息转发、Webhook提醒等功能。
 
 [![wechatter show](docs/images/wechatter_show.png)](docs/command_show.md)
+
 
 ## 快速开始
 
@@ -106,13 +107,15 @@ python3 -m wechatter
 
 ## 支持的功能
 
-- [x] 消息转发，需[自行配置](#%EF%B8%8F-message-forwarding-配置)。
-- [x] 定时任务推送，大部分命令均支持定时任务。需[自行配置](#%EF%B8%8F-task-cron-配置)。
-- [x] 消息可引用回复，用户可以通过引用并回复命令消息进一步获取消息内容。带“（可引用：***）”的机器人消息均为可进一步互动的可引用消息。
+- [x] **消息可引用回复**： 用户可以通过引用并回复命令消息进一步获取消息内容。带`（可引用：***）`的机器人消息即为可进一步互动的可引用消息。
+- [x] **消息转发**： 转发用户或群的消息到其他用户或群，并支持引用回复转发消息。需进行[配置](#%EF%B8%8F-message-forwarding-配置)。
+<img src="docs/images/message_forwarding_and_quoted_reply.png">
+
+- [x] **定时任务**：大部分命令均支持定时任务。需进行[配置](#%EF%B8%8F-task-cron-配置)。
 
 ## 支持的 Webhook
 
-- [x] GitHub 仓库 Webhook，需在 GitHub 仓库 Settings 中添加 Webhook 并[配置](#%EF%B8%8F-github-webhook-配置)。
+- [x] GitHub 仓库 Webhook，需在 GitHub 仓库 Settings 中添加 Webhook 并进行[配置](#%EF%B8%8F-github-webhook-配置)。
 
 ## 配置文件
 
@@ -175,7 +178,8 @@ python3 -m wechatter
 | --- | --- |  --- | --- |
 | `message_forwarding_enabled` | | 功能开关，是否开启消息转发 | 默认为 `False` |
 | `message_forwarding_rule_list` | | 消息规则列表，每个规则包含三个字段：`from_list`、`to_person_list` 和 `to_group_list` |  |
-| | `from_list` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称 |
+| | `from_list` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称，若要转发所有消息则使用 `["%ALL"]` |
+| | `from_list_exclude` | 消息转发来源排除列表，不转发此列表的用户和群 | 只在 `from_list` 为 `["%ALL"]` 时生效 |
 | | `to_person_list` | 消息转发目标用户列表，即消息接收用户 | 可以填多个用户名称或为空列表 |
 | | `to_group_list` | 消息转发目标群列表，即消息接收群 | 可以填多个群名称或为空列表 |
 
@@ -186,7 +190,6 @@ python3 -m wechatter
 | `all_task_cron_enabled` | 所有定时任务的总开关 | 默认为 `True` |
 | `task_cron_list` | 定时任务列表，每个任务包含四个字段：`task`、`enabled`、`cron` 和 `commands` | |
 
-[//]: # (引导用户查看定时任务配置详细docs/task_cron_config_detail)
 关于定时任务配置详细请参阅[定时任务配置详细](docs/task_cron_config_detail.md)。
 
 ### ⚙️ Custom Command Key 配置

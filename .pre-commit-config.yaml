@@ -12,4 +12,9 @@ repos:
   hooks:
     - id: isort
       name: isort (python)
+- repo: https://github.com/PyCQA/bandit
+  rev: 1.7.7
+  hooks:
+  - id: bandit
+    args: ['-c', 'pyproject.toml']
 
