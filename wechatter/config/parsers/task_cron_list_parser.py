@@ -87,15 +87,21 @@ def parse_task_cron_list(task_cron_list: List) -> List:
                     logger.error(f"[{desc}] 任务的命令不存在: {cmd}")
                     raise ValueError(f"[{desc}] 任务的命令不存在: {cmd}")
 
-                def _func(_cmd: str, *_args):
+                def _func(
+                    _cmd: str,
+                    _to_person_list: List,
+                    _to_group_list: List,
+                    _desc: str,
+                    *_args,
+                ):
                     # 如果命令支持引用回复
                     if COMMANDS[_cmd]["is_quotable"]:
                         try:
                             message, q_response = COMMANDS[_cmd]["mainfunc"](*_args)
                         except TypeError as e:
                             # 如果用户配置的参数不正确
-                            logger.error(f"[{desc}] 任务的命令参数不正确: {str(e)}")
-                            raise TypeError(f"[{desc}] 任务的命令参数不正确: {str(e)}")
+                            logger.error(f"[{_desc}] 任务的命令参数不正确: {str(e)}")
+                            raise TypeError(f"[{_desc}] 任务的命令参数不正确: {str(e)}")
                         quoted_response = QuotedResponse(
                             command=_cmd,
                             response=q_response,
@@ -104,25 +110,25 @@ def parse_task_cron_list(task_cron_list: List) -> List:
                         try:
                             message = COMMANDS[_cmd]["mainfunc"](*_args)
                         except TypeError as e:
-                            logger.error(f"[{desc}] 任务的命令参数不正确: {str(e)}")
-                            raise TypeError(f"[{desc}] 任务的命令参数不正确: {str(e)}")
+                            logger.error(f"[{_desc}] 任务的命令参数不正确: {str(e)}")
+                            raise TypeError(f"[{_desc}] 任务的命令参数不正确: {str(e)}")
                         quoted_response = None
                     # 判断一下是发送文本消息还是文件
                     type = "text"
                     if cmd in SEND_FILE_COMMANDS:
                         type = "localfile"
                     # 发送消息
-                    if to_person_list:
+                    if _to_person_list:
                         sender.mass_send_msg(
-                            to_person_list,
+                            _to_person_list,
                             message,
                             is_group=False,
                             type=type,
                             quoted_response=quoted_response,
                         )
-                    if to_group_list:
+                    if _to_group_list:
                         sender.mass_send_msg(
-                            to_group_list,
+                            _to_group_list,
                             message,
                             is_group=True,
                             type=type,
@@ -132,9 +138,9 @@ def parse_task_cron_list(task_cron_list: List) -> List:
                     if _cmd in SEND_FILE_COMMANDS:
                         if os.path.exists(message):
                             os.remove(message)
-                    logger.info(f"[{desc}] 任务的命令执行成功: {_cmd}")
+                    logger.info(f"[{_desc}] 任务的命令执行成功: {_cmd}")
 
-                funcs.append((_func, (cmd, *args)))
+                funcs.append((_func, (cmd, to_person_list, to_group_list, desc, *args)))
         except KeyError as e:
             if task_cron.get("task"):
                 logger.error(f"[{task_cron['task']}] 定时任务规则缺少 {e.args[0]} 字段")
