@@ -31,6 +31,22 @@ function TaskCron() {
         });
     };
 
+    // 在TaskCron组件中添加handleAddCommand事件处理器
+    const handleAddCommand = (taskIndex) => {
+        const newTaskCronList = [...taskCronList];
+        const newCommand = {
+            cmd: '',
+            args: [],
+            to_person_list: [],
+            to_group_list: [],
+        };
+        newTaskCronList[taskIndex].commands.push(newCommand);
+        setConfig({
+            ...config,
+            task_cron_list: newTaskCronList,
+        });
+    };
+
     return (
         <div className="border-4 border-dashed border-gray-200 rounded-lg mb-6">
             <div className="flex flex-col items-center justify-center h-full">
@@ -96,6 +112,11 @@ function TaskCron() {
                                     />
                                 </div>
                             ))}
+                            <button
+                                onClick={() => handleAddCommand(taskIndex)}
+                                className="mt-4 px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-md">
+                                添加命令
+                            </button>
                         </div>
                     ))}
                     <button
