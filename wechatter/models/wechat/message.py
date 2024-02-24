@@ -11,6 +11,7 @@ from wechatter.bot import BotInfo
 from wechatter.models.wechat.group import Group
 from wechatter.models.wechat.person import Person
 from wechatter.models.wechat.quoted_response import QUOTABLE_FORMAT
+from wechatter.models.wechat.url_link import UrlLink
 
 PERSON_FORWARDING_MESSAGE_FORMAT = "⤴️ [%s] 说：\n" "-------------------------\n"
 GROUP_FORWARDING_MESSAGE_FORMAT = "⤴️ [%s] 在 [%s] 说：\n" "-------------------------\n"
@@ -222,6 +223,22 @@ class Message(BaseModel):
         :return: 是否是公众号消息
         """
         return self.person.is_official_account
+
+    @computed_field
+    @cached_property
+    def urllink(self) -> Optional[UrlLink]:
+        """
+        当消息类型为urlLink时，返回url link的解析结果
+        """
+        if self.type == MessageType.urlLink:
+            url_link_json = json.loads(self.content)
+            return UrlLink(
+                title=url_link_json.get("title"),
+                desc=url_link_json.get("description"),
+                url=url_link_json.get("url"),
+                cover_url=url_link_json.get("thumbnailUrl"),
+            )
+        return None
 
     def __str__(self) -> str:
         source = self.person

@@ -74,7 +74,13 @@ def _get_quoted_response(quotable_id: str) -> QuotedResponse:
     return quoted_response
 
 
-message_forwarder = MessageForwarder(config["message_forwarding_rule_list"])
+message_forwarder = MessageForwarder(
+    config["message_forwarding_rule_list"],
+    config["official_account_reminder_rule_list"],
+)
+message_forwarder.official_account_reminder_type = config[
+    "official_account_reminder_type"
+]
 
 
 class MessageHandler:
@@ -95,12 +101,16 @@ class MessageHandler:
         处理消息
         :param message_obj: 消息对象
         """
+        # 公众号文章提醒
+        if message_obj.is_official_account and message_obj.type.value == "urlLink":
+            # 尝试提醒
+            message_forwarder.remind_official_account_article(message_obj)
+            return
 
         # 消息转发
         if config["message_forwarding_enabled"] and not message_obj.is_official_account:
             # 尝试进行消息转发
             message_forwarder.forwarding(message_obj)
-
             # 尝试进行转发消息的回复
             if message_obj.forwarded_source:
                 message_forwarder.reply_forwarded_message(message_obj)
