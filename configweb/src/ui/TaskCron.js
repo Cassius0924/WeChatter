@@ -35,7 +35,7 @@ function TaskCron() {
     const handleAddCommand = (taskIndex) => {
         const newTaskCronList = [...taskCronList];
         const newCommand = {
-            cmd: '',
+            cmd: [],
             args: [],
             to_person_list: [],
             to_group_list: [],
