@@ -80,13 +80,13 @@ function TaskCron() {
 
     // 在TaskCron组件中添加handleDeleteCron事件处理器
     const handleDeleteCron = (taskIndex) => {
-            const newTaskCronList = [...taskCronList];
-            newTaskCronList.splice(taskIndex, 1);
-            setConfig({
-                ...config,
-                task_cron_list: newTaskCronList,
-            });
-        };
+        const newTaskCronList = [...taskCronList];
+        newTaskCronList.splice(taskIndex, 1);
+        setConfig({
+            ...config,
+            task_cron_list: newTaskCronList,
+        });
+    };
 
 
     return (
@@ -96,137 +96,138 @@ function TaskCron() {
                     <h3 className="mb-4 text-lg leading-6 font-medium text-gray-900">
                         任务计划列表
                     </h3>
-
-                    {taskCronList.map((taskCron, taskIndex) => (
-                        <div key={taskIndex}>
-                            <button
-                                onClick={handleAddCron}
-                                className="mt-4 px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-md">
-                                添加任务
-                            </button>
-                            <h4 className="mb-2 text-md leading-6 font-medium text-gray-900">
-                                Task {taskIndex + 1}
+                    <div className="flex justify-center flex-wrap">
+                        {taskCronList.map((taskCron, taskIndex) => (
+                            <div key={taskIndex} className="m-4">
                                 <button
-                                    onClick={() => handleDeleteCron(taskIndex)}
-                                    className="mt-4 px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-md">
-                                    删除任务
+                                    onClick={handleAddCron}
+                                    className="mt-4 px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-md">
+                                    添加任务
                                 </button>
-                            </h4>
-                            <input
-                                type="text"
-                                className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                                placeholder="Task"
-                                value={taskCron.task}
-                                onChange={e => handleChange(taskIndex, 'task', e.target.value)}
-                            />
-                            <input
-                                type="checkbox"
-                                className="form-checkbox mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                                checked={taskCron.enabled}
-                                onChange={e => handleChange(taskIndex, 'enabled', e.target.checked)}
-                            />
-                            <div>
-                                <h5 className="mb-2 text-sm leading-6 font-medium text-gray-900">
-                                    Cron Fields
-                                </h5>
-                                <input
-                                    type="text"
-                                    className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                                    placeholder="Hour"
-                                    value={taskCron.cron.hour}
-                                    onChange={e => handleChange(taskIndex, 'cron', {
-                                        ...taskCron.cron,
-                                        hour: e.target.value
-                                    })}
-                                />
-                                <input
-                                    type="text"
-                                    className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                                    placeholder="Minute"
-                                    value={taskCron.cron.minute}
-                                    onChange={e => handleChange(taskIndex, 'cron', {
-                                        ...taskCron.cron,
-                                        minute: e.target.value
-                                    })}
-                                />
-                                <input
-                                    type="text"
-                                    className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                                    placeholder="Second"
-                                    value={taskCron.cron.second}
-                                    onChange={e => handleChange(taskIndex, 'cron', {
-                                        ...taskCron.cron,
-                                        second: e.target.value
-                                    })}
-                                />
-                                <input
-                                    type="text"
-                                    className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                                    placeholder="Timezone"
-                                    value={taskCron.cron.timezone}
-                                    onChange={e => handleChange(taskIndex, 'cron', {
-                                        ...taskCron.cron,
-                                        timezone: e.target.value
-                                    })}
-                                />
-                            </div>
-
-                            {taskCron.commands.map((command, commandIndex) => (
-                                <div key={commandIndex}>
-                                    <h5 className="mb-2 text-sm leading-6 font-medium text-gray-900">
-                                        Command {commandIndex + 1}
-                                    </h5>
-                                    {/*cmd*/}
-                                    <input
-                                        type="text"
-                                        className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                                        placeholder="Command"
-                                        value={command.cmd}
-                                        onChange={e => handleCommandChange(taskIndex, commandIndex, 'cmd', e.target.value)}
-                                    />
-                                    {/*args*/}
-                                    <input
-                                        type="text"
-                                        className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                                        placeholder="Args"
-                                        value={(command.args || []).join(', ')}
-                                        onChange={e => handleCommandChange(taskIndex, commandIndex, 'args', e.target.value.split(', '))}
-                                    />
-                                    {/*to_person_list*/}
-                                    <input
-                                        type="text"
-                                        className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                                        placeholder="To Person List"
-                                        value={(command.to_person_list || []).join(', ')}
-                                        onChange={e => handleCommandChange(taskIndex, commandIndex, 'to_person_list', e.target.value.split(', '))}
-                                    />
-                                    {/*to_group_list*/}
-                                    <input
-                                        type="text"
-                                        className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                                        placeholder="To Group List"
-                                        value={(command.to_group_list || []).join(', ')}
-                                        onChange={e => handleCommandChange(taskIndex, commandIndex, 'to_group_list', e.target.value.split(', '))}
-                                    />
+                                <h4 className="mb-2 text-md leading-6 font-medium text-gray-900">
+                                    Task {taskIndex + 1}
                                     <button
-                                        onClick={() => handleDeleteCommand(taskIndex, commandIndex)}
+                                        onClick={() => handleDeleteCron(taskIndex)}
                                         className="mt-4 px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-md">
-                                        删除命令
+                                        删除任务
                                     </button>
+                                </h4>
+                                <input
+                                    type="text"
+                                    className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                    placeholder="Task"
+                                    value={taskCron.task}
+                                    onChange={e => handleChange(taskIndex, 'task', e.target.value)}
+                                />
+                                <input
+                                    type="checkbox"
+                                    className="form-checkbox mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                    checked={taskCron.enabled}
+                                    onChange={e => handleChange(taskIndex, 'enabled', e.target.checked)}
+                                />
+                                <div>
+                                    <h5 className="mb-2 text-sm leading-6 font-medium text-gray-900">
+                                        Cron Fields
+                                    </h5>
+                                    <input
+                                        type="text"
+                                        className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                        placeholder="Hour"
+                                        value={taskCron.cron.hour}
+                                        onChange={e => handleChange(taskIndex, 'cron', {
+                                            ...taskCron.cron,
+                                            hour: e.target.value
+                                        })}
+                                    />
+                                    <input
+                                        type="text"
+                                        className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                        placeholder="Minute"
+                                        value={taskCron.cron.minute}
+                                        onChange={e => handleChange(taskIndex, 'cron', {
+                                            ...taskCron.cron,
+                                            minute: e.target.value
+                                        })}
+                                    />
+                                    <input
+                                        type="text"
+                                        className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                        placeholder="Second"
+                                        value={taskCron.cron.second}
+                                        onChange={e => handleChange(taskIndex, 'cron', {
+                                            ...taskCron.cron,
+                                            second: e.target.value
+                                        })}
+                                    />
+                                    <input
+                                        type="text"
+                                        className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                        placeholder="Timezone"
+                                        value={taskCron.cron.timezone}
+                                        onChange={e => handleChange(taskIndex, 'cron', {
+                                            ...taskCron.cron,
+                                            timezone: e.target.value
+                                        })}
+                                    />
                                 </div>
-                            ))}
-                            <button
-                                onClick={() => handleAddCommand(taskIndex)}
-                                className="mt-4 px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-md">
-                                添加命令
-                            </button>
-                        </div>
-                    ))}
-                    <button
-                        onClick={handleSave}
-                        className="mt-4 px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md">
-                        保存
-                    </button>
+
+                                {taskCron.commands.map((command, commandIndex) => (
+                                    <div key={commandIndex}>
+                                        <h5 className="mb-2 text-sm leading-6 font-medium text-gray-900">
+                                            Command {commandIndex + 1}
+                                        </h5>
+                                        {/*cmd*/}
+                                        <input
+                                            type="text"
+                                            className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                            placeholder="Command"
+                                            value={command.cmd}
+                                            onChange={e => handleCommandChange(taskIndex, commandIndex, 'cmd', e.target.value)}
+                                        />
+                                        {/*args*/}
+                                        <input
+                                            type="text"
+                                            className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                            placeholder="Args"
+                                            value={(command.args || []).join(', ')}
+                                            onChange={e => handleCommandChange(taskIndex, commandIndex, 'args', e.target.value.split(', '))}
+                                        />
+                                        {/*to_person_list*/}
+                                        <input
+                                            type="text"
+                                            className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                            placeholder="To Person List"
+                                            value={(command.to_person_list || []).join(', ')}
+                                            onChange={e => handleCommandChange(taskIndex, commandIndex, 'to_person_list', e.target.value.split(', '))}
+                                        />
+                                        {/*to_group_list*/}
+                                        <input
+                                            type="text"
+                                            className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                            placeholder="To Group List"
+                                            value={(command.to_group_list || []).join(', ')}
+                                            onChange={e => handleCommandChange(taskIndex, commandIndex, 'to_group_list', e.target.value.split(', '))}
+                                        />
+                                        <button
+                                            onClick={() => handleDeleteCommand(taskIndex, commandIndex)}
+                                            className="mt-4 px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-md">
+                                            删除命令
+                                        </button>
+                                    </div>
+                                ))}
+                                <button
+                                    onClick={() => handleAddCommand(taskIndex)}
+                                    className="mt-4 px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-md">
+                                    添加命令
+                                </button>
+                            </div>
+                        ))}
+                        <button
+                            onClick={handleSave}
+                            className="mt-4 px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md">
+                            保存
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
