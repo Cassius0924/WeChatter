@@ -64,9 +64,9 @@ function TaskCron() {
             task: '新任务',
             enabled: true,
             cron: {
-                hour: '*',
-                minute: '*',
-                second: '*/8',
+                hour: '8',
+                minute: '0',
+                second: '0',
                 timezone: 'Asia/Shanghai',
             },
             commands: [
