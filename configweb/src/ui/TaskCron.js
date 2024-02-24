@@ -91,26 +91,16 @@ function TaskCron() {
 
     return (
         <div className="border-4 border-dashed border-gray-200 rounded-lg mb-6">
-            <button
-                onClick={handleSave}
-                className="mt-4 px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md">
-                保存
-            </button>
             <div className="flex flex-col items-center justify-center h-full">
-                <button
-                    onClick={handleSave}
-                    className="mt-4 px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md">
-                    保存
-                </button>
                 <div className="text-center">
+                    <h3 className="mb-4 text-lg leading-6 font-medium text-gray-900">
+                        任务计划列表
+                    </h3>
                     <button
                         onClick={handleSave}
                         className="mt-4 px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md">
                         保存
                     </button>
-                    <h3 className="mb-4 text-lg leading-6 font-medium text-gray-900">
-                        任务计划列表
-                    </h3>
                     <div className="flex justify-center flex-wrap">
                         {taskCronList.map((taskCron, taskIndex) => (
                             <div key={taskIndex} className="m-4">
@@ -235,11 +225,6 @@ function TaskCron() {
                                         </button>
                                     </div>
                                 ))}
-                                <button
-                                    onClick={handleSave}
-                                    className="mt-4 px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md">
-                                    保存
-                                </button>
                             </div>
                         ))}
 
