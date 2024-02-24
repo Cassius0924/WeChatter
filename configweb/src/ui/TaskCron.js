@@ -103,39 +103,39 @@ function TaskCron() {
                                 checked={taskCron.enabled}
                                 onChange={e => handleChange(taskIndex, 'enabled', e.target.checked)}
                             />
-                            {/*<div>*/}
-                            {/*    <h5 className="mb-2 text-sm leading-6 font-medium text-gray-900">*/}
-                            {/*        Cron Fields*/}
-                            {/*    </h5>*/}
-                            {/*    <input*/}
-                            {/*        type="text"*/}
-                            {/*        className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"*/}
-                            {/*        placeholder="Hour"*/}
-                            {/*        value={taskCron.cron.hour}*/}
-                            {/*        onChange={e => handleChange(taskIndex, 'cron', {...taskCron.cron, hour: e.target.value})}*/}
-                            {/*    />*/}
-                            {/*    <input*/}
-                            {/*        type="text"*/}
-                            {/*        className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"*/}
-                            {/*        placeholder="Minute"*/}
-                            {/*        value={taskCron.cron.minute}*/}
-                            {/*        onChange={e => handleChange(taskIndex, 'cron', {...taskCron.cron, minute: e.target.value})}*/}
-                            {/*    />*/}
-                            {/*    <input*/}
-                            {/*        type="text"*/}
-                            {/*        className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"*/}
-                            {/*        placeholder="Second"*/}
-                            {/*        value={taskCron.cron.second}*/}
-                            {/*        onChange={e => handleChange(taskIndex, 'cron', {...taskCron.cron, second: e.target.value})}*/}
-                            {/*    />*/}
-                            {/*    <input*/}
-                            {/*        type="text"*/}
-                            {/*        className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"*/}
-                            {/*        placeholder="Timezone"*/}
-                            {/*        value={taskCron.cron.timezone}*/}
-                            {/*        onChange={e => handleChange(taskIndex, 'cron', {...taskCron.cron, timezone: e.target.value})}*/}
-                            {/*    />*/}
-                            {/*</div>*/}
+                            <div>
+                                <h5 className="mb-2 text-sm leading-6 font-medium text-gray-900">
+                                    Cron Fields
+                                </h5>
+                                <input
+                                    type="text"
+                                    className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                    placeholder="Hour"
+                                    value={taskCron.cron.hour}
+                                    onChange={e => handleChange(taskIndex, 'cron', {...taskCron.cron, hour: e.target.value})}
+                                />
+                                <input
+                                    type="text"
+                                    className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                    placeholder="Minute"
+                                    value={taskCron.cron.minute}
+                                    onChange={e => handleChange(taskIndex, 'cron', {...taskCron.cron, minute: e.target.value})}
+                                />
+                                <input
+                                    type="text"
+                                    className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                    placeholder="Second"
+                                    value={taskCron.cron.second}
+                                    onChange={e => handleChange(taskIndex, 'cron', {...taskCron.cron, second: e.target.value})}
+                                />
+                                <input
+                                    type="text"
+                                    className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                    placeholder="Timezone"
+                                    value={taskCron.cron.timezone}
+                                    onChange={e => handleChange(taskIndex, 'cron', {...taskCron.cron, timezone: e.target.value})}
+                                />
+                            </div>
 
                             {taskCron.commands.map((command, commandIndex) => (
                                 <div key={commandIndex}>
@@ -143,7 +143,7 @@ function TaskCron() {
                                         Command {commandIndex + 1}
                                     </h5>
                                     {/*cmd*/}
-                                    <input2
+                                    <input
                                         type="text"
                                         className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                                         placeholder="Command"
