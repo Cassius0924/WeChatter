@@ -88,7 +88,12 @@ function TaskCron() {
                     {taskCronList.map((taskCron, taskIndex) => (
                         <div key={taskIndex}>
                             <h4 className="mb-2 text-md leading-6 font-medium text-gray-900">
-                                {taskCron.task}
+                                Task {taskIndex + 1}
+                                <button
+                                    onClick={() => handleDeleteCommand(taskIndex)}
+                                    className="mt-4 px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-md">
+                                    删除任务
+                                </button>
                             </h4>
                             <input
                                 type="text"
