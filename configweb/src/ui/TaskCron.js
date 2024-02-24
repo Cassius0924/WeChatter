@@ -47,6 +47,16 @@ function TaskCron() {
         });
     };
 
+    // 在TaskCron组件中添加handleDeleteCommand事件处理器
+    const handleDeleteCommand = (taskIndex, commandIndex) => {
+        const newTaskCronList = [...taskCronList];
+        newTaskCronList[taskIndex].commands.splice(commandIndex, 1);
+        setConfig({
+            ...config,
+            task_cron_list: newTaskCronList,
+        });
+    };
+
     return (
         <div className="border-4 border-dashed border-gray-200 rounded-lg mb-6">
             <div className="flex flex-col items-center justify-center h-full">
@@ -110,6 +120,11 @@ function TaskCron() {
                                         value={(command.to_group_list || []).join(', ')}
                                         onChange={e => handleCommandChange(taskIndex, commandIndex, 'to_group_list', e.target.value.split(', '))}
                                     />
+                                    <button
+                                        onClick={() => handleDeleteCommand(taskIndex, commandIndex)}
+                                        className="mt-4 px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-md">
+                                        删除命令
+                                    </button>
                                 </div>
                             ))}
                             <button
