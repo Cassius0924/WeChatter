@@ -29,11 +29,12 @@ def validate_config(config):
     :param config: 配置文件
     """
     logger.info("正在验证配置文件...")
-    valid_types = ["text", "image"]
-    if config["official_account_reminder_type"] not in valid_types:
-        error_msg = (
-            f"配置参数错误：official_account_reminder_type 参数可选择为 {valid_types} "
-        )
-        logger.critical(error_msg)
-        raise ValueError(error_msg)
+    # valid_types = ["text", "image"]
+    # if config["official_account_reminder_type"] not in valid_types:
+    #     error_msg = (
+    #         f"配置参数错误：official_account_reminder_type 参数可选择为 {valid_types} "
+    #     )
+    #     logger.critical(error_msg)
+    #     raise ValueError(error_msg)
+
     logger.info("配置文件验证通过！")

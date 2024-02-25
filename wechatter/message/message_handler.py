@@ -78,9 +78,9 @@ message_forwarder = MessageForwarder(
     config["message_forwarding_rule_list"],
     config["official_account_reminder_rule_list"],
 )
-message_forwarder.official_account_reminder_type = config[
-    "official_account_reminder_type"
-]
+# message_forwarder.official_account_reminder_type = config[
+#     "official_account_reminder_type"
+# ]
 
 
 class MessageHandler:

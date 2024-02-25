@@ -118,15 +118,15 @@ class MessageForwarder:
                         response = _construct_official_account_reminder_image(
                             message_obj
                         )
+                        logger.info(
+                            f"提醒公众号文章：{message_obj.sender_name} -> {recipient_list}"
+                        )
                         sender.mass_send_msg(
                             recipient_list,
                             response,
                             type="localfile",
                             is_group=is_group,
                         )
-                    logger.info(
-                        f"提醒公众号文章：{message_obj.sender_name} -> {recipient_list}"
-                    )
 
 
 def _construct_official_account_reminder_message(message_obj: Message) -> str:

@@ -82,11 +82,14 @@ class Message(BaseModel):
         elif gender == 0:
             g = "female"
         # 判断 id 长度：个人用户为65位，公众号为33位（包括@符号）
-        # FIXME: 央视新闻公众号的id长度为65位
+        name = payload.get("name", "")
+        # 暂时通过名字判断是否为央视新闻公众号
         is_official_account = len(payload.get("id", "")) == 33
+        if name == "央视新闻":
+            is_official_account = True
         _person = Person(
             id=payload.get("id", ""),
-            name=payload.get("name", ""),
+            name=name,
             alias=payload.get("alias", ""),
             gender=g,
             signature=payload.get("signature", ""),
