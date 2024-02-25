@@ -62,7 +62,7 @@ class command:
 
         commands[self.command] = {}
         # 自定义命令关键词
-        if config["custom_command_key_dict"].get(self.command, None):
+        if config.get("custom_command_key_dict", {}).get(self.command, None):
             self.keys.extend(config["custom_command_key_dict"][self.command])
 
         commands[self.command]["keys"] = self.keys
