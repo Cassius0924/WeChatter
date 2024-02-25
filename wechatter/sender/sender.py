@@ -50,12 +50,12 @@ def _logging(func):
         if r_json["message"].startswith("Message"):
             pass
         elif r_json["message"].startswith("Some"):
-            logger.error("发送消息失败，参数校验不通过")
+            logger.error(f"发送消息失败，参数校验不通过：{kwargs['json']}")
         elif r_json["message"].startswith("All"):
-            logger.error("发送消息失败，所有消息均发送失败")
+            logger.error(f"发送消息失败，所有消息均发送失败: {kwargs['json']}")
             return
         elif r_json["message"].startswith("Part"):
-            logger.warning("发送消息失败，部分消息发送成功")
+            logger.warning(f"发送消息失败，部分消息发送成功: {kwargs['json']}")
             return
 
         if "task" not in r_json:
