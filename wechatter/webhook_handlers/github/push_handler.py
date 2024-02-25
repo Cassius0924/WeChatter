@@ -15,7 +15,7 @@ def handle_push(data: dict):
     # 用 h5 的 a 标签，用于在微信中打开（经测试微信会吞掉 href 里的链接），下面方法失效
     # branch_url = '<a href=" https://github.com/Cassius0924 ">查看详情</a>'
     message = (
-        "==== GitHub Push 事件 ====\n"
+        "== GitHub Push 事件 ==\n"
         "🚀 新的代码已经推送到了仓库！\n"
         f"📚 仓库：{payload.repository.full_name}\n"
         f"🌱 分支：{payload.ref}\n"

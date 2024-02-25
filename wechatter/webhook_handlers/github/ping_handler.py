@@ -10,7 +10,7 @@ def handle_ping(data: dict):
     payload = GithubPingWebhook(**data)
     logger.info(f"Ping from {payload.repository.full_name}.")
     message = (
-        "==== GitHub Ping 事件 ====\n"
+        "== GitHub Ping 事件 ==\n"
         "❇️ 有 Ping 事件！\n"
         f"📝 ZEN：{payload.zen}\n"
         f"📚 仓库：{payload.repository.full_name}\n"
