@@ -183,7 +183,7 @@ python3 -m wechatter
 | | `to_person_list` | 消息转发目标用户列表，即消息接收用户 | 可以填多个用户名称或为空列表 |
 | | `to_group_list` | 消息转发目标群列表，即消息接收群 | 可以填多个群名称或为空列表 |
 
-### ⚙️ Offical Account Reminder 配置
+### ⚙️ Official Account Reminder 配置
 
 | 配置项 | 子项 | 解释 | 备注 |
 | --- | --- |  --- | --- |
