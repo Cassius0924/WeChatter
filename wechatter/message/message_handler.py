@@ -74,7 +74,16 @@ def _get_quoted_response(quotable_id: str) -> QuotedResponse:
     return quoted_response
 
 
-message_forwarder = MessageForwarder(config["message_forwarding_rule_list"])
+message_forwarding_enabled = False
+if config["message_forwarding_enabled"]:
+    message_forwarding_enabled = True
+    message_forwarder = MessageForwarder(
+        config["message_forwarding_rule_list"],
+        config["official_account_reminder_rule_list"],
+    )
+# message_forwarder.official_account_reminder_type = config[
+#     "official_account_reminder_type"
+# ]
 
 
 class MessageHandler:
@@ -95,10 +104,17 @@ class MessageHandler:
         处理消息
         :param message_obj: 消息对象
         """
+        # 公众号文章提醒
+        if message_obj.is_official_account and message_obj.type.value == "urlLink":
+            # 尝试提醒
+            message_forwarder.remind_official_account_article(message_obj)
+            return
 
-        if config["message_forwarding_enabled"]:
+        # 消息转发
+        if message_forwarding_enabled and not message_obj.is_official_account:
+            # 尝试进行消息转发
             message_forwarder.forwarding(message_obj)
-
+            # 尝试进行转发消息的回复
             if message_obj.forwarded_source:
                 message_forwarder.reply_forwarded_message(message_obj)
                 return
@@ -110,7 +126,6 @@ class MessageHandler:
         cmd_dict = self.__parse_command(
             content, message_obj.is_mentioned, message_obj.is_group
         )
-        logger.info(cmd_dict["desc"])
 
         # 是可引用的命令消息
         if message_obj.quotable_id:
@@ -126,6 +141,7 @@ class MessageHandler:
             logger.info("该消息不是命令类型")
             return
 
+        logger.info(cmd_dict["desc"])
         # TODO: 可以为不同的群设置是否need_mentioned
         if (
             config["need_mentioned"]

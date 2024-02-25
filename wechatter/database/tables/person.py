@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 class Person(Base):
     """
-    微信用户表
+    微信用户表（包括公众号）
     """
 
     __tablename__ = "person"
@@ -28,6 +28,7 @@ class Person(Base):
     # phone: Mapped[Union[str, None]] = mapped_column(String, nullable=True)
     is_star: Mapped[bool] = mapped_column(Boolean, default=False)
     is_friend: Mapped[bool] = mapped_column(Boolean, default=False)
+    is_official_account: Mapped[bool] = mapped_column(Boolean, default=False)
 
     groups: Mapped[List["Group"]] = relationship(
         "Group",
@@ -50,6 +51,7 @@ class Person(Base):
             city=person_model.city,
             is_star=person_model.is_star,
             is_friend=person_model.is_friend,
+            is_official_account=person_model.is_official_account,
         )
 
     @classmethod
@@ -71,6 +73,7 @@ class Person(Base):
             city=self.city,
             is_star=self.is_star,
             is_friend=self.is_friend,
+            is_official_account=self.is_official_account,
         )
 
     def update(self, person_model: PersonModel):
@@ -81,3 +84,4 @@ class Person(Base):
         self.city = person_model.city
         self.is_star = person_model.is_star
         self.is_friend = person_model.is_friend
+        self.is_official_account = person_model.is_official_account

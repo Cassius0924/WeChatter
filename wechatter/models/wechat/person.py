@@ -28,3 +28,4 @@ class Person(BaseModel):
     # phone_list: List[str]
     is_star: bool
     is_friend: bool
+    is_official_account: bool = False

@@ -50,12 +50,12 @@ def _logging(func):
         if r_json["message"].startswith("Message"):
             pass
         elif r_json["message"].startswith("Some"):
-            logger.error("发送消息失败，参数校验不通过")
+            logger.error(f"发送消息失败，参数校验不通过：{kwargs['json']}")
         elif r_json["message"].startswith("All"):
-            logger.error("发送消息失败，所有消息均发送失败")
+            logger.error(f"发送消息失败，所有消息均发送失败: {kwargs['json']}")
             return
         elif r_json["message"].startswith("Part"):
-            logger.warning("发送消息失败，部分消息发送成功")
+            logger.warning(f"发送消息失败，部分消息发送成功: {kwargs['json']}")
             return
 
         if "task" not in r_json:
@@ -380,14 +380,15 @@ def mass_send_msg_to_admins(
     if quoted_response:
         message = make_quotable(message=message, quoted_response=quoted_response)
 
-    if len(config["admin_list"]) == 0:
-        logger.warning("管理员列表为空")
-    else:
-        mass_send_msg(config["admin_list"], message, type=type)
-    if len(config["admin_group_list"]) == 0:
-        logger.warning("管理员群列表为空")
-    else:
-        mass_send_msg(config["admin_group_list"], message, is_group=True, type=type)
+    admin_list = config.get("admin_list")
+    if admin_list:
+        logger.info(f"发送消息给管理员：{admin_list}")
+        mass_send_msg(admin_list, message, type=type)
+
+    admin_group_list = config.get("admin_group_list")
+    if admin_group_list:
+        logger.info(f"发送消息给管理员群组：{admin_group_list}")
+        mass_send_msg(admin_group_list, message, is_group=True, type=type)
 
 
 def mass_send_msg_to_github_webhook_receivers(
@@ -404,18 +405,16 @@ def mass_send_msg_to_github_webhook_receivers(
 
     person_list = config.get("github_webhook_receive_person_list")
     group_list = config.get("github_webhook_receive_group_list")
-    if not person_list:
-        logger.warning("GitHub Webhook 接收者列表为空")
-    else:
+    if person_list:
+        logger.info(f"发送消息给 GitHub Webhook 接收者：{person_list}")
         mass_send_msg(
             person_list,
             message,
             is_group=False,
             type=type,
         )
-    if not group_list:
-        logger.warning("GitHub Webhook 接收群列表为空")
-    else:
+    if group_list:
+        logger.info(f"发送消息给 GitHub Webhook 接收者：{group_list}")
         mass_send_msg(
             group_list,
             message,
