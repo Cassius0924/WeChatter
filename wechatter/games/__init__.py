@@ -158,5 +158,19 @@ def _register_game_basic_command():
         """
         _execute_game("over", to, message, message_obj)
 
+    @command(
+        command="games",
+        keys=["games", "游戏", "game_list"],
+        desc="查看所有游戏",
+    )
+    def games_list_handler(to: SendTo, message: str = "", message_obj=None):
+        """
+        查看所有游戏
+        """
+        response = "✨==所有游戏列表==✨\n"
+        for i, (game_name, game_info) in enumerate(games.items()):
+            response += f"{i + 1}. {game_name}：{game_info['desc']}\n"
+        sender.send_msg(to, response)
+
 
 __all__ = ["load_games", "games", "game_class_name_dict", "Game"]
