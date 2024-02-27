@@ -81,4 +81,5 @@ task_cron_list:
 custom_command_key_dict:
   gpt4: [ ">" ]
   bili-hot: [ "bh" ]
+  play: [ "p" ]
   weather: [ "w", "温度" ]

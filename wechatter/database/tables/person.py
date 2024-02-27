@@ -7,6 +7,7 @@ from wechatter.database.tables import Base
 from wechatter.models.wechat import Gender, GroupMember, Person as PersonModel
 
 if TYPE_CHECKING:
+    from wechatter.database.tables.game_states import GameStates
     from wechatter.database.tables.gpt_chat_info import GptChatInfo
     from wechatter.database.tables.group import Group
     from wechatter.database.tables.message import Message
@@ -29,6 +30,7 @@ class Person(Base):
     is_star: Mapped[bool] = mapped_column(Boolean, default=False)
     is_friend: Mapped[bool] = mapped_column(Boolean, default=False)
     is_official_account: Mapped[bool] = mapped_column(Boolean, default=False)
+    is_gaming: Mapped[bool] = mapped_column(Boolean, default=False)
 
     groups: Mapped[List["Group"]] = relationship(
         "Group",
@@ -38,6 +40,9 @@ class Person(Base):
     messages: Mapped[List["Message"]] = relationship("Message", back_populates="person")
     gpt_chat_infos: Mapped[List["GptChatInfo"]] = relationship(
         "GptChatInfo", back_populates="person"
+    )
+    game_states_list: Mapped[List["GameStates"]] = relationship(
+        "GameStates", back_populates="host_person"
     )
 
     @classmethod
@@ -52,6 +57,7 @@ class Person(Base):
             is_star=person_model.is_star,
             is_friend=person_model.is_friend,
             is_official_account=person_model.is_official_account,
+            is_gaming=person_model.is_gaming,
         )
 
     @classmethod
@@ -74,6 +80,7 @@ class Person(Base):
             is_star=self.is_star,
             is_friend=self.is_friend,
             is_official_account=self.is_official_account,
+            is_gaming=self.is_gaming,
         )
 
     def update(self, person_model: PersonModel):
@@ -85,3 +92,4 @@ class Person(Base):
         self.is_star = person_model.is_star
         self.is_friend = person_model.is_friend
         self.is_official_account = person_model.is_official_account
+        self.is_gaming = person_model.is_gaming

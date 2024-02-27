@@ -13,6 +13,7 @@ from wechatter.database import (
     Person as DbPerson,
     make_db_session,
 )
+from wechatter.games import games
 from wechatter.message import MessageHandler
 from wechatter.models.wechat import Message
 from wechatter.models.wechat.group import Group
@@ -68,7 +69,9 @@ async def recv_wechat_msg(
     print(str(message))
 
     # 传入命令字典，构造消息处理器
-    message_handler = MessageHandler(commands=commands, quoted_handlers=quoted_handlers)
+    message_handler = MessageHandler(
+        commands=commands, quoted_handlers=quoted_handlers, games=games
+    )
     # 用户发来的消息均送给消息解析器处理
     message_handler.handle_message(message)
 
