@@ -50,9 +50,7 @@ class command:
             logger.error(error_message)
             raise ValueError(error_message)
         if len(params) == 3 and "message_obj" not in params:
-            error_message = (
-                f"参数名错误，命令处理函数的第3个参数必须为 message_obj{func.__name__}"
-            )
+            error_message = f"参数名错误，命令处理函数的第3个参数必须为 message_obj：{func.__name__}"
             logger.error(error_message)
             raise ValueError(error_message)
         if len(params) > 3:
