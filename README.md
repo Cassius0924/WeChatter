@@ -116,6 +116,14 @@ python3 -m wechatter
 
 - [x] **定时任务**：大部分命令均支持定时任务。需进行[配置](#%EF%B8%8F-task-cron-配置)。
 
+## 支持的游戏
+
+- [x] **井字棋**：双人游戏，图片游戏。
+![tictactoe_show](docs/images/tictactoe_show.png)
+
+> [!TIP]
+> 游戏相关命令帮助请使用查阅[游戏基本命令](docs/command_show.md#游戏基本命令)。
+
 ## 支持的 Webhook
 
 - [x] GitHub 仓库 Webhook，需在 GitHub 仓库 Settings 中添加 Webhook 并进行[配置](#%EF%B8%8F-github-webhook-配置)。
