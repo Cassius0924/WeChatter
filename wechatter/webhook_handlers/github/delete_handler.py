@@ -11,7 +11,7 @@ def handle_delete(data: dict):
     if payload.ref_type == "branch":
         logger.info(f"Branch {payload.ref} was deleted by {payload.sender.login}")
         message = (
-            "==== GitHub Delete 事件 ====\n"
+            "== GitHub Delete 事件 ==\n"
             f"🚮 有分支被删除了！\n"
             f"📚 仓库：{payload.repository.full_name}\n"
             f"🚮 删除了 {payload.ref} 分支\n"
@@ -22,7 +22,7 @@ def handle_delete(data: dict):
     elif payload.ref_type == "tag":
         logger.info(f"Tag {payload.ref} was deleted by {payload.sender.login}")
         message = (
-            "==== GitHub Delete 事件 ====\n"
+            "== GitHub Delete 事件 ==\n"
             f"🚮 有标签被删除了！\n"
             f"📚 仓库：{payload.repository.full_name}\n"
             f"🚮 删除了 {payload.ref} 标签\n"

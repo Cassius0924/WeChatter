@@ -11,7 +11,7 @@ def handle_create(data: dict):
     if payload.ref_type == "branch":
         logger.info(f"Branch {payload.ref} was created by {payload.sender.login}.")
         message = (
-            "==== GitHub Create 事件 ====\n"
+            "== GitHub Create 事件 ==\n"
             "🆕 有新的分支创建！\n"
             f"📚 仓库：{payload.repository.full_name}\n"
             f"🆕 创建了 {payload.ref} 分支\n"
@@ -22,7 +22,7 @@ def handle_create(data: dict):
     elif payload.ref_type == "tag":
         logger.info(f"Tag {payload.ref} was created by {payload.sender.login}.")
         message = (
-            "==== GitHub Create 事件 ====\n"
+            "== GitHub Create 事件 ==\n"
             "🆕 有新的标签创建！\n"
             f"📚 仓库：{payload.repository.full_name}\n"
             f"🆕 创建了 {payload.ref} 标签\n"

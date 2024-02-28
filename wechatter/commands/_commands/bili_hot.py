@@ -78,6 +78,7 @@ def _generate_bili_hot_message(hot_list: List) -> str:
     if not hot_list:
         return "暂无Bilibili热搜"
 
+    # TODO: 写一个generate_message的框架函数，统一处理消息的格式，确保消息格式统一。
     hot_str = "✨=====Bilibili热搜=====✨\n"
     for i, hot_search in enumerate(hot_list):
         hot_str += f"{i + 1}. {hot_search.get('keyword')}\n"

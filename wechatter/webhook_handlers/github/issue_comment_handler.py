@@ -17,7 +17,7 @@ def handle_issue_comment(data: dict):
     else:
         content = payload.comment.body
     message = (
-        "==== GitHub Comment 事件 ====\n"
+        "== GitHub Comment 事件 ==\n"
         f"💬 有评论被 {payload.action.capitalize()} ！\n"
         f"📚 仓库：{payload.repository.full_name}\n"
         f"📝 标题：{payload.issue.title}\n"

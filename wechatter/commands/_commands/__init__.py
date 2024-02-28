@@ -15,3 +15,6 @@ for file in command_files:
         continue
     # 动态导入模块
     importlib.import_module("." + module_name, __package__)
+
+# 释放变量
+del command_files

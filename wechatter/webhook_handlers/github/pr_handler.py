@@ -14,7 +14,7 @@ def handle_pr(data: dict):
     # 如果是closed，判断是否是合并
     if payload.action == "closed" and payload.pull_request.merged:
         message = (
-            "==== GitHub Pull Request 事件 ====\n"
+            "== GitHub Pull Request 事件 ==\n"
             f"⬇️ 有 PR 被 Merged ！🥳\n"
             f"📚 仓库：{payload.repository.full_name}\n"
             f"📝 标题：{payload.pull_request.title}\n"
@@ -25,7 +25,7 @@ def handle_pr(data: dict):
         sender.mass_send_msg_to_github_webhook_receivers(message)
         return
     message = (
-        "==== GitHub Pull Request 事件 ====\n"
+        "== GitHub Pull Request 事件 ==\n"
         f"⬇️ 有 PR 被 {payload.action.capitalize()} ！\n"
         f"📚 仓库：{payload.repository.full_name}\n"
         f"🌱 分支: {payload.pull_request.head.ref}\n"

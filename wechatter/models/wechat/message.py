@@ -2,7 +2,7 @@ import enum
 import json
 import re
 from functools import cached_property
-from typing import Optional
+from typing import Optional, Tuple
 
 from loguru import logger
 from pydantic import BaseModel, computed_field
@@ -11,6 +11,10 @@ from wechatter.bot import BotInfo
 from wechatter.models.wechat.group import Group
 from wechatter.models.wechat.person import Person
 from wechatter.models.wechat.quoted_response import QUOTABLE_FORMAT
+from wechatter.models.wechat.url_link import UrlLink
+
+PERSON_FORWARDING_MESSAGE_FORMAT = "⤴️ [%s] 说：\n" "-------------------------\n"
+GROUP_FORWARDING_MESSAGE_FORMAT = "⤴️ [%s] 在 [%s] 说：\n" "-------------------------\n"
 
 
 class MessageType(enum.Enum):
@@ -57,6 +61,11 @@ class Message(BaseModel):
     ):
         """
         从API接口创建消息对象
+        :param type: 消息类型
+        :param content: 消息内容
+        :param source: 消息来源
+        :param is_mentioned: 是否@机器人
+        :return: 消息对象
         """
         try:
             source_json = json.loads(source)
@@ -72,9 +81,15 @@ class Message(BaseModel):
             g = "male"
         elif gender == 0:
             g = "female"
+        # 判断 id 长度：个人用户为65位，公众号为33位（包括@符号）
+        name = payload.get("name", "")
+        # 暂时通过名字判断是否为央视新闻公众号
+        is_official_account = len(payload.get("id", "")) == 33
+        if name == "央视新闻":
+            is_official_account = True
         _person = Person(
             id=payload.get("id", ""),
-            name=payload.get("name", ""),
+            name=name,
             alias=payload.get("alias", ""),
             gender=g,
             signature=payload.get("signature", ""),
@@ -83,6 +98,7 @@ class Message(BaseModel):
             # phone_list=payload.get("phone", []),
             is_star=payload.get("star", ""),
             is_friend=payload.get("friend", ""),
+            is_official_account=is_official_account,
         )
 
         _group = None
@@ -113,6 +129,7 @@ class Message(BaseModel):
     def is_group(self) -> bool:
         """
         是否是群消息
+        :return: 是否是群消息
         """
         return self.group is not None
 
@@ -121,6 +138,7 @@ class Message(BaseModel):
     def is_quoted(self) -> bool:
         """
         是否引用机器人消息
+        :return: 是否引用机器人消息
         """
         # 引用消息的正则
         quote_pattern = r"(?s)「(.*?)」\n- - - - - - - - - - - - - - -"
@@ -138,6 +156,7 @@ class Message(BaseModel):
     def sender_name(self) -> str:
         """
         返回消息发送对象名，如果是群则返回群名，如果不是则返回人名
+        :return: 消息发送对象名
         """
         return self.group.name if self.is_group else self.person.name
 
@@ -146,9 +165,10 @@ class Message(BaseModel):
     def quotable_id(self) -> Optional[str]:
         """
         获取引用消息的id
+        :return: 引用消息的id
         """
         if self.is_quoted:
-            pattern = rf'「.+{QUOTABLE_FORMAT % "(.{3})"}'
+            pattern = f'^「[^「]+{QUOTABLE_FORMAT % "(.{3})"}'
             try:
                 return re.search(pattern, self.content).group(1)
             except AttributeError:
@@ -160,12 +180,68 @@ class Message(BaseModel):
     def pure_content(self) -> str:
         """
         获取不带引用的消息内容，即用户真实发送的消息
+        :return: 不带引用的消息内容
         """
         if self.is_quoted:
             pattern = "「[\s\S]+」\n- - - - - - - - - - - - - - -\n([\s\S]*)"
             return re.search(pattern, self.content).group(1)
         else:
             return self.content
+
+    @computed_field
+    @cached_property
+    def forwarded_source(self) -> Optional[Tuple[str, bool]]:
+        """
+        获取转发消息的来源的名字
+        :return: 消息来源的名字和是否为群的元组(source, is_group)
+        """
+        if self.is_quoted:
+            # 先尝试匹配群消息
+            group_format = GROUP_FORWARDING_MESSAGE_FORMAT.replace("[", "\[").replace(
+                "]", "\]"
+            )
+            pattern = re.compile(f'{group_format % ("(.*)", "(.+)")}')
+            try:
+                # 将名字和该名字是否为群都返回，便于在回复时判断
+                return re.search(pattern, self.content).group(2), True
+            except AttributeError:
+                pass
+            # 再尝试匹配个人消息
+            person_format = PERSON_FORWARDING_MESSAGE_FORMAT.replace("[", "\[").replace(
+                "]", "\]"
+            )
+            pattern = re.compile(f'{person_format % "(.+)"}')
+            try:
+                return re.search(pattern, self.content).group(1), False
+            except AttributeError:
+                return None
+        else:
+            return None
+
+    @computed_field
+    @cached_property
+    def is_official_account(self) -> bool:
+        """
+        是否是公众号消息
+        :return: 是否是公众号消息
+        """
+        return self.person.is_official_account
+
+    @computed_field
+    @cached_property
+    def urllink(self) -> Optional[UrlLink]:
+        """
+        当消息类型为urlLink时，返回url link的解析结果
+        """
+        if self.type == MessageType.urlLink:
+            url_link_json = json.loads(self.content)
+            return UrlLink(
+                title=url_link_json.get("title"),
+                desc=url_link_json.get("description"),
+                url=url_link_json.get("url"),
+                cover_url=url_link_json.get("thumbnailUrl"),
+            )
+        return None
 
     def __str__(self) -> str:
         source = self.person

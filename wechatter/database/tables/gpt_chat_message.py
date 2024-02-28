@@ -45,5 +45,5 @@ class GptChatMessage(Base):
             id=self.id,
             message=self.message.to_model(),
             gpt_chat_info=self.gpt_chat_info.to_model(),
-            gp_response=self.gpt_response,
+            gpt_response=self.gpt_response,
         )
