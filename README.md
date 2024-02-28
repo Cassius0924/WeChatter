@@ -37,7 +37,7 @@ docker run -d \
 dannicool/docker-wechatbot-webhook
 ```
 
-- `<Token>`：登录令牌（可选）
+- `<Token>`：令牌
 - `<宿主机IP>`：填入 Docker 的宿主机地址。
 - `<接收消息端口>`：设置一个接收消息的端口，默认为 `4000`。
 
@@ -147,6 +147,7 @@ python3 -m wechatter
 | --- | --- | --- |
 | `wx_webhook_base_api`      | 发送消息的 BaseAPI | 默认为 `localhost:3001`，即 `wxBotWebhook` Docker 的地址 |
 | `wx_webhook_recv_api_path` | 接收消息的接口路径  | 默认为 `/receive_msg`，此路径为 Docker 参数 `RECVD_MSG_API` 的路径 |
+| `wx_webhook_token` | wxBotWebhook 的 Token | |
 
 ### ⚙️ Admin 配置
 
