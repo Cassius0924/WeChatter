@@ -13,6 +13,7 @@ import wechatter.utils.file_manager as fm
 from wechatter.app.app import app
 from wechatter.bot import BotInfo
 from wechatter.config import config
+from wechatter.games import load_games
 
 
 def main():
@@ -27,6 +28,7 @@ def main():
     fm.check_and_create_folder("data/text_image")
 
     db.create_tables()
+    load_games()
 
     # 启动uvicorn
     port = config["wechatter_port"]

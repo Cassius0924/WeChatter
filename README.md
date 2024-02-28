@@ -107,15 +107,27 @@ python3 -m wechatter
 
 ## 支持的功能
 
-- [x] **消息可引用回复**： 用户可以通过引用并回复命令消息进一步获取消息内容。带`（可引用：***）`的机器人消息即为可进一步互动的可引用消息。
-- [x] **消息转发**： 转发用户或群的消息到其他用户或群，并支持引用回复转发消息。需进行[配置](#%EF%B8%8F-message-forwarding-配置)。
-<img src="docs/images/message_forwarding_and_quoted_reply.png">
+- [x] **消息可引用回复**：用户可以通过引用并回复命令消息进一步获取消息内容。带`（可引用：***）`的机器人消息即为可进一步互动的可引用消息。
+- [x] **消息转发**：转发用户或群的消息到其他用户或群，并支持引用回复转发消息。需进行[配置](#%EF%B8%8F-message-forwarding-配置)。
+![message_forwarding_and_quoted_reply_show](docs/images/message_forwarding_and_quoted_reply_show.png)
+
+- [x] **公众号提醒**：当指定公众号发布新文章时，机器人会给指定用户或群发送提醒。需进行[配置](#%EF%B8%8F-official-account-reminder-配置)。
+![official_account_reminder_show](docs/images/official_account_reminder_show.png)
 
 - [x] **定时任务**：大部分命令均支持定时任务。需进行[配置](#%EF%B8%8F-task-cron-配置)。
+
+## 支持的游戏
+
+- [x] **井字棋**：双人游戏，图片游戏。
+![tictactoe_show](docs/images/tictactoe_show.png)
+
+> [!TIP]
+> 游戏相关命令帮助请使用查阅[游戏基本命令](docs/command_show.md#游戏基本命令)。
 
 ## 支持的 Webhook
 
 - [x] GitHub 仓库 Webhook，需在 GitHub 仓库 Settings 中添加 Webhook 并进行[配置](#%EF%B8%8F-github-webhook-配置)。
+![github_webhook_show](docs/images/github_webhook_show.png)
 
 ## 配置文件
 
@@ -180,6 +192,16 @@ python3 -m wechatter
 | `message_forwarding_rule_list` | | 消息规则列表，每个规则包含三个字段：`from_list`、`to_person_list` 和 `to_group_list` |  |
 | | `from_list` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称，若要转发所有消息则使用 `["%ALL"]` |
 | | `from_list_exclude` | 消息转发来源排除列表，不转发此列表的用户和群 | 只在 `from_list` 为 `["%ALL"]` 时生效 |
+| | `to_person_list` | 消息转发目标用户列表，即消息接收用户 | 可以填多个用户名称或为空列表 |
+| | `to_group_list` | 消息转发目标群列表，即消息接收群 | 可以填多个群名称或为空列表 |
+
+### ⚙️ Official Account Reminder 配置
+
+| 配置项 | 子项 | 解释 | 备注 |
+| --- | --- |  --- | --- |
+| `official_account_reminder_enabled` | | 功能开关，是否开启消息转发 | 默认为 `True` |
+| `official_account_reminder_rule_list` | | 消息规则列表，每个规则包含三个字段：`oa_name_list`、`to_person_list` 和 `to_group_list` |  |
+| | `oa_name_list` | 公众号名称列表 | 可以填多个公众号名称 |
 | | `to_person_list` | 消息转发目标用户列表，即消息接收用户 | 可以填多个用户名称或为空列表 |
 | | `to_group_list` | 消息转发目标群列表，即消息接收群 | 可以填多个群名称或为空列表 |
 

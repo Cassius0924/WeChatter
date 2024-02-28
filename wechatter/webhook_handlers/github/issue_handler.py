@@ -12,7 +12,7 @@ def handle_issue(data: dict):
         f"Issue {payload.issue.number} was {payload.action} by {payload.issue.user.login}."
     )
     message = (
-        "==== GitHub Issue 事件 ====\n"
+        "== GitHub Issue 事件 ==\n"
         f"📬 有问题被 {payload.action.capitalize()} ！\n"
         f"📚 仓库：{payload.repository.full_name}\n"
         f"📝 标题：{payload.issue.title}\n"

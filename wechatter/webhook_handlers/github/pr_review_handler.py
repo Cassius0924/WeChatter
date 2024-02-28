@@ -12,7 +12,7 @@ def handle_pr_review(data: dict):
         f"Pull Request Review {payload.review.state} by {payload.review.user.login}."
     )
     message = (
-        "==== GitHub Pull Request Review 事件 ====\n"
+        "== GitHub Pull Request Review 事件 ==\n"
         f"⬇️ 有 PR Review 被 {payload.review.state.capitalize()} ！\n"
         f"📚 仓库：{payload.repository.full_name}\n"
         f"📝 标题：{payload.pull_request.title}\n"

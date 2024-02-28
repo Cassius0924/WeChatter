@@ -2,6 +2,10 @@ from typing import Dict, List
 
 from loguru import logger
 
+from wechatter.config.parsers import (
+    parse_message_forwarding_rule_list,
+    parse_official_account_reminder_rule_list,
+)
 from wechatter.models.wechat import (
     GROUP_FORWARDING_MESSAGE_FORMAT,
     PERSON_FORWARDING_MESSAGE_FORMAT,
@@ -37,42 +41,24 @@ class MessageForwarder:
     消息转发器类
     """
 
-    def __init__(self, rule_list: List):
+    def __init__(
+        self,
+        message_forwarding_rule_list: List,
+        official_account_reminder_rule_list: List,
+    ):
         """
         初始化
-        :param rule_list: 转发规则列表
+        :param message_forwarding_rule_list: 消息转发规则列表
+        :param official_account_reminder_rule_list: 公众号文章提醒规则列表
         """
-        self.all_message_rule = {
-            "from_list_exclude": [],
-            "to_group_list": [],
-            "to_person_list": [],
-        }
-        self.specific_message_rules = {}
-
-        for rule in rule_list:
-            if "%ALL" in rule["from_list"]:
-                self.all_message_rule["from_list_exclude"].extend(
-                    rule.get("from_list_exclude", [])
-                )
-                self.all_message_rule["to_group_list"].extend(
-                    rule.get("to_group_list", [])
-                )
-                self.all_message_rule["to_person_list"].extend(
-                    rule.get("to_person_list", [])
-                )
-            else:
-                for from_name in rule["from_list"]:
-                    if from_name not in self.specific_message_rules:
-                        self.specific_message_rules[from_name] = {
-                            "to_group_list": [],
-                            "to_person_list": [],
-                        }
-                    self.specific_message_rules[from_name]["to_group_list"].extend(
-                        rule.get("to_group_list", [])
-                    )
-                    self.specific_message_rules[from_name]["to_person_list"].extend(
-                        rule.get("to_person_list", [])
-                    )
+        (
+            self.all_message_rule,
+            self.specific_message_rules,
+        ) = parse_message_forwarding_rule_list(message_forwarding_rule_list)
+        self.official_account_reminder_rule = parse_official_account_reminder_rule_list(
+            official_account_reminder_rule_list
+        )
+        self.official_account_reminder_type = "text"
 
     def forwarding(self, message_obj: Message):
         """
@@ -86,7 +72,7 @@ class MessageForwarder:
             rule = self.all_message_rule
             _forwarding_by_rule(message_obj, rule)
 
-        if message_obj.sender_name in self.specific_message_rules.keys():
+        if message_obj.sender_name in self.specific_message_rules:
             rule = self.specific_message_rules[message_obj.sender_name]
             _forwarding_by_rule(message_obj, rule)
 
@@ -104,6 +90,64 @@ class MessageForwarder:
             is_group=is_group,
         )
         logger.info(f"回复 {message_obj.forwarded_source} 的转发消息")
+
+    def remind_official_account_article(self, message_obj: Message):
+        """
+        提醒公众号文章
+        :param message_obj: 消息对象
+        """
+        if not message_obj.is_official_account:
+            return
+        if message_obj.sender_name in self.official_account_reminder_rule:
+            rule = self.official_account_reminder_rule[message_obj.sender_name]
+            to_person_list = rule["to_person_list"]
+            to_group_list = rule["to_group_list"]
+            for recipient_list, is_group in [
+                (to_person_list, False),
+                (to_group_list, True),
+            ]:
+                if recipient_list:
+                    if self.official_account_reminder_type == "text":
+                        response = _construct_official_account_reminder_message(
+                            message_obj
+                        )
+                        sender.mass_send_msg(
+                            recipient_list, response, type="text", is_group=is_group
+                        )
+                    elif self.official_account_reminder_type == "image":
+                        response = _construct_official_account_reminder_image(
+                            message_obj
+                        )
+                        logger.info(
+                            f"提醒公众号文章：{message_obj.sender_name} -> {recipient_list}"
+                        )
+                        sender.mass_send_msg(
+                            recipient_list,
+                            response,
+                            type="localfile",
+                            is_group=is_group,
+                        )
+
+
+def _construct_official_account_reminder_message(message_obj: Message) -> str:
+    """
+    构造公众号文章提醒消息
+    """
+    result = (
+        "✨===公众号文章提醒===✨\n"
+        f"😃 公众号：{message_obj.sender_name}\n"
+        f"📰 标题：{message_obj.urllink.title}\n"
+    )
+    return result
+
+
+def _construct_official_account_reminder_image(message_obj: Message) -> str:
+    """
+    构造公众号文章提醒图片
+    """
+    # title = message_obj.urllink.title
+    return "开发中..."
+    pass
 
 
 def _construct_forwarding_message(message_obj: Message) -> str:

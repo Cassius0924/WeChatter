@@ -28,3 +28,10 @@ class Person(BaseModel):
     # phone_list: List[str]
     is_star: bool
     is_friend: bool
+    is_official_account: bool = False
+    is_gaming: bool = False
+
+    def to_dict(self):
+        result = self.__dict__.copy()
+        result["gender"] = self.gender.value
+        return result

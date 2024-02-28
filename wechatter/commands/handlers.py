@@ -50,9 +50,7 @@ class command:
             logger.error(error_message)
             raise ValueError(error_message)
         if len(params) == 3 and "message_obj" not in params:
-            error_message = (
-                f"参数名错误，命令处理函数的第3个参数必须为 message_obj{func.__name__}"
-            )
+            error_message = f"参数名错误，命令处理函数的第3个参数必须为 message_obj：{func.__name__}"
             logger.error(error_message)
             raise ValueError(error_message)
         if len(params) > 3:
@@ -62,7 +60,7 @@ class command:
 
         commands[self.command] = {}
         # 自定义命令关键词
-        if config["custom_command_key_dict"].get(self.command, None):
+        if config.get("custom_command_key_dict", {}).get(self.command, None):
             self.keys.extend(config["custom_command_key_dict"][self.command])
 
         commands[self.command]["keys"] = self.keys

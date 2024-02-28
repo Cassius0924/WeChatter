@@ -12,7 +12,7 @@ def handle_fork(data: dict):
         f"A new fork by {payload.sender.login} to {payload.repository.full_name}"
     )
     message = (
-        "==== GitHub Fork 事件 ====\n"
+        "== GitHub Fork 事件 ==\n"
         f"🍴 {payload.repository.full_name} 有新的 Fork！🆙\n"
     )
     sender.mass_send_msg_to_github_webhook_receivers(message)
