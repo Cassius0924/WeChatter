@@ -18,6 +18,8 @@ ESSENTIAL_TOP_FIELDS = [
     "official_account_reminder_rule_list",
     "all_task_cron_enabled",
     "task_cron_list",
+    "discord_message_forwarding_enabled",
+    "discord_message_forwarding_rule_list",
 ]
 
 

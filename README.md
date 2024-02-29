@@ -115,6 +115,7 @@ python3 -m wechatter
 ![official_account_reminder_show](docs/images/official_account_reminder_show.png)
 
 - [x] **定时任务**：大部分命令均支持定时任务。需进行[配置](#%EF%B8%8F-task-cron-配置)。
+- [x] **Discord 消息转发**：基于 Discord Webhook，将微信消息转发到 Discord 频道。需进行[配置](#%EF%B8%8F-discord-message-forwarding-配置)。
 
 ## 支持的游戏
 
@@ -190,7 +191,7 @@ python3 -m wechatter
 | 配置项 | 子项 | 解释 | 备注 |
 | --- | --- |  --- | --- |
 | `message_forwarding_enabled` | | 功能开关，是否开启消息转发 | 默认为 `False` |
-| `message_forwarding_rule_list` | | 消息规则列表，每个规则包含三个字段：`from_list`、`to_person_list` 和 `to_group_list` |  |
+| `message_forwarding_rule_list` | | 消息规则列表，每个规则包含四个字段：`from_list`、`from_list_exclude`、`to_person_list` 和 `to_group_list` |  |
 | | `from_list` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称，若要转发所有消息则使用 `["%ALL"]` |
 | | `from_list_exclude` | 消息转发来源排除列表，不转发此列表的用户和群 | 只在 `from_list` 为 `["%ALL"]` 时生效 |
 | | `to_person_list` | 消息转发目标用户列表，即消息接收用户 | 可以填多个用户名称或为空列表 |
@@ -222,6 +223,17 @@ python3 -m wechatter
 | `custom_command_key_dict` | 自定义命令关键词字典，格式为 `command: [key1, key2, ...]`, 其中 `command` 为命令名称，`key1` 和 `key2` 为自定义命令关键词 |  |
 
 关于命令名称可选值请参阅[自定义命令关键词配置详细](docs/custom_command_key_config_detail.md)。
+
+### ⚙️ Discord Message Forwarding 配置
+
+| 配置项 | 解释 | 备注 |
+| --- | --- | --- |
+| `discord_message_forwarding_enabled` | 功能开关，是否开启 Discord 消息转发 | 默认为 `False` |
+| `discord_message_forwarding_rule_list` | 消息规则列表，每个规则包含三个字段：`from_list`、`to_discord_webhook_url` 和 `to_discord_webhook_name` |  |
+| | `from_list` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称，若要转发所有消息则使用 `["%ALL"]` |
+| | `from_list_exclude` | 消息转发来源排除列表，不转发此列表的用户和群 | 只在 `from_list` 为 `["%ALL"]` 时生效 |
+| | `discord_webhook_url` | 消息转发目标 Discord Webhook URL | |
+
 
 ## 日志文件
 

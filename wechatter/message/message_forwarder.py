@@ -3,6 +3,7 @@ from typing import Dict, List
 from loguru import logger
 
 from wechatter.config.parsers import (
+    parse_discord_message_forwarding_rule_list,
     parse_message_forwarding_rule_list,
     parse_official_account_reminder_rule_list,
 )
@@ -41,31 +42,60 @@ class MessageForwarder:
     消息转发器类
     """
 
-    def __init__(
-        self,
-        message_forwarding_rule_list: List,
-        official_account_reminder_rule_list: List,
-    ):
+    def __init__(self):
+        self.all_message_rule = (None,)
+        self.specific_message_rules = (None,)
+        self.official_account_reminder_rule = None
+        self.official_account_reminder_type = "text"
+        self.discord_all_message_rule = None
+        self.discord_message_forwarding_rule = None
+
+    def set_wechat_forwarding_rule(self, message_forwarding_rule_list: List):
         """
-        初始化
+        设置微信消息转发规则
         :param message_forwarding_rule_list: 消息转发规则列表
-        :param official_account_reminder_rule_list: 公众号文章提醒规则列表
         """
         (
             self.all_message_rule,
             self.specific_message_rules,
         ) = parse_message_forwarding_rule_list(message_forwarding_rule_list)
+
+    def set_official_account_reminder_rule(
+        self, official_account_reminder_rule_list: List
+    ):
+        """
+        设置公众号提醒规则
+        :param official_account_reminder_rule_list: 公众号提醒规则列表
+        """
         self.official_account_reminder_rule = parse_official_account_reminder_rule_list(
             official_account_reminder_rule_list
         )
-        self.official_account_reminder_type = "text"
 
-    def forwarding(self, message_obj: Message):
+    def set_discord_forwarding_rule(self, discord_message_forwarding_rule_list: List):
+        """
+        设置 Discord 消息转发规则
+        :param discord_message_forwarding_rule_list: Discord 消息转发规则列表
+        """
+        (
+            self.discord_all_message_rule,
+            self.discord_specific_message_rules,
+        ) = parse_discord_message_forwarding_rule_list(
+            discord_message_forwarding_rule_list
+        )
+
+    def forwarding_to_wechat(self, message_obj: Message):
         """
         消息转发
         :param message_obj: 消息对象
         """
         # TODO: 转发文件
+
+        # 判断是否设置了转发规则
+        if not self.all_message_rule and not self.specific_message_rules:
+            logger.warning(
+                "消息转发器未设置转发规则，self.all_message_rule 和 self.specific_message_rules 均为空"
+            )
+            return
 
         # 判断消息来源是否符合转发规则
         if self.all_message_rule:
@@ -77,7 +107,7 @@ class MessageForwarder:
             _forwarding_by_rule(message_obj, rule)
 
     @staticmethod
-    def reply_forwarded_message(message_obj: Message):
+    def reply_wechat_forwarded_message(message_obj: Message):
         """
         回复转发消息
         :param message_obj: 消息对象
@@ -97,6 +127,12 @@ class MessageForwarder:
         :param message_obj: 消息对象
         """
         if not message_obj.is_official_account:
+            return
+        # 判断是否设置了提醒规则
+        if not self.official_account_reminder_rule:
+            logger.warning(
+                "消息转发器未设置公众号提醒规则，self.official_account_reminder_rule 为空"
+            )
             return
         if message_obj.sender_name in self.official_account_reminder_rule:
             rule = self.official_account_reminder_rule[message_obj.sender_name]
@@ -128,6 +164,34 @@ class MessageForwarder:
                             is_group=is_group,
                         )
 
+    def forwarding_to_discord(self, message_obj: Message):
+        """
+        转发消息到 Discord
+        :param message_obj: 消息对象
+        """
+        if (
+            not self.discord_all_message_rule
+            and not self.discord_specific_message_rules
+        ):
+            logger.warning(
+                "消息转发器未设置 Discord 转发规则，self.discord_message_forwarding_rule 为空"
+            )
+            return
+
+        if self.discord_all_message_rule:
+            rule = self.discord_all_message_rule
+            webhook_url = rule["webhook_url"]
+            sender.send_to_discord(
+                webhook_url, message_obj.content, message_obj.person, message_obj.group
+            )
+
+        if message_obj.sender_name in self.discord_specific_message_rules:
+            rule = self.discord_specific_message_rules[message_obj.sender_name]
+            webhook_url = rule["webhook_url"]
+            sender.send_to_discord(
+                webhook_url, message_obj.content, message_obj.person, message_obj.group
+            )
+
 
 def _construct_official_account_reminder_message(message_obj: Message) -> str:
     """
@@ -145,6 +209,7 @@ def _construct_official_account_reminder_image(message_obj: Message) -> str:
     """
     构造公众号文章提醒图片
     """
+    # TODO: 构造公众号文章提醒图片
     # title = message_obj.urllink.title
     return "开发中..."
     pass

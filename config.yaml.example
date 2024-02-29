@@ -84,3 +84,11 @@ custom_command_key_dict:
   bili-hot: [ "bh" ]
   play: [ "p" ]
   weather: [ "w", "温度" ]
+
+
+# Discord Message Forwarding：Discord 消息转发
+discord_message_forwarding_enabled: True
+discord_message_forwarding_rule_list:
+  - from_list: [ "%ALL" ]
+    from_list_exclude: [ "" ]
+    webhook_url: "your_discord_webhook_url"
