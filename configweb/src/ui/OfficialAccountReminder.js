@@ -4,7 +4,7 @@ import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
 
 function OfficialAccountReminder() {
-    const [config, setConfig] = useFetchData('official_account_reminder');
+    const [config, setConfig] = useFetchData('official-account-reminder');
     const handleSave = useSaveConfig('official-account-reminder', config);
     useEffect(() => {
         console.log('config changed');
