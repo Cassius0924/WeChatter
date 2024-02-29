@@ -313,13 +313,13 @@ def update_message_forwarding_config(updated_config: dict = Body(...)):
             "message_forwarding_rule_list": succeed_message_forwarding_rule_list}
 
 
-@app.get("/official_account_reminder")
+@app.get("/official-account-reminder")
 def get_official_account_reminder_config():
     sections = get_config_sections(['official_account_reminder_enabled', 'official_account_reminder_rule_list'])
     return sections
 
 
-@app.post("/official_account_reminder")
+@app.post("/official-account-reminder")
 def update_official_account_reminder_config(updated_config: dict = Body(...)):
     succeed_official_account_reminder_enabled = update_config_section('official_account_reminder_enabled',
                                                                       updated_config)
