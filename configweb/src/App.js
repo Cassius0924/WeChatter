@@ -8,6 +8,7 @@ import Chat from "./ui/Chat";
 import CopilotGPT4 from "./ui/CopilotGPT4";
 import GitHubWebhook from "./ui/GitHubWebhook";
 import MessageForwarding from "./ui/MessageForwarding";
+import Official_Account_Reminder from "./ui/Official_Account_Reminder";
 import TaskCron from "./ui/TaskCron";
 import CustomCommandKey from "./ui/Custom-Command-Key";
 import ConfigWeb from "./ui/ConfigWeb";
@@ -78,6 +79,10 @@ function App() {
                                     <Link to="Message-Forwarding"
                                           className="text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition">
                                         Message-Forwarding
+                                    </Link>
+                                    <Link to="Official_Account_Reminder"
+                                          className="text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition">
+                                        Official_Account_Reminder
                                     </Link>
                                     <Link to="Task-Cron"
                                           className="text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition">
@@ -213,6 +218,7 @@ function App() {
                     <Route path="/copilot-gpt4" element={<CopilotGPT4/>}/>
                     <Route path="/github-webhook" element={<GitHubWebhook/>}/>
                     <Route path="/message-forwarding" element={<MessageForwarding/>}/>
+                    <Route path={"/official_account_reminder"} element={<Official_Account_Reminder/>}/>
                     <Route path="/task-cron" element={<TaskCron/>}/>
                     <Route path="/custom-command-key" element={<CustomCommandKey/>}/>
                 </Routes>

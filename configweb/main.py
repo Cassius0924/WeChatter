@@ -305,12 +305,28 @@ def get_message_forwarding_config():
     return sections
 
 
-@app.post("/message-forwarding")
+@app.post("/message-forwading")
 def update_message_forwarding_config(updated_config: dict = Body(...)):
     succeed_message_forwarding_enabled = update_config_section('message_forwarding_enabled', updated_config)
     succeed_message_forwarding_rule_list = update_config_section('message_forwarding_rule_list', updated_config)
     return {"message_forwarding_enabled": succeed_message_forwarding_enabled,
             "message_forwarding_rule_list": succeed_message_forwarding_rule_list}
+
+
+@app.get("/official_account_reminder")
+def get_official_account_reminder_config():
+    sections = get_config_sections(['official_account_reminder_enabled', 'official_account_reminder_rule_list'])
+    return sections
+
+
+@app.post("/official_account_reminder")
+def update_official_account_reminder_config(updated_config: dict = Body(...)):
+    succeed_official_account_reminder_enabled = update_config_section('official_account_reminder_enabled',
+                                                                      updated_config)
+    succeed_official_account_reminder_rule_list = update_config_section('official_account_reminder_rule_list',
+                                                                        updated_config)
+    return {"official_account_reminder_enabled": succeed_official_account_reminder_enabled,
+            "official_account_reminder_rule_list": succeed_official_account_reminder_rule_list}
 
 
 @app.get("/task-cron")
@@ -338,6 +354,7 @@ def update_custom_command_key_config(updated_config: dict = Body(...)):
     return {"custom_command_key_dict": succeed_custom_command_key_dict}
 
 
+# 这里的run_main_thread是全局变量，用来保存启动wechatter的线程，用来判断wechatter是否在运行（只适用于在configweb启动的wechatter）
 run_main_thread = None
 
 
