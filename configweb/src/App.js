@@ -218,7 +218,7 @@ function App() {
                     <Route path="/copilot-gpt4" element={<CopilotGPT4/>}/>
                     <Route path="/github-webhook" element={<GitHubWebhook/>}/>
                     <Route path="/message-forwarding" element={<MessageForwarding/>}/>
-                    <Route path={"/official-account-reminder"} element={<OfficialAccountReminder/>}/>
+                    <Route path="/official-account-reminder" element={<OfficialAccountReminder/>}/>
                     <Route path="/task-cron" element={<TaskCron/>}/>
                     <Route path="/custom-command-key" element={<CustomCommandKey/>}/>
                 </Routes>
