@@ -8,7 +8,7 @@ import Chat from "./ui/Chat";
 import CopilotGPT4 from "./ui/CopilotGPT4";
 import GitHubWebhook from "./ui/GitHubWebhook";
 import MessageForwarding from "./ui/MessageForwarding";
-import Official_Account_Reminder from "./ui/Official_Account_Reminder";
+import OfficialAccountReminder from "./ui/OfficialAccountReminder";
 import TaskCron from "./ui/TaskCron";
 import CustomCommandKey from "./ui/Custom-Command-Key";
 import ConfigWeb from "./ui/ConfigWeb";
@@ -218,7 +218,7 @@ function App() {
                     <Route path="/copilot-gpt4" element={<CopilotGPT4/>}/>
                     <Route path="/github-webhook" element={<GitHubWebhook/>}/>
                     <Route path="/message-forwarding" element={<MessageForwarding/>}/>
-                    <Route path={"/official_account_reminder"} element={<Official_Account_Reminder/>}/>
+                    <Route path={"/official-account-reminder"} element={<OfficialAccountReminder/>}/>
                     <Route path="/task-cron" element={<TaskCron/>}/>
                     <Route path="/custom-command-key" element={<CustomCommandKey/>}/>
                 </Routes>
