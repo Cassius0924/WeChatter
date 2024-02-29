@@ -80,9 +80,9 @@ function App() {
                                           className="text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition">
                                         Message-Forwarding
                                     </Link>
-                                    <Link to="Official_Account_Reminder"
+                                    <Link to="Official-Account-Reminder"
                                           className="text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition">
-                                        Official_Account_Reminder
+                                        Official-Account-Reminder
                                     </Link>
                                     <Link to="Task-Cron"
                                           className="text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition">
