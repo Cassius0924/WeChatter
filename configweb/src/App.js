@@ -210,7 +210,7 @@ function App() {
                 <Routes>
                     <Route path="*" element={window.location.pathname.startsWith('/api') ? null : <ConfigWeb/>}/>
                     <Route path="/ConfigWeb" element={<ConfigWeb/>}/>
-                    <Route path="/wechatter" element={<WeChatter/>}/>//这里的path是url的路径，不是组件的路径，具体是：http://localhost:3000/wechatter
+                    <Route path="/wechatter" element={<WeChatter/>}/>{/*这里的path是url的路径，不是组件的路径，具体是：http://localhost:3000/wechatter*/}
                     <Route path="/wx-bot-webhook" element={<WxBotWebhook/>}/>
                     <Route path="/admin" element={<Admin/>}/>
                     <Route path="/bot" element={<Bot/>}/>

@@ -9,6 +9,7 @@ import GitHubWebhook from "./GitHubWebhook";
 import MessageForwarding from "./MessageForwarding";
 import TaskCron from "./TaskCron";
 import CustomCommandKey from "./Custom-Command-Key";
+import OfficialAccountReminder from "./OfficialAccountReminder";
 
 function ConfigWeb() {
     return (
@@ -21,6 +22,7 @@ function ConfigWeb() {
             <CopilotGPT4/>
             <GitHubWebhook/>
             <MessageForwarding/>
+            <OfficialAccountReminder/>
             <TaskCron/>
             <CustomCommandKey/>
         </main>
