@@ -39,13 +39,6 @@ print(f"后端端口是{BACKEND_PORT}")
 
 
 
-# 把BACKEND_IP和BACKEND_PORT创建并写进config.json文件中(好让config.js读取到)
-import json
-
-with open('src/config.json', 'w', encoding='utf-8') as f:
-    json.dump({"backend_ip": BACKEND_IP, "backend_port": BACKEND_PORT}, f)
-    print("config.json created successfully")
-
 # #本地测试
 # FRONTEND_IP = "localhost"
 # BACKEND_PORT = "3000"
@@ -216,6 +209,10 @@ def run_command(command, working_directory):
 #             print("错误输出:")
 #             print('None' if output[1] is None else output[1].decode('utf-8'))
 #     return process.poll()
+@app.get("/backend")
+def read_backend():
+    sections = get_config_sections(['backend_ip', 'backend_port'])
+    return sections
 
 
 @app.get("/")
