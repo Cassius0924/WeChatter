@@ -11,12 +11,45 @@ from ruamel.yaml.comments import CommentedSeq
 logging.basicConfig(level=logging.DEBUG)
 app = FastAPI()
 
+
+def get_config_sections(section_names):
+    try:
+        yaml = YAML()
+        with open('../config.yaml', 'r', encoding='utf-8') as f:
+            config = yaml.load(f)
+        section_configs = {section_name: config.get(section_name) for section_name in section_names}
+        for section_name, section_config in section_configs.items():
+            print(f"!!!{config.get(section_name)}type:{type(config.get(section_name))}!!!")
+            if section_config is None:
+                raise KeyError(f"Section '{section_name}' not found in configuration file.")
+        return section_configs
+    except Exception as e:
+        return {"error": str(e)}
+
+
+# 获取后端ip、后端端口、前端ip、前端端口
+FRONTEND_IP = get_config_sections(['frontend_ip']).get('frontend_ip')
+FRONTEND_PORT = get_config_sections(['frontend_port']).get('frontend_port')
+BACKEND_IP = get_config_sections(['backend_ip']).get('backend_ip')
+BACKEND_PORT = get_config_sections(['backend_port']).get('backend_port')
+print(f"前端ip是{FRONTEND_IP}")
+print(f"前端端口是{FRONTEND_PORT}")
+print(f"后端ip是{BACKEND_IP}")
+print(f"后端端口是{BACKEND_PORT}")
+
+# 把BACKEND_IP和BACKEND_PORT创建并写进config.json文件中(好让config.js读取到)
+import json
+
+with open('src/config.json', 'w', encoding='utf-8') as f:
+    json.dump({"backend_ip": BACKEND_IP, "backend_port": BACKEND_PORT}, f)
+    print("config.json created successfully")
+
 # #本地测试
 # FRONTEND_IP = "localhost"
 # BACKEND_PORT = "3000"
 # 服务器前端
-FRONTEND_IP = "47.92.99.199"
-FRONTEND_PORT = "3000"
+# FRONTEND_IP = "47.92.99.199"
+# FRONTEND_PORT = "3000"
 
 # 其他代码...
 FRONTEND_URL = f"http://{FRONTEND_IP}:"
@@ -41,21 +74,6 @@ app.add_middleware(
 #         return section_config
 #     except Exception as e:
 #         return {"error": str(e)}
-
-
-def get_config_sections(section_names):
-    try:
-        yaml = YAML()
-        with open('../config.yaml', 'r', encoding='utf-8') as f:
-            config = yaml.load(f)
-        section_configs = {section_name: config.get(section_name) for section_name in section_names}
-        for section_name, section_config in section_configs.items():
-            print(f"!!!{config.get(section_name)}type:{type(config.get(section_name))}!!!")
-            if section_config is None:
-                raise KeyError(f"Section '{section_name}' not found in configuration file.")
-        return section_configs
-    except Exception as e:
-        return {"error": str(e)}
 
 
 def update_config_section(section_name, updated_value):
@@ -143,9 +161,9 @@ def update_config_section(section_name, updated_value):
 # )是非阻塞的，会立即返回子进程的状态，如果子进程结束了，就返回子进程的状态，如果子进程没有结束，就返回None，所以while process.poll() is None不会阻塞，而while True会阻塞，所以将while
 # True改为while process.poll() is None就不会死锁了
 
-# 死锁问题，问题具体如下：（现在用npm start就可以让前后端启动，在前端APP.js中，点击启动的button会执行await axios.post(`http://${BACKEND_URL}:${
+# 死锁问题，问题具体如下：（现在用npm start就可以让前后端启动，在前端APP.js中，点击启动的button会执行await axios.post(`http://${BACKEND_IP}:${
 # BACKEND_PORT}/run-main`)，服务器就会执行python3 main.py以启动另一个项目，cpu是正常的。点击停止的button会执行await axios.post(`http://${
-# BACKEND_URL}:${BACKEND_PORT}/stop-main`)，服务器就会执行kill -9 $(lsof -t
+# BACKEND_IP}:${BACKEND_PORT}/stop-main`)，服务器就会执行kill -9 $(lsof -t
 # -i:400)，也执行成功了，已经启动的那个另一个项目的进程停止了，但是出现了问题：后端突然占用很大的cpu，平均有140%的cpu，具体是在点击停止的button的过程中，INFO:     Started reloader
 # process [2993425] using StatReload INFO:     Started server process [
 # 2993434]，这个2993434进程，突然变得占用cpu很大，他的command是python3 -c from multiprocessing.spawn import spawn main;spawn main(

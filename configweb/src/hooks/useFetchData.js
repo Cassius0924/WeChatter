@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
-import { BACKEND_URL, BACKEND_PORT } from '../config';
+import { BACKEND_IP, BACKEND_PORT } from '../config';
 
 
 function useFetchData(path) {
@@ -9,7 +9,7 @@ function useFetchData(path) {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get(`http://${BACKEND_URL}:${BACKEND_PORT}/${path}`)
+        axios.get(`http://${BACKEND_IP}:${BACKEND_PORT}/${path}`)
             .then(res => {
                 console.log(res.data);
                 setData(res.data);

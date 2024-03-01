@@ -2,6 +2,12 @@
 # 配置说明：https://github.com/Cassius0924/WeChatter?tab=readme-ov-file#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6
 
 
+# Configweb
+backend_ip: 47.92.99.199
+backend_port: 8000
+frontend_ip: 47.92.99.199
+frontend_port: 3000
+
 # Wechatter
 wechatter_port: 4000
 
