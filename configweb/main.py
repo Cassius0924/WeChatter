@@ -37,6 +37,8 @@ print(f"前端端口是{FRONTEND_PORT}")
 print(f"后端ip是{BACKEND_IP}")
 print(f"后端端口是{BACKEND_PORT}")
 
+
+
 # 把BACKEND_IP和BACKEND_PORT创建并写进config.json文件中(好让config.js读取到)
 import json
 
@@ -50,6 +52,9 @@ with open('src/config.json', 'w', encoding='utf-8') as f:
 # 服务器前端
 # FRONTEND_IP = "47.92.99.199"
 # FRONTEND_PORT = "3000"
+
+#把FRONTEND_PORT变成字符串
+FRONTEND_PORT = str(FRONTEND_PORT)
 
 # 其他代码...
 FRONTEND_URL = f"http://{FRONTEND_IP}:"
