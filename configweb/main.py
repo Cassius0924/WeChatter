@@ -194,10 +194,6 @@ def run_command(command, working_directory):
 #             print("错误输出:")
 #             print('None' if output[1] is None else output[1].decode('utf-8'))
 #     return process.poll()
-@app.get("/backend")
-def read_backend():
-    sections = get_config_sections(['backend_ip', 'backend_port'])
-    return sections
 
 
 @app.get("/")
