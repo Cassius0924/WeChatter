@@ -30,13 +30,8 @@ def get_config_sections(section_names):
 # 获取后端ip、后端端口、前端ip、前端端口
 FRONTEND_IP = get_config_sections(['frontend_ip']).get('frontend_ip')
 FRONTEND_PORT = get_config_sections(['frontend_port']).get('frontend_port')
-BACKEND_IP = get_config_sections(['backend_ip']).get('backend_ip')
-BACKEND_PORT = get_config_sections(['backend_port']).get('backend_port')
 print(f"前端ip是{FRONTEND_IP}")
 print(f"前端端口是{FRONTEND_PORT}")
-print(f"后端ip是{BACKEND_IP}")
-print(f"后端端口是{BACKEND_PORT}")
-
 
 
 # #本地测试

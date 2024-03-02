@@ -13,7 +13,7 @@ import TaskCron from "./ui/TaskCron";
 import CustomCommandKey from "./ui/Custom-Command-Key";
 import ConfigWeb from "./ui/ConfigWeb";
 import axios from "axios";
-import {BACKEND_IP, BACKEND_PORT} from './config';
+import {BACKEND_IP, BACKEND_PORT} from '../../config';
 
 
 function App() {

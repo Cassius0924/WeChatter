@@ -1,6 +1,6 @@
 import {useCallback} from 'react';
 import axios from 'axios';
-import { BACKEND_IP, BACKEND_PORT } from '../config';
+import { BACKEND_IP, BACKEND_PORT } from '../../../config';
 
 
 function useSaveConfig(configName, config) {
