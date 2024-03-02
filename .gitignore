@@ -13,3 +13,5 @@ logs/
 
 .sqllsrc.json
 assets/games/tictactoe/gaming_board.png
+
+configweb/src/config.js
