@@ -94,8 +94,12 @@ def _post_request(
     )
 
 
-URL = f"{config['wx_webhook_base_api']}/webhook/msg/v2"
-V1_URL = f"{config['wx_webhook_base_api']}/webhook/msg"
+URL = (
+    f"{config['wx_webhook_base_api']}/webhook/msg/v2?token={config['wx_webhook_token']}"
+)
+V1_URL = (
+    f"{config['wx_webhook_base_api']}/webhook/msg?token={config['wx_webhook_token']}"
+)
 
 MSG_TYPE = ["text", "fileUrl", "localfile"]
 

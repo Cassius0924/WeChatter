@@ -1,6 +1,7 @@
 from wechatter.init_logger import init_logger
 
-from .config import load_config, validate_config
+from .config import load_config
+from .validate import validate_config
 
 # 初始化 logger
 init_logger()
