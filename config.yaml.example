@@ -3,9 +3,7 @@
 
 
 # Configweb
-backend_ip: 47.92.99.199
-backend_port: 8000
-frontend_ip: 47.92.99.199
+frontend_ip: localhost
 frontend_port: 3000
 
 # Wechatter
