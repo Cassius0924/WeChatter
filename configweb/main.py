@@ -64,16 +64,6 @@ app.add_middleware(
 )
 
 
-# def get_config_section(section_name):
-#     try:
-#         config = configparser.ConfigParser()
-#         config.read('../config.ini', encoding='utf-8')
-#         section_config = dict(config[section_name])
-#         return section_config
-#     except Exception as e:
-#         return {"error": str(e)}
-
-
 def update_config_section(section_name, updated_value):
     try:
         yaml = YAML()
