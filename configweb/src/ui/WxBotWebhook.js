@@ -33,6 +33,19 @@ function WxBotWebhook() {
                                placeholder="/receive_msg"
                                value={config.wx_webhook_recv_api_path || ''}
                                onChange={e => setConfig({...config, wx_webhook_recv_api_path: e.target.value})}/>
+
+                        <h2 className="mb-4 text-lg leading-6 font-medium text-gray-900">
+                            wx_webhook_token
+                        </h2>
+                        <p className="mb-4 text-sm leading-5 text-gray-500">
+                            用于验证消息的token（wxbot）
+                        </p>
+                        <input type="text"
+                               className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                               placeholder="wxbot"
+                               value={config.wx_webhook_token || ''}
+                               onChange={e => setConfig({...config, wx_webhook_token: e.target.value})}/>
+
                         <button
                             onClick={handleSave}
                             className="mt-4 px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md">

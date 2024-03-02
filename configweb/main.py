@@ -215,7 +215,7 @@ def update_wechatter_config(updated_config: dict = Body(...)):
 
 @app.get("/wx-bot-webhook")
 def get_wx_bot_webhook_config():
-    sections = get_config_sections(['wx_webhook_base_api', 'wx_webhook_recv_api_path'])
+    sections = get_config_sections(['wx_webhook_base_api', 'wx_webhook_recv_api_path', 'wx_webhook_token'])
     return sections
 
 
@@ -223,8 +223,10 @@ def get_wx_bot_webhook_config():
 def update_wx_bot_webhook_config(updated_config: dict = Body(...)):
     succeed_wx_webhook_base_api = update_config_section('wx_webhook_base_api', updated_config)
     succeed_wx_webhook_recv_api_path = update_config_section('wx_webhook_recv_api_path', updated_config)
+    succeed_wx_webhook_token = update_config_section('wx_webhook_token', updated_config)
     return {"wx_webhook_base_api": succeed_wx_webhook_base_api,
-            "wx_webhook_recv_api_path": succeed_wx_webhook_recv_api_path}
+            "wx_webhook_recv_api_path": succeed_wx_webhook_recv_api_path,
+            "wx_webhook_token": succeed_wx_webhook_token}
 
 
 @app.get("/admin")
