@@ -226,10 +226,10 @@ python3 -m wechatter
 
 ### ⚙️ Discord Message Forwarding 配置
 
-| 配置项 | 解释 | 备注 |
-| --- | --- | --- |
-| `discord_message_forwarding_enabled` | 功能开关，是否开启 Discord 消息转发 | 默认为 `False` |
-| `discord_message_forwarding_rule_list` | 消息规则列表，每个规则包含三个字段：`from_list`、`to_discord_webhook_url` 和 `to_discord_webhook_name` |  |
+| 配置项 | 子项 | 解释 | 备注 |
+| --- | --- | --- | --- |
+| `discord_message_forwarding_enabled` | | 功能开关，是否开启 Discord 消息转发 | 默认为 `False` |
+| `discord_message_forwarding_rule_list` | | 消息规则列表，每个规则包含三个字段：`from_list`、`to_discord_webhook_url` 和 `to_discord_webhook_name` |
 | | `from_list` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称，若要转发所有消息则使用 `["%ALL"]` |
 | | `from_list_exclude` | 消息转发来源排除列表，不转发此列表的用户和群 | 只在 `from_list` 为 `["%ALL"]` 时生效 |
 | | `discord_webhook_url` | 消息转发目标 Discord Webhook URL | |
