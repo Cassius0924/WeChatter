@@ -47,10 +47,10 @@ def validate_config(config):
     #     raise ValueError(error_msg)
 
     # 定时任务配置
-    task_cron_ess_fields = ["task", "cron", "commands"]
+    ess_fields = ["task", "cron", "commands"]
     for i, task_cron in enumerate(config["task_cron_list"]):
         # task_cron_list 字段验证
-        for field in task_cron_ess_fields:
+        for field in ess_fields:
             if field not in task_cron:
                 error_msg = f"配置参数错误：task_cron_list[{i}] 缺少必要字段 {field}"
                 logger.critical(error_msg)
@@ -74,5 +74,14 @@ def validate_config(config):
                         error_msg = f"配置参数错误：task_cron_list[{i}].commands[{i2}] 缺少必要字段 {field}"
                         logger.critical(error_msg)
                         raise ValueError(error_msg)
+
+    # Discord 消息转发配置
+    ess_fields = ["from_list", "webhook_url"]
+    for i, rule in enumerate(config["discord_message_forwarding_rule_list"]):
+        for field in ess_fields:
+            if field not in rule:
+                error_msg = f"配置参数错误：discord_message_forwarding_rule_list[{i}] 缺少必要字段 {field}"
+                logger.critical(error_msg)
+                raise ValueError(error_msg)
 
     logger.info("配置文件验证通过！")

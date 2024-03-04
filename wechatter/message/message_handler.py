@@ -107,15 +107,6 @@ class MessageHandler:
         else:
             logger.debug("该消息不是命令类型")
 
-        # game_name = self.__get_game(content, message_obj.is_mentioned, message_obj.is_group)
-        # # 是游戏命令
-        # if game_name:
-        #     game_class = self.games[game_name]["class"]
-        #     logger.info(self.games[game_name]["desc"])
-        #     _execute_game(game, game_class, to, content, message_obj)
-        # else:
-        #     logger.debug("该消息不是游戏类型")
-
     def __parse_command(self, content: str, is_mentioned: bool, is_group: bool) -> Dict:
         """
         解析命令
