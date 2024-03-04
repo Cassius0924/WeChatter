@@ -26,9 +26,9 @@ command_prefix: /
 need_mentioned: False
 
 
-# Copilot GPT4
-cp_gpt4_base_api: http://localhost:999
-cp_token: ghu_your_token
+# LLM
+openai_base_api: https://api.openai.com
+openai_token: sk_your_openai_token
 
 
 # GitHub Webhook

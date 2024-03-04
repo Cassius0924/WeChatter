@@ -85,7 +85,7 @@ python3 -m wechatter
 
 ## 支持的命令
 
-- [x] GPT 问答，基于 [Copilot-GPT4-Service](https://github.com/aaamoon/copilot-gpt4-service)（不支持定时任务）
+- [x] GPT 问答（不支持定时任务）
 - [x] Bilibili 热搜
 - [x] 知乎热搜
 - [x] 微博热搜
@@ -170,12 +170,12 @@ python3 -m wechatter
 | `command_prefix` | 机器人命令前缀 | 默认为 `/` ，可以设置为`>>`、`!` 等任意字符 |
 | `need_mentioned` | 群聊中的命令是否需要@机器人 | 默认为 `True` |
 
-### ⚙️ Copilot GPT4 配置
+### ⚙️ LLM 配置
 
 | 配置项 | 解释 |  备注 |
 | --- | --- | --- |
-| `cp_gpt4_base_api` | CopilotGPT4 服务的 BaseAPI | 默认为 `http://localhost:8080` |
-| `cp_token` | GitHub Copilot 的 Token | 以 `ghu_` 开头的字符串 |
+| `openai_base_api` | OpenAI 服务的 BaseAPI | 默认为 `https://api.openai.com` |
+| `openai_token` | OpenAI Token（Key） | 以 `sk_` 开头的字符串密钥 |
 
 ### ⚙️ GitHub Webhook 配置
 
