@@ -26,6 +26,11 @@ class MessageType(enum.Enum):
     file = "file"
     urlLink = "urlLink"
     friendship = "friendship"
+    system_event_login = "system_event_login"
+    system_event_logout = "system_event_logout"
+    system_event_error = "system_event_error"
+    system_event_push_notify = "system_event_push_notify"
+    unknown = "unknown"
 
 
 class MessageSenderType(enum.Enum):
@@ -35,8 +40,6 @@ class MessageSenderType(enum.Enum):
 
     PERSON = 0
     GROUP = 1
-    # TODO: 公众号文章
-    # ARTICLE = 2
 
 
 class Message(BaseModel):
@@ -47,8 +50,10 @@ class Message(BaseModel):
     type: MessageType
     person: Person
     group: Optional[Group] = None
+    receiver: Optional[Person] = None
     content: str
     is_mentioned: bool = False
+    is_from_self: bool = False
     id: Optional[int] = None
 
     @classmethod
@@ -58,6 +63,7 @@ class Message(BaseModel):
         content: str,
         source: str,
         is_mentioned: str,
+        is_from_self: str = 0,
     ):
         """
         从API接口创建消息对象
@@ -65,6 +71,7 @@ class Message(BaseModel):
         :param content: 消息内容
         :param source: 消息来源
         :param is_mentioned: 是否@机器人
+        :param is_from_self: 是否是自己发送的消息
         :return: 消息对象
         """
         try:
@@ -112,16 +119,34 @@ class Message(BaseModel):
                 admin_id_list=payload.get("adminIdList", []),
                 member_list=payload.get("memberList", []),
             )
+
+        _receiver = None
+        if source_json.get("to"):
+            to_payload = source_json.get("to").get("payload", {})
+            _receiver = Person(
+                id=to_payload.get("id", ""),
+                name=to_payload.get("name", ""),
+                alias=to_payload.get("alias", ""),
+                gender="unknown",
+                is_star=to_payload.get("star", ""),
+                is_friend=to_payload.get("friend", ""),
+            )
+
         _content = content.replace("\u2005", " ", 1)
         _is_mentioned = False
         if is_mentioned == "1":
             _is_mentioned = True
+        _is_from_self = False
+        if is_from_self == "1":
+            _is_from_self = True
         return cls(
             type=type,
             person=_person,
             group=_group,
+            receiver=_receiver,
             content=_content,
-            is_mentioned=is_mentioned,
+            is_mentioned=_is_mentioned,
+            is_from_self=_is_from_self,
         )
 
     @computed_field
@@ -190,10 +215,10 @@ class Message(BaseModel):
 
     @computed_field
     @cached_property
-    def forwarded_source(self) -> Optional[Tuple[str, bool]]:
+    def forwarded_source_name(self) -> Optional[Tuple[str, bool]]:
         """
         获取转发消息的来源的名字
-        :return: 消息来源的名字和是否为群的元组(source, is_group)
+        :return: 消息来源的名字和是否为群的元组(source_name, is_group)
         """
         if self.is_quoted:
             # 先尝试匹配群消息

@@ -107,6 +107,7 @@ python3 -m wechatter
 
 ## 支持的功能
 
+- [x] **掉线提醒**：当机器人掉线时，通过 Bark 推送提醒消息。
 - [x] **消息可引用回复**：用户可以通过引用并回复命令消息进一步获取消息内容。带`（可引用：***）`的机器人消息即为可进一步互动的可引用消息。
 - [x] **消息转发**：转发用户或群的消息到其他用户或群，并支持引用回复转发消息。需进行[配置](#%EF%B8%8F-message-forwarding-配置)。
 ![message_forwarding_and_quoted_reply_show](docs/images/message_forwarding_and_quoted_reply_show.png)
@@ -156,6 +157,7 @@ python3 -m wechatter
 | --- | --- | --- |
 | `admin_list` | 设置管理员,用于接收机器人状态变化通知 | 填入管理员微信名（不是备注） |
 | `admin_group_list` | 与 `admin_list` 同理，接收机器人状态变化通知 | 填入群名称（不是群备注） |
+| `bark_url` | 用于接收机器人状态变化通知的 Bark URL | [Bark](https://github.com/Finb/Bark) 仅限 iOS 和 iPadOS |
 
 ### ⚙️ Bot 配置
 
@@ -168,7 +170,7 @@ python3 -m wechatter
 | 配置项 | 解释 | 备注 |
 | --- | --- | --- |
 | `command_prefix` | 机器人命令前缀 | 默认为 `/` ，可以设置为`>>`、`!` 等任意字符 |
-| `need_mentioned` | 群聊中的命令是否需要@机器人 | 默认为 `True` |
+| `need_mentioned` | 群聊中的命令是否需要@机器人 | 默认为 `False` |
 
 ### ⚙️ LLM 配置
 
@@ -226,10 +228,10 @@ python3 -m wechatter
 
 ### ⚙️ Discord Message Forwarding 配置
 
-| 配置项 | 解释 | 备注 |
-| --- | --- | --- |
-| `discord_message_forwarding_enabled` | 功能开关，是否开启 Discord 消息转发 | 默认为 `False` |
-| `discord_message_forwarding_rule_list` | 消息规则列表，每个规则包含三个字段：`from_list`、`to_discord_webhook_url` 和 `to_discord_webhook_name` |  |
+| 配置项 | 子项 | 解释 | 备注 |
+| --- | --- | --- | --- |
+| `discord_message_forwarding_enabled` | | 功能开关，是否开启 Discord 消息转发 | 默认为 `False` |
+| `discord_message_forwarding_rule_list` | | 消息规则列表，每个规则包含三个字段：`from_list`、`to_discord_webhook_url` 和 `to_discord_webhook_name` |
 | | `from_list` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称，若要转发所有消息则使用 `["%ALL"]` |
 | | `from_list_exclude` | 消息转发来源排除列表，不转发此列表的用户和群 | 只在 `from_list` 为 `["%ALL"]` 时生效 |
 | | `discord_webhook_url` | 消息转发目标 Discord Webhook URL | |

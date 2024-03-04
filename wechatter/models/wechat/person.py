@@ -1,4 +1,5 @@
 import enum
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -22,9 +23,9 @@ class Person(BaseModel):
     name: str
     alias: str
     gender: Gender
-    signature: str
-    province: str
-    city: str
+    signature: Optional[str] = None
+    province: Optional[str] = None
+    city: Optional[str] = None
     # phone_list: List[str]
     is_star: bool
     is_friend: bool

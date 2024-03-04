@@ -10,6 +10,7 @@ import wechatter.utils.http_request as http_request
 from wechatter.config import config
 from wechatter.models.wechat import QuotedResponse, SendTo
 from wechatter.sender.quotable import make_quotable
+from wechatter.utils.url_joiner import join_urls
 
 
 # 对retry装饰器重新包装，增加日志输出
@@ -99,10 +100,12 @@ def _post_request(
 
 
 URL = (
-    f"{config['wx_webhook_base_api']}/webhook/msg/v2?token={config['wx_webhook_token']}"
+    join_urls(config["wx_webhook_base_api"], "webhook/msg/v2")
+    + f"?token={config['wx_webhook_token']}"
 )
 V1_URL = (
-    f"{config['wx_webhook_base_api']}/webhook/msg?token={config['wx_webhook_token']}"
+    join_urls(config["wx_webhook_base_api"], "webhook/msg")
+    + f"?token={config['wx_webhook_token']}"
 )
 
 MSG_TYPE = ["text", "fileUrl", "localfile"]

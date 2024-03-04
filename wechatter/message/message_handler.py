@@ -63,7 +63,7 @@ class MessageHandler:
             # 尝试进行消息转发
             message_forwarder.forwarding_to_wechat(message_obj)
             # 尝试进行转发消息的回复
-            if message_obj.forwarded_source:
+            if message_obj.forwarded_source_name:
                 message_forwarder.reply_wechat_forwarded_message(message_obj)
                 return
 
@@ -74,7 +74,11 @@ class MessageHandler:
         ):
             message_forwarder.forwarding_to_discord(message_obj)
 
-        to = SendTo(person=message_obj.person, group=message_obj.group)
+        # 判断是否是自己的消息，是则需要将 to 设置为对方
+        if message_obj.is_from_self and not message_obj.is_group:
+            to = SendTo(person=message_obj.receiver, group=message_obj.group)
+        else:
+            to = SendTo(person=message_obj.person, group=message_obj.group)
 
         # 解析命令
         content = message_obj.content
