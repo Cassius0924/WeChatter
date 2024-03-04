@@ -75,7 +75,7 @@ class MessageHandler:
             message_forwarder.forwarding_to_discord(message_obj)
 
         # 判断是否是自己的消息，是则需要将 to 设置为对方
-        if message_obj.is_from_self:
+        if message_obj.is_from_self and not message_obj.is_group:
             to = SendTo(person=message_obj.receiver, group=message_obj.group)
         else:
             to = SendTo(person=message_obj.person, group=message_obj.group)

@@ -40,8 +40,6 @@ class MessageSenderType(enum.Enum):
 
     PERSON = 0
     GROUP = 1
-    # TODO: 公众号文章
-    # ARTICLE = 2
 
 
 class Message(BaseModel):
