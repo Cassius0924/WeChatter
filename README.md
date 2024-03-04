@@ -107,6 +107,7 @@ python3 -m wechatter
 
 ## 支持的功能
 
+- [x] **掉线提醒**：当机器人掉线时，通过 Bark 推送提醒消息。
 - [x] **消息可引用回复**：用户可以通过引用并回复命令消息进一步获取消息内容。带`（可引用：***）`的机器人消息即为可进一步互动的可引用消息。
 - [x] **消息转发**：转发用户或群的消息到其他用户或群，并支持引用回复转发消息。需进行[配置](#%EF%B8%8F-message-forwarding-配置)。
 ![message_forwarding_and_quoted_reply_show](docs/images/message_forwarding_and_quoted_reply_show.png)
@@ -156,6 +157,7 @@ python3 -m wechatter
 | --- | --- | --- |
 | `admin_list` | 设置管理员,用于接收机器人状态变化通知 | 填入管理员微信名（不是备注） |
 | `admin_group_list` | 与 `admin_list` 同理，接收机器人状态变化通知 | 填入群名称（不是群备注） |
+| `bark_url` | 用于接收机器人状态变化通知的 Bark URL | [Bark](https://github.com/Finb/Bark) 仅限 iOS 和 iPadOS |
 
 ### ⚙️ Bot 配置
 

@@ -1,7 +1,12 @@
 # 消息通知器
 from typing import TYPE_CHECKING
 
+from loguru import logger
+
+from wechatter.config import config
 from wechatter.sender import sender
+from wechatter.utils import get_request
+from wechatter.utils.url_joiner import join_urls
 
 if TYPE_CHECKING:
     from wechatter.models.wechat import SendTo
@@ -21,13 +26,26 @@ def notify_logged_in() -> None:
     通知登录成功
     """
     msg = "微信机器人启动成功"
+    logger.info(msg)
     sender.mass_send_msg_to_admins(msg)
+    if config.get("bark_url"):
+        url = join_urls(
+            config["bark_url"],
+            f"WeChatter/🟢 微信机器人（{config['bot_name']}）登录成功",
+        )
+        get_request(url)
 
 
-# FIXME: 登出消息发送不出去，因为发消息时候，机器人已经退出登录了
 def notify_logged_out() -> None:
     """
     通知已退出登录
     """
     msg = "微信机器人已退出"
-    sender.mass_send_msg_to_admins(msg)
+    logger.info(msg)
+    # bark 提醒
+    if config.get("bark_url"):
+        url = join_urls(
+            config["bark_url"],
+            f"WeChatter/🔴 微信机器人（{config['bot_name']}）已退出登录?copy={config['wx_webhook_base_api']}/login?token={config['wx_webhook_token']}",
+        )
+        get_request(url)

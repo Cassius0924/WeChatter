@@ -1,4 +1,3 @@
-import json
 from typing import Union
 
 from fastapi import APIRouter, Form, UploadFile
@@ -39,7 +38,6 @@ async def recv_wechat_msg(
     """
     用于接收 wxBotWebhook 转发过来的消息的接口
     """
-
     # 更新机器人信息（id和name）
     # BotInfo.update_from_source(source)
 
@@ -50,7 +48,7 @@ async def recv_wechat_msg(
     # 判断是否是系统事件
     if type in ["system_event_login", "system_event_logout", "system_event_error"]:
         logger.info(f"收到系统事件：{type}")
-        handle_system_event(content)
+        handle_system_event(type)
         return
 
     # 不是系统消息，则是用户发来的消息
@@ -84,19 +82,16 @@ async def recv_wechat_msg(
     # return {"success": True, "data": {"type": "text", "content": "hello world！"}}
 
 
-def handle_system_event(content: str) -> None:
+def handle_system_event(event: str) -> None:
     """
     判断系统事件类型，并调用相应的函数
     """
-    content_dict: dict = json.loads(content)
     # 判断是否为机器人登录消息
-    if content_dict["event"] == "login":
-        logger.info("机器人登录成功")
+    if event == "system_event_login":
         notifier.notify_logged_in()
-    elif content_dict["event"] == "logout":
-        logger.info("机器人已退出登录")
+    elif event == "system_event_logout":
         notifier.notify_logged_out()
-    elif content_dict["event"] == "error":
+    elif event == "system_event_error":
         pass
     else:
         pass
