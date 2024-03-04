@@ -45,7 +45,11 @@ def _logging(func):
 
     def logging_wrapper(*args, **kwargs):
         response = func(*args, **kwargs)
-        r_json = response.json()
+        try:
+            r_json = response.json()
+        except requests.exceptions.JSONDecodeError:
+            logger.debug("请求返回值 JSON 解析失败")
+            return
         # https://github.com/danni-cool/wechatbot-webhook?tab=readme-ov-file#%E8%BF%94%E5%9B%9E%E5%80%BC-response-%E7%BB%93%E6%9E%84
         if r_json["message"].startswith("Message"):
             pass
@@ -425,3 +429,20 @@ def mass_send_msg_to_github_webhook_receivers(
             is_group=True,
             type=type,
         )
+
+
+def send_to_discord(webhook_url: str, message: str, person, group=None):
+    """
+    发送消息到 Discord
+    :param webhook_url: Discord 频道 Webhook URL
+    :param message: 消息内容
+    :param person: 用户
+    :param group: 群组
+    """
+    data = {"username": "", "content": message}
+    if group:
+        data["username"] = f"WeChatter [{group.name}]-[{person.name}]"
+    else:
+        data["username"] = f"WeChatter [{person.name}]"
+
+    _post_request(webhook_url, json=data)

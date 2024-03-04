@@ -9,12 +9,18 @@ from wechatter.database import QuotedResponse, make_db_session
 from wechatter.message.message_forwarder import MessageForwarder
 from wechatter.models.wechat import Message, SendTo
 
-message_forwarding_enabled = False
+message_forwarder = MessageForwarder()
 if config["message_forwarding_enabled"]:
-    message_forwarding_enabled = True
-    message_forwarder = MessageForwarder(
-        config["message_forwarding_rule_list"],
-        config["official_account_reminder_rule_list"],
+    message_forwarder.set_wechat_forwarding_rule(config["message_forwarding_rule_list"])
+
+if config["official_account_reminder_enabled"]:
+    message_forwarder.set_official_account_reminder_rule(
+        config["official_account_reminder_rule_list"]
+    )
+
+if config["discord_message_forwarding_enabled"]:
+    message_forwarder.set_discord_forwarding_rule(
+        config["discord_message_forwarding_rule_list"]
     )
 
 
@@ -43,19 +49,30 @@ class MessageHandler:
         :param message_obj: 消息对象
         """
         # 公众号文章提醒
-        if message_obj.is_official_account and message_obj.type.value == "urlLink":
+        if (
+            config["official_account_reminder_enabled"]
+            and message_obj.is_official_account
+            and message_obj.type.value == "urlLink"
+        ):
             # 尝试提醒
             message_forwarder.remind_official_account_article(message_obj)
             return
 
         # 消息转发
-        if message_forwarding_enabled and not message_obj.is_official_account:
+        if config["message_forwarding_enabled"] and not message_obj.is_official_account:
             # 尝试进行消息转发
-            message_forwarder.forwarding(message_obj)
+            message_forwarder.forwarding_to_wechat(message_obj)
             # 尝试进行转发消息的回复
             if message_obj.forwarded_source:
-                message_forwarder.reply_forwarded_message(message_obj)
+                message_forwarder.reply_wechat_forwarded_message(message_obj)
                 return
+
+        # Discord消息转发
+        if (
+            config["discord_message_forwarding_enabled"]
+            and not message_obj.is_official_account
+        ):
+            message_forwarder.forwarding_to_discord(message_obj)
 
         to = SendTo(person=message_obj.person, group=message_obj.group)
 
@@ -89,15 +106,6 @@ class MessageHandler:
             _execute_command(cmd_dict, to, message_obj)
         else:
             logger.debug("该消息不是命令类型")
-
-        # game_name = self.__get_game(content, message_obj.is_mentioned, message_obj.is_group)
-        # # 是游戏命令
-        # if game_name:
-        #     game_class = self.games[game_name]["class"]
-        #     logger.info(self.games[game_name]["desc"])
-        #     _execute_game(game, game_class, to, content, message_obj)
-        # else:
-        #     logger.debug("该消息不是游戏类型")
 
     def __parse_command(self, content: str, is_mentioned: bool, is_group: bool) -> Dict:
         """

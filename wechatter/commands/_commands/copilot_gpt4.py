@@ -3,7 +3,6 @@ from typing import List, Union
 
 from loguru import logger
 
-import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
 from wechatter.config import config
 from wechatter.database import (
@@ -16,9 +15,9 @@ from wechatter.models.wechat import Person, SendTo
 from wechatter.sender import sender
 from wechatter.utils import post_request_json
 from wechatter.utils.time import get_current_date, get_current_time, get_current_week
+from wechatter.utils.url_joiner import join_urls
 
 DEFAULT_TOPIC = "（对话进行中*）"
-# DEFAULT_MODEL = "gpt-4"
 # TODO: 初始化对话，Prompt选择
 DEFAULT_CONVERSATION = [
     {
@@ -197,9 +196,8 @@ def _gptx_continue(model: str, to: SendTo, message: str = "") -> None:
 
 
 class CopilotGPT4:
-    api = f"{config['cp_gpt4_base_api']}/v1/chat/completions"
-    bearer_token = "Bearer " + config["cp_token"]
-    save_path = pm.get_abs_path("data/copilot_gpt4/chats/")
+    chat_api = join_urls(config["openai_base_api"], "v1/chat/completions")
+    token = "Bearer " + config["openai_token"]
 
     @staticmethod
     def create_chat(person: Person, model: str) -> GptChatInfo:
@@ -428,7 +426,7 @@ class CopilotGPT4:
         newconv = [{"role": "user", "content": message}]
         # 发送请求
         headers = {
-            "Authorization": CopilotGPT4.bearer_token,
+            "Authorization": CopilotGPT4.token,
             "Content-Type": "application/json",
         }
         json = {
@@ -436,7 +434,7 @@ class CopilotGPT4:
             "messages": DEFAULT_CONVERSATION + chat_info.get_conversation() + newconv,
         }
         r_json = post_request_json(
-            url=CopilotGPT4.api, headers=headers, json=json, timeout=60
+            url=CopilotGPT4.chat_api, headers=headers, json=json, timeout=60
         )
 
         # 判断是否有 error 或 code 字段
