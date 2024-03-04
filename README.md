@@ -168,7 +168,7 @@ python3 -m wechatter
 | 配置项 | 解释 | 备注 |
 | --- | --- | --- |
 | `command_prefix` | 机器人命令前缀 | 默认为 `/` ，可以设置为`>>`、`!` 等任意字符 |
-| `need_mentioned` | 群聊中的命令是否需要@机器人 | 默认为 `True` |
+| `need_mentioned` | 群聊中的命令是否需要@机器人 | 默认为 `False` |
 
 ### ⚙️ LLM 配置
 

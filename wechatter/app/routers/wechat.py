@@ -4,7 +4,7 @@ from typing import Union
 from fastapi import APIRouter, Form, UploadFile
 from loguru import logger
 
-from wechatter.bot import BotInfo
+# from wechatter.bot import BotInfo
 from wechatter.commands import commands, quoted_handlers
 from wechatter.config import config
 from wechatter.database import (
@@ -22,6 +22,11 @@ from wechatter.sender import notifier
 
 router = APIRouter()
 
+# 传入命令字典，构造消息处理器
+message_handler = MessageHandler(
+    commands=commands, quoted_handlers=quoted_handlers, games=games
+)
+
 
 @router.post(config["wx_webhook_recv_api_path"])
 async def recv_wechat_msg(
@@ -29,18 +34,22 @@ async def recv_wechat_msg(
     content: Union[UploadFile, str] = Form(),
     source: str = Form(),
     is_mentioned: str = Form(alias="isMentioned"),
-    is_system_event: str = Form(alias="isSystemEvent"),
+    is_from_self: str = Form(alias="isMsgFromSelf"),
 ):
     """
-    接收Docker转发过来的消息的接口
+    用于接收 wxBotWebhook 转发过来的消息的接口
     """
 
     # 更新机器人信息（id和name）
-    BotInfo.update_from_source(source)
+    # BotInfo.update_from_source(source)
+
+    if type == "unknown":
+        logger.info(f"收到未知消息：{content}")
+        return
 
     # 判断是否是系统事件
-    if is_system_event == "1":
-        logger.warning(f"收到系统事件：{content}")
+    if type in ["system_event_login", "system_event_logout", "system_event_error"]:
+        logger.info(f"收到系统事件：{type}")
         handle_system_event(content)
         return
 
@@ -51,29 +60,25 @@ async def recv_wechat_msg(
 
     # 解析命令
     # 构造消息对象
-    message = Message.from_api_msg(
+    message_obj = Message.from_api_msg(
         type=type,
         content=content,
         source=source,
         is_mentioned=is_mentioned,
+        is_from_self=is_from_self,
     )
     # 向群组表中添加该群组
-    add_group(message.group)
+    add_group(message_obj.group)
     # 向用户表中添加该用户
-    add_person(message.person)
+    add_person(message_obj.person)
     # 向消息表中添加该消息
-    message.id = add_message(message)
-    # TODO: 添加自己发送的消息，等待 wechatbot-webhook 支持
+    message_obj.id = add_message(message_obj)
 
     # DEBUG
-    print(str(message))
+    print(str(message_obj))
 
-    # 传入命令字典，构造消息处理器
-    message_handler = MessageHandler(
-        commands=commands, quoted_handlers=quoted_handlers, games=games
-    )
     # 用户发来的消息均送给消息解析器处理
-    message_handler.handle_message(message)
+    message_handler.handle_message(message_obj)
 
     # 快捷回复
     # return {"success": True, "data": {"type": "text", "content": "hello world！"}}
