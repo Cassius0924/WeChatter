@@ -43,8 +43,8 @@ class MessageForwarder:
     """
 
     def __init__(self):
-        self.all_message_rule = (None,)
-        self.specific_message_rules = (None,)
+        self.all_message_rule = None
+        self.specific_message_rules = None
         self.official_account_reminder_rule = None
         self.official_account_reminder_type = "text"
         self.discord_all_message_rule = None
@@ -98,7 +98,7 @@ class MessageForwarder:
             return
 
         # 判断消息来源是否符合转发规则
-        if self.all_message_rule:
+        if not self.all_message_rule["is_none"]:
             rule = self.all_message_rule
             _forwarding_by_rule(message_obj, rule)
 
@@ -178,7 +178,7 @@ class MessageForwarder:
             )
             return
 
-        if self.discord_all_message_rule:
+        if not self.discord_all_message_rule["is_none"]:
             rule = self.discord_all_message_rule
             webhook_url = rule["webhook_url"]
             sender.send_to_discord(

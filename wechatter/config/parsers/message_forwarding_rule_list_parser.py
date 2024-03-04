@@ -8,6 +8,7 @@ def parse_message_forwarding_rule_list(rule_list: List) -> Tuple[Dict, Dict]:
     :return: 转发规则元组，第一个元素为全局转发规则，第二个元素为特定转发规则
     """
     all_message_rule = {
+        "is_none": True,
         "from_list_exclude": [],
         "to_group_list": [],
         "to_person_list": [],
@@ -15,6 +16,7 @@ def parse_message_forwarding_rule_list(rule_list: List) -> Tuple[Dict, Dict]:
     specific_message_rules = {}
     for rule in rule_list:
         if "%ALL" in rule["from_list"]:
+            all_message_rule["is_none"] = False
             all_message_rule["from_list_exclude"].extend(
                 rule.get("from_list_exclude", [])
             )
