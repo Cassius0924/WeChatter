@@ -6,11 +6,10 @@ import requests
 import tenacity
 from loguru import logger
 
-import wechatter.utils.http_request as http_request
 from wechatter.config import config
 from wechatter.models.wechat import QuotedResponse, SendTo
 from wechatter.sender.quotable import make_quotable
-from wechatter.utils.url_joiner import join_urls
+from wechatter.utils import join_urls, post_request
 
 
 # 对retry装饰器重新包装，增加日志输出
@@ -94,7 +93,7 @@ def _logging(func):
 def _post_request(
     url, data=None, json=None, files=None, headers={}, timeout=5
 ) -> requests.Response:
-    return http_request.post_request(
+    return post_request(
         url, data=data, json=json, files=files, headers=headers, timeout=timeout
     )
 

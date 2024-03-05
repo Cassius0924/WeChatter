@@ -5,8 +5,7 @@ from loguru import logger
 
 from wechatter.config import config
 from wechatter.sender import sender
-from wechatter.utils import get_request
-from wechatter.utils.url_joiner import join_urls
+from wechatter.utils import get_request, join_urls
 
 if TYPE_CHECKING:
     from wechatter.models.wechat import SendTo

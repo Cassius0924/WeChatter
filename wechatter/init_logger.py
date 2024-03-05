@@ -4,7 +4,7 @@ import sys
 
 from loguru import logger
 
-from wechatter.utils.path_manager import get_abs_path
+from wechatter.utils import get_abs_path
 
 # 使用环境变量中的 LOG_LEVEL
 LOG_LEVEL_NAME = os.environ.get("WECHATTER_LOG_LEVEL", "INFO")

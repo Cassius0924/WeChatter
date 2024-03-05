@@ -4,10 +4,10 @@ from typing import Union
 import qrcode as qrc
 from loguru import logger
 
-import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
 from wechatter.models.wechat import SendTo
 from wechatter.sender import sender
+from wechatter.utils import get_abs_path
 from wechatter.utils.time import get_current_datetime
 
 
@@ -39,7 +39,7 @@ def get_qrcode_saved_path(data: str) -> str:
     if not data:
         raise ValueError("请输入文本或链接")
     datetime_str = get_current_datetime()
-    path = pm.get_abs_path(f"data/qrcodes/{datetime_str}.png")
+    path = get_abs_path(f"data/qrcodes/{datetime_str}.png")
     img = _generate_qrcode(data)
     _save_qrcode(img, path)
     return path

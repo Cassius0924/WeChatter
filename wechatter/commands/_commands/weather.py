@@ -5,12 +5,11 @@ import requests
 from bs4 import BeautifulSoup
 from loguru import logger
 
-import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
 from wechatter.exceptions import Bs4ParsingError
 from wechatter.models.wechat import SendTo
 from wechatter.sender import sender
-from wechatter.utils import get_request, load_json
+from wechatter.utils import get_abs_path, get_request, load_json
 from wechatter.utils.time import get_current_hour, get_current_minute, get_current_ymdh
 
 
@@ -92,7 +91,7 @@ TIME_EMOJIS = {
 }
 # fmt: on
 
-CITY_IDS_PATH = pm.get_abs_path("assets/weather_china/city_ids.json")
+CITY_IDS_PATH = get_abs_path("assets/weather_china/city_ids.json")
 
 
 # 封装起来，方便定时任务调用

@@ -13,9 +13,8 @@ from wechatter.database import (
 from wechatter.models.gpt import GptChatInfo
 from wechatter.models.wechat import Person, SendTo
 from wechatter.sender import sender
-from wechatter.utils import post_request_json
+from wechatter.utils import join_urls, post_request_json
 from wechatter.utils.time import get_current_date, get_current_time, get_current_week
-from wechatter.utils.url_joiner import join_urls
 
 DEFAULT_TOPIC = "（对话进行中*）"
 # TODO: 初始化对话，Prompt选择
