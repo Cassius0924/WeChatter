@@ -103,8 +103,8 @@ class Message(BaseModel):
             province=payload.get("province", ""),
             city=payload.get("city", ""),
             # phone_list=payload.get("phone", []),
-            is_star=payload.get("star", ""),
-            is_friend=payload.get("friend", ""),
+            is_star=payload.get("star", False),
+            is_friend=payload.get("friend", False),
             is_official_account=is_official_account,
         )
 
@@ -128,8 +128,8 @@ class Message(BaseModel):
                 name=to_payload.get("name", ""),
                 alias=to_payload.get("alias", ""),
                 gender="unknown",
-                is_star=to_payload.get("star", ""),
-                is_friend=to_payload.get("friend", ""),
+                is_star=to_payload.get("star", False),
+                is_friend=to_payload.get("friend", False),
             )
 
         _content = content.replace("\u2005", " ", 1)

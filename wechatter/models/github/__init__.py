@@ -7,6 +7,7 @@ from .ping_webhook import GithubPingWebhook
 from .pr_review_webhook import GithubPrReviewWebhook
 from .pr_webhook import GithubPrWebhook
 from .push_webhook import GithubPushWebhook
+from .release_webhook import GithubReleaseWebhook
 from .star_webhook import GithubStarWebhook
 
 __all__ = [
@@ -20,4 +21,5 @@ __all__ = [
     "GithubPrWebhook",
     "GithubPushWebhook",
     "GithubStarWebhook",
+    "GithubReleaseWebhook",
 ]

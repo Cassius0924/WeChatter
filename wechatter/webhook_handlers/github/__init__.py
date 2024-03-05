@@ -7,6 +7,7 @@ from .ping_handler import handle_ping
 from .pr_handler import handle_pr
 from .pr_review_handler import handle_pr_review
 from .push_handler import handle_push
+from .release_handler import handle_release
 from .star_handler import handle_star
 
 __all__ = [
@@ -20,4 +21,5 @@ __all__ = [
     "handle_pr",
     "handle_push",
     "handle_star",
+    "handle_release",
 ]
