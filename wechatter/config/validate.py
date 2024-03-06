@@ -8,8 +8,8 @@ ESSENTIAL_TOP_FIELDS = [
     "bot_name",
     "command_prefix",
     "need_mentioned",
-    "cp_gpt4_base_api",
-    "cp_token",
+    "openai_base_api",
+    "openai_token",
     "github_webhook_enabled",
     "github_webhook_api_path",
     "message_forwarding_enabled",
@@ -18,6 +18,8 @@ ESSENTIAL_TOP_FIELDS = [
     "official_account_reminder_rule_list",
     "all_task_cron_enabled",
     "task_cron_list",
+    "discord_message_forwarding_enabled",
+    "discord_message_forwarding_rule_list",
 ]
 
 
@@ -45,10 +47,10 @@ def validate_config(config):
     #     raise ValueError(error_msg)
 
     # 定时任务配置
-    task_cron_ess_fields = ["task", "cron", "commands"]
+    ess_fields = ["task", "cron", "commands"]
     for i, task_cron in enumerate(config["task_cron_list"]):
         # task_cron_list 字段验证
-        for field in task_cron_ess_fields:
+        for field in ess_fields:
             if field not in task_cron:
                 error_msg = f"配置参数错误：task_cron_list[{i}] 缺少必要字段 {field}"
                 logger.critical(error_msg)
@@ -72,5 +74,30 @@ def validate_config(config):
                         error_msg = f"配置参数错误：task_cron_list[{i}].commands[{i2}] 缺少必要字段 {field}"
                         logger.critical(error_msg)
                         raise ValueError(error_msg)
+    # 微信消息转发配置
+    ess_fields = ["from_list"]
+    for i, rule in enumerate(config["message_forwarding_rule_list"]):
+        for field in ess_fields:
+            if field not in rule:
+                error_msg = f"配置参数错误：message_forwarding_rule_list[{i}] 缺少必要字段 {field}"
+                logger.critical(error_msg)
+                raise ValueError(error_msg)
+
+            # 判断这个 rule 是否有 from_list_exclude 字段
+            if (
+                "from_list_exclude" in rule
+                and config["bot_name"] not in rule["from_list_exclude"]
+            ):
+                # 加入机器人名字，防止机器人自己转发自己的消息，导致死循环刷屏
+                rule["from_list_exclude"].append(config["bot_name"])
+
+    # Discord 消息转发配置
+    ess_fields = ["from_list", "webhook_url"]
+    for i, rule in enumerate(config["discord_message_forwarding_rule_list"]):
+        for field in ess_fields:
+            if field not in rule:
+                error_msg = f"配置参数错误：discord_message_forwarding_rule_list[{i}] 缺少必要字段 {field}"
+                logger.critical(error_msg)
+                raise ValueError(error_msg)
 
     logger.info("配置文件验证通过！")

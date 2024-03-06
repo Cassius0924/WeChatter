@@ -11,81 +11,56 @@
 
 ## 介绍
 
-一个基于 [wechatbot-webhook](https://github.com/danni-cool/wechatbot-webhook) 的微信机器人💬，支持 GPT 问答、热搜推送、天气预报、消息转发、Webhook提醒等功能。
+一个基于 [wechatbot-webhook](https://github.com/danni-cool/wechatbot-webhook) 的微信机器人💬，支持 GPT 问答、热搜推送、天气预报、消息转发、小游戏、Webhook 提醒等功能。
 
 [![wechatter show](docs/images/wechatter_show.png)](docs/command_show.md)
 
 
 ## 快速开始
 
-### 运行 wechatbot-webhook
+WeChatter 支持 [Docker Compose 部署](#docker-compose-部署)、[Docker 部署](./docs/development.md#docker-部署)和[本地部署](./docs/development.md#本地部署)。
 
-1. 拉取 Docker 镜像
+> [!TIP]
+> 推荐使用 Docker-compose 部署。
 
-```bash
-docker pull dannicool/docker-wechatbot-webhook
-```
+### Docker Compose 部署
 
-2. 运行 Docker
-
-```bash
-docker run -d \
---name wxBotWebhook \
--p 3001:3001 \
--e LOGIN_API_TOKEN="<Token>" \
--e RECVD_MSG_API="http(s)://<宿主机IP>:<接收消息端口>/receive_msg" \
-dannicool/docker-wechatbot-webhook
-```
-
-- `<Token>`：令牌
-- `<宿主机IP>`：填入 Docker 的宿主机地址。
-- `<接收消息端口>`：设置一个接收消息的端口，默认为 `4000`。
-
-3. 登录微信
-
-使用下面命令查看 Docker 日志中的微信二维码，扫码登录微信。
+1. 下载 WeChatter 配置文件
 
 ```bash
-docker logs -f wxBotWebhook
+mkdir WeChatter && cd WeChatter
+wget -O config_cps.yaml https://cdn.jsdelivr.net/gh/cassius0924/wechatter@master/config_cps.yaml.example
 ```
 
-### 启动 WeChatter
-
-1. 下载源代码
+2. 编辑 `config_cps.yaml` 配置文件
 
 ```bash
-git clone https://github.com/Cassius0924/WeChatter
-cd WeChatter
+vim config_cps.yaml
 ```
 
-2. 安装依赖项
+3. 下载 docker-compose.yml
 
 ```bash
-# 如果需要，可创建虚拟环境...
-
-pip install -r requirements.txt
+wget https://cdn.jsdelivr.net/gh/cassius0924/wechatter@master/docker-compose.yml
 ```
 
-3. 复制并编辑配置文件
+4. 运行 Docker Compose
 
 ```bash
-cp config.yaml.example config.yaml
-vim config.yaml
+docker-compose -f docker-compose.yml up
 ```
 
-4. 启动 WeChatter
+5. 登录微信
 
-```bash
-python3 -m wechatter
-```
+使用微信扫描终端输出的二维码登录微信。
 
-5. 测试机器人
+6. 测试机器人
 
 使用另一个微信给机器人发送 `/help` 指令。
 
 ## 支持的命令
 
-- [x] GPT 问答，基于 [Copilot-GPT4-Service](https://github.com/aaamoon/copilot-gpt4-service)（不支持定时任务）
+- [x] GPT 问答（不支持定时任务）
 - [x] Bilibili 热搜
 - [x] 知乎热搜
 - [x] 微博热搜
@@ -107,6 +82,7 @@ python3 -m wechatter
 
 ## 支持的功能
 
+- [x] **掉线提醒**：当机器人掉线时，通过 Bark 推送提醒消息。
 - [x] **消息可引用回复**：用户可以通过引用并回复命令消息进一步获取消息内容。带`（可引用：***）`的机器人消息即为可进一步互动的可引用消息。
 - [x] **消息转发**：转发用户或群的消息到其他用户或群，并支持引用回复转发消息。需进行[配置](#%EF%B8%8F-message-forwarding-配置)。
 ![message_forwarding_and_quoted_reply_show](docs/images/message_forwarding_and_quoted_reply_show.png)
@@ -115,6 +91,7 @@ python3 -m wechatter
 ![official_account_reminder_show](docs/images/official_account_reminder_show.png)
 
 - [x] **定时任务**：大部分命令均支持定时任务。需进行[配置](#%EF%B8%8F-task-cron-配置)。
+- [x] **Discord 消息转发**：基于 Discord Webhook，将微信消息转发到 Discord 频道。需进行[配置](#%EF%B8%8F-discord-message-forwarding-配置)。
 
 ## 支持的游戏
 
@@ -145,9 +122,9 @@ python3 -m wechatter
 
 | 配置项 | 解释 | 备注 |
 | --- | --- | --- |
-| `wx_webhook_base_api`      | 发送消息的 BaseAPI | 默认为 `localhost:3001`，即 `wxBotWebhook` Docker 的地址 |
+| `wx_webhook_base_api`      | 发送消息的 BaseAPI | 默认为 `http://localhost:3001`，即 `wxBotWebhook` Docker 的地址。Docker Compose 部署时默认为 `http://wxbotwebhook:3001` |
 | `wx_webhook_recv_api_path` | 接收消息的接口路径  | 默认为 `/receive_msg`，此路径为 Docker 参数 `RECVD_MSG_API` 的路径 |
-| `wx_webhook_token` | wxBotWebhook 的 Token | |
+| `wx_webhook_token` | wxBotWebhook 的 Token | Docker Compose 部署时默认为 `wechatter` |
 
 ### ⚙️ Admin 配置
 
@@ -155,6 +132,7 @@ python3 -m wechatter
 | --- | --- | --- |
 | `admin_list` | 设置管理员,用于接收机器人状态变化通知 | 填入管理员微信名（不是备注） |
 | `admin_group_list` | 与 `admin_list` 同理，接收机器人状态变化通知 | 填入群名称（不是群备注） |
+| `bark_url` | 用于接收机器人状态变化通知的 Bark URL | [Bark](https://github.com/Finb/Bark) 仅限 iOS 和 iPadOS |
 
 ### ⚙️ Bot 配置
 
@@ -167,14 +145,14 @@ python3 -m wechatter
 | 配置项 | 解释 | 备注 |
 | --- | --- | --- |
 | `command_prefix` | 机器人命令前缀 | 默认为 `/` ，可以设置为`>>`、`!` 等任意字符 |
-| `need_mentioned` | 群聊中的命令是否需要@机器人 | 默认为 `True` |
+| `need_mentioned` | 群聊中的命令是否需要@机器人 | 默认为 `False` |
 
-### ⚙️ Copilot GPT4 配置
+### ⚙️ LLM 配置
 
 | 配置项 | 解释 |  备注 |
 | --- | --- | --- |
-| `cp_gpt4_base_api` | CopilotGPT4 服务的 BaseAPI | 默认为 `http://localhost:8080` |
-| `cp_token` | GitHub Copilot 的 Token | 以 `ghu_` 开头的字符串 |
+| `openai_base_api` | OpenAI 服务的 BaseAPI | 默认为 `https://api.openai.com` |
+| `openai_token` | OpenAI Token（Key） | 以 `sk_` 开头的字符串密钥 |
 
 ### ⚙️ GitHub Webhook 配置
 
@@ -190,7 +168,7 @@ python3 -m wechatter
 | 配置项 | 子项 | 解释 | 备注 |
 | --- | --- |  --- | --- |
 | `message_forwarding_enabled` | | 功能开关，是否开启消息转发 | 默认为 `False` |
-| `message_forwarding_rule_list` | | 消息规则列表，每个规则包含三个字段：`from_list`、`to_person_list` 和 `to_group_list` |  |
+| `message_forwarding_rule_list` | | 消息规则列表，每个规则包含四个字段：`from_list`、`from_list_exclude`、`to_person_list` 和 `to_group_list` |  |
 | | `from_list` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称，若要转发所有消息则使用 `["%ALL"]` |
 | | `from_list_exclude` | 消息转发来源排除列表，不转发此列表的用户和群 | 只在 `from_list` 为 `["%ALL"]` 时生效 |
 | | `to_person_list` | 消息转发目标用户列表，即消息接收用户 | 可以填多个用户名称或为空列表 |
@@ -222,6 +200,17 @@ python3 -m wechatter
 | `custom_command_key_dict` | 自定义命令关键词字典，格式为 `command: [key1, key2, ...]`, 其中 `command` 为命令名称，`key1` 和 `key2` 为自定义命令关键词 |  |
 
 关于命令名称可选值请参阅[自定义命令关键词配置详细](docs/custom_command_key_config_detail.md)。
+
+### ⚙️ Discord Message Forwarding 配置
+
+| 配置项 | 子项 | 解释 | 备注 |
+| --- | --- | --- | --- |
+| `discord_message_forwarding_enabled` | | 功能开关，是否开启 Discord 消息转发 | 默认为 `False` |
+| `discord_message_forwarding_rule_list` | | 消息规则列表，每个规则包含三个字段：`from_list`、`to_discord_webhook_url` 和 `to_discord_webhook_name` |
+| | `from_list` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称，若要转发所有消息则使用 `["%ALL"]` |
+| | `from_list_exclude` | 消息转发来源排除列表，不转发此列表的用户和群 | 只在 `from_list` 为 `["%ALL"]` 时生效 |
+| | `discord_webhook_url` | 消息转发目标 Discord Webhook URL | |
+
 
 ## 日志文件
 

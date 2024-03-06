@@ -7,7 +7,7 @@ from wechatter.database import GameStates as DbGameStates, make_db_session
 from wechatter.models.game import GameStates
 from wechatter.models.wechat import Group, Person
 from wechatter.sender import sender
-from wechatter.utils.unique_list import UniqueList
+from wechatter.utils import UniqueList
 
 
 class Game(ABC):

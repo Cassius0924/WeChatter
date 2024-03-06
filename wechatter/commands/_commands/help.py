@@ -6,7 +6,7 @@ from wechatter.commands.handlers import command
 from wechatter.config import config
 from wechatter.models.wechat import SendTo
 from wechatter.sender import sender
-from wechatter.utils.text_to_image import text_to_image
+from wechatter.utils import text_to_image
 
 
 @command(command="help", keys=["帮助", "help"], desc="获取帮助信息。")

@@ -5,7 +5,7 @@ from loguru import logger
 from wechatter.commands.handlers import command
 from wechatter.models.wechat import Message, SendTo
 from wechatter.sender import sender
-from wechatter.utils.unique_list import UniqueList
+from wechatter.utils import UniqueList
 
 from ._games import *  # noqa: F403
 from .game import Game

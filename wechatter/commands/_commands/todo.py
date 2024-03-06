@@ -4,11 +4,10 @@ from typing import List, Union
 
 from loguru import logger
 
-import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
 from wechatter.models.wechat import SendTo
 from wechatter.sender import sender
-from wechatter.utils import load_json, save_json
+from wechatter.utils import get_abs_path, load_json, save_json
 
 
 # TODO: 使用SQLite进行数据持久化
@@ -64,9 +63,7 @@ def remove_todo_command_handler(to: Union[str, SendTo], message: str = "") -> No
 
 def _load_todos(person_id: str) -> List[str]:
     """加载特定用户的待办事项"""
-    file_path = pm.get_abs_path(
-        os.path.join("data", "todos", f"p{person_id}_todo.json")
-    )
+    file_path = get_abs_path(os.path.join("data", "todos", f"p{person_id}_todo.json"))
     if os.path.exists(file_path):
         return load_json(file_path)
     return []
@@ -74,9 +71,7 @@ def _load_todos(person_id: str) -> List[str]:
 
 def _save_todos(person_id: str, content: List[str]) -> None:
     """保存待办事项到特定用户的 JSON 文件中"""
-    file_path = pm.get_abs_path(
-        os.path.join("data", "todos", f"p{person_id}_todo.json")
-    )
+    file_path = get_abs_path(os.path.join("data", "todos", f"p{person_id}_todo.json"))
     save_json(file_path, content)
 
 

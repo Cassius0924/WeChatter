@@ -6,10 +6,10 @@ import requests
 import tenacity
 from loguru import logger
 
-import wechatter.utils.http_request as http_request
 from wechatter.config import config
 from wechatter.models.wechat import QuotedResponse, SendTo
 from wechatter.sender.quotable import make_quotable
+from wechatter.utils import join_urls, post_request
 
 
 # 对retry装饰器重新包装，增加日志输出
@@ -45,7 +45,11 @@ def _logging(func):
 
     def logging_wrapper(*args, **kwargs):
         response = func(*args, **kwargs)
-        r_json = response.json()
+        try:
+            r_json = response.json()
+        except requests.exceptions.JSONDecodeError:
+            logger.debug("请求返回值 JSON 解析失败")
+            return
         # https://github.com/danni-cool/wechatbot-webhook?tab=readme-ov-file#%E8%BF%94%E5%9B%9E%E5%80%BC-response-%E7%BB%93%E6%9E%84
         if r_json["message"].startswith("Message"):
             pass
@@ -89,16 +93,18 @@ def _logging(func):
 def _post_request(
     url, data=None, json=None, files=None, headers={}, timeout=5
 ) -> requests.Response:
-    return http_request.post_request(
+    return post_request(
         url, data=data, json=json, files=files, headers=headers, timeout=timeout
     )
 
 
 URL = (
-    f"{config['wx_webhook_base_api']}/webhook/msg/v2?token={config['wx_webhook_token']}"
+    join_urls(config["wx_webhook_base_api"], "webhook/msg/v2")
+    + f"?token={config['wx_webhook_token']}"
 )
 V1_URL = (
-    f"{config['wx_webhook_base_api']}/webhook/msg?token={config['wx_webhook_token']}"
+    join_urls(config["wx_webhook_base_api"], "webhook/msg")
+    + f"?token={config['wx_webhook_token']}"
 )
 
 MSG_TYPE = ["text", "fileUrl", "localfile"]
@@ -425,3 +431,20 @@ def mass_send_msg_to_github_webhook_receivers(
             is_group=True,
             type=type,
         )
+
+
+def send_to_discord(webhook_url: str, message: str, person, group=None):
+    """
+    发送消息到 Discord
+    :param webhook_url: Discord 频道 Webhook URL
+    :param message: 消息内容
+    :param person: 用户
+    :param group: 群组
+    """
+    data = {"username": "", "content": message}
+    if group:
+        data["username"] = f"WeChatter [{group.name}]-[{person.name}]"
+    else:
+        data["username"] = f"WeChatter [{person.name}]"
+
+    _post_request(webhook_url, json=data)

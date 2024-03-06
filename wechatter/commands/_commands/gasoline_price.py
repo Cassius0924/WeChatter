@@ -4,12 +4,11 @@ import requests
 from bs4 import BeautifulSoup
 from loguru import logger
 
-import wechatter.utils.path_manager as pm
 from wechatter.commands.handlers import command
 from wechatter.exceptions import Bs4ParsingError
 from wechatter.models.wechat import SendTo
 from wechatter.sender import sender
-from wechatter.utils import get_request, load_json
+from wechatter.utils import get_abs_path, get_request, load_json
 
 
 @command(
@@ -78,7 +77,7 @@ def _parse_gasoline_price_response(response: requests.Response) -> str:
     return desired_text
 
 
-CITY_IDS_PATH = pm.get_abs_path("assets/gasoline_price_china/city_ids.json")
+CITY_IDS_PATH = get_abs_path("assets/gasoline_price_china/city_ids.json")
 
 
 def _get_city_id(city_name: str) -> str:

@@ -1,7 +1,7 @@
 from typing import Dict, List, Tuple
 
 
-def parse_message_forwarding_rule_list(rule_list: List) -> Tuple[Dict, Dict]:
+def parse_discord_message_forwarding_rule_list(rule_list: List) -> Tuple[Dict, Dict]:
     """
     解析消息转发规则列表
     :param rule_list: 消息转发规则列表
@@ -10,8 +10,7 @@ def parse_message_forwarding_rule_list(rule_list: List) -> Tuple[Dict, Dict]:
     all_message_rule = {
         "is_none": True,
         "from_list_exclude": [],
-        "to_group_list": [],
-        "to_person_list": [],
+        "webhook_url": "",
     }
     specific_message_rules = {}
     for rule in rule_list:
@@ -20,19 +19,12 @@ def parse_message_forwarding_rule_list(rule_list: List) -> Tuple[Dict, Dict]:
             all_message_rule["from_list_exclude"].extend(
                 rule.get("from_list_exclude", [])
             )
-            all_message_rule["to_group_list"].extend(rule.get("to_group_list", []))
-            all_message_rule["to_person_list"].extend(rule.get("to_person_list", []))
+            all_message_rule["webhook_url"] = rule["webhook_url"]
         else:
             for from_name in rule["from_list"]:
                 if from_name not in specific_message_rules:
                     specific_message_rules[from_name] = {
-                        "to_group_list": [],
-                        "to_person_list": [],
+                        "webhook_url": [],
                     }
-                specific_message_rules[from_name]["to_group_list"].extend(
-                    rule.get("to_group_list", [])
-                )
-                specific_message_rules[from_name]["to_person_list"].extend(
-                    rule.get("to_person_list", [])
-                )
+                specific_message_rules[from_name]["webhook_url"] = rule["webhook_url"]
     return all_message_rule, specific_message_rules

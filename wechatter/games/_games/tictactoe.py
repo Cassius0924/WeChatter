@@ -7,7 +7,7 @@ from PIL import Image
 from typing_extensions import override
 
 from wechatter.games.game import Game
-from wechatter.utils.path_manager import get_abs_path
+from wechatter.utils import get_abs_path
 
 
 class Tictactoe(Game):

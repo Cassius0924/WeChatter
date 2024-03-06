@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from wechatter.database.tables import Base
-from wechatter.utils.path_manager import get_abs_path
+from wechatter.utils import get_abs_path
 
 DB_PATH = get_abs_path("data/wechatter.sqlite")
 

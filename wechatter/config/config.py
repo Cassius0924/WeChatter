@@ -3,7 +3,7 @@ from typing import Dict
 import yaml
 from loguru import logger
 
-from wechatter.utils.path_manager import get_abs_path
+from wechatter.utils import get_abs_path
 
 
 def load_config(config_path="config.yaml") -> Dict:

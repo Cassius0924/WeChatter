@@ -7,7 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from wechatter.database.tables import Base
 from wechatter.models.game.game_states import GameStates as GameStatesModel
-from wechatter.utils.unique_list import UniqueListDecoder, UniqueListEncoder
+from wechatter.utils import UniqueListDecoder, UniqueListEncoder
 
 if TYPE_CHECKING:
     from wechatter.database.tables.group import Group
