@@ -283,9 +283,9 @@ def get_copilot_gpt4_config():
 
 @app.post("/copilot-gpt4")
 def update_copilot_gpt4_config(updated_config: dict = Body(...)):
-    succeed_cp_gpt4_base_api = update_config_section('cp_gpt4_base_api', updated_config)
-    succeed_cp_token = update_config_section('cp_token', updated_config)
-    return {"cp_gpt4_base_api": succeed_cp_gpt4_base_api, "cp_token": succeed_cp_token}
+    succeed_cp_gpt4_base_api = update_config_section('openai_base_api', updated_config)
+    succeed_cp_token = update_config_section('openai_token', updated_config)
+    return {"openai_base_api": succeed_cp_gpt4_base_api, "openai_token": succeed_cp_token}
 
 
 @app.get("/github-webhook")

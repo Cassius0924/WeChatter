@@ -20,8 +20,8 @@ function CopilotGPT4() {
                     <input type="text"
                            className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                            placeholder="http://localhost"
-                           value={config.cp_gpt4_base_api || ''}
-                           onChange={e => setConfig({...config, cp_gpt4_base_api: e.target.value})}/>
+                           value={config.openai_base_api || ''}
+                           onChange={e => setConfig({...config, openai_base_api: e.target.value})}/>
 
                     <h3 className="mb-4 text-lg leading-6 font-medium text-gray-900">
                         cp_token
@@ -32,8 +32,8 @@ function CopilotGPT4() {
                     <input type="text"
                            className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                            placeholder="ghu_your_token"
-                           value={config.cp_token || ''}
-                           onChange={e => setConfig({...config, cp_token: e.target.value})}/>
+                           value={config.openai_token || ''}
+                           onChange={e => setConfig({...config, openai_token: e.target.value})}/>
                     <button
                         onClick={handleSave}
                         className="mt-4 px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md">
