@@ -29,13 +29,13 @@ WeChatter 支持 [Docker Compose 部署](#docker-compose-部署)、[Docker 部�
 
 ```bash
 mkdir WeChatter && cd WeChatter
-wget -O compose_config.yaml https://cdn.jsdelivr.net/gh/cassius0924/wechatter@master/compose_config.yaml.example
+wget -O config_cps.yaml https://cdn.jsdelivr.net/gh/cassius0924/wechatter@master/config_cps.yaml.example
 ```
 
-2. 编辑 `compose_config.yaml` 配置文件
+2. 编辑 `config_cps.yaml` 配置文件
 
 ```bash
-vim compose_config.yaml
+vim config_cps.yaml
 ```
 
 3. 下载 docker-compose.yml
@@ -47,8 +47,16 @@ wget https://cdn.jsdelivr.net/gh/cassius0924/wechatter@master/docker-compose.yml
 4. 运行 Docker Compose
 
 ```bash
-docker-compose -f docker-compose.yml up -d
+docker-compose -f docker-compose.yml up
 ```
+
+5. 登录微信
+
+使用微信扫描终端输出的二维码登录微信。
+
+6. 测试机器人
+
+使用另一个微信给机器人发送 `/help` 指令。
 
 ## 支持的命令
 

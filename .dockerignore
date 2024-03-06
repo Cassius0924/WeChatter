@@ -90,7 +90,7 @@ venv/
 .pre-commit-config.yaml
 config.yaml.example
 config.yaml
-compose_config.yaml.example
+config_cps.yaml.example
 /.github
 /tests
 .DS_Store

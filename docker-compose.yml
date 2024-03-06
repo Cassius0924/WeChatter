@@ -11,12 +11,12 @@ services:
       - RECVD_MSG_API=http://wechatter:4000/receive_msg
 
   wechatter:
-    image: cassius0924/wechatter:v0.5.10
+    image: cassius0924/wechatter
     container_name: wechatter
     ports:
       - "4000:4000"
     volumes:
-      - ./compose_config.yaml.example:/wechatter/config.yaml
+      - ./config_cps.yaml:/wechatter/config.yaml
     environment:
       - WECHATTER_LOG_LEVEL=INFO
     depends_on:
