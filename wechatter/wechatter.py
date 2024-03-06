@@ -9,11 +9,11 @@
 import uvicorn
 
 import wechatter.database as db
-import wechatter.utils.file_manager as fm
 from wechatter.app.app import app
 from wechatter.bot import BotInfo
 from wechatter.config import config
 from wechatter.games import load_games
+from wechatter.utils import check_and_create_folder
 
 
 def main():
@@ -23,9 +23,9 @@ def main():
 
     BotInfo.update_name(config["bot_name"])
     # 创建文件夹
-    fm.check_and_create_folder("data/qrcodes")
-    fm.check_and_create_folder("data/todos")
-    fm.check_and_create_folder("data/text_image")
+    check_and_create_folder("data/qrcodes")
+    check_and_create_folder("data/todos")
+    check_and_create_folder("data/text_image")
 
     db.create_tables()
     load_games()

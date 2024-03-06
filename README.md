@@ -11,75 +11,50 @@
 
 ## 介绍
 
-一个基于 [wechatbot-webhook](https://github.com/danni-cool/wechatbot-webhook) 的微信机器人💬，支持 GPT 问答、热搜推送、天气预报、消息转发、Webhook提醒等功能。
+一个基于 [wechatbot-webhook](https://github.com/danni-cool/wechatbot-webhook) 的微信机器人💬，支持 GPT 问答、热搜推送、天气预报、消息转发、小游戏、Webhook 提醒等功能。
 
 [![wechatter show](docs/images/wechatter_show.png)](docs/command_show.md)
 
 
 ## 快速开始
 
-### 运行 wechatbot-webhook
+WeChatter 支持 [Docker Compose 部署](#docker-compose-部署)、[Docker 部署](./docs/development.md#docker-部署)和[本地部署](./docs/development.md#本地部署)。
 
-1. 拉取 Docker 镜像
+> [!TIP]
+> 推荐使用 Docker-compose 部署。
 
-```bash
-docker pull dannicool/docker-wechatbot-webhook
-```
+### Docker Compose 部署
 
-2. 运行 Docker
-
-```bash
-docker run -d \
---name wxBotWebhook \
--p 3001:3001 \
--e LOGIN_API_TOKEN="<Token>" \
--e RECVD_MSG_API="http(s)://<宿主机IP>:<接收消息端口>/receive_msg" \
-dannicool/docker-wechatbot-webhook
-```
-
-- `<Token>`：令牌
-- `<宿主机IP>`：填入 Docker 的宿主机地址。
-- `<接收消息端口>`：设置一个接收消息的端口，默认为 `4000`。
-
-3. 登录微信
-
-使用下面命令查看 Docker 日志中的微信二维码，扫码登录微信。
+1. 下载 WeChatter 配置文件
 
 ```bash
-docker logs -f wxBotWebhook
+mkdir WeChatter && cd WeChatter
+wget -O config_cps.yaml https://cdn.jsdelivr.net/gh/cassius0924/wechatter@master/config_cps.yaml.example
 ```
 
-### 启动 WeChatter
-
-1. 下载源代码
+2. 编辑 `config_cps.yaml` 配置文件
 
 ```bash
-git clone https://github.com/Cassius0924/WeChatter
-cd WeChatter
+vim config_cps.yaml
 ```
 
-2. 安装依赖项
+3. 下载 docker-compose.yml
 
 ```bash
-# 如果需要，可创建虚拟环境...
-
-pip install -r requirements.txt
+wget https://cdn.jsdelivr.net/gh/cassius0924/wechatter@master/docker-compose.yml
 ```
 
-3. 复制并编辑配置文件
+4. 运行 Docker Compose
 
 ```bash
-cp config.yaml.example config.yaml
-vim config.yaml
+docker-compose -f docker-compose.yml up
 ```
 
-4. 启动 WeChatter
+5. 登录微信
 
-```bash
-python3 -m wechatter
-```
+使用微信扫描终端输出的二维码登录微信。
 
-5. 测试机器人
+6. 测试机器人
 
 使用另一个微信给机器人发送 `/help` 指令。
 
@@ -147,9 +122,9 @@ python3 -m wechatter
 
 | 配置项 | 解释 | 备注 |
 | --- | --- | --- |
-| `wx_webhook_base_api`      | 发送消息的 BaseAPI | 默认为 `localhost:3001`，即 `wxBotWebhook` Docker 的地址 |
+| `wx_webhook_base_api`      | 发送消息的 BaseAPI | 默认为 `http://localhost:3001`，即 `wxBotWebhook` Docker 的地址。Docker Compose 部署时默认为 `http://wxbotwebhook:3001` |
 | `wx_webhook_recv_api_path` | 接收消息的接口路径  | 默认为 `/receive_msg`，此路径为 Docker 参数 `RECVD_MSG_API` 的路径 |
-| `wx_webhook_token` | wxBotWebhook 的 Token | |
+| `wx_webhook_token` | wxBotWebhook 的 Token | Docker Compose 部署时默认为 `wechatter` |
 
 ### ⚙️ Admin 配置
 

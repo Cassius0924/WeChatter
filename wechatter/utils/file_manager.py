@@ -1,19 +1,18 @@
-# 文件夹管理类
 import os
 from typing import List
 
 from loguru import logger
 
-import wechatter.utils.path_manager as pm
+from wechatter.utils import get_abs_path, join_path
 
 
 def check_and_create_folder(*paths: str) -> None:
     """
     检查文件是否存在，如果不存在则创建
-    :param *paths: 文件夹路径（可变参数）
+    :param paths: 文件夹路径（可变参数）
     """
-    path = pm.join_path(*paths)
-    abs_path = pm.get_abs_path(path)
+    path = join_path(*paths)
+    abs_path = get_abs_path(path)
     if not os.path.exists(abs_path):
         try:
             os.makedirs(abs_path)
@@ -29,20 +28,20 @@ def check_and_create_folder(*paths: str) -> None:
 def is_folder_exist(*paths: str) -> bool:
     """
     检查文件夹是否存在
-    :param *paths: 文件夹路径（可变参数）
+    :param paths: 文件夹路径（可变参数）
     """
-    path = pm.join_path(*paths)
-    abs_path = pm.get_abs_path(path)
+    path = join_path(*paths)
+    abs_path = get_abs_path(path)
     return os.path.exists(abs_path)
 
 
 def create_folder(*paths: str) -> None:
     """
     创建文件夹
-    :param *paths: 文件夹路径（可变参数）
+    :param paths: 文件夹路径（可变参数）
     """
-    path = pm.join_path(*paths)
-    abs_path = pm.get_abs_path(path)
+    path = join_path(*paths)
+    abs_path = get_abs_path(path)
     try:
         os.makedirs(abs_path)
         logger.info(f"成功创建文件夹 '{abs_path}'。")
@@ -57,10 +56,10 @@ def create_folder(*paths: str) -> None:
 def create_file(*paths: str) -> None:
     """
     创建文件
-    :param *paths: 文件路径（可变参数）
+    :param paths: 文件路径（可变参数）
     """
-    path = pm.join_path(*paths)
-    abs_path = pm.get_abs_path(path)
+    path = join_path(*paths)
+    abs_path = get_abs_path(path)
     try:
         with open(abs_path, "w", encoding="utf-8") as f:
             f.write("")
@@ -76,20 +75,20 @@ def create_file(*paths: str) -> None:
 def is_file_exist(*paths: str) -> bool:
     """
     检查文件是否存在
-    :param *paths: 文件路径（可变参数）
+    :param paths: 文件路径（可变参数）
     """
-    path = pm.join_path(*paths)
-    abs_path = pm.get_abs_path(path)
+    path = join_path(*paths)
+    abs_path = get_abs_path(path)
     return os.path.exists(abs_path)
 
 
 def check_and_create_file(*paths: str) -> None:
     """
     检查文件是否存在，如果不存在则创建
-    :param *paths: 文件路径（可变参数）
+    :param paths: 文件路径（可变参数）
     """
-    path = pm.join_path(*paths)
-    abs_path = pm.get_abs_path(path)
+    path = join_path(*paths)
+    abs_path = get_abs_path(path)
     if not os.path.exists(abs_path):
         try:
             with open(abs_path, "w", encoding="utf-8") as f:
@@ -106,11 +105,11 @@ def check_and_create_file(*paths: str) -> None:
 def list_files(*paths: str, suffixs: List[str] = []) -> List[str]:
     """
     列出路径下所有文件（不包括文件夹）
-    :param *paths: 路径（可变参数）
+    :param paths: 路径（可变参数）
     :param suffix: 文件后缀
     """
-    path = pm.join_path(*paths)
-    abs_path = pm.get_abs_path(path)
+    path = join_path(*paths)
+    abs_path = get_abs_path(path)
     if not os.path.exists(abs_path):
         logger.error(f"路径 '{abs_path}' 不存在。")
         return []
@@ -129,10 +128,10 @@ def list_files(*paths: str, suffixs: List[str] = []) -> List[str]:
 def list_folder(*paths: str) -> List[str]:
     """
     列出路径下所有文件夹
-    :param *paths: 路径（可变参数）
+    :param paths: 路径（可变参数）
     """
-    path = pm.join_path(*paths)
-    abs_path = pm.get_abs_path(path)
+    path = join_path(*paths)
+    abs_path = get_abs_path(path)
     if not os.path.exists(abs_path):
         logger.error(f"路径 '{abs_path}' 不存在。")
         return []
@@ -147,10 +146,10 @@ def list_folder(*paths: str) -> List[str]:
 def delete_file(*paths: str) -> None:
     """
     删除文件
-    :param *paths: 文件路径（可变参数）
+    :param paths: 文件路径（可变参数）
     """
-    path = pm.join_path(*paths)
-    abs_path = pm.get_abs_path(path)
+    path = join_path(*paths)
+    abs_path = get_abs_path(path)
     if not os.path.exists(abs_path):
         logger.error(f"文件 '{abs_path}' 不存在。")
         return
@@ -166,10 +165,10 @@ def delete_file(*paths: str) -> None:
 def delete_folder(*paths: str) -> None:
     """
     删除文件夹
-    :param *paths: 文件夹路径（可变参数）
+    :param paths: 文件夹路径（可变参数）
     """
-    path = pm.join_path(*paths)
-    abs_path = pm.get_abs_path(path)
+    path = join_path(*paths)
+    abs_path = get_abs_path(path)
     if not os.path.exists(abs_path):
         logger.error(f"文件夹 '{abs_path}' 不存在。")
         return
@@ -188,7 +187,7 @@ def rename_file(file_path: str, new_name: str) -> None:
     :param file_path: 文件路径
     :param new_name: 新文件名
     """
-    abs_path = pm.get_abs_path(file_path)
+    abs_path = get_abs_path(file_path)
     if not os.path.exists(abs_path):
         logger.error(f"文件 '{abs_path}' 不存在。")
         return
