@@ -19,7 +19,7 @@ wx_webhook_token: "wechatter"
 # Admin
 admin_list: [ "文件传输助手", "AdminName" ]
 admin_group_list: [ "AdminGroupName" ]
-bark_url: your_bark_url
+bark_url:
 
 
 # Bot
