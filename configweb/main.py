@@ -277,7 +277,7 @@ def update_chat_config(updated_config: dict = Body(...)):
 
 @app.get("/copilot-gpt4")
 def get_copilot_gpt4_config():
-    sections = get_config_sections(['cp_gpt4_base_api', 'cp_token'])
+    sections = get_config_sections(['openai_base_api', 'openai_token'])
     return sections
 
 
