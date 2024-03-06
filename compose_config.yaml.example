@@ -7,9 +7,12 @@ wechatter_port: 4000
 
 
 # WX Webhook
-# Docker 部署时，wx_webhook_base_api 需要配置为 wxbotwebhook，端口需要与 docker-compose.yml 中的端口一致
+# Docker Compose 部署时，wx_webhook_base_api 需要配置为 http://wxbotwebhook
+# 端口号需要与 docker-compose.yml 文件的 wxbotwebhook 中的端口一致
 wx_webhook_base_api: http://wxbotwebhook:3001
 wx_webhook_recv_api_path: /receive_msg
+# 默认为 "wechatter"
+# 需要与 docker-compose.yml 文件的 wxbotwebhook 中的 LOGIN_API_TOKEN 一致
 wx_webhook_token: "wechatter"
 
 

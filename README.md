@@ -116,7 +116,7 @@ docker-compose -f docker-compose.yml up -d
 | --- | --- | --- |
 | `wx_webhook_base_api`      | 发送消息的 BaseAPI | 默认为 `http://localhost:3001`，即 `wxBotWebhook` Docker 的地址。Docker Compose 部署时默认为 `http://wxbotwebhook:3001` |
 | `wx_webhook_recv_api_path` | 接收消息的接口路径  | 默认为 `/receive_msg`，此路径为 Docker 参数 `RECVD_MSG_API` 的路径 |
-| `wx_webhook_token` | wxBotWebhook 的 Token | |
+| `wx_webhook_token` | wxBotWebhook 的 Token | Docker Compose 部署时默认为 `wechatter` |
 
 ### ⚙️ Admin 配置
 
