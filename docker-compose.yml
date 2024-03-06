@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  wxbotwebhook:
+    image: dannicool/docker-wechatbot-webhook
+    container_name: wxbotwebhook
+    ports:
+      - "3001:3001"
+    environment:
+      - LOGIN_API_TOKEN=wechatter
+      - ACCEPT_RECVD_MSG_MYSELF=true
+      - RECVD_MSG_API=http://wechatter:4000/receive_msg
+
+  wechatter:
+    image: cassius0924/wechatter:v0.5.10
+    container_name: wechatter
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./compose_config.yaml.example:/wechatter/config.yaml
+    environment:
+      - WECHATTER_LOG_LEVEL=INFO
+    depends_on:
+      - wxbotwebhook

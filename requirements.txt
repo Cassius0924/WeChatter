@@ -13,4 +13,4 @@ loguru==0.7.2
 tenacity==8.2.3
 pydantic==2.5.3
 sqlalchemy==2.0.25
-PyYAML==6.0
+PyYAML~=6.0
