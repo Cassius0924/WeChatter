@@ -71,5 +71,4 @@ def init_logger(log_level: str = ""):
         rotation="00:00",
         encoding="utf-8",
         format=LOGURU_FORMAT,
-        colorize=True,
     )
