@@ -90,6 +90,10 @@ class MessageForwarder:
         """
         # TODO: 转发文件
 
+        # 判断发送者是否为自己
+        if message_obj.is_from_self:
+            return
+
         # 判断是否设置了转发规则
         if not self.all_message_rule and not self.specific_message_rules:
             logger.warning(
