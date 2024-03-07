@@ -56,7 +56,9 @@ docker-compose -f docker-compose.yml up
 
 6. 测试机器人
 
-使用另一个微信给机器人发送 `/help` 指令。
+使用另一个微信尝试拍一拍机器人或给机器人发送 `/help` 指令。
+
+![tickled_show](docs/images/tickled_show.jpg)
 
 ## 支持的命令
 
