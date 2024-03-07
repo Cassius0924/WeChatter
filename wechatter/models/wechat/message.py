@@ -268,6 +268,15 @@ class Message(BaseModel):
             )
         return None
 
+    @computed_field
+    @cached_property
+    def is_tickled(self) -> bool:
+        """
+        是否为拍一拍消息
+        """
+        # 消息类型为 unknown 且 content 为 "某人" 拍了拍我
+        return self.type == MessageType.unknown and "拍了拍我" in self.content
+
     def __str__(self) -> str:
         source = self.person
         if self.is_group:
