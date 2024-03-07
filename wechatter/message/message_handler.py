@@ -8,6 +8,7 @@ from wechatter.config import config
 from wechatter.database import QuotedResponse, make_db_session
 from wechatter.message.message_forwarder import MessageForwarder
 from wechatter.models.wechat import Message, SendTo
+from wechatter.sender.notifier import reply_tickled
 
 message_forwarder = MessageForwarder()
 if config["message_forwarding_enabled"]:
@@ -48,6 +49,7 @@ class MessageHandler:
         处理消息
         :param message_obj: 消息对象
         """
+
         # 公众号文章提醒
         if (
             config["official_account_reminder_enabled"]
@@ -56,6 +58,13 @@ class MessageHandler:
         ):
             # 尝试提醒
             message_forwarder.remind_official_account_article(message_obj)
+            return
+
+        # 判断是否为拍一拍
+        if message_obj.is_tickled:
+            # 回复 Hello, WeChatter
+            to = SendTo(person=message_obj.person, group=message_obj.group)
+            reply_tickled(to)
             return
 
         # 消息转发
