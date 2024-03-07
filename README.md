@@ -15,7 +15,6 @@
 
 [![wechatter show](docs/images/wechatter_show.png)](docs/command_show.md)
 
-
 ## 快速开始
 
 WeChatter 支持 [Docker Compose 部署](#docker-compose-部署)、[Docker 部署](./docs/development.md#docker-部署)和[本地部署](./docs/development.md#本地部署)。
@@ -212,7 +211,6 @@ docker-compose -f docker-compose.yml up
 | | `from_list` | 消息转发来源列表，即消息发送者 | 可以填多个用户名称或群名称，若要转发所有消息则使用 `["%ALL"]` |
 | | `from_list_exclude` | 消息转发来源排除列表，不转发此列表的用户和群 | 只在 `from_list` 为 `["%ALL"]` 时生效 |
 | | `discord_webhook_url` | 消息转发目标 Discord Webhook URL | |
-
 
 ## 日志文件
 
