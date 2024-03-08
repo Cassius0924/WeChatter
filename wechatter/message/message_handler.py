@@ -141,10 +141,13 @@ class MessageHandler:
         for command, info in self.commands.items():
             # 第一个空格或回车前的内容即为指令
             cont_list = re.split(r"\s|\n", content, 1)
-            if not cont_list[0].startswith(config["command_prefix"]):
-                continue
-            # 去掉命令前缀
-            no_prefix = cont_list[0][len(config["command_prefix"]) :]
+            if config.get("command_prefix") is not None:
+                if not cont_list[0].startswith(config["command_prefix"]):
+                    continue
+                # 去掉命令前缀
+                no_prefix = cont_list[0][len(config["command_prefix"]) :]
+            else:
+                no_prefix = cont_list[0]
             if no_prefix.lower() in info["keys"]:
                 cmd_dict["command"] = command
                 cmd_dict["desc"] = info["desc"]
