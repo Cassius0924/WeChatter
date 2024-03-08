@@ -67,6 +67,10 @@ class MessageHandler:
             reply_tickled(to)
             return
 
+        # if message_obj.type.value == "unknown":
+        #     logger.info("未知消息类型")
+        #     return
+
         # 消息转发
         if config["message_forwarding_enabled"] and not message_obj.is_official_account:
             # 尝试进行消息转发

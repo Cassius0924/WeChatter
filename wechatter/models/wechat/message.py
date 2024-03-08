@@ -257,6 +257,7 @@ class Message(BaseModel):
     def urllink(self) -> Optional[UrlLink]:
         """
         当消息类型为urlLink时，返回url link的解析结果
+        :return: url link的解析结果
         """
         if self.type == MessageType.urlLink:
             url_link_json = json.loads(self.content)
@@ -273,9 +274,37 @@ class Message(BaseModel):
     def is_tickled(self) -> bool:
         """
         是否为拍一拍消息
+        :return: 是否为拍一拍消息
         """
         # 消息类型为 unknown 且 content 为 "某人" 拍了拍我
         return self.type == MessageType.unknown and "拍了拍我" in self.content
+
+    @computed_field
+    @cached_property
+    def is_sticky(self) -> bool:
+        """
+        是否为表情包消息
+        :return: 是否为表情包消息
+        """
+        # 表情包消息类型为 unknown，内容为 XML 格式，具体格式为 <msg><emoji.*></emoji></msg>
+        return self.type == MessageType.unknown and self.content.startswith(
+            "<msg><emoji"
+        )
+
+    @computed_field
+    @cached_property
+    def sticky_url(self) -> Optional[str]:
+        """
+        获取表情包的URL
+        :return: 表情包的URL
+        """
+        if self.is_sticky:
+            # 使用 spilt，比正则效率高
+            url = self.content.split('cdnurl="')[1].split('" designerid')[0]
+            # 将 URL 中的 &amp; 替换为 &
+            print(url.replace("&amp;amp;", "&"))
+            return url.replace("&amp;amp;", "&")
+        return None
 
     def __str__(self) -> str:
         source = self.person
