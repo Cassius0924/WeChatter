@@ -61,7 +61,7 @@ class MessageHandler:
             return
 
         # 判断是否为拍一拍
-        if message_obj.is_tickled:
+        if message_obj.is_tickled and not message_obj.is_from_self:
             # 回复 Hello, WeChatter
             to = SendTo(person=message_obj.person, group=message_obj.group)
             reply_tickled(to)

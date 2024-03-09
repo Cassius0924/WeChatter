@@ -277,7 +277,9 @@ class Message(BaseModel):
         :return: 是否为拍一拍消息
         """
         # 消息类型为 unknown 且 content 为 "某人" 拍了拍我
-        return self.type == MessageType.unknown and "拍了拍我" in self.content
+        return self.type == MessageType.unknown and (
+            "拍了拍我" in self.content or "我拍了拍自己" in self.content
+        )
 
     @computed_field
     @cached_property
