@@ -49,6 +49,20 @@ class MessageHandler:
         处理消息
         :param message_obj: 消息对象
         """
+        # 判断是否为黑名单
+        if (
+            config.get("ban_person_list")
+            and message_obj.person.name in config["ban_person_list"]
+        ):
+            logger.info(f"黑名单用户：{message_obj.person.name}")
+            return
+        if (
+            message_obj.is_group
+            and config.get("ban_group_list")
+            and message_obj.group.name in config["ban_group_list"]
+        ):
+            logger.info(f"黑名单群：{message_obj.group.name}")
+            return
 
         # 公众号文章提醒
         if (

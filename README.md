@@ -147,6 +147,8 @@ docker-compose -f docker-compose.yml up
 | --- | --- | --- |
 | `command_prefix` | 机器人命令前缀 | 默认为 `/` ，可以设置为`>>`、`!` 等任意字符，可以为空，此项为空时触发命令不需要命令前缀 |
 | `need_mentioned` | 群聊中的命令是否需要@机器人 | 默认为 `False` |
+| `ban_person_list` | 黑名单用户列表 | 机器人不会响应黑名单用户的消息 |
+| `ban_group_list` | 黑名单群列表 | 机器人不会响应黑名单群的消息 |
 
 ### ⚙️ LLM 配置
 

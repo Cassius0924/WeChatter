@@ -25,6 +25,8 @@ bot_name: Cassius
 # Chat
 command_prefix: /
 need_mentioned: False
+ban_person_list: [ ]
+ban_group_list: [ ]
 
 
 # LLM
