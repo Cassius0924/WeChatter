@@ -61,11 +61,15 @@ class MessageHandler:
             return
 
         # 判断是否为拍一拍
-        if message_obj.is_tickled:
+        if message_obj.is_tickled and not message_obj.is_from_self:
             # 回复 Hello, WeChatter
             to = SendTo(person=message_obj.person, group=message_obj.group)
             reply_tickled(to)
             return
+
+        # if message_obj.type.value == "unknown":
+        #     logger.info("未知消息类型")
+        #     return
 
         # 消息转发
         if config["message_forwarding_enabled"] and not message_obj.is_official_account:
@@ -141,10 +145,13 @@ class MessageHandler:
         for command, info in self.commands.items():
             # 第一个空格或回车前的内容即为指令
             cont_list = re.split(r"\s|\n", content, 1)
-            if not cont_list[0].startswith(config["command_prefix"]):
-                continue
-            # 去掉命令前缀
-            no_prefix = cont_list[0][len(config["command_prefix"]) :]
+            if config.get("command_prefix") is not None:
+                if not cont_list[0].startswith(config["command_prefix"]):
+                    continue
+                # 去掉命令前缀
+                no_prefix = cont_list[0][len(config["command_prefix"]) :]
+            else:
+                no_prefix = cont_list[0]
             if no_prefix.lower() in info["keys"]:
                 cmd_dict["command"] = command
                 cmd_dict["desc"] = info["desc"]

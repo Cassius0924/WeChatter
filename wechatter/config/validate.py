@@ -6,7 +6,6 @@ ESSENTIAL_TOP_FIELDS = [
     "wx_webhook_recv_api_path",
     "wx_webhook_token",
     "bot_name",
-    "command_prefix",
     "need_mentioned",
     "openai_base_api",
     "openai_token",
