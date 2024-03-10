@@ -316,7 +316,7 @@ def get_message_forwarding_config():
     return sections
 
 
-@app.post("/message-forwading")
+@app.post("/message-forwarding")
 def update_message_forwarding_config(updated_config: dict = Body(...)):
     succeed_message_forwarding_enabled = update_config_section('message_forwarding_enabled', updated_config)
     succeed_message_forwarding_rule_list = update_config_section('message_forwarding_rule_list', updated_config)

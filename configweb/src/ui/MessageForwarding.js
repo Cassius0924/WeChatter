@@ -39,6 +39,15 @@ function MessageForwarding() {
                            placeholder=""
                            value={ruleList.from_list || ''}
                            onChange={e => setConfig({...config, message_forwarding_rule_list: [{...ruleList, from_list: e.target.value}]})} />
+                    {/*from_list_exclude*/}
+                    <p className="mb-4 text-sm leading-5 text-gray-500">
+                        from_list_exclude: 消息来源排除列表
+                    </p>
+                    <input type="text"
+                            className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                            placeholder=""
+                            value={ruleList.from_list_exclude || ''}
+                            onChange={e => setConfig({...config, message_forwarding_rule_list: [{...ruleList, from_list_exclude: e.target.value}]})} />
                     <p className="mb-4 text-sm leading-5 text-gray-500">
                         to_person_list: 转发给个人列表
                     </p>
