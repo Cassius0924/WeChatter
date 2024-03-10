@@ -1,4 +1,4 @@
-FROM python:3.9-alpine3.18
+FROM python:3.9-alpine3.18 as build
 LABEL authors="Cassius0924"
 
 WORKDIR /wechatter

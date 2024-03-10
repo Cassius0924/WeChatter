@@ -21,3 +21,14 @@ services:
       - WECHATTER_LOG_LEVEL=INFO
     depends_on:
       - wxbotwebhook
+
+  configweb:
+    image: jerryestt/wecahtter-configweb:v1
+    container_name: configweb
+    ports:
+      - "3000:3000"
+      - "8000:8000"
+    volumes:
+        - ./config_cps.js:/configweb/src/config.js
+    depends_on:
+      - wechatter
