@@ -41,9 +41,9 @@ async def recv_wechat_msg(
     # 更新机器人信息（id和name）
     # BotInfo.update_from_source(source)
 
-    if type == "unknown":
-        logger.info(f"收到未知消息：{content}")
-        return
+    # if type == "unknown":
+    #     logger.info(f"收到未知消息：{content}")
+    #     return
 
     # 判断是否是系统事件
     if type in ["system_event_login", "system_event_logout", "system_event_error"]:

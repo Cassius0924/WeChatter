@@ -30,6 +30,9 @@ def get_help_msg() -> str:
             continue
         cmd_msg = ""
         for key in value["keys"]:
-            cmd_msg += config["command_prefix"] + key + "\n"
+            if config.get("command_prefix"):
+                cmd_msg += config["command_prefix"] + key + "\n"
+            else:
+                cmd_msg += key + "\n"
         help_msg += cmd_msg + "-->「" + value["desc"] + "」\n\n"
     return help_msg

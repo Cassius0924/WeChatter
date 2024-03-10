@@ -29,11 +29,19 @@ def _forwarding_by_rule(message_obj: Message, rule: Dict):
     if to_person_list:
         msg = _construct_forwarding_message(message_obj)
         sender.mass_send_msg(to_person_list, msg, is_group=False)
+        if message_obj.is_sticky:
+            sender.mass_send_msg(
+                to_person_list, message_obj.sticky_url, is_group=False, type="text"
+            )
         logger.info(f"转发消息：{message_obj.sender_name} -> {to_person_list}")
     to_group_list = rule["to_group_list"]
     if to_group_list:
         msg = _construct_forwarding_message(message_obj)
         sender.mass_send_msg(to_group_list, msg, is_group=True)
+        if message_obj.is_sticky:
+            sender.mass_send_msg(
+                to_person_list, message_obj.sticky_url, is_group=True, type="text"
+            )
         logger.info(f"转发消息：{message_obj.sender_name} -> {to_group_list}")
 
 
@@ -89,6 +97,10 @@ class MessageForwarder:
         :param message_obj: 消息对象
         """
         # TODO: 转发文件
+
+        # 判断发送者是否为自己
+        if message_obj.is_from_self:
+            return
 
         # 判断是否设置了转发规则
         if not self.all_message_rule and not self.specific_message_rules:
@@ -220,9 +232,12 @@ def _construct_forwarding_message(message_obj: Message) -> str:
     构造转发消息
     """
 
-    content = message_obj.content
+    if message_obj.is_sticky:
+        content = "表情包："
+    else:
+        content = message_obj.content
     if message_obj.is_group:
-        content = (
+        message = (
             GROUP_FORWARDING_MESSAGE_FORMAT
             % (
                 message_obj.person.name,
@@ -231,5 +246,5 @@ def _construct_forwarding_message(message_obj: Message) -> str:
             + content
         )
     else:
-        content = PERSON_FORWARDING_MESSAGE_FORMAT % message_obj.person.name + content
-    return content
+        message = PERSON_FORWARDING_MESSAGE_FORMAT % message_obj.person.name + content
+    return message

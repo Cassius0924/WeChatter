@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from wechatter.models.wechat import SendTo
 
 
-def notify_received(to: "SendTo") -> None:
+def notify_received(to: "SendTo"):
     """
     通知收到命令请求
     """
@@ -20,7 +20,7 @@ def notify_received(to: "SendTo") -> None:
 
 
 # 机器人登录登出通知，若是登录（登出）则发送登录（登出）消息给所有管理员
-def notify_logged_in() -> None:
+def notify_logged_in():
     """
     通知登录成功
     """
@@ -35,7 +35,7 @@ def notify_logged_in() -> None:
         get_request(url)
 
 
-def notify_logged_out() -> None:
+def notify_logged_out():
     """
     通知已退出登录
     """
@@ -48,3 +48,11 @@ def notify_logged_out() -> None:
             f"WeChatter/🔴 微信机器人（{config['bot_name']}）已退出登录?copy={config['wx_webhook_base_api']}/login?token={config['wx_webhook_token']}",
         )
         get_request(url)
+
+
+def reply_tickled(to: "SendTo"):
+    """
+    回复拍一拍
+    """
+    msg = "Hello, WeChatter"
+    sender.send_msg(to, msg)

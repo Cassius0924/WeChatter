@@ -15,7 +15,6 @@
 
 [![wechatter show](docs/images/wechatter_show.png)](docs/command_show.md)
 
-
 ## 快速开始
 
 WeChatter 支持 [Docker Compose 部署](#docker-compose-部署)、[Docker 部署](./docs/development.md#docker-部署)和[本地部署](./docs/development.md#本地部署)。
@@ -56,7 +55,9 @@ docker-compose -f docker-compose.yml up
 
 6. 测试机器人
 
-使用另一个微信给机器人发送 `/help` 指令。
+使用另一个微信尝试拍一拍机器人或给机器人发送 `/help` 指令。
+
+![tickled_show](docs/images/tickled_show.png)
 
 ## 支持的命令
 
@@ -144,8 +145,10 @@ docker-compose -f docker-compose.yml up
 
 | 配置项 | 解释 | 备注 |
 | --- | --- | --- |
-| `command_prefix` | 机器人命令前缀 | 默认为 `/` ，可以设置为`>>`、`!` 等任意字符 |
+| `command_prefix` | 机器人命令前缀 | 默认为 `/` ，可以设置为`>>`、`!` 等任意字符，可以为空，此项为空时触发命令不需要命令前缀 |
 | `need_mentioned` | 群聊中的命令是否需要@机器人 | 默认为 `False` |
+| `ban_person_list` | 黑名单用户列表 | 机器人不会响应黑名单用户的消息 |
+| `ban_group_list` | 黑名单群列表 | 机器人不会响应黑名单群的消息 |
 
 ### ⚙️ LLM 配置
 
@@ -211,12 +214,23 @@ docker-compose -f docker-compose.yml up
 | | `from_list_exclude` | 消息转发来源排除列表，不转发此列表的用户和群 | 只在 `from_list` 为 `["%ALL"]` 时生效 |
 | | `discord_webhook_url` | 消息转发目标 Discord Webhook URL | |
 
-
 ## 日志文件
 
 日志文件存放在项目根目录下的 `logs/` 文件夹中。
 
-默认的日志记录级别为 `INFO`，若需要调整日志记录级别，请修改环境变量 `WECHATTER_LOG_LEVEL`，可设置 `DEBUG`、`INFO`、`WARNING`、`ERROR`、`CRITICAL`。
+默认的日志记录级别为 `INFO`，日志记录级别可选值有 `DEBUG`、`INFO`、`WARNING`、`ERROR`、`CRITICAL`。
+ 
+### Docker Compose 部署时
+
+若需要调整日志记录级别，请修改 `docker-compose.yml` 文件中的 `WECHATTER_LOG_LEVEL` 环境变量。
+
+### Docker 部署时
+
+请修改 `docker run` 命令中的 `WECHATTER_LOG_LEVEL` 环境变量。
+
+### 本地部署时
+
+请修改系统环境变量 `WECHATTER_LOG_LEVEL`。
 
 ```bash
 export WECHATTER_LOG_LEVEL=DEBUG
