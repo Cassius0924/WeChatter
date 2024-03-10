@@ -6,6 +6,7 @@ __pycache__/
 .DS_Store
 
 config.yaml
+config_cps.yaml
 
 data/
 

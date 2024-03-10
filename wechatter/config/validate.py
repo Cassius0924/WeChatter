@@ -6,7 +6,6 @@ ESSENTIAL_TOP_FIELDS = [
     "wx_webhook_recv_api_path",
     "wx_webhook_token",
     "bot_name",
-    "command_prefix",
     "need_mentioned",
     "openai_base_api",
     "openai_token",
@@ -82,14 +81,6 @@ def validate_config(config):
                 error_msg = f"配置参数错误：message_forwarding_rule_list[{i}] 缺少必要字段 {field}"
                 logger.critical(error_msg)
                 raise ValueError(error_msg)
-
-            # 判断这个 rule 是否有 from_list_exclude 字段
-            if (
-                "from_list_exclude" in rule
-                and config["bot_name"] not in rule["from_list_exclude"]
-            ):
-                # 加入机器人名字，防止机器人自己转发自己的消息，导致死循环刷屏
-                rule["from_list_exclude"].append(config["bot_name"])
 
     # Discord 消息转发配置
     ess_fields = ["from_list", "webhook_url"]

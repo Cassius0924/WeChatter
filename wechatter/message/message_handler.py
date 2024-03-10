@@ -8,6 +8,7 @@ from wechatter.config import config
 from wechatter.database import QuotedResponse, make_db_session
 from wechatter.message.message_forwarder import MessageForwarder
 from wechatter.models.wechat import Message, SendTo
+from wechatter.sender.notifier import reply_tickled
 
 message_forwarder = MessageForwarder()
 if config["message_forwarding_enabled"]:
@@ -48,6 +49,21 @@ class MessageHandler:
         处理消息
         :param message_obj: 消息对象
         """
+        # 判断是否为黑名单
+        if (
+            config.get("ban_person_list")
+            and message_obj.person.name in config["ban_person_list"]
+        ):
+            logger.info(f"黑名单用户：{message_obj.person.name}")
+            return
+        if (
+            message_obj.is_group
+            and config.get("ban_group_list")
+            and message_obj.group.name in config["ban_group_list"]
+        ):
+            logger.info(f"黑名单群：{message_obj.group.name}")
+            return
+
         # 公众号文章提醒
         if (
             config["official_account_reminder_enabled"]
@@ -57,6 +73,17 @@ class MessageHandler:
             # 尝试提醒
             message_forwarder.remind_official_account_article(message_obj)
             return
+
+        # 判断是否为拍一拍
+        if message_obj.is_tickled and not message_obj.is_from_self:
+            # 回复 Hello, WeChatter
+            to = SendTo(person=message_obj.person, group=message_obj.group)
+            reply_tickled(to)
+            return
+
+        # if message_obj.type.value == "unknown":
+        #     logger.info("未知消息类型")
+        #     return
 
         # 消息转发
         if config["message_forwarding_enabled"] and not message_obj.is_official_account:
@@ -132,10 +159,13 @@ class MessageHandler:
         for command, info in self.commands.items():
             # 第一个空格或回车前的内容即为指令
             cont_list = re.split(r"\s|\n", content, 1)
-            if not cont_list[0].startswith(config["command_prefix"]):
-                continue
-            # 去掉命令前缀
-            no_prefix = cont_list[0][len(config["command_prefix"]) :]
+            if config.get("command_prefix") is not None:
+                if not cont_list[0].startswith(config["command_prefix"]):
+                    continue
+                # 去掉命令前缀
+                no_prefix = cont_list[0][len(config["command_prefix"]) :]
+            else:
+                no_prefix = cont_list[0]
             if no_prefix.lower() in info["keys"]:
                 cmd_dict["command"] = command
                 cmd_dict["desc"] = info["desc"]

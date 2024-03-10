@@ -20,7 +20,7 @@ wx_webhook_token: "your_wx_webhook_token"
 # Admin
 admin_list: [ "文件传输助手", "AdminName" ]
 admin_group_list: [ "AdminGroupName" ]
-bark_url: your_bark_url
+bark_url:
 
 
 # Bot
@@ -30,6 +30,8 @@ bot_name: Cassius
 # Chat
 command_prefix: /
 need_mentioned: False
+ban_person_list: [ ]
+ban_group_list: [ ]
 
 
 # LLM
