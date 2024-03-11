@@ -1,11 +1,34 @@
-// CustomCommandKey.js
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
+import {
+    Button,
+    ButtonArea,
+    CellBody,
+    CellHeader,
+    CellsTitle,
+    Dialog,
+    Form,
+    FormCell,
+    Input,
+    Label,
+    Page
+} from 'react-weui';
 import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
 
+// 添加样式
+const headerStyle = {
+    width: '20%',
+    paddingRight: '10px',
+    whiteSpace: 'nowrap'
+};
+
+const bodyStyle = {
+    width: '80%'
+};
+
 function CustomCommandKey() {
     const [config, setConfig] = useFetchData('custom-command-key');
-    const handleSave = useSaveConfig('custom-command-key', config);
+    const [saveConfig, dialog, hideDialog] = useSaveConfig('custom-command-key', config);
     useEffect(() => {
         console.log('config changed');
         console.log(config);
@@ -14,45 +37,96 @@ function CustomCommandKey() {
     const commandKeyDict = config.custom_command_key_dict || {};
     console.log(commandKeyDict);
 
-    const handleChange = (key, value) => {
+    const handleChange = (oldKey, newKey, value) => {
+        const newCommandKeyDict = {...commandKeyDict};
+        delete newCommandKeyDict[oldKey];
+        newCommandKeyDict[newKey] = value.split(',').map(item => item.trim());
         setConfig({
             ...config,
-            custom_command_key_dict: {
-                ...commandKeyDict,
-                [key]: value.split(',').map(item => item.trim()),
-            },
+            custom_command_key_dict: newCommandKeyDict,
         });
     };
 
+    // 添加新的自定义命令键
+    const handleAddCommandKey = () => {
+        const newCommandKeyDict = {...commandKeyDict};
+        newCommandKeyDict['新命令键'] = [];
+        setConfig({
+            ...config,
+            custom_command_key_dict: newCommandKeyDict,
+        });
+    };
+
+    // 删除自定义命令键
+    const handleDeleteCommandKey = (key) => {
+        const newCommandKeyDict = {...commandKeyDict};
+        delete newCommandKeyDict[key];
+        setConfig({
+            ...config,
+            custom_command_key_dict: newCommandKeyDict,
+        });
+    };
+    const dialogStyle = {
+        title: "保存成功",
+        buttons: [
+            {
+                type: 'default',
+                label: '确定',
+                onClick: () => hideDialog()
+            }
+        ]
+    };
     return (
-        <div className="border-4 border-dashed border-gray-200 rounded-lg mb-6">
-            <div className="flex flex-col items-center justify-center h-full">
-                <div className="text-center">
-                    <h3 className="mb-4 text-lg leading-6 font-medium text-gray-900">
-                        自定义命令键
-                    </h3>
-                    {Object.keys(commandKeyDict).map((key) => (
-                        <div key={key}>
-                            <h4 className="mb-2 text-md leading-6 font-medium text-gray-900">
-                                {key}
-                            </h4>
-                            <input
-                                type="text"
-                                className="form-input mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                                placeholder={key}
-                                value={commandKeyDict[key].join(', ')}
-                                onChange={e => handleChange(key, e.target.value)}
-                            />
-                        </div>
-                    ))}
-                    <button
-                        onClick={handleSave}
-                        className="mt-4 px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md">
-                        保存
-                    </button>
+        <Page className="input">
+            <CellsTitle>自定义命令键</CellsTitle>
+            <ButtonArea>
+                <Button
+                    onClick={handleAddCommandKey}
+                >
+                    添加命令键
+                </Button>
+            </ButtonArea>
+            {Object.keys(commandKeyDict).map((key) => (
+                <div key={key}>
+                    <Form>
+                        <FormCell>
+                            <CellHeader style={headerStyle}>
+                                <Input
+                                    type="text"
+                                    defaultValue={key}
+                                    onChange={e => handleChange(key, e.target.value, commandKeyDict[key].join(', '))}
+                                />
+                            </CellHeader>
+                            <CellBody style={bodyStyle}>
+                                <Input
+                                    type="text"
+                                    placeholder="输入命令"
+                                    value={commandKeyDict[key].join(', ')}
+                                    onChange={e => handleChange(key, key, e.target.value)}
+                                />
+                            </CellBody>
+                        </FormCell>
+                    </Form>
+                    <ButtonArea>
+                        <Button
+                            onClick={() => handleDeleteCommandKey(key)}
+                        >
+                            删除命令键
+                        </Button>
+                    </ButtonArea>
                 </div>
-            </div>
-        </div>
+            ))}
+            <ButtonArea>
+                <Button
+                    onClick={saveConfig}
+                >
+                    保存
+                </Button>
+            </ButtonArea>
+            <Dialog type="ios" title={dialog.title} buttons={dialogStyle.buttons} show={dialog.show}>
+                {dialog.message}
+            </Dialog>
+        </Page>
     );
 }
 

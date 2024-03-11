@@ -14,6 +14,7 @@ import CustomCommandKey from "./ui/Custom-Command-Key";
 import ConfigWeb from "./ui/ConfigWeb";
 import axios from "axios";
 import {BACKEND_IP, BACKEND_PORT} from './config';
+import 'weui';
 
 
 function App() {
