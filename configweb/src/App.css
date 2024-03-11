@@ -36,3 +36,30 @@
     transform: rotate(360deg);
   }
 }
+
+.navbar {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  height: 100vh;
+  position: fixed;
+  overflow: auto;
+}
+
+
+.navbar a {
+  color: #333;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.navbar a:hover {
+  color: #007bff;
+}
+
+
+.content {
+  margin-left: 300px;
+}
+
+

@@ -10,11 +10,20 @@ import {
     Page,
     Panel,
     PanelBody,
-    Dialog
+    Dialog, CellHeader, Label
 } from 'react-weui';
 import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
 
+const headerStyle = {
+    width: '20%',
+    paddingRight: '10px',
+    whiteSpace: 'nowrap'
+};
+
+const bodyStyle = {
+    width: '80%'
+};
 function WeChatter() {
     const [config, setConfig] = useFetchData('wechatter');
     const [saveConfig, dialog, hideDialog] = useSaveConfig('wechatter', config);
@@ -35,6 +44,9 @@ function WeChatter() {
                     <CellsTitle>微信机器人服务的端口，接收消息的端口，RECV_MSG_API的端口（4000）</CellsTitle>
                     <Form>
                         <FormCell>
+                            <CellHeader style={headerStyle}>
+                                <Label>wechatter_port</Label>
+                            </CellHeader>
                             <CellBody>
                                 <Input
                                     type="text"
