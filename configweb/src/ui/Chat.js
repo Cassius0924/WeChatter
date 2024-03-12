@@ -15,6 +15,8 @@ import {
 } from 'react-weui';
 import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
+import CustomFormCell from "./CustomFormCell";
+
 
 // 添加样式
 const headerStyle = {
@@ -47,21 +49,12 @@ function Chat() {
     return (
         <Page className="input">
             <CellsTitle>命令前缀，用于区分命令和普通消息（/）</CellsTitle>
-            <Form>
-                <FormCell>
-                    <CellHeader style={headerStyle}>
-                        <Label>command_prefix</Label>
-                    </CellHeader>
-                    <CellBody style={bodyStyle}>
-                        <Input
-                            type="text"
-                            placeholder="/"
-                            value={config.command_prefix || ''}
-                            onChange={e => setConfig({...config, command_prefix: e.target.value})}
-                        />
-                    </CellBody>
-                </FormCell>
-            </Form>
+            <CustomFormCell
+                label="command_prefix"
+                value={config.command_prefix || ''}
+                onChange={e => setConfig({...config, command_prefix: e.target.value})}
+                placeholder="/"
+            />
 
             <CellsTitle>群消息命令是否需要@机器人才能触发</CellsTitle>
             <Form>

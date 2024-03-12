@@ -15,6 +15,8 @@ import {
 } from 'react-weui';
 import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
+import CustomFormCell from "./CustomFormCell";
+
 
 // 添加样式
 const headerStyle = {
@@ -60,55 +62,28 @@ function OfficialAccountReminder() {
             </Form>
 
             <CellsTitle>公众号名称列表</CellsTitle>
-            <Form>
-                <FormCell>
-                    <CellHeader style={headerStyle}>
-                        <Label>oa_name_list</Label>
-                    </CellHeader>
-                    <CellBody style={bodyStyle}>
-                        <Input
-                            type="text"
-                            placeholder=""
-                            value={ruleList.oa_name_list || ''}
-                            onChange={e => setConfig({...config, official_account_reminder_rule_list: [{...ruleList, oa_name_list: e.target.value}]})}
-                        />
-                    </CellBody>
-                </FormCell>
-            </Form>
+            <CustomFormCell
+                label="oa_name_list"
+                placeholder="央视新闻,人民日报"
+                value={ruleList.oa_name_list || ''}
+                onChange={e => setConfig({...config, official_account_reminder_rule_list: [{...ruleList, oa_name_list: e.target.value}]})}
+            />
 
             <CellsTitle>提醒给个人列表</CellsTitle>
-            <Form>
-                <FormCell>
-                    <CellHeader style={headerStyle}>
-                        <Label>to_person_list</Label>
-                    </CellHeader>
-                    <CellBody style={bodyStyle}>
-                        <Input
-                            type="text"
-                            placeholder=""
-                            value={ruleList.to_person_list || ''}
-                            onChange={e => setConfig({...config, official_account_reminder_rule_list: [{...ruleList, to_person_list: e.target.value}]})}
-                        />
-                    </CellBody>
-                </FormCell>
-            </Form>
+            <CustomFormCell
+                label="to_person_list"
+                placeholder="You"
+                value={ruleList.to_person_list || ''}
+                onChange={e => setConfig({...config, official_account_reminder_rule_list: [{...ruleList, to_person_list: e.target.value}]})}
+            />
 
             <CellsTitle>提醒给群组列表</CellsTitle>
-            <Form>
-                <FormCell>
-                    <CellHeader style={headerStyle}>
-                        <Label>to_group_list</Label>
-                    </CellHeader>
-                    <CellBody style={bodyStyle}>
-                        <Input
-                            type="text"
-                            placeholder=""
-                            value={ruleList.to_group_list || ''}
-                            onChange={e => setConfig({...config, official_account_reminder_rule_list: [{...ruleList, to_group_list: e.target.value}]})}
-                        />
-                    </CellBody>
-                </FormCell>
-            </Form>
+            <CustomFormCell
+                label="to_group_list"
+                placeholder="Team"
+                value={ruleList.to_group_list || ''}
+                onChange={e => setConfig({...config, official_account_reminder_rule_list: [{...ruleList, to_group_list: e.target.value}]})}
+            />
 
             <ButtonArea>
                 <Button

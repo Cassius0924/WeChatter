@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {BrowserRouter as Router, Link, Route, Routes} from "react-router-dom";
-import {Cells, Cell, CellBody, Dialog, Button} from 'react-weui';
+import {Button, Cell, CellBody, Cells, Dialog} from 'react-weui';
 import WxBotWebhook from "./ui/WxBotWebhook";
 import WeChatter from "./ui/WeChatter";
 import Admin from "./ui/Admin";
@@ -16,7 +16,7 @@ import ConfigWeb from "./ui/ConfigWeb";
 import {BACKEND_IP, BACKEND_PORT} from './config';
 import 'weui';
 import './App.css';
-import axios from "axios";  // Add this line
+import axios from "axios"; // Add this line
 
 function App() {
     const [dialog, setDialog] = useState({title: '', message: '', show: false});
@@ -73,12 +73,13 @@ function App() {
             <div className="min-h-screen bg-gray-100">
                 <nav className="bg-white shadow navbar">  {/* Add the CSS class here */}
                     <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+                        <header className="text-center py-2">
+                            <Link to="/ConfigWeb" className="text-2xl font-bold text-blue-500 hover:text-blue-700">
+                                ConfigWeb
+                            </Link>
+                        </header>
+
                         <Cells>
-                            <Cell access>
-                                <CellBody>
-                                    <Link to="/ConfigWeb">ConfigWeb</Link>
-                                </CellBody>
-                            </Cell>
                             <Cell access>
                                 <CellBody>
                                     <Link to="/WeChatter">WeChatter</Link>
@@ -144,21 +145,21 @@ function App() {
                         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                             <div className="flex justify-between items-center">
                                 <h1 className="text-3xl font-bold leading-tight text-gray-900">
-                                    WeChat Robot 配置
+                                    WeChatter 配置
                                 </h1>
-                                <div className="flex">
-                                    <div className="flex-shrink-0">
-                                        <button
-                                            className="relative inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline-indigo focus:border-indigo-700 active:bg-indigo-700 transition">
-                                            <span>Search</span>
-                                        </button>
-                                    </div>
 
-                                    <div className="button-sp-area">
-                                        <Button onClick={handleStart} className="weui-btn weui-btn_primary">启动</Button>
+                                <div className="flex">
+                                    <div className="mr-4">
+                                        <Button onClick={handleStart}
+                                                className="weui-btn weui-btn_primary px-5 py-2 text-lg font-bold">
+                                            启动
+                                        </Button>
                                     </div>
-                                    <div className="button-sp-area">
-                                        <Button onClick={handleStop} className="weui-btn weui-btn_warn">停止</Button>
+                                    <div>
+                                        <Button onClick={handleStop}
+                                                className="weui-btn weui-btn_warn px-5 py-2 text-lg font-bold">
+                                            停止
+                                        </Button>
                                     </div>
                                     <Dialog type="ios" title={dialog.title} buttons={[{
                                         type: 'default',
@@ -168,6 +169,7 @@ function App() {
                                         {dialog.message}
                                     </Dialog>
                                 </div>
+
                             </div>
                         </div>
                     </header>
@@ -194,7 +196,7 @@ function App() {
                 </div>
             </div>
         </Router>
-);
+    );
 }
 
 

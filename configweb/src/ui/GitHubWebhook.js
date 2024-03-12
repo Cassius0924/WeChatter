@@ -15,6 +15,8 @@ import {
 } from 'react-weui';
 import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
+import CustomFormCell from "./CustomFormCell";
+
 
 // 添加样式
 const headerStyle = {
@@ -54,55 +56,28 @@ function GithubWebhook() {
             </Form>
 
             <CellsTitle>接收 GitHub Webhook 的接口路径（/webhook/github）</CellsTitle>
-            <Form>
-                <FormCell>
-                    <CellHeader style={headerStyle}>
-                        <Label>github_webhook_api_path</Label>
-                    </CellHeader>
-                    <CellBody style={bodyStyle}>
-                        <Input
-                            type="text"
-                            placeholder="/webhook/github"
-                            value={config.github_webhook_api_path || ''}
-                            onChange={e => setConfig({...config, github_webhook_api_path: e.target.value})}
-                        />
-                    </CellBody>
-                </FormCell>
-            </Form>
+            <CustomFormCell
+                label="github_webhook_api_path"
+                placeholder="/webhook/github"
+                value={config.github_webhook_api_path || ''}
+                onChange={e => setConfig({...config, github_webhook_api_path: e.target.value})}
+            />
 
             <CellsTitle>接收 GitHub Webhook 的微信用户</CellsTitle>
-            <Form>
-                <FormCell>
-                    <CellHeader style={headerStyle}>
-                        <Label>github_webhook_receiver_list</Label>
-                    </CellHeader>
-                    <CellBody style={bodyStyle}>
-                        <Input
-                            type="text"
-                            placeholder="[]"
-                            value={config.github_webhook_receive_person_list || ''}
-                            onChange={e => setConfig({...config, github_webhook_receive_person_list: e.target.value})}
-                        />
-                    </CellBody>
-                </FormCell>
-            </Form>
+            <CustomFormCell
+                label="github_webhook_receive_person_list"
+                value={config.github_webhook_receive_person_list || ''}
+                onChange={e => setConfig({...config, github_webhook_receive_person_list: e.target.value})}
+                placeholder="[]"
+            />
 
             <CellsTitle>接收 GitHub Webhook 的微信群</CellsTitle>
-            <Form>
-                <FormCell>
-                    <CellHeader style={headerStyle}>
-                        <Label>github_webhook_receive_group_list</Label>
-                    </CellHeader>
-                    <CellBody style={bodyStyle}>
-                        <Input
-                            type="text"
-                            placeholder="[]"
-                            value={config.github_webhook_receive_group_list || ''}
-                            onChange={e => setConfig({...config, github_webhook_receive_group_list: e.target.value})}
-                        />
-                    </CellBody>
-                </FormCell>
-            </Form>
+            <CustomFormCell
+                label="github_webhook_receive_group_list"
+                value={config.github_webhook_receive_group_list || ''}
+                onChange={e => setConfig({...config, github_webhook_receive_group_list: e.target.value})}
+                placeholder="[]"
+            />
 
             <ButtonArea>
                 <Button

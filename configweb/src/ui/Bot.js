@@ -14,6 +14,7 @@ import {
 } from 'react-weui';
 import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
+import CustomFormCell from "./CustomFormCell";
 
 // 添加样式
 const headerStyle = {
@@ -43,21 +44,12 @@ function Bot() {
     return (
         <Page className="input">
             <CellsTitle>机器人的微信名称（不是微信号，不带引号）</CellsTitle>
-            <Form>
-                <FormCell>
-                    <CellHeader style={headerStyle}>
-                        <Label>bot_name</Label>
-                    </CellHeader>
-                    <CellBody style={bodyStyle}>
-                        <Input
-                            type="text"
-                            placeholder="BotName"
-                            value={config.bot_name || ''}
-                            onChange={e => setConfig({...config, bot_name: e.target.value})}
-                        />
-                    </CellBody>
-                </FormCell>
-            </Form>
+            <CustomFormCell
+                label="bot_name"
+                value={config.bot_name || ''}
+                onChange={e => setConfig({...config, bot_name: e.target.value})}
+                placeholder="Cassius"
+            />
             <ButtonArea>
                 <Button
                     onClick={saveConfig}

@@ -2,21 +2,20 @@ import React from 'react';
 import {
     Button,
     ButtonArea,
+    CellBody,
+    CellHeader,
     CellsTitle,
+    Dialog,
     Form,
     FormCell,
-    CellHeader,
-    CellBody,
-    CellFooter,
-    Label,
     Input,
-    Page,
-    Panel,
-    PanelBody,
-    Dialog
+    Label,
+    Page
 } from 'react-weui';
 import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
+import CustomFormCell from "./CustomFormCell";
+
 
 // 添加样式
 const headerStyle = {
@@ -48,56 +47,30 @@ function WxBotWebhook() {
 
     return (
         <Page className="input">
-                    <CellsTitle>发送消息的 API 地址，必须包含http(s)://ip:端口（http://localhost:3001）</CellsTitle>
-                    <Form>
-                        <FormCell>
-                            <CellHeader style={headerStyle}>
-                                <Label>wx_webhook_host</Label>
-                            </CellHeader>
-                            <CellBody style={bodyStyle}>
-                                <Input
-                                    type="text"
-                                    placeholder="http://localhost:3001"
-                                    value={config.wx_webhook_base_api || ''}
-                                    onChange={e => setConfig({...config, wx_webhook_base_api: e.target.value})}
-                                />
-                            </CellBody>
-                        </FormCell>
-                    </Form>
+            <CellsTitle>发送消息的 API 地址，必须包含http(s)://ip:端口（http://localhost:3001）</CellsTitle>
+            <CustomFormCell
+                label="wx_webhook_host"
+                value={config.wx_webhook_base_api || ''}
+                onChange={e => setConfig({...config, wx_webhook_base_api: e.target.value})}
+                placeholder="http://localhost:3001"
+            />
 
-                    <CellsTitle>接收消息的接口路径，RECV_MSG_API的路径（/receive_msg）</CellsTitle>
-                    <Form>
-                        <FormCell>
-                            <CellHeader style={headerStyle}>
-                                <Label>wx_webhook_recv_api_path</Label>
-                            </CellHeader>
-                            <CellBody style={bodyStyle}>
-                                <Input
-                                    type="text"
-                                    placeholder="/receive_msg"
-                                    value={config.wx_webhook_recv_api_path || ''}
-                                    onChange={e => setConfig({...config, wx_webhook_recv_api_path: e.target.value})}
-                                />
-                            </CellBody>
-                        </FormCell>
-                    </Form>
+            <CellsTitle>接收消息的接口路径，RECV_MSG_API的路径（/receive_msg）</CellsTitle>
+            <CustomFormCell
+                label="wx_webhook_recv_api_path"
+                value={config.wx_webhook_recv_api_path || ''}
+                onChange={e => setConfig({...config, wx_webhook_recv_api_path: e.target.value})}
+                placeholder="/receive_msg"
+            />
 
-                    <CellsTitle>用于验证消息的token（wxbot）</CellsTitle>
-                    <Form>
-                        <FormCell>
-                            <CellHeader style={headerStyle}>
-                                <Label>wx_webhook_token</Label>
-                            </CellHeader>
-                            <CellBody style={bodyStyle}>
-                                <Input
-                                    type="text"
-                                    placeholder="wxbot"
-                                    value={config.wx_webhook_token || ''}
-                                    onChange={e => setConfig({...config, wx_webhook_token: e.target.value})}
-                                />
-                            </CellBody>
-                        </FormCell>
-                    </Form>
+            <CellsTitle>用于验证消息的token（wxbot）</CellsTitle>
+            <CustomFormCell
+                label="wx_webhook_token"
+                value={config.wx_webhook_token || ''}
+                onChange={e => setConfig({...config, wx_webhook_token: e.target.value})}
+                placeholder="your_wx_webhook_token"
+            />
+
             <ButtonArea>
                 <Button
                     onClick={saveConfig}
@@ -113,8 +86,6 @@ function WxBotWebhook() {
 }
 
 export default WxBotWebhook;
-
-
 
 
 // // WxBotWebhook.js

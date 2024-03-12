@@ -1,7 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { Button, ButtonArea, CellBody, CellHeader, CellsTitle, Dialog, Form, FormCell, Input, Label, Page } from 'react-weui';
+import React, {useEffect} from 'react';
+import {
+    Button,
+    ButtonArea,
+    CellBody,
+    CellHeader,
+    CellsTitle,
+    Dialog,
+    Form,
+    FormCell,
+    Input,
+    Label,
+    Page
+} from 'react-weui';
 import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
+import CustomFormCell from './CustomFormCell';
+
 
 // 添加样式
 const headerStyle = {
@@ -54,35 +68,21 @@ function Admin() {
     return (
         <Page className="input">
             <CellsTitle>管理员</CellsTitle>
-            <Form>
-                <FormCell>
-                    <CellHeader style={headerStyle}>
-                        <Label>admin_list</Label>
-                    </CellHeader>
-                    <CellBody style={bodyStyle}>
-                        <Input
-                            type="text"
-                            placeholder="微信管理员"
-                            value={config.admin_list || ''}
-                            onChange={e => setConfig({...config, admin_list: e.target.value})}
-                        />
-                    </CellBody>
-                </FormCell>
+            <CustomFormCell
+                label="admin_list"
+                value={config.admin_list}
+                onChange={e => setConfig({...config, admin_list: e.target.value})}
+                placeholder="文件传输助手,AdminName"
+            />
 
-                <FormCell>
-                    <CellHeader style={headerStyle}>
-                        <Label>admin_group_list</Label>
-                    </CellHeader>
-                    <CellBody style={bodyStyle}>
-                        <Input
-                            type="text"
-                            placeholder="微信群名称"
-                            value={config.admin_group_list || ''}
-                            onChange={e => setConfig({...config, admin_group_list: e.target.value})}
-                        />
-                    </CellBody>
-                </FormCell>
-            </Form>
+            <CellsTitle>管理员群</CellsTitle>
+            <CustomFormCell
+                label="admin_group_list"
+                value={config.admin_group_list}
+                onChange={e => setConfig({...config, admin_group_list: e.target.value})}
+                placeholder="AdminGroupName"
+            />
+
             <ButtonArea>
                 <Button
                     onClick={saveConfig}

@@ -14,6 +14,8 @@ import {
 } from 'react-weui';
 import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
+import CustomFormCell from "./CustomFormCell";
+
 
 // 添加样式
 const headerStyle = {
@@ -42,38 +44,20 @@ function CopilotGPT4() {
     return (
         <Page className="input">
             <CellsTitle>Copilot GPT4 服务的 API 地址，必须包含http(s)://（http://localhost）</CellsTitle>
-            <Form>
-                <FormCell>
-                    <CellHeader style={headerStyle}>
-                        <Label>cp_gpt4_api_host</Label>
-                    </CellHeader>
-                    <CellBody style={bodyStyle}>
-                        <Input
-                            type="text"
-                            placeholder="http://localhost"
-                            value={config.openai_base_api || ''}
-                            onChange={e => setConfig({...config, openai_base_api: e.target.value})}
-                        />
-                    </CellBody>
-                </FormCell>
-            </Form>
+            <CustomFormCell
+                label="cp_gpt4_api_host"
+                value={config.openai_base_api || ''}
+                onChange={e => setConfig({...config, openai_base_api: e.target.value})}
+                placeholder="https://api.openai.com"
+            />
 
             <CellsTitle>Copilot 的 Token</CellsTitle>
-            <Form>
-                <FormCell>
-                    <CellHeader style={headerStyle}>
-                        <Label>cp_token</Label>
-                    </CellHeader>
-                    <CellBody style={bodyStyle}>
-                        <Input
-                            type="text"
-                            placeholder="ghu_your_token"
-                            value={config.openai_token || ''}
-                            onChange={e => setConfig({...config, openai_token: e.target.value})}
-                        />
-                    </CellBody>
-                </FormCell>
-            </Form>
+            <CustomFormCell
+                label="cp_token"
+                value={config.openai_token || ''}
+                onChange={e => setConfig({...config, openai_token: e.target.value})}
+                placeholder="sk_your_openai_token"
+            />
 
             <ButtonArea>
                 <Button

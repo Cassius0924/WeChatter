@@ -15,6 +15,8 @@ import {
 } from 'react-weui';
 import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
+import CustomFormCell from './CustomFormCell';
+
 
 // 添加样式
 const headerStyle = {
@@ -60,72 +62,48 @@ function MessageForwarding() {
             </Form>
 
             <CellsTitle>消息来源列表</CellsTitle>
-            <Form>
-                <FormCell>
-                    <CellHeader style={headerStyle}>
-                        <Label>from_list</Label>
-                    </CellHeader>
-                    <CellBody style={bodyStyle}>
-                        <Input
-                            type="text"
-                            placeholder=""
-                            value={ruleList.from_list || ''}
-                            onChange={e => setConfig({...config, message_forwarding_rule_list: [{...ruleList, from_list: e.target.value}]})}
-                        />
-                    </CellBody>
-                </FormCell>
-            </Form>
+            <CustomFormCell
+                label="from_list"
+                value={ruleList.from_list}
+                onChange={e => setConfig({
+                    ...config,
+                    message_forwarding_rule_list: [{...ruleList, from_list: e.target.value}]
+                })}
+                placeholder="%ALL"
+            />
+
 
             <CellsTitle>消息来源排除列表</CellsTitle>
-            <Form>
-                <FormCell>
-                    <CellHeader style={headerStyle}>
-                        <Label>from_list_exclude</Label>
-                    </CellHeader>
-                    <CellBody style={bodyStyle}>
-                        <Input
-                            type="text"
-                            placeholder=""
-                            value={ruleList.from_list_exclude || ''}
-                            onChange={e => setConfig({...config, message_forwarding_rule_list: [{...ruleList, from_list_exclude: e.target.value}]})}
-                        />
-                    </CellBody>
-                </FormCell>
-            </Form>
+            <CustomFormCell
+                label="from_list_exclude"
+                value={ruleList.from_list_exclude}
+                onChange={e => setConfig({
+                    ...config,
+                    message_forwarding_rule_list: [{...ruleList, from_list_exclude: e.target.value}]
+                })}
+                placeholder="You"
+            />
 
             <CellsTitle>转发给个人列表</CellsTitle>
-            <Form>
-                <FormCell>
-                    <CellHeader style={headerStyle}>
-                        <Label>to_person_list</Label>
-                    </CellHeader>
-                    <CellBody style={bodyStyle}>
-                        <Input
-                            type="text"
-                            placeholder=""
-                            value={ruleList.to_person_list || ''}
-                            onChange={e => setConfig({...config, message_forwarding_rule_list: [{...ruleList, to_person_list: e.target.value}]})}
-                        />
-                    </CellBody>
-                </FormCell>
-            </Form>
+            <CustomFormCell
+                label="to_person_list"
+                value={ruleList.to_person_list}
+                onChange={e => setConfig({
+                    ...config,
+                    message_forwarding_rule_list: [{...ruleList, to_person_list: e.target.value}]
+                })}
+                placeholder="You"
+            />
 
             <CellsTitle>转发给群组列表</CellsTitle>
-            <Form>
-                <FormCell>
-                    <CellHeader style={headerStyle}>
-                        <Label>to_group_list</Label>
-                    </CellHeader>
-                    <CellBody style={bodyStyle}>
-                        <Input
-                            type="text"
-                            placeholder=""
-                            value={ruleList.to_group_list || ''}
-                            onChange={e => setConfig({...config, message_forwarding_rule_list: [{...ruleList, to_group_list: e.target.value}]})}
-                        />
-                    </CellBody>
-                </FormCell>
-            </Form>
+            <CustomFormCell
+                label="to_group_list"
+                value={ruleList.to_group_list}
+                onChange={e => setConfig({
+                    ...config,
+                    message_forwarding_rule_list: [{...ruleList, to_group_list: e.target.value}]
+                })}
+            />
 
             <ButtonArea>
                 <Button

@@ -2,18 +2,20 @@ import React, { useEffect } from 'react';
 import {
     Button,
     ButtonArea,
-    CellBody,
+    CellBody, CellFooter,
     CellHeader,
     CellsTitle,
     Dialog,
     Form,
-    FormCell,
+    FormCell, Icon,
     Input,
     Label,
     Page
 } from 'react-weui';
 import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
+import { isValueExist } from './CustomFormCell';
+
 
 // 添加样式
 const headerStyle = {
@@ -105,6 +107,9 @@ function CustomCommandKey() {
                                     onChange={e => handleChange(key, key, e.target.value)}
                                 />
                             </CellBody>
+                            <CellFooter>
+                                {isValueExist(commandKeyDict[key]) ? <Icon value='success'/> : <Icon value='cancel'/>}
+                            </CellFooter>
                         </FormCell>
                     </Form>
                     <ButtonArea>
