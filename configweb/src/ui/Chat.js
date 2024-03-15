@@ -1,18 +1,5 @@
 import React, {useEffect} from 'react';
-import {
-    Button,
-    ButtonArea,
-    CellBody,
-    CellHeader,
-    CellsTitle,
-    Dialog,
-    Form,
-    FormCell,
-    Input,
-    Label,
-    Page,
-    Switch
-} from 'react-weui';
+import {Button, ButtonArea, CellBody, CellHeader, CellsTitle, Dialog, Form, FormCell, Page, Switch} from 'react-weui';
 import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
 import CustomFormCell from "./CustomFormCell";
@@ -59,7 +46,11 @@ function Chat() {
             <CellsTitle>群消息命令是否需要@机器人才能触发</CellsTitle>
             <Form>
                 <FormCell switch>
-                    <CellBody>need_mentioned</CellBody>
+                    <CellHeader>
+                        need_mentioned
+                    </CellHeader>
+                    <CellBody>
+                    </CellBody>
                     <Switch
                         checked={config.need_mentioned || false}
                         onChange={e => setConfig({...config, need_mentioned: e.target.checked})}

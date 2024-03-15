@@ -13,7 +13,8 @@
     "react-scripts": "5.0.1",
     "react-weui": "^1.2.3",
     "web-vitals": "^2.1.4",
-    "weui": "^1.1.0"
+    "weui": "^1.1.0",
+    "weui.js": "^1.2.21"
   },
   "scripts": {
     "start:frontend": "react-scripts start",

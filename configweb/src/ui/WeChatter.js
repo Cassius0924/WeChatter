@@ -2,18 +2,20 @@ import React from 'react';
 import {
     Button,
     ButtonArea,
-    CellsTitle,
-    Form,
-    FormCell,
     CellBody,
-    Input,
+    CellHeader,
+    CellsTitle,
+    Dialog,
+    Form,
+    FormCell, Input,
+    Label,
     Page,
     Panel,
-    PanelBody,
-    Dialog, CellHeader, Label
+    PanelBody
 } from 'react-weui';
 import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
+import Picker from "./Picker";
 
 
 const headerStyle = {
@@ -25,6 +27,7 @@ const headerStyle = {
 const bodyStyle = {
     width: '80%'
 };
+
 function WeChatter() {
     const [config, setConfig] = useFetchData('wechatter');
     const [saveConfig, dialog, hideDialog] = useSaveConfig('wechatter', config);
@@ -38,6 +41,24 @@ function WeChatter() {
             }
         ]
     };
+    // 端口选择器：
+    const Pickerdata = Array.from({length: 1000}, (v, i) => ({
+        label: `${i + 1}`,
+        value: i + 1
+    }));
+
+    const Pickerconfig = {
+        depth: 1,
+        id: 'numberPicker',
+        title: config.wechatter_port,
+        defaultValue: [config.wechatter_port],
+        onChange: function (result) {
+            console.log(result);
+        },
+        onConfirm: function (result) {
+            setConfig({...config, wechatter_port: result[0].value});
+        }
+    };
     return (
         <Page className="input">
             <Panel>
@@ -48,13 +69,17 @@ function WeChatter() {
                             <CellHeader style={headerStyle}>
                                 <Label>wechatter_port</Label>
                             </CellHeader>
-                            <CellBody>
+                            <CellBody style={bodyStyle}>
                                 <Input
                                     type="text"
                                     placeholder="4000"
                                     value={config.wechatter_port || ''}
                                     onChange={e => setConfig({...config, wechatter_port: e.target.value})}
                                 />
+                                {/*<Picker*/}
+                                {/*    Pickerdata={Pickerdata}*/}
+                                {/*    Pickerconfig={Pickerconfig}*/}
+                                {/*/>*/}
                             </CellBody>
                         </FormCell>
                     </Form>
@@ -71,6 +96,7 @@ function WeChatter() {
                 </PanelBody>
             </Panel>
         </Page>
+
     );
 }
 

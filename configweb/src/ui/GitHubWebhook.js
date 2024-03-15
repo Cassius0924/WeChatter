@@ -47,7 +47,10 @@ function GithubWebhook() {
             <CellsTitle>是否接收 GitHub Webhook （True/False）</CellsTitle>
             <Form>
                 <FormCell switch>
-                    <CellBody>github_webhook_enabled</CellBody>
+                    <CellHeader>
+                        github_webhook_enabled
+                    </CellHeader>
+                    <CellBody></CellBody>
                     <Switch
                         checked={config.github_webhook_enabled || false}
                         onChange={e => setConfig({...config, github_webhook_enabled: e.target.checked})}

@@ -36,6 +36,7 @@ function CustomFormCell({ label, value, onChange, placeholder = null, iconValues
                         onChange={onChange}
                     />
                 </CellBody>
+                {/*TODO: 查看有多少个空value，在收集，并在app.js里加入<Badge preset="body">8</Badge>*/}
                 <CellFooter>
                     {isValueExist(value) ? <Icon value={iconValues.success}/> : <Icon value={iconValues.cancel}/>}
                 </CellFooter>

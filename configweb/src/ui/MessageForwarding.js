@@ -53,7 +53,10 @@ function MessageForwarding() {
             <CellsTitle>是否开启消息转发（True/False）</CellsTitle>
             <Form>
                 <FormCell switch>
-                    <CellBody>message_forwarding_enabled</CellBody>
+                    <CellHeader>
+                        message_forwarding_enabled
+                    </CellHeader>
+                    <CellBody></CellBody>
                     <Switch
                         checked={config.message_forwarding_enabled || false}
                         onChange={e => setConfig({...config, message_forwarding_enabled: e.target.checked})}

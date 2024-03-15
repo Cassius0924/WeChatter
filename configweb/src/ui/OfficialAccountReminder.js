@@ -53,7 +53,10 @@ function OfficialAccountReminder() {
             <CellsTitle>是否开启公众号提醒（True/False）</CellsTitle>
             <Form>
                 <FormCell switch>
-                    <CellBody>official_account_reminder_enabled</CellBody>
+                    <CellHeader>
+                        official_account_reminder_enabled
+                    </CellHeader>
+                    <CellBody></CellBody>
                     <Switch
                         checked={config.official_account_reminder_enabled || false}
                         onChange={e => setConfig({...config, official_account_reminder_enabled: e.target.checked})}
