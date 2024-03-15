@@ -79,14 +79,12 @@
     background-color: #ffffff;
     transition: all 0.3s ease;
 }
-/*.weui-picker__item {*/
-/*    color: #181818;  !* 文本颜色 *!*/
-/*    font-size: 18px;  !* 字体大小 *!*/
-/*    line-height: 20px;  !* 行高 *!*/
-/*    padding: 14px 0;  !* 上下内边距 *!*/
-/*    box-sizing: border-box;  !* 盒模型 *!*/
-/*    transition: all 0.3s ease;  !* 过渡效果 *!*/
-/*}*/
+.weui-picker__item {
+    color: #181818;  /* 文本颜色 */
+    font-size: 18px;  /* 字体大小 */
+    line-height: 20px;  /* 行高 */
+    padding: 14px 0;  /* 上下内边距 */
+    box-sizing: border-box;  /* 盒模型 */}
 
 .weui-picker__item_disabled {
     color: #999;  /* 文本颜色 */
@@ -99,7 +97,16 @@
 .weui-picker__btn:active {
     opacity: 0.7;  /* 按钮在被按下时的透明度 */
 }
-
+.weui-picker__mask {
+    top: 0;
+    height: 100%;
+    margin: 0 auto;
+    background: linear-gradient(180deg, hsla(0, 0%, 100%, .95), hsla(0, 0%, 100%, .6)), linear-gradient(0deg, hsla(0, 0%, 100%, .95), hsla(0, 0%, 100%, .6));
+    background-position: top, bottom;
+    background-size: 100% 102px;
+    background-repeat: no-repeat;
+    transform: translateZ(0);
+}
 
 .weui-btn_icon {
     color: #000;  /* 标题颜色 */
