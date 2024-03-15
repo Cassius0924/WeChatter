@@ -82,7 +82,10 @@
 .weui-picker__item {
     color: #181818;  /* 文本颜色 */
     font-size: 18px;  /* 字体大小 */
-    line-height: 38px;  /* 行高 */
+    /*line-height: 38px;  !* 行高 *!*/
+    padding: 10px 0;  /* 上下内边距 */
+    box-sizing: border-box;  /* 盒模型 */
+    transition: all 0.3s ease;  /* 过渡效果 */
 }
 
 .weui-picker__item_disabled {
