@@ -3,7 +3,7 @@ import {useNavigate} from 'react-router-dom';
 import {
     Button,
     ButtonArea,
-    CellBody,
+    CellBody, CellFooter,
     CellHeader,
     CellsTitle,
     Dialog,
@@ -314,10 +314,15 @@ function TaskCron() {
                     <CellsTitle>Cron Fields</CellsTitle>
 
                     <Form>
-                        <Picker
-                            Pickerdata={TaskCron_cronData}
-                            Pickerconfig={cronconfig(taskIndex, taskCron.cron)}
-                        />
+                        <FormCell>
+                            <CellHeader style={headerStyle}>
+                                <Label>Cron</Label>
+                            </CellHeader>
+                            <Picker
+                                Pickerdata={TaskCron_cronData}
+                                Pickerconfig={cronconfig(taskIndex, taskCron.cron)}
+                            />
+                        </FormCell>
                         <FormCell>
                             <CellHeader style={headerStyle}>
                                 <Label>Year</Label>
