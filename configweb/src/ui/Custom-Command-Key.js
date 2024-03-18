@@ -98,8 +98,8 @@ function CustomCommandKey() {
         {label: '获取 Bilibili 热搜', value: 'bili-hot'},
         {label: '获取食物热量', value: 'calories'},
 
-        //depth设置成2，表示有两级联动，以此类推
-        {label: '获取食物热量', value: 'calories', children: [{label: '香蕉',value: '香蕉', children: [{label: '大香蕉',value: '大香蕉', children: [{label: '超级大香蕉',value: '超级大香蕉', children: [{label: '超级无敌大香蕉',value: '超级无敌大香蕉', children: [{label: '小香蕉',value: '小香蕉'}]}]}]}]},{label: '苹果', value: '苹果'}]},
+        // //depth设置成2，表示有两级联动，以此类推
+        // {label: '获取食物热量', value: 'calories', children: [{label: '香蕉',value: '香蕉', children: [{label: '大香蕉',value: '大香蕉', children: [{label: '超级大香蕉',value: '超级大香蕉', children: [{label: '超级无敌大香蕉',value: '超级无敌大香蕉', children: [{label: '小香蕉',value: '小香蕉'}]}]}]}]},{label: '苹果', value: '苹果'}]},
 
         {label: '获取抖音热搜', value: 'douyin-hot'},
         {label: '继续 GPT3.5 问答', value: 'gpt'},
@@ -143,7 +143,7 @@ function CustomCommandKey() {
     }
 
     const Pickerconfig = (key) => ({
-        depth: 10,
+        depth: 2,
         id: 'Custom_Command_Key_commandPicker',
         title: getLabelFromValuef(Pickerdata, key),
         desc: '请选择命令键',
@@ -213,24 +213,7 @@ function CustomCommandKey() {
                             </div>
                         </FormCell>
                     </Form>
-                    {/*<div style={{*/}
-                    {/*    width: '200px',*/}
-                    {/*    marginLeft: 'auto',*/}
-                    {/*    marginRight: 'auto',*/}
-                    {/*    margin: '1px auto',*/}
-                    {/*    backgroundColor: '#f5f5f5',*/}
-                    {/*    textAlign: 'center',*/}
-                    {/*    borderRadius: '8px'*/}
-                    {/*}}>*/}
-                    {/*    <ButtonArea>*/}
-                    {/*        <Button*/}
-                    {/*            onClick={() => handleDeleteCommandKey(key)}*/}
-                    {/*            className="weui-btn weui-btn_warn px-2 py-2 text-lg font-bold"*/}
-                    {/*        >*/}
-                    {/*            删除命令键*/}
-                    {/*        </Button>*/}
-                    {/*    </ButtonArea>*/}
-                    {/*</div>*/}
+
                 </div>
             ))}
             <ButtonArea>

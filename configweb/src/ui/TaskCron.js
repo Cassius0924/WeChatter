@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {
     Button,
     ButtonArea,
@@ -11,12 +12,13 @@ import {
     Input,
     Label,
     Page,
-    Switch
+    Switch,
 } from 'react-weui';
 import useFetchData from '../hooks/useFetchData';
 import useSaveConfig from '../hooks/useSaveConfig';
-import Picker from "./Picker";
 import {TaskCron_pickerData} from "../TaskCron_pickerData";
+import Picker from "./Picker";
+import {TaskCron_cronData} from "../TaskCron_cronData";
 
 // 添加样式
 const headerStyle = {
@@ -90,6 +92,9 @@ function TaskCron() {
             task: '新任务',
             enabled: true,
             cron: {
+                year: '*',
+                month: '*',
+                day: '*',
                 hour: '8',
                 minute: '0',
                 second: '0',
@@ -206,6 +211,35 @@ function TaskCron() {
         }
     }
 
+    const navigate = useNavigate();
+
+    const cronconfig = (taskIndex, cron) => ({
+        depth: 5,
+        id: 'Task_Cron_cronPicker',
+        title: 'Cron',
+        desc: '请选择Cron',
+        closeText: '❌',
+        onChange: function (result) {
+            console.log(result);
+            console.log(cron);
+
+        },
+        onConfirm: function (result) {
+            // 调试信息
+            console.log(result);
+
+            //如果cron中任意一个在result[0].value里面，就调用对应的handleChange函数
+            if (Object.keys(cron).includes(result[0].value)) {
+                console.log('result[0].value:', result[0].value);
+                handleChange(taskIndex, 'cron', {
+                    ...cron,
+                    [result[0].value]: result[1].value,
+                })
+            }
+        }
+    });
+
+
     return (
         <Page className="input">
             <CellsTitle>任务计划列表</CellsTitle>
@@ -280,6 +314,60 @@ function TaskCron() {
                     <CellsTitle>Cron Fields</CellsTitle>
 
                     <Form>
+                        <Picker
+                            Pickerdata={TaskCron_cronData}
+                            Pickerconfig={cronconfig(taskIndex, taskCron.cron)}
+                        />
+                        <FormCell>
+                            <CellHeader style={headerStyle}>
+                                <Label>Year</Label>
+                            </CellHeader>
+                            <CellBody style={bodyStyle}>
+                                <Input
+                                    type="text"
+                                    placeholder="Year"
+                                    value={taskCron.cron.year}
+                                    onChange={e => handleChange(taskIndex, 'cron', {
+                                        ...taskCron.cron,
+                                        year: e.target.value
+                                    })}
+                                />
+                            </CellBody>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader style={headerStyle}>
+                                <Label>Month</Label>
+                            </CellHeader>
+                            <CellBody style={bodyStyle}>
+                                <Input
+                                    type="text"
+                                    placeholder="Month"
+                                    value={taskCron.cron.month}
+                                    onChange={e => handleChange(taskIndex, 'cron', {
+                                        ...taskCron.cron,
+                                        month: e.target.value
+                                    })}
+                                />
+                            </CellBody>
+                        </FormCell>
+                        <FormCell>
+                            <CellHeader style={headerStyle}>
+                                <Label>Day</Label>
+                            </CellHeader>
+                            <CellBody style={bodyStyle}>
+                                <Input
+                                    type="text"
+                                    placeholder="Day"
+                                    value={taskCron.cron.day}
+                                    onChange={e => handleChange(taskIndex, 'cron', {
+                                        ...taskCron.cron,
+                                        day: e.target.value
+                                    })}
+                                />
+                            </CellBody>
+                        </FormCell>
+
+
                         <FormCell>
                             <CellHeader style={headerStyle}>
                                 <Label>Hour</Label>

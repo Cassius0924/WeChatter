@@ -18,7 +18,6 @@ import 'weui';
 import './App.css';
 import axios from "axios";
 import SuccessFooter from "./ui/SuccessFooter";
-import weui from 'weui.js';
 
 
 //微信强迫症崩溃小点点
