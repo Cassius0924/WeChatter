@@ -117,7 +117,7 @@ def add_group(group: Group) -> None:
                     _person = DbPerson.from_member_model(member)
                     session.add(_person)
                     session.commit()
-                    logger.info(f"用户 {member.name} 已添加到数据库")
+                    logger.debug(f"用户 {member.name} 已添加到数据库")
                 else:
                     # 更新用户信息
                     _person.name = member.name
@@ -125,7 +125,7 @@ def add_group(group: Group) -> None:
                     session.commit()
 
             session.commit()
-            logger.info(f"群组 {group.name} 已添加到数据库")
+            logger.debug(f"群组 {group.name} 已添加到数据库")
         else:
             # 更新群组信息
             _group.update(group)
@@ -142,7 +142,7 @@ def add_person(person: Person) -> None:
             _person = DbPerson.from_model(person)
             session.add(_person)
             session.commit()
-            logger.info(f"用户 {person.name} 已添加到数据库")
+            logger.debug(f"用户 {person.name} 已添加到数据库")
         else:
             # 更新用户信息
             _person.update(person)
@@ -157,5 +157,5 @@ def add_message(message: Message) -> int:
         _message = DbMessage.from_model(message)
         session.add(_message)
         session.commit()
-        logger.info(f"消息 {_message.id} 已添加到数据库")
+        logger.debug(f"消息 {_message.id} 已添加到数据库")
         return _message.id

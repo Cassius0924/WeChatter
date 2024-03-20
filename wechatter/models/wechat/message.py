@@ -304,8 +304,8 @@ class Message(BaseModel):
             # 使用 spilt，比正则效率高
             url = self.content.split('cdnurl="')[1].split('" designerid')[0]
             # 将 URL 中的 &amp; 替换为 &
-            print(url.replace("&amp;amp;", "&"))
-            return url.replace("&amp;amp;", "&")
+            # 带上别名参数，使得表情包为原图
+            return f'{url.replace("&amp;amp;", "&")}?$alias=sticky.jpg'
         return None
 
     def __str__(self) -> str:

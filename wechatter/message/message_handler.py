@@ -136,6 +136,25 @@ class MessageHandler:
             # 开始处理命令
             _execute_command(cmd_dict, to, message_obj)
         else:
+            # 判断是否配置了默认GPT命令，若有则触发GPT命令
+            if (
+                message_obj.type != "file"
+                and not message_obj.is_group
+                and message_obj.sender_name in config.get("gpt_mode_person_list", [])
+            ):
+                cmd_dict["command"] = config.get("gpt_mode_model", "gpt35")
+                cmd_dict["handler"] = self.commands.get(cmd_dict["command"], {}).get(
+                    "handler", None
+                )
+                cmd_dict["desc"] = self.commands.get(cmd_dict["command"], {}).get(
+                    "desc", ""
+                )
+                cmd_dict["args"] = content
+                cmd_dict["param_count"] = self.commands.get(
+                    cmd_dict["command"], {}
+                ).get("param_count", 0)
+                logger.info(f"默认触发GPT命令：{cmd_dict['command']}")
+                _execute_command(cmd_dict, to, message_obj)
             logger.debug("该消息不是命令类型")
 
     def __parse_command(self, content: str, is_mentioned: bool, is_group: bool) -> Dict:
