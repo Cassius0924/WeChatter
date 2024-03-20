@@ -95,3 +95,8 @@ discord_message_forwarding_rule_list:
   - from_list: [ "%ALL" ]
     from_list_exclude: [ "" ]
     webhook_url: "your_discord_webhook_url"
+
+
+# GPT Mode Person
+gpt_mode_person_list: [ ]
+gpt_mode_model: "gpt4"
