@@ -1,11 +1,11 @@
 python-multipart==0.0.9
-requests==2.31.0
+requests==2.32.0
 fastapi==0.109.2
 uvicorn==0.25.0
 langid==1.1.6
 BeautifulSoup4==4.11.2
 qrcode==7.4.2
-Pillow~=10.2.0
+Pillow~=10.3.0
 bs4~=0.0.1
 apscheduler==3.10.4
 pre-commit==3.5.0
