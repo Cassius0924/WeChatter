@@ -5,6 +5,9 @@ __pycache__/
 .ruff_cache/
 .DS_Store
 
+# 忽略特定文件
+backup.yaml
+config.ini
 config.yaml
 config_cps.yaml
 
