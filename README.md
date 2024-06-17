@@ -214,6 +214,14 @@ docker-compose -f docker-compose.yml up
 | | `from_list_exclude` | 消息转发来源排除列表，不转发此列表的用户和群 | 只在 `from_list` 为 `["%ALL"]` 时生效 |
 | | `discord_webhook_url` | 消息转发目标 Discord Webhook URL | |
 
+### ⚙️ GPT Mode Person 配置
+
+| 配置项 | 解释 | 备注 |
+| --- | --- | --- |
+| `gpt_mode_person_list` | 默认为 GPT 问答模式的用户列表 | 即带命令关键词的消息会正常触发相对应的命令，其余消息均判断为GPT命令 |
+| `gpt_model` | 默认 GPT 问答的模型 | 可选值为 `gpt35`、`gpt4` |
+
+
 ## 日志文件
 
 日志文件存放在项目根目录下的 `logs/` 文件夹中。
