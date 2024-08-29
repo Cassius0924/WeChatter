@@ -23,7 +23,7 @@ bark_url:
 
 
 # Bot
-bot_name: Cassius
+bot_name: "Cassius"
 
 
 # Chat
@@ -37,7 +37,7 @@ openai_token: sk_your_openai_token
 
 
 # GitHub Webhook
-github_webhook_enabled: True
+github_webhook_enabled: False
 github_webhook_api_path: /webhook/github
 github_webhook_receive_person_list: [ ]
 github_webhook_receive_group_list: [ ]
