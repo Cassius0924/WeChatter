@@ -6,13 +6,13 @@ from loguru import logger
 from wechatter.commands._commands.openai_chat_gpt import DEFAULT_TOPIC, DEFAULT_CONVERSATION
 from wechatter.commands.handlers import command
 from wechatter.config import config
-from wechatter.models import GptChatInfo, Person
 from wechatter.database import (
     GptChatInfo as DbGptChatInfo,
     GptChatMessage as DbGptChatMessage,
     make_db_session,
 )
-from wechatter.models.wechat import SendTo
+from wechatter.models.gpt import GptChatInfo
+from wechatter.models.wechat import Person, SendTo
 from wechatter.sender import sender
 from wechatter.utils import post_request_json
 from wechatter.utils.time import get_current_date, get_current_week, get_current_time
@@ -96,7 +96,7 @@ def _gptx(model: str, to: SendTo, message: str = "", message_obj=None) -> None:
             logger.info(response)
             sender.send_msg(to, response)
         except Exception as e:
-            error_message = f"调用" + this_model + "服务失败，错误信息：{str(e)}"
+            error_message = f"调用" + this_model + "服务失败，错误信息：" + {str(e)}
             logger.error(error_message)
             sender.send_msg(to, error_message)
 
@@ -161,7 +161,7 @@ class SparkChat:
         # 生成上一次对话的主题
         SparkChat._save_chatting_chat_topic(person, model)
         SparkChat._set_all_chats_not_chatting(person, model)
-        gpt_chat_info = SparkChat(
+        gpt_chat_info = GptChatInfo(
             person=person,
             model=model,
             topic=DEFAULT_TOPIC,
