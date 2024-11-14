@@ -96,7 +96,7 @@ def _gptx(model: str, to: SendTo, message: str = "", message_obj=None) -> None:
             logger.info(response)
             sender.send_msg(to, response)
         except Exception as e:
-            error_message = f"调用" + this_model + "服务失败，错误信息：" + {str(e)}
+            error_message = f"调用{this_model}服务失败，错误信息：{str(e)}"
             logger.error(error_message)
             sender.send_msg(to, error_message)
 
