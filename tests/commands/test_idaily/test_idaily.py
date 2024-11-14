@@ -7,8 +7,7 @@ from wechatter.commands._commands import idaily
 class TestTodayInHistoryCommand(unittest.TestCase):
     def setUp(self):
         with open(
-            # "tests/commands/test_idaily/idaily_response.json"
-            "idaily_response.json"
+            "tests/commands/test_idaily/idaily_response.json"
         ) as f:
             self.tih_response = json.load(f)
             self.tih_list = self.tih_response

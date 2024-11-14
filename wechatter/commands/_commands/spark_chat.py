@@ -3,7 +3,6 @@ from typing import Union, List
 
 from loguru import logger
 
-from wechatter.commands._commands.openai_chat_gpt import DEFAULT_TOPIC, DEFAULT_CONVERSATION
 from wechatter.commands.handlers import command
 from wechatter.config import config
 from wechatter.database import (
