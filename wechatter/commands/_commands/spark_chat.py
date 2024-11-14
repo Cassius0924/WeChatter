@@ -6,13 +6,13 @@ from loguru import logger
 from wechatter.commands._commands.openai_chat_gpt import DEFAULT_TOPIC, DEFAULT_CONVERSATION
 from wechatter.commands.handlers import command
 from wechatter.config import config
-from wechatter.models import GptChatInfo, Person
 from wechatter.database import (
     GptChatInfo as DbGptChatInfo,
     GptChatMessage as DbGptChatMessage,
     make_db_session,
 )
-from wechatter.models.wechat import SendTo
+from wechatter.models.gpt import GptChatInfo
+from wechatter.models.wechat import Person, SendTo
 from wechatter.sender import sender
 from wechatter.utils import post_request_json
 from wechatter.utils.time import get_current_date, get_current_week, get_current_time
@@ -161,7 +161,7 @@ class SparkChat:
         # 生成上一次对话的主题
         SparkChat._save_chatting_chat_topic(person, model)
         SparkChat._set_all_chats_not_chatting(person, model)
-        gpt_chat_info = SparkChat(
+        gpt_chat_info = GptChatInfo(
             person=person,
             model=model,
             topic=DEFAULT_TOPIC,
