@@ -111,8 +111,8 @@ class Message(BaseModel):
 
         _group = None
         # room为群信息，只有群消息才有room
-        if "room" in source_json and isinstance(source_json["room"], dict):
-            if source_json["room"] is not None:
+        if source_json["room"] is not None:
+            if "room" in source_json and isinstance(source_json["room"], dict):
                 g_data = source_json["room"]
                 payload = g_data.get("payload", {})
                 _group = Group(
@@ -122,9 +122,9 @@ class Message(BaseModel):
                     member_list=payload.get("memberList", []),
                 )
             else:
-                logger.error("这是个人发的信息")
+                logger.error("source_json[room]: " + str(source_json["room"]))
         else:
-            logger.error("source_json[room]: " + str(source_json["room"]))
+            logger.error("source_json[room]是空的，不是群信息")
 
         _receiver = None
         if source_json.get("to"):
