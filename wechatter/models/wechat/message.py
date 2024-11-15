@@ -111,7 +111,7 @@ class Message(BaseModel):
 
         _group = None
         # room为群信息，只有群消息才有room
-        if source_json["room"] is not None:
+        if source_json["room"] != '':
             if "room" in source_json and isinstance(source_json["room"], dict):
                 g_data = source_json["room"]
                 payload = g_data.get("payload", {})
