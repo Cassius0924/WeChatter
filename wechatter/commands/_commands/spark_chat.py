@@ -388,10 +388,12 @@ class SparkChat:
         r_json = post_request_json(
             url=SparkChat.spark_api, headers=headers, json=json, timeout=60
         )
-
+        
+        print(r_json)
+        
         # 判断是否有 error 或 code 字段
         if "error" in r_json or "code" in r_json:
-            raise ValueError(this_model + " 服务返回值错误")
+            raise ValueError(this_model + " 服务返回值错误" + r_json)
 
         msg = r_json["choices"][0]["message"]
         msg_content = msg.get("content", "调用" + this_model + "服务失败")
