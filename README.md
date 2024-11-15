@@ -152,10 +152,24 @@ docker-compose -f docker-compose.yml up
 
 ### ⚙️ LLM 配置
 
+#### 1.OpenAi
+
 | 配置项 | 解释 |  备注 |
 | --- | --- | --- |
 | `openai_base_api` | OpenAI 服务的 BaseAPI | 默认为 `https://api.openai.com` |
 | `openai_token` | OpenAI Token（Key） | 以 `sk_` 开头的字符串密钥 |
+
+#### 2.Spark（讯飞星火大模型）
+
+##### 现免费领取Spark 4.0 Ultra，tokens: 200万，有效期:1年
+
+获取途径：[讯飞星火大模型-AI大语言模型-星火大模型-科大讯飞](https://xinghuo.xfyun.cn/sparkapi?scr=price)
+
+| 配置项        | 解释                     | 备注                                                         |
+| ------------- | ------------------------ | ------------------------------------------------------------ |
+| `spark_api`   | 星火大模型服务的 BaseAPI | 默认为`https://spark-api-open.xf-yun.com/v1/chat/completions` |
+| `spark_model` | 指定访问的模型版本       | lite指向Lite版本;4.0Ultra指向4.0 Ultra版本;                  |
+| `spark_token` | 星火大模型的Token        | 字符串密钥                                                   |
 
 ### ⚙️ GitHub Webhook 配置
 
@@ -227,7 +241,7 @@ docker-compose -f docker-compose.yml up
 日志文件存放在项目根目录下的 `logs/` 文件夹中。
 
 默认的日志记录级别为 `INFO`，日志记录级别可选值有 `DEBUG`、`INFO`、`WARNING`、`ERROR`、`CRITICAL`。
- 
+
 ### Docker Compose 部署时
 
 若需要调整日志记录级别，请修改 `docker-compose.yml` 文件中的 `WECHATTER_LOG_LEVEL` 环境变量。

@@ -76,7 +76,6 @@ class Message(BaseModel):
         """
         try:
             source_json = json.loads(source)
-            logger.warning(source_json)
         except json.JSONDecodeError as e:
             logger.error("消息来源解析失败")
             raise e
@@ -123,8 +122,8 @@ class Message(BaseModel):
                 )
             else:
                 logger.error("source_json[room]: " + str(source_json["room"]))
-        else:
-            logger.error("source_json[room]是空的，不是群信息")
+        # else:
+        #     logger.warning("source_json[room]是空的，不是群信息")
 
         _receiver = None
         if source_json.get("to"):

@@ -148,7 +148,7 @@ def _gptx_continue(model: str, to: SendTo, message: str = "") -> None:
 
 
 class SparkChat:
-    spark_api = "https://spark-api-open.xf-yun.com/v1/chat/completions"
+    spark_api = config["spark_api"]
     token = "Bearer " + config["spark_token"]
 
     @staticmethod
