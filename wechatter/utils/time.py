@@ -1,6 +1,6 @@
 # 获取时间工具类
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 def get_current_hour() -> int:
@@ -105,3 +105,20 @@ def get_current_ymdh() -> str:
     :return: 返回格式化后的年月日时字符串
     """
     return time.strftime("%Y%m%d%H", time.localtime())
+
+
+def get_current_bdy() -> str:
+    """
+    获取当前月（英文）日年
+    :return: 返回格式化后的月（英文）日年字符串,输出: November 16, 2024
+    """
+    return time.strftime("%B %d, %Y", time.localtime())
+
+
+def get_yesterday_bdy() -> str:
+    """
+    获取昨天月（英文）日年
+    :return: 返回格式化后的昨天月（英文）日年字符串,输出: November 16, 2024
+    """
+    yesterday = datetime.now() - timedelta(days=1)
+    return yesterday.strftime("%B %d, %Y")

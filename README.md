@@ -69,7 +69,7 @@ docker-compose -f docker-compose.yml up
 - [x] GitHub 趋势
 - [x] 单词词语翻译（不支持定时任务）
 - [x] 少数派早报
-- [x] 历史上的今天
+- [x] 每日环球视野
 - [x] 二维码生成
 - [x] 待办清单（不支持定时任务）
 - [x] 人民日报 PDF
