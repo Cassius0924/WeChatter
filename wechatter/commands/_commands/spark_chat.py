@@ -382,7 +382,8 @@ class SparkChat:
         }
         json = {
             "model": this_model,
-            "messages": DEFAULT_CONVERSATION + chat_info.get_conversation() + newconv,
+            # "messages": DEFAULT_CONVERSATION + chat_info.get_conversation() + newconv,
+            "messages": newconv
         }
         r_json = post_request_json(
             url=SparkChat.spark_api, headers=headers, json=json, timeout=60
