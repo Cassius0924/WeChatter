@@ -76,7 +76,7 @@ class Message(BaseModel):
         """
         try:
             source_json = json.loads(source)
-            logger.debug(f"source_json: {source_json}")
+            logger.info(f"source_json: {source_json}")
         except json.JSONDecodeError as e:
             logger.error("消息来源解析失败")
             raise e
@@ -121,7 +121,7 @@ class Message(BaseModel):
                 member_list=payload.get("memberList", []),
             )
         else:
-            logger.error("群不存在，source_json：%s", source_json)
+            logger.error("群不存在，source_json: %s", source_json)
 
         _receiver = None
         if source_json.get("to"):
