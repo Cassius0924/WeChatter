@@ -76,6 +76,7 @@ class Message(BaseModel):
         """
         try:
             source_json = json.loads(source)
+            logger.debug(f"source_json: {source_json}")
         except json.JSONDecodeError as e:
             logger.error("消息来源解析失败")
             raise e
@@ -110,7 +111,7 @@ class Message(BaseModel):
 
         _group = None
         # room为群信息，只有群消息才有room
-        if source_json["room"] != {}:
+        if "room" in source_json and isinstance(source_json["room"], dict):
             g_data = source_json["room"]
             payload = g_data.get("payload", {})
             _group = Group(
@@ -119,6 +120,8 @@ class Message(BaseModel):
                 admin_id_list=payload.get("adminIdList", []),
                 member_list=payload.get("memberList", []),
             )
+        else:
+            logger.error("群不存在，source_json：%s", source_json)
 
         _receiver = None
         if source_json.get("to"):
