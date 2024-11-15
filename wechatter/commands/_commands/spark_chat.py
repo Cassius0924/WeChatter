@@ -381,7 +381,7 @@ class SparkChat:
             "Content-Type": "application/json",
         }
         json = {
-            "model": chat_info.model,
+            "model": this_model,
             "messages": DEFAULT_CONVERSATION + chat_info.get_conversation() + newconv,
         }
         r_json = post_request_json(
