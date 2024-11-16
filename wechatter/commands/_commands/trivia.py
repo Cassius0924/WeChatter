@@ -19,10 +19,10 @@ from wechatter.utils import get_request
     desc="获取冷知识。",
 )
 def trivia_command_handler(to: Union[str, SendTo], message: str = "") -> None:
-    random_number = random.randint(1, 917)  # nosec
+    random_number = random.randint(1, 946)  # nosec
     try:
         response = get_request(
-            url=f"http://www.quzhishi.com/shiwangelengzhishi/{random_number}.html"
+            url=f"http://www.zhangzaixi.com/shiwangelengzhishi/{random_number}.html"
         )
         trivia_list = _parse_trivia_response(response)
         result = _generate_trivia_message(trivia_list, random_number)
