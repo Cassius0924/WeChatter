@@ -1,14 +1,11 @@
 from typing import Dict, Union
 
-from dateutil.utils import today
 from loguru import logger
-from matplotlib.pyplot import title
 
 from wechatter.commands.handlers import command
 from wechatter.models.wechat import SendTo
 from wechatter.sender import sender
 from wechatter.utils import get_request_json
-from wechatter.utils.file_manager import is_folder_exist
 from wechatter.utils.time import get_current_bdy, get_yesterday_bdy
 
 
