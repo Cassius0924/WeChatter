@@ -31,7 +31,7 @@
 - TODO
   - `todo`: 添加待办事项
   - `todo-remove`: 删除待办事项
-- `today-in-history`: 获取历史上的今天
+- `idaily`: 获取每日环球视野
 - `trivia`: 获取笑话
 - `weather`: 查询天气预报
 - `weibo-hot`: 获取微博热搜
