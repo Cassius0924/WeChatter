@@ -157,4 +157,4 @@
 
 ## 每日环球视野
 
-![每日环球视野](./images/cmd_today_in_history.png)
+![每日环球视野](./images/cmd_idaily.png)

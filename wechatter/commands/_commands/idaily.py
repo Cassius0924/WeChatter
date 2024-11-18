@@ -46,7 +46,7 @@ def _generate_idaily_message(tih_list: dict) -> str:
     if not tih_list:
         return "暂无每日环球视野"
 
-    idaily_str = ["✨=====每日环球视野=====✨"]
+    idaily_str = ["✨====每日环球视野====✨"]
     content_list = []
     today = get_current_bdy()
     yesterday = get_yesterday_bdy()
@@ -106,7 +106,3 @@ def _generate_idaily_message(tih_list: dict) -> str:
 #         idaily_str += "🗓️ 时间: " + _yesterday + "\n"
 #     idaily_str += this_str
 #     return idaily_str
-
-
-if __name__ == '__main__':
-    print(get_idaily_str())
