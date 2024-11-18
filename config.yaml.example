@@ -37,6 +37,11 @@ spark_api: https://spark-api-open.xf-yun.com/v1/chat/completions
 spark_model: 4.0Ultra
 spark_token: your_spark_token
 
+grok_api: https://api.x.ai/v1/chat/completions
+grok_model: grok-beta
+grok_token: your_grok_token
+
+
 
 # GitHub Webhook
 github_webhook_enabled: True
