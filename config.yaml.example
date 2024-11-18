@@ -33,6 +33,10 @@ ban_group_list: [ ]
 openai_base_api: https://api.openai.com
 openai_token: sk_your_openai_token
 
+spark_api: https://spark-api-open.xf-yun.com/v1/chat/completions
+spark_model: 4.0Ultra
+spark_token: your_spark_token
+
 
 # GitHub Webhook
 github_webhook_enabled: True
