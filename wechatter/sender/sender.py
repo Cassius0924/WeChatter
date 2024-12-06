@@ -217,14 +217,14 @@ def _send_msg2(
             quoted_response=quoted_response,
         )
 
-    if to.group:
+    if to.g_id and to.g_name:
         return _send_msg1(
             to.g_name,
             message,
             is_group=True,
             type=type,
             quoted_response=quoted_response,
-        )
+        )   
     elif to.person:
         return _send_msg1(
             to.p_name,

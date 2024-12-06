@@ -161,7 +161,7 @@ class Message(BaseModel):
         是否是群消息
         :return: 是否是群消息
         """
-        return self.group is not None
+        return self.group.id != ''
 
     @computed_field
     @cached_property
