@@ -4,7 +4,6 @@ from typing import List, Union
 
 from loguru import logger
 
-from wechatter.config import config
 from wechatter.database import (
     GptChatInfo as DbGptChatInfo,
     GptChatMessage as DbGptChatMessage,

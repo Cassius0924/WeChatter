@@ -171,7 +171,7 @@ docker-compose -f docker-compose.yml up
 | `spark_model` | 指定访问的模型版本       | lite指向Lite版本;4.0Ultra指向4.0 Ultra版本;                  |
 | `spark_token` | 星火大模型的Token        | 字符串密钥                                                   |
 
-#### 2.Grok
+#### 3.Grok
 
 ##### 现在免费领取25刀的credits
 
