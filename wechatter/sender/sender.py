@@ -1,4 +1,5 @@
 import json
+import time
 from functools import singledispatch
 from typing import List, Union
 
@@ -322,16 +323,16 @@ def mass_send_msg(
     if quoted_response:
         message = make_quotable(message=message, quoted_response=quoted_response)
 
-    data = []
     for name in name_list:
-        data.append(
+        data = [
             {
                 "to": name,
                 "isRoom": is_group,
                 "data": {"type": type, "content": message},
             }
-        )
-    _post_request(URL, json=data)
+        ]
+        _post_request(URL, json=data)
+        time.sleep(6)# 避免触发风控
 
 
 @singledispatch

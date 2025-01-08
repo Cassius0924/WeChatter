@@ -1,6 +1,5 @@
 # 获取命令帮助消息
 from typing import Union
-
 from wechatter.commands import commands
 from wechatter.commands.handlers import command
 from wechatter.config import config
@@ -21,6 +20,11 @@ def help_command_handler(to: Union[str, SendTo], message: str = "") -> None:
     response = text_to_image(help_msg)
     if response:
         sender.send_msg(to, response, type="localfile")
+
+@command(command="help_txt", keys=["帮助(文本)", "help_txt"], desc="获取帮助信息(文本)。")
+def help_txt_command_handler(to: Union[str, SendTo], message: str = "") -> None:
+    help_msg = get_help_msg()
+    sender.send_msg(to, help_msg, type="text")
 
 
 def get_help_msg() -> str:
