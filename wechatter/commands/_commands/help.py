@@ -1,8 +1,5 @@
 # 获取命令帮助消息
 from typing import Union
-
-from scrapy.utils.defer import deferred_to_future
-
 from wechatter.commands import commands
 from wechatter.commands.handlers import command
 from wechatter.config import config
