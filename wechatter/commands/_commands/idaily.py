@@ -53,8 +53,8 @@ def _generate_idaily_message(tih_list: dict) -> str:
     today_has_idaily = False
 
     def format_entry(index, entry):
-        title = entry['title_wechat_tml'].split(" - ")[0]
-        content = entry['content']
+        title = entry.get('title_wechat_tml', 'title_not_found').split(" - ")[0] or ''
+        content = entry.get('content', '')
         return f"{index + 1}. 🌎 {title}\n    🌪️ {content}"
 
     for index, entry in enumerate(tih_list):
