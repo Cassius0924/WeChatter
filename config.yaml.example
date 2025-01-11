@@ -30,16 +30,19 @@ ban_group_list: [ ]
 
 
 # LLM
-openai_base_api: https://api.openai.com
-openai_token: sk_your_openai_token
-
-spark_api: https://spark-api-open.xf-yun.com/v1/chat/completions
-spark_model: 4.0Ultra
-spark_token: your_spark_token
-
-grok_api: https://api.x.ai/v1/chat/completions
-grok_model: grok-beta
-grok_token: your_grok_token
+llms:
+  spark:
+    api_url: https://spark-api-open.xf-yun.com/v1/chat/completions
+    token: your_spark_token
+    model: 4.0Ultra
+  grok:
+    api_url: https://api.x.ai/v1/chat/completions
+    token: your_grok_token
+    model: grok-beta
+  gpt4:
+    api_url: https://api.openai.com/v1/chat/completions
+    token: your_openai_token
+    model: gpt-4
 
 
 
