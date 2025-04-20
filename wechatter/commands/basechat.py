@@ -30,7 +30,7 @@ class BaseChat:
         self.api_url = api_url
         self.token = token
 
-    def gptx(self, model: str, to: SendTo, message: str = "", message_obj=None) -> None:
+    def gptx(self, command_name: str, model: str, to: SendTo, message: str = "", message_obj=None) -> None:
         person = to.person
         # 获取文件夹下最新的对话记录
         chat_info = BaseChat.get_chatting_chat_info(person, model)
@@ -46,7 +46,7 @@ class BaseChat:
             sender.send_msg(to, "对话未开始，继续上一次对话")
         else:  # /gpt4 <message>
             # 如果没有对话记录，则创建新对话
-            sender.send_msg(to, f"正在调用 {model} 进行对话...")
+            sender.send_msg(to, f"正在调用 {command_name} 进行对话，LLM模型为 {model}...")
             if chat_info is None:
                 chat_info = BaseChat.create_chat(self, person, model)
                 logger.info("无历史对话记录，创建新对话成功")
@@ -58,7 +58,7 @@ class BaseChat:
                 logger.info(response)
                 sender.send_msg(to, response)
             except Exception as e:
-                error_message = f"调用 ChatGPT 服务失败，错误信息：{str(e)}"
+                error_message = f"调用 {model} 服务失败，错误信息：{str(e)}"
                 logger.error(error_message)
                 sender.send_msg(to, error_message)
 
@@ -314,9 +314,11 @@ class BaseChat:
             "model": chat_info.model,
             "messages": DEFAULT_CONVERSATION + chat_info.get_conversation() + newconv,
         }
+
         r_json = post_request_json(url=self.api_url, headers=headers, json=json, timeout=60)
 
-        if "error" in r_json or "code" in r_json:
+        # if "error" in r_json or "code" in r_json:
+        if "error" in r_json in r_json:
             raise ValueError(f"服务返回值错误: {r_json}")
 
         msg = r_json["choices"][0]["message"]

@@ -1,4 +1,6 @@
 import json
+import time
+import random
 from functools import singledispatch
 from typing import List, Union
 
@@ -322,16 +324,16 @@ def mass_send_msg(
     if quoted_response:
         message = make_quotable(message=message, quoted_response=quoted_response)
 
-    data = []
     for name in name_list:
-        data.append(
+        data = [
             {
                 "to": name,
                 "isRoom": is_group,
                 "data": {"type": type, "content": message},
             }
-        )
-    _post_request(URL, json=data)
+        ]
+        _post_request(URL, json=data)
+        time.sleep(random.uniform(5, 6))  # 避免触发风控，使用 5-6 秒之间的随机数
 
 
 @singledispatch
