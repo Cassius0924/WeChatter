@@ -11,7 +11,7 @@ def load_config(config_path="config.yaml") -> Dict:
     logger.info(f"正在加载配置文件 {config_path} ...")
 
     try:
-        with open(config_path, "r") as file:
+        with open(config_path, "r", encoding="utf-8") as file:
             yaml_data = yaml.safe_load(file)
     except FileNotFoundError:
         logger.critical(
